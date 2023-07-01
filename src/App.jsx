@@ -10,8 +10,10 @@ import {
   BrowserRouter,
 } from "react-router-dom";
 
-
 import Layout from "./Layout";
+
+import Auth from "./comp/auth/Auth";
+import Menu from "./comp/menu/Menu";
 
 const App = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -19,9 +21,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout/>}>
-          <Route path="/auth" element={<p>Route "/auth" </p>} />
-          <Route path="/menu" element={<p>Route "/menu" </p>} />
+        <Route path="/" element={<Layout/>} >
+          <Route path="/auth" element={<Auth/>} />
+          <Route path="/menu" element={<Menu/>} />
         </Route>
       </Routes>
     </BrowserRouter>
