@@ -10,10 +10,6 @@ const Layout = ({ basketQty }) => {
   const [user, loading, error] = useAuthState(auth);
   const nav = useNavigate();
 
-  useEffect(() => {
-    user ? nav("/menu") : nav("/auth")
-  }, [user]);
-
   return (
     <div className="flex flex-col justify-center h-[100svh] relative">
       {user && <MobileHeader/>}
