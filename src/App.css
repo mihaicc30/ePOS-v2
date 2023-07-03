@@ -21,7 +21,7 @@
   --clsec: #ff90294f;
   --clsuc: #198754;
   --clwar: #FFC107;
-  --cldan: #DC3545;
+  --cldan: #ff5c5c75;
   --clinfo: #0DCAF0;
   --cllight: #F8F9FA;
   --cldark: #212529;
@@ -34,4 +34,28 @@
 
 input {
   outline-color: #F6F6F6;
+}
+
+
+::selection {
+  background: #00000011;
+  /* WebKit/Blink Browsers */
+}
+
+::-moz-selection {
+  background: #00000011;
+  /* Gecko Browsers */
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-drag: none;
+}
+
+button.yellow::selection {
+  background: #00000011;
+}
+
+button.yellow::-moz-selection {
+  background: #00000011;
 }

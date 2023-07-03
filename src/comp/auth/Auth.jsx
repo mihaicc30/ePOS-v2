@@ -1,32 +1,26 @@
-import React, { useState, useEffect } from "react";
-import {
-  db,
-  auth,
-  logInWithEmailAndPassword,
-  signInWithGoogle,
-  signInWithPopup,
-  signInWithFacebook,
-} from "../../firebase/config.jsx";
-import { useAuthState } from "react-firebase-hooks/auth";
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
+import React, { useState, useEffect, useRef } from "react";
+import "./Auth.css";
+import { db, auth, logInWithEmailAndPassword, signInWithGoogle, signInWithPopup, signInWithFacebook } from "../../firebase/config.jsx";
+
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 
 import { FcGoogle } from "react-icons/fc";
 import { BsFacebook } from "react-icons/bs";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { authUser, setVenue } from "../../utils/authUser";
+
 const Auth = () => {
-  const [user, loading, error] = useAuthState(auth);
+  const [user, setUser] = useState(null);
+  const fp = useRef(null)
 
-  useEffect(()=>{
-    if(user) nav("/Menu")
-  },[user])
+  useEffect(() => {
+    if (user) navigate("/Menu");
+  }, [user]);
 
-  const [loginState, setLoginState] = useState(true);
   const location = useLocation();
-  const nav = useNavigate();
+  const navigate = useNavigate();
+
   const [err, setErr] = useState({
     email: "",
     password: "",
@@ -37,267 +31,182 @@ const Auth = () => {
   const performValidation = async (e) => {
     e.preventDefault();
 
-    let submit = true;
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-    const password2 = !loginState ? e.target.password2.value : null;
-    const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}$/;
+    const pin = e.target.pin.value;
 
-    if (!email || email.length < 5) {
-      submit = false;
-      setErr((prevErr) => ({
-        ...prevErr,
-        email: "Please enter email.",
-      }));
-    } else if (!emailPattern.test(email)) {
-      submit = false;
-      setErr((prevErr) => ({
-        ...prevErr,
-        email: "Email is not valid.",
-      }));
-    } else {
-      setErr((prevErr) => ({
-        ...prevErr,
-        email: "",
-      }));
-    }
+    // if (!loginState) {
+    //   const res = await createUserWithEmailAndPassword(auth, email, password);
+    //   const user = res.user;
+    // } else if (loginState) {
+    //   const res = await signInWithEmailAndPassword(auth, email, password);
+    //   const user = res.user;
+    // }
+  };
 
-    if (!password || password.length < 5) {
-      submit = false;
-      setErr((prevErr) => ({
-        ...prevErr,
-        password: "Please enter password.",
+  const [pin, setPin] = useState({
+    pin: "",
+    pin2: "",
+  });
+
+  const handlePinInput = (e) => {
+    const { name } = e.target;
+    const isNumber = !isNaN(name);
+
+    if (name === "b") {
+      setPin((prevPin) => ({
+        ...prevPin,
+        pin: prevPin.pin.slice(0, -1),
+        pin2: prevPin.pin2.slice(0, -1),
       }));
-    } else {
-      setErr((prevErr) => ({
-        ...prevErr,
-        password: "",
+    } else if (name === "c") {
+      setPin({ pin: "", pin2: "" });
+    } else if (isNumber && name >= 0 && name < 10) {
+      setPin((prevPin) => ({
+        ...prevPin,
+        pin: "*".repeat(prevPin.pin2.length + 1),
+        pin2: prevPin.pin2 + name,
       }));
-    }
-
-    if (!loginState) {
-      if (!password2 || password2.length < 5) {
-        submit = false;
-        setErr((prevErr) => ({
-          ...prevErr,
-          password2: "Please enter password.",
-        }));
-      } else if (password2 !== password) {
-        submit = false;
-        setErr((prevErr) => ({
-          ...prevErr,
-          password2: "Passwords do not match.",
-        }));
-      } else {
-        setErr((prevErr) => ({
-          ...prevErr,
-          password2: "",
-        }));
-      }
-    }
-
-    setErr({
-      email: "",
-      password: "",
-      password2: "",
-      general: "",
-    });
-
-    console.log("loginState", loginState);
-    if (!loginState) {
-      const res = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(res.user);
-      const user = res.user;
-    } else if (loginState) {
-      const res = await signInWithEmailAndPassword(auth, email, password);
-      console.log(res.user);
-      const user = res.user;
     }
   };
 
-  const handleGoogle = () => {
-    window.open("https://www.mozilla.org/", "_self", "popup");
+  useEffect(() => {
+    const foundPin = userTable.find((userpin) => userpin.pin === pin.pin2);
+    if (foundPin) {
+      // auth user
+      authUser(foundPin);
+      setVenue(setVenue, foundPin);
+      setPin({ pin: "", pin2: "" });
+      navigate("/Menu");
+    }
+  }, [pin]);
+
+  // mimic db
+  const userTable = [
+    {
+      displayName: "Mihai C",
+      email: "alemihai25@gmail.com",
+      pin: "111",
+      fingerprint: "",
+      venueID: 1,
+    },
+    {
+      displayName: "Test User",
+      email: "Test@Test.Test",
+      pin: "000",
+      fingerprint: "",
+      venueID: 1,
+    },
+  ];
+
+  const [isScanning, setIsScanning] = useState(false);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      //mimic fingerprint checking
+      if (isScanning) {
+        const fpRef = fp.current
+        fpRef.classList.remove("animate-shake");
+        authUser(userTable[0]);
+        setVenue(setVenue, userTable[0]);
+        navigate("/Menu");
+      } else {
+        // mimic fingerprint error
+        const fpRef = fp.current
+        fpRef.classList.add("animate-shake");
+        setTimeout(() => {
+          fpRef.classList.remove("animate-shake");
+        }, 1500);
+      }
+      setIsScanning(false);
+    }, 2000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [isScanning]);
+
+  const handleScanStart = () => {
+    setIsScanning(true);
   };
 
   return (
     <div className="flex bg-[--clsec] animate-fadeUP1">
       <div className="basis-[60%] max-md:basis-[100%] flex flex-col gap-[3vh] min-h-[100svh] justify-center items-center ">
-        <div className="bg-[--c30] rounded shadow-lg shadow-[#535353] flex flex-col w-[80%] p-4 min-h-[80svh] justify-start border-2 border-[--c12] max-w-[650px]">
-          <p className="font-black text-3xl tracking-widest text-center">
-            CCW POS
-          </p>
-          <img
-            className="mx-auto max-w-[15svh] max-h-[15svh]"
-            src="./assets/d956248b8cfe7fe8fa39033b50728bcb.jpg"
-          />
+        <div className="bg-[--c30] rounded shadow-lg shadow-[#535353] flex flex-col w-[80%] p-4 min-h-[80svh] relative justify-start border-2 border-[--c12] max-w-[650px]">
+          <p className="font-black text-3xl tracking-widest text-center">CCW POS</p>
+          <img className="max-w-[15svh] max-h-[15svh] mx-auto" src="./assets/d956248b8cfe7fe8fa39033b50728bcb.jpg" />
           <div className="text-center">
             <p className="font-bold text-lg">Welcome!</p>
-            <p>Please enter your details below</p>
+            <p>Sign in to start to order.</p>
           </div>
-          <div className="text-center">
-            <div className="my-4 py-4 flex justify-center gap-10 text-[3rem]">
-              <FcGoogle
-                className="transition hover:scale-[1.2] cursor-pointer text-[3.3rem]"
-                onClick={signInWithGoogle}
-              />
-              <BsFacebook
-                style={{ fill: "#4267B2" }}
-                className="transition hover:scale-[1.2] cursor-pointer"
-              />
+
+          <div className="grow flex flex-col">
+            <input type="text" className="text-center" defaultValue={pin.pin} />
+            <div className="keypad grid grid-cols-3 gap-4 my-4 animate-fadeUP1">
+              <button name="1" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                1
+              </button>
+              <button name="2" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                2
+              </button>
+              <button name="3" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                3
+              </button>
+              <button name="4" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                4
+              </button>
+              <button name="5" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                5
+              </button>
+              <button name="6" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                6
+              </button>
+              <button name="7" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                7
+              </button>
+              <button name="8" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                8
+              </button>
+              <button name="9" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                9
+              </button>
+              <button name="c" onClick={handlePinInput} className="bg-[--c3] rounded px-[1vw] py-[2vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                C
+              </button>
+              <button name="0" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                0
+              </button>
+              <button name="b" onClick={handlePinInput} className="bg-[--c3] rounded px-[1vw] py-[2vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <svg className="w-8 h-8 mx-auto" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                  <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path opacity="0" d="M21 9.648C21 5.82037 20.1796 5 16.352 5H10.7515C10.267 5 9.79904 5.17584 9.43446 5.49485L3.72017 10.4948C2.80952 11.2917 2.80952 12.7083 3.72018 13.5052L9.43446 18.5052C9.79904 18.8242 10.267 19 10.7515 19H16.352C20.1796 19 21 18.1796 21 14.352V9.648Z" fill="#000"></path>
+                    <path d="M21 9.648C21 5.82037 20.1796 5 16.352 5H10.7515C10.267 5 9.79904 5.17584 9.43446 5.49485L3.72017 10.4948C2.80952 11.2917 2.80952 12.7083 3.72018 13.5052L9.43446 18.5052C9.79904 18.8242 10.267 19 10.7515 19H16.352C20.1796 19 21 18.1796 21 14.352V9.648Z" stroke="#000" strokeWidth="2" strokeLinejoin="round"></path> <path d="M12 10L16 14" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M16 10L12 14" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
+                  </g>
+                </svg>
+              </button>
             </div>
-            <p className="text-[#bbbaba] text-sm">- Or use email -</p>
-          </div>
-          <div className="grow">
-            <form
-              onSubmit={performValidation}
-              className={`${
-                !loginState ? "flex" : "hidden"
-              } flex-col mx-auto my-[2vh] w-[100%] max-w-[500px] max-sm:max-w-[90vw] grow animate-fadeUP1`}
-            >
-              <input
-                name="email"
-                type="text"
-                placeholder="Email"
-                defaultValue=""
-                required
-                className="px-4 py-2 border-b-[--c60] border-b-2"
-              />
-              {err.email && <p>{err.email}</p>}
-              <input
-                name="password"
-                type="Password"
-                placeholder="Password"
-                defaultValue=""
-                required
-                className="px-4 py-2 border-b-[--c60] border-b-2"
-              />
-              {err.password && <p>{err.password}</p>}
-
-              <input
-                name="password2"
-                type="Password"
-                placeholder="Confirm Password"
-                defaultValue=""
-                required
-                className="px-4 py-2 border-b-[--c60] border-b-2"
-              />
-              {err.password2 && <p>{err.password2}</p>}
-
-              {err.general && (
-                <p className="my-4 bg-[--cldan] p-2 rounded">
-                  🔴 {err.general}
-                </p>
-              )}
-              {loading ? (
-                <div className="ui-loader loader-blk mx-auto animate-fadeUP1 mt-10">
-                  <svg viewBox="22 22 44 44" className="multiColor-loader">
-                    <circle
-                      cx="44"
-                      cy="44"
-                      r="20.2"
-                      fill="none"
-                      strokeWidth="3.6"
-                      className="loader-circle loader-circle-animation"
-                    ></circle>
-                  </svg>
-                </div>
-              ) : (
-                <button
-                  disabled={loading}
-                  className=" animate-fadeUP1 bg-[--c1] rounded px-3 py-1 font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none"
-                >
-                  Register
-                </button>
-              )}
-            </form>
-            <form
-              onSubmit={performValidation}
-              className={`${
-                loginState ? "flex" : "hidden"
-              } flex-col mx-auto my-[2vh] w-[100%] max-w-[500px] max-sm:max-w-[90vw] grow animate-fadeUP1`}
-            >
-              <input
-                name="email"
-                type="text"
-                placeholder="Email"
-                defaultValue="mihaic@gmail.com"
-                required
-                className="px-4 py-2 border-b-[--c60] border-b-2"
-              />
-              {err.email && <p>{err.email}</p>}
-              <input
-                name="password"
-                type="Password"
-                placeholder="Password"
-                defaultValue="mihaic@gmail.com"
-                required
-                className="px-4 py-2 border-b-[--c60] border-b-2"
-              />
-
-              {err.password && <p>{err.password}</p>}
-
-              {err.general && (
-                <p className="my-4 bg-[--cldan] p-2 rounded">
-                  🔴 {err.general}
-                </p>
-              )}
-
-              {loading ? (
-                <div className="ui-loader loader-blk mx-auto animate-fadeUP1 mt-10">
-                  <svg viewBox="22 22 44 44" className="multiColor-loader">
-                    <circle
-                      cx="44"
-                      cy="44"
-                      r="20.2"
-                      fill="none"
-                      strokeWidth="3.6"
-                      className="loader-circle loader-circle-animation"
-                    ></circle>
-                  </svg>
-                </div>
-              ) : (
-                <button
-                  disabled={loading}
-                  className=" animate-fadeUP1 bg-[--c1] rounded px-3 py-1 font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none"
-                >
-                  Log in
-                </button>
-              )}
-            </form>
-          </div>
-          <div className="text-center flex items-center gap-4 mx-auto max-[400px]:flex-col ">
-            <button className="basis-[46%] whitespace-nowrap bg-[#c4c4c4] rounded px-3 py-1 font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner">
-              Forgot password?
-            </button>
-            <button
-              onClick={() => setLoginState(!loginState)}
-              href="#"
-              className="basis-[46%] bg-[--c1] whitespace-nowrap rounded px-3 py-1 font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner"
-            >
-              {loginState ? "Sign Up!" : "Log In!"}
-            </button>
+            <div
+              className="scan mt-auto relative cursor-pointer mx-auto"
+              ref={fp}
+              onMouseDown={() => {
+                setIsScanning(true);
+                handleScanStart();
+              }}
+              onMouseUp={() => setIsScanning(false)}>
+              <h6 className="absolute opacity-0 -top-1/2">Scanning...</h6>
+              <div className="fingerprint"></div>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="basis-[40%] ml-auto block max-md:hidden overflow-hidden">
         <div className="overflow-hidden max-h-[100svh]">
-          <img
-            src="./assets/img-eWJbfpAtsnldJ5hRNnNHl.jpeg"
-            className="ml-auto aspect-auto"
-          />
-          <img
-            src="./assets/img-FG3J2WMxkew7bcOilt4BG.jpeg"
-            className="ml-auto aspect-auto"
-          />
-          <img
-            src="./assets/img-HiPyM5L04ZqdZG74hUvLM.jpeg"
-            className="ml-auto aspect-auto"
-          />
-          <img
-            src="./assets/img-LfA4ebR2EcyVlRcRnmEbV.jpeg"
-            className="ml-auto aspect-auto"
-          />
+          <img src="./assets/img-eWJbfpAtsnldJ5hRNnNHl.jpeg" className="ml-auto aspect-auto" />
+          <img src="./assets/img-FG3J2WMxkew7bcOilt4BG.jpeg" className="ml-auto aspect-auto" />
+          <img src="./assets/img-HiPyM5L04ZqdZG74hUvLM.jpeg" className="ml-auto aspect-auto" />
+          <img src="./assets/img-LfA4ebR2EcyVlRcRnmEbV.jpeg" className="ml-auto aspect-auto" />
         </div>
       </div>
     </div>

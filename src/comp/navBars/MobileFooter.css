@@ -1,7 +1,7 @@
 .MAFA{
     color: var(--c2);
     text-shadow: 1px 1px 1px var(--c30), -1px -1px 1px var(--c30), 1px 0px 1px var(--c30), 0px 1px 1px var(--c30);
-    background-color: var(--c12);
+    background-color: var(--c1);
 }
 .MobileFooter::after{
     content: "";
