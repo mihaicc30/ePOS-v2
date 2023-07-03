@@ -12,72 +12,64 @@ import { authUser, setVenue } from "../../utils/authUser";
 
 const Auth = () => {
   const [user, setUser] = useState(null);
-  const fp = useRef(null)
+  const location = useLocation();
+  const navigate = useNavigate();
+  const fp = useRef(null);
 
   useEffect(() => {
     if (user) navigate("/Menu");
   }, [user]);
-
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const [err, setErr] = useState({
-    email: "",
-    password: "",
-    password2: "",
-    general: "",
-  });
-
-  const performValidation = async (e) => {
-    e.preventDefault();
-
-    const pin = e.target.pin.value;
-
-    // if (!loginState) {
-    //   const res = await createUserWithEmailAndPassword(auth, email, password);
-    //   const user = res.user;
-    // } else if (loginState) {
-    //   const res = await signInWithEmailAndPassword(auth, email, password);
-    //   const user = res.user;
-    // }
-  };
 
   const [pin, setPin] = useState({
     pin: "",
     pin2: "",
   });
 
+  const handleBackspace = () => {
+    setPin((prevPin) => ({
+      ...prevPin,
+      pin: prevPin.pin.slice(0, -1),
+      pin2: prevPin.pin2.slice(0, -1),
+    }));
+  };
+
+  const handleClear = () => {
+    setPin({ pin: "", pin2: "" });
+  };
+
+  const handleNumber = (name) => {
+    if (isNaN(name)) return;
+
+    setPin((prevPin) => ({
+      ...prevPin,
+      pin: "*".repeat(prevPin.pin2.length + 1),
+      pin2: prevPin.pin2 + name,
+    }));
+  };
+
   const handlePinInput = (e) => {
     const { name } = e.target;
-    const isNumber = !isNaN(name);
 
     if (name === "b") {
-      setPin((prevPin) => ({
-        ...prevPin,
-        pin: prevPin.pin.slice(0, -1),
-        pin2: prevPin.pin2.slice(0, -1),
-      }));
+      handleBackspace();
     } else if (name === "c") {
-      setPin({ pin: "", pin2: "" });
-    } else if (isNumber && name >= 0 && name < 10) {
-      setPin((prevPin) => ({
-        ...prevPin,
-        pin: "*".repeat(prevPin.pin2.length + 1),
-        pin2: prevPin.pin2 + name,
-      }));
+      handleClear();
+    } else {
+      handleNumber(name);
     }
   };
 
   useEffect(() => {
     const foundPin = userTable.find((userpin) => userpin.pin === pin.pin2);
-    if (foundPin) {
-      // auth user
+    if (foundPin && pin.pin2.length == 3) {
       authUser(foundPin);
       setVenue(setVenue, foundPin);
       setPin({ pin: "", pin2: "" });
       navigate("/Menu");
+    } else if (!foundPin && pin.pin2.length >= 3) {
+      setPin({ pin: "", pin2: "" });
     }
-  }, [pin]);
+  }, [pin.pin2]);
 
   // mimic db
   const userTable = [
@@ -93,7 +85,7 @@ const Auth = () => {
       email: "Test@Test.Test",
       pin: "000",
       fingerprint: "",
-      venueID: 1,
+      venueID: 101010,
     },
   ];
 
@@ -103,14 +95,15 @@ const Auth = () => {
     const timeoutId = setTimeout(() => {
       //mimic fingerprint checking
       if (isScanning) {
-        const fpRef = fp.current
+        const fpRef = fp.current;
         fpRef.classList.remove("animate-shake");
-        authUser(userTable[0]);
-        setVenue(setVenue, userTable[0]);
+        console.log("Loggin into test user.");
+        authUser(userTable[1]);
+        setVenue(setVenue, userTable[1]);
         navigate("/Menu");
       } else {
         // mimic fingerprint error
-        const fpRef = fp.current
+        const fpRef = fp.current;
         fpRef.classList.add("animate-shake");
         setTimeout(() => {
           fpRef.classList.remove("animate-shake");
@@ -126,6 +119,15 @@ const Auth = () => {
 
   const handleScanStart = () => {
     setIsScanning(true);
+  };
+
+  const handleTouchStart = () => {
+    setIsScanning(true);
+    handleScanStart();
+  };
+
+  const handleTouchEnd = () => {
+    setIsScanning(false);
   };
 
   return (
@@ -189,6 +191,8 @@ const Auth = () => {
             <div
               className="scan mt-auto relative cursor-pointer mx-auto"
               ref={fp}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
               onMouseDown={() => {
                 setIsScanning(true);
                 handleScanStart();

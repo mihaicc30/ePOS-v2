@@ -52,8 +52,8 @@ const MenuItem = ({ user, item }) => {
                 </p>
               </div>
               <div>
-                <p className="font-bold text-xl text-end">{menuItem.price}</p>
-                <p className="text-sm whitespace-nowrap">{menuItem.cal}</p>
+                <p className="font-bold text-xl text-end">£{(menuItem.price).toFixed(2)}</p>
+                <p className="text-sm whitespace-nowrap text-end">{menuItem.cal}kcal</p>
               </div>
             </div>
           </li>

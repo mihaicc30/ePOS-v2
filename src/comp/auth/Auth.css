@@ -7,23 +7,25 @@
 }
 
 .scan .fingerprint {
-  position: relative;
+  position: relataive;
   width: 80px;
   height: 80px;
-  background: url(https://assets.codepen.io/4421919/fingerprint.png);
+  background: url("/assets/fingerprint.png");
   background-size: 80px;
 }
 
 .scan:active .fingerprint::before {
   content: "";
+  z-index: 1111;
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: url(https://assets.codepen.io/4421919/fingerprint2.png);
-  background-size: 300px;
-  animation: animate 4s ease-in-out infinite;
+  background: url("/assets/fingerprint2.png");
+  background-size: 80px;
+  animation: animate 1s ease-in-out infinite;
+  -webkit-animation: animate 1s ease-in-out infinite;
 }
 
 @keyframes animate {
@@ -47,8 +49,8 @@
   background: var(--c1);
   border-radius: 8px;
   filter: drop-shadow(0 0 20px var(--c1)) drop-shadow(0 0 60px var(--c1));
-  animation: animate_line 4s ease-in-out infinite;
-  -webkit-animation: animate_line 4s ease-in-out infinite;
+  animation: animate_line 1s ease-in-out infinite;
+  -webkit-animation: animate_line 1s ease-in-out infinite;
   -webkit-filter: drop-shadow(0 0 20px var(--c1)) drop-shadow(0 0 60px var(--c1));
 }
 

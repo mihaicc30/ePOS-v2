@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import { auth, db, logout } from "./firebase/config.jsx";
 
-
 import { Routes, Route, Outlet, NavLink, BrowserRouter } from "react-router-dom";
 
 // Routes
@@ -31,6 +30,17 @@ import { loadStripe } from "@stripe/stripe-js";
 
 // mimic db fetch - temporary
 const venues = [
+  {
+    id: 101010,
+    name: "The Test Venue",
+    email: "testvenue@testvenue.test",
+    address: "Test Street, TestCity AA1 1AA",
+    phone: "12345 1234 123",
+    website: "thetestvenue.test.test",
+    img: "./assets/defaultVenue.jpg",
+    table: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+    coords: [{ long: "52.191724" }, { lat: "-2.220120" }],
+  },
   {
     id: 1,
     name: "The White Lion",
@@ -1834,7 +1844,6 @@ const App = () => {
   };
 
   useEffect(() => {
-    
     async function get() {
       // fetch simulation of setting the menu from the database - temporary
       setMenuitems(dbmenuitems);
@@ -1845,6 +1854,7 @@ const App = () => {
   useEffect(() => {
     calculateTotalQuantity();
   }, [basketItems]);
+  
 
   return (
     <Routes>
@@ -1876,7 +1886,7 @@ const App = () => {
           }
         />
         <Route path="/orderComplete" element={<OrderComplete venueNtable={{ venue: getVenueById(venues, venueNtable.venue), table: venueNtable.table }} menuitems={menuitems} venues={venues} basketItems={basketItems} setBasketItems={setBasketItems} />} />
-        <Route path="/settings" element={<Settings venues={venues}/>} />
+        <Route path="/settings" element={<Settings venues={venues} />} />
 
         <Route path="/contact" element={<Contact />} />
         <Route path="/faq" element={<FAQ />} />
