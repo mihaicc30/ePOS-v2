@@ -71,6 +71,48 @@ const Payment = ({ user, basketItems, setBasketItems }) => {
     );
   }, [basketItems]);
 
+  const handleItemMove = (id) => {
+    const originalItem = basketItems.find((item) => item.id === id);
+    const splitItem = splitBill.find((item) => item.id === id);
+    const remainingQty = originalItem.qty - 1;
+    const updatedOriginalItem = { ...originalItem, qty: remainingQty };
+
+    if (splitItem) {
+      let splitItem = splitBill.find((item) => item.id === id);
+      let newsi = splitItem.qty + 1;
+      setSplitBill((prevState) => prevState.map((item) => (item.id === id ? { ...item, qty: newsi } : item)));
+    } else if (!splitItem) {
+      let newSplitBillItem = { ...originalItem, qty: originalItem.qty - remainingQty };
+      setSplitBill((prevState) => [...prevState, newSplitBillItem]);
+    }
+    if (remainingQty === 0) {
+      setBasketItems((prevState) => prevState.filter((item) => item.id !== id));
+    } else {
+      setBasketItems((prevState) => prevState.map((item) => (item.id === id ? updatedOriginalItem : item)));
+    }
+  };
+
+  const handleItemMoveReverse = (id) => {
+    const originalItem = splitBill.find((item) => item.id === id);
+    const splitItem = basketItems.find((item) => item.id === id);
+    const remainingQty = originalItem.qty - 1;
+    const updatedOriginalItem = { ...originalItem, qty: remainingQty };
+
+    if (splitItem) {
+      let splitItem = basketItems.find((item) => item.id === id);
+      let newsi = splitItem.qty + 1;
+      setBasketItems((prevState) => prevState.map((item) => (item.id === id ? { ...item, qty: newsi } : item)));
+    } else if (!splitItem) {
+      let newSplitBillItem = { ...originalItem, qty: originalItem.qty - remainingQty };
+      setBasketItems((prevState) => [...prevState, newSplitBillItem]);
+    }
+    if (remainingQty === 0) {
+      setSplitBill((prevState) => prevState.filter((item) => item.id !== id));
+    } else {
+      setSplitBill((prevState) => prevState.map((item) => (item.id === id ? updatedOriginalItem : item)));
+    }
+  };
+
   const handleSplitDecrement = () => {
     if (splitCount > 1) setSplitCount(splitCount - 1);
   };
@@ -80,16 +122,21 @@ const Payment = ({ user, basketItems, setBasketItems }) => {
   };
 
   useEffect(() => {
+    setSplitBillTotal(
+      splitBill
+        .reduce((total, item) => {
+          return total + item.price * item.qty;
+        }, 0)
+        .toFixed(2)
+    );
+  }, [splitBill]);
+
+  useEffect(() => {
     setTotalSplitSum((basketTotal / splitCount).toFixed(2));
   }, [totalSplitSum, splitCount, basketTotal, basketItems]);
 
   const [extra, setExtra] = useState(null); // service charge
   const [extra2, setExtra2] = useState(null); // tips
-
-  const handleItemMove = (id) => {
-    console.log("disabled** saved for future development");
-  };
-
   return (
     <>
       <div className="grid grid-cols-[1fr_3fr_3fr_3fr] h-[100%] overflow-hidden">
@@ -120,10 +167,10 @@ const Payment = ({ user, basketItems, setBasketItems }) => {
           )}
           {currentTable && (
             <div className="grid grid-cols-2 mx-2 p-1 gap-2">
-              <button onClick={() => console.log("dev**to create modal")} className={`${extra === "SC" ? "bg-[--c12]" : "bg-[--c1]"} grayscale border-b-2 border-b-black px-2 py-1 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md`}>
+              <button onClick={() => console.log("dev**to create modal")} className={`${extra === "SC" ? "bg-[--c12]" : "bg-[--c1]"} border-b-2 border-b-black px-2 py-1 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md`}>
                 {extra === "SC" ? "Remove Serv.Charge" : "Add Serv.Charge"}{" "}
               </button>
-              <button onClick={() => console.log("dev**to create modal")} className={`${extra2 === "T" ? "bg-[--c12]" : "bg-[--c1]"} grayscale border-b-2 border-b-black px-2 py-1 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md`}>
+              <button onClick={() => console.log("dev**to create modal")} className={`${extra2 === "T" ? "bg-[--c12]" : "bg-[--c1]"} border-b-2 border-b-black px-2 py-1 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md`}>
                 {extra2 === "T" ? "Remove Tips" : "Add Tips"}
               </button>
             </div>
@@ -158,7 +205,7 @@ const Payment = ({ user, basketItems, setBasketItems }) => {
                         ➕
                       </button>
 
-                      <button onClick={() => handleItemMove(menuItem.id)} grayscale className="bg-[--c12] px-2 py-1 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md">
+                      <button onClick={() => handleItemMove(menuItem.id)} className="bg-[--c12] px-2 py-1 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md">
                         Add to Split
                       </button>
                     </div>
@@ -168,9 +215,8 @@ const Payment = ({ user, basketItems, setBasketItems }) => {
           </div>
         </div>
         {currentTable && (
-          <div className="flex flex-col  overflow-y-hidden ">
-            {/* blured and saved for future development */}
-            <div className="MenuLeftSide relative flex flex-col h-[100%] overflow-y-hidden blur-sm">
+          <div className="flex flex-col  overflow-y-hidden">
+            <div className="MenuLeftSide relative flex flex-col h-[100%] overflow-y-hidden">
               <p className="border-b-2 pb-2 mb-2 text-center font-bold">Split Bill By Item</p>
               <p className="text-center text-xl">
                 Split Value: <span className="text-xl font-bold">£{splitBillTotal}</span>{" "}
@@ -221,7 +267,7 @@ const Payment = ({ user, basketItems, setBasketItems }) => {
             <div className="flex flex-col overflow-y-scroll h-[100%]">
               <p className="border-b-2 pb-2 mb-2 text-center font-bold">Payment Options</p>
               <div className="grid grid-cols-1 grid-rows-6 gap-2 h-[90%]">
-                <button onClick={() => console.log("disabled** saved for future development")} className={`blur-sm text-xl border-b-2 border-b-black px-2 py-1 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md`}>
+                <button disabled={splitBillTotal <= 0 ? true : false} className={`${splitBillTotal <= 0 ? "bg-[--c12] grayscale" : "bg-[--c1]"} text-xl border-b-2 border-b-black px-2 py-1 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md`}>
                   Pay Splitted Items <span className="font-bold">£{splitBillTotal}</span>
                 </button>
                 <button className={`${totalSplitSum <= 0 ? "bg-[--c12] grayscale" : "bg-[--c1]"} text-xl border-b-2 border-b-black px-2 py-1 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md`}>
@@ -230,13 +276,13 @@ const Payment = ({ user, basketItems, setBasketItems }) => {
                 <button className={`${basketTotal <= 0 ? "bg-[--c12] grayscale" : "bg-[--c1]"} text-xl border-b-2 border-b-black px-2 py-1 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md`}>
                   Pay Whole Bill <span className="font-bold">£{basketTotal}</span>
                 </button>
-                <button onClick={() => console.log("disabled** saved for future development")} className={`blur-sm text-xl border-b-2 border-b-black px-2 py-1 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md`}>
+                <button className={`${totalPartsPaid <= 0 ? "bg-[--c12] grayscale" : "bg-[--c1]"} text-xl border-b-2 border-b-black px-2 py-1 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md`}>
                   Pay Whats Left <span className="font-bold">£{totalPartsPaid}</span>
                 </button>
                 {/* <span className="col-span-2 row-span-2"></span> */}
                 <span></span>
                 <div className="col-span-1 border-b-2 rounded-xl border-b-[--c1] shadow-xl">
-                  <p className="mt-auto text-center text-5xl text-bold">£{basketTotal}</p>
+                  <p className="mt-auto text-center text-5xl text-bold">£{totalPartsPaid}</p>
                   <p className="mt-auto text-center text-3xl text-bold">Left to Pay</p>
                 </div>
               </div>

@@ -1829,8 +1829,6 @@ const App = () => {
   const [venueNtable, setVenueNtable] = useState({ venue: 1, table: null });
 
   const [menuitems, setMenuitems] = useState([]);
-  const [selectedKCal, setSelectedKCal] = useState("clear");
-  const [selectedDietary, setSelectedDietary] = useState("clear");
   const [toggleGrid, setToggleGrid] = useState(false);
   const [toggleFilters, setToggleFilters] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -1861,11 +1859,11 @@ const App = () => {
 
         <Route path="/tables" element={<Tables />} />
 
-        <Route path="/menu" element={<Menu basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} toggleGrid={toggleGrid} setToggleGrid={setToggleGrid} toggleFilters={toggleFilters} setToggleFilters={setToggleFilters} searchValue={searchValue} setSearchValue={setSearchValue} selectedKCal={selectedKCal} setSelectedKCal={setSelectedKCal} selectedDietary={selectedDietary} setSelectedDietary={setSelectedDietary} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}>
+        <Route path="/menu" element={<Menu basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} searchValue={searchValue} setSearchValue={setSearchValue} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}>
           
         </Route>
         
-        <Route path="/payment" element={<Payment />} />
+        <Route path="/payment" element={<Payment basketItems={basketItems} setBasketItems={setBasketItems} user={user}/>} />
 
         <Route path="/settings" element={<Settings venues={venues} />} />
 
