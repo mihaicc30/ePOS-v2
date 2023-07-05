@@ -103,10 +103,6 @@ const Auth = () => {
     }
   };
 
-  const handleGoogle = () => {
-    window.open("https://www.mozilla.org/", "_self", "popup");
-  };
-
   return (
     <div className="flex bg-[--clsec] animate-fadeUP1">
       <div className="basis-[60%] max-md:basis-[100%] flex flex-col gap-[3vh] min-h-[100svh] justify-center items-center ">
