@@ -66,6 +66,7 @@ const VenueNTable = ({ user, venues, venueNtable, setVenueNtable }) => {
             </button>
           </div>
 
+
           {venues
             .filter(
               (venue) =>
@@ -136,6 +137,20 @@ const VenueNTable = ({ user, venues, venueNtable, setVenueNtable }) => {
               ✖
             </button>
           </div>
+          <button className="bg-[--c1] rounded my-4 p-[2px] text-xl font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">SKIP</button>
+          
+          <div
+                  onClick={() => handleTable("Bar")}
+                  className="my-2 bg-[--c30] rounded px-3 py-2 border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none"
+                >
+                  <div className="flex flex-nowrap">
+                    <p className="font-bold text-lg truncate w-[100%]">
+                      Bar
+                    </p>
+                    <AiFillCaretRight className=" bg-[--c1] rounded my-auto p-[2px] text-xl font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none" />
+                  </div>
+                </div>
+          
           {getVenueById(venues, localStorage.getItem('venueID')).table
             .filter((venue)=>String(venue).includes(String(searchTableValue)))
             .map((venue, index) => {

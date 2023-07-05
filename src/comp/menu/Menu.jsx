@@ -1930,10 +1930,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
       );
 
     return (
-    <div className={`basis-[80%] flex flex-col bg-[--c60] z-10 ${isBaseRoute ? "overflow-y-scroll" : "overflow-y-hidden"} relative`}>
+    <>
       {!venueNtable.venue || (!venueNtable.table && <VenueNTable venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />)}
 
-      <div className="flex flex-col gap-4 ">
+      <div className="flex flex-col gap-4 overflow-y-scroll">
         <div className="searchBar flex flex-col relative gap-4">
           <div className="relative flex  mr-4 items-center max-[350px]:flex-wrap  max-[350px]:justify-center">
             <div className="relative grow mx-4">
@@ -2049,7 +2049,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
