@@ -1719,6 +1719,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
 
       <div className="grid grid-cols-[2fr_3fr] gap-1 rounded h-[100%] w-[100%]">
         <div className="h-[100%] w-[100%] rounded shadow-xl grid grid-cols-1 p-1 overflow-hidden">
+          
           <div className="grid grid-cols-4 gap-2">
             <button className="text-sm bg-red-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] flex flex-col justify-center items-center border-b-2 border-b-black "><span>Delete ALL</span><span>5</span></button>
             <div className="tableNumber m-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black ">
@@ -1734,7 +1735,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           </div>
         </div>
 
-        <div className="MenuRightSide h-[100%] w-[100%] rounded shadow-xl p-1 flex flex-col">
+        <div className="MenuRightSide h-[100%] w-[100%] rounded shadow-xl p-1 flex flex-col overflow-hidden">
           <MenuRightSide />
         </div>
       </div>
