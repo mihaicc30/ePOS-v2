@@ -1,0 +1,20 @@
+.MAFA{
+    color: var(--c2);
+    text-shadow: 1px 1px 1px var(--c30), -1px -1px 1px var(--c30), 1px 0px 1px var(--c30), 0px 1px 1px var(--c30);
+    background-color: var(--c1);
+}
+.MobileFooter::after{
+    content: "";
+    display: block;
+    width: 30svw;
+    position: absolute;
+    background-color: var(--c12);
+    height: 6px;
+    bottom: 0;
+    margin: 4px;
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    -ms-border-radius: 30px;
+    -o-border-radius: 30px;
+}

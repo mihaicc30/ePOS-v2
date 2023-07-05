@@ -25,6 +25,7 @@ import Symbol from "./comp/Settings/Symbol";
 import TC from "./comp/Settings/T&C";
 
 import { getVenueById } from "./utils/BasketUtils";
+
 import { loadStripe } from "@stripe/stripe-js";
 
 // mimic db fetch - temporary
@@ -1853,6 +1854,7 @@ const App = () => {
   useEffect(() => {
     calculateTotalQuantity();
   }, [basketItems]);
+  
 
   return (
     <Routes>

@@ -162,7 +162,7 @@ const Basket = ({ menuitems, basketItems, setBasketItems, venueNtable, setVenueN
   };
 
   return (
-    <div className="basis-[80%] bg-[--c60] z-10 overflow-scroll flex flex-col">
+    <div className="basis-[80%] bg-[--c60] z-10 overflow-y-scroll flex flex-col">
       <div className="flex flex-col text-center my-4 pb-4 border-b-2 text-xl">
         <p>{venueNtable.venue ? venueNtable.venue.name : null}</p>
         <p className="text-xs">{venueNtable.venue ? venueNtable.venue.address : null}</p>
@@ -174,7 +174,7 @@ const Basket = ({ menuitems, basketItems, setBasketItems, venueNtable, setVenueN
           </span>
         </p>
       </div>
-      <div className="products flex flex-col gap-4 px-4 grow">
+      <div className="products flex flex-col gap-4 px-4 grow overflow-auto">
         {getUniqueCourses().length == 0 && (
           <div>
             <p className="text-center my-auto under text-xl">Your basket is empty!</p>
