@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BsFilterRight } from "react-icons/bs";
 
-const MenuRightSide = () => {
+const MenuRightSide = ({ basketItems, setBasketItems }) => {
   // mimic db fetch - temporary
   let dbmenuitems = [
     {
@@ -9,7 +9,7 @@ const MenuRightSide = () => {
       img: "./assets/breakfast.jpg",
       items: [
         {
-          name: "Grilled Salmon with Lemon Butter Sauce",
+          name: "Grilled Hake with Lemon Butter Sauce",
           tag: ["gluten-free"],
           subcategory: "special",
           subcategory_course: "2",
@@ -36,7 +36,7 @@ const MenuRightSide = () => {
           },
           cal: 350,
           img: "./assets/defaultDish.jpg",
-          ingredients: ["Salmon fillet", "Lemon", "Butter", "Salt", "Pepper"],
+          ingredients: ["Hake fillet", "Lemon", "Butter", "Salt", "Pepper"],
         },
         {
           name: "Kids Mozzarella Sticks",
@@ -308,7 +308,7 @@ const MenuRightSide = () => {
           allergens: ["nut free"],
           img: "./assets/defaultDish.jpg",
         },
-      
+
         {
           name: "Chocolate Brownie",
           subcategory: "desert",
@@ -1427,7 +1427,7 @@ const MenuRightSide = () => {
         },
       ],
     },
-    
+
     {
       category: "Beverages",
       img: "./assets/drinks.jpg",
@@ -1831,12 +1831,9 @@ const MenuRightSide = () => {
 
   // filter for beverages/food/barsnacks
   const changeMenuType = (e) => {
-    if (e.target.innerText === menuType) {
       setMenuType2("");
       setMenuType3("");
-    } else {
       setMenuType(e.target.innerText);
-    }
   };
 
   // filter for type of beverage
@@ -1866,6 +1863,27 @@ const MenuRightSide = () => {
       setMenuType3(e.target.innerText);
     }
   };
+
+  const handleAddToMenu = (item) => {
+    const id = crypto.randomUUID();
+    const message = "";
+    const existingItem = basketItems.find((menuItem) => menuItem.name === item.name);
+    if (existingItem) {
+      const updatedbasketItems = basketItems.map((menuItem) => {
+        if (menuItem.name === item.name) {
+          return {
+            ...menuItem,
+            qty: menuItem.qty + 1,
+          };
+        }
+        return menuItem;
+      });
+      setBasketItems(updatedbasketItems);
+    } else {
+      setBasketItems([...basketItems, { ...item, id, message, qty: 1 }]);
+    }
+  };
+
   return (
     <>
       <div className="relative flex  mr-4 items-center max-[350px]:flex-wrap  max-[350px]:justify-center">
@@ -1879,7 +1897,14 @@ const MenuRightSide = () => {
             ✖
           </button>
         </div>
-        <button disabled={menuType2 === "" && menuType3 === "" && menuType4 === ""} onClick={() =>{setMenuType2("");setMenuType3("");setMenuType4("")}} className={`p-2 ${menuType2 === "" && menuType3 === "" && menuType4 === "" ? "bg-[--c3]" : "bg-[--c1]"} rounded-xl shadow-xl border-b-2 border-b-black transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] active:shadow-[inset_0px_4px_2px_black]`}>
+        <button
+          disabled={menuType2 === "" && menuType3 === "" && menuType4 === ""}
+          onClick={() => {
+            setMenuType2("");
+            setMenuType3("");
+            setMenuType4("");
+          }}
+          className={`p-2 ${menuType2 === "" && menuType3 === "" && menuType4 === "" ? "bg-[--c3]" : "bg-[--c1]"} rounded-xl shadow-xl border-b-2 border-b-black transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] active:shadow-[inset_0px_4px_2px_black]`}>
           Clear Filters
         </button>
       </div>
@@ -1945,33 +1970,45 @@ const MenuRightSide = () => {
         {menuType === "Bar Snacks" && <p className="text-center col-span-3">Range Bar Snacks</p>}
       </div>
 
-      <div className="grid grid-cols-4 overflow-y-scroll">
+      <div className="grid grid-cols-4 overflow-y-scroll h-[100%]">
         {dbmenuitems
           .filter((category) => menuType === "" || category.category.toLowerCase() === menuType.toLowerCase())
           .map((category, index) => {
-            return category.items
-              // .filter((item) => menuType2 === "" || item.subcategory.toLowerCase() === menuType2.toLowerCase())
-              .filter((item) => {
-                if (category.category === "Beverages") {
-                  return menuType2 === "" || item.subcategory.toLowerCase() === menuType2.toLowerCase();
-                } else if (category.category === "Food") {
-                  return menuType3 === "" || item.subcategory.toLowerCase() === menuType3.toLowerCase();
-                } else if (category.category === "Bar Snacks") {
-                  return menuType4 === "" || item.subcategory.toLowerCase() === menuType4.toLowerCase();
-                }
-                return true; // No additional filter for other categories
-              })
-              .map((item, index2) => {
-                return (
-                  <div key={category + index2} className="flex flex-col shadow-xl m-1 p-1 transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]">
-                    <span className="text-end">{item.stock || 1}</span>
-                    <span className="line-clamp-2 h-[48px]">{item.name}</span>
-                    <span>£{item.price}</span>
-                    <span className="h-[24px]">{item.allergens.join(", ")}</span>
-                  </div>
-                );
-              });
+            return (
+              category.items
+                // .filter((item) => menuType2 === "" || item.subcategory.toLowerCase() === menuType2.toLowerCase())
+                .filter((item) => {
+                  if (category.category === "Beverages") {
+                    return menuType2 === "" || item.subcategory.toLowerCase() === menuType2.toLowerCase();
+                  } else if (category.category === "Food") {
+                    return menuType3 === "" || item.subcategory.toLowerCase() === menuType3.toLowerCase();
+                  } else if (category.category === "Bar Snacks") {
+                    return menuType4 === "" || item.subcategory.toLowerCase() === menuType4.toLowerCase();
+                  }
+                  return true; // No additional filter for other categories
+                })
+                .map((item, index2) => {
+                  return (
+                    <div key={category + index2} onClick={() => handleAddToMenu(item)} className="h-[128px] w-[170px] flex flex-col shadow-xl m-1 p-1 transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]">
+                      <span className="text-end">{item.stock || 1}</span>
+                      <span className="line-clamp-2 h-[48px]">{item.name}</span>
+                      <span>£{item.price.toFixed(2)}</span>
+                      <span className="h-[24px]">{item.allergens.join(", ")}</span>
+                    </div>
+                  );
+                })
+            );
           })}
+      </div>
+
+      <div className="grid grid-cols-5 w-[100%] h-[100px]">
+        
+        <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`}>Misc Item</div>
+        
+      <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`}>Apply Discount</div>
+      <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`}>Store</div>
+        <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`}>Print Bar</div>
+        <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`}>Print Kitchen</div>
       </div>
     </>
   );

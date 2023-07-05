@@ -1825,7 +1825,7 @@ const dbmenuitems = [
 
 const App = () => {
   const [user, setUser] = useState(null);
-
+  const [basketItems, setBasketItems] = useState([]);
   const [venueNtable, setVenueNtable] = useState({ venue: 1, table: null });
 
   const [menuitems, setMenuitems] = useState([]);
@@ -1835,8 +1835,6 @@ const App = () => {
   const [toggleFilters, setToggleFilters] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [basketQty, setBasketQty] = useState(0);
-
-  const [basketItems, setBasketItems] = useState([]);
 
   const calculateTotalQuantity = () => {
     const totalQty = basketItems.reduce((total, item) => total + parseInt(item.qty), 0);
@@ -1863,7 +1861,7 @@ const App = () => {
 
         <Route path="/tables" element={<Tables />} />
 
-        <Route path="/menu" element={<Menu menuitems={menuitems} toggleGrid={toggleGrid} setToggleGrid={setToggleGrid} toggleFilters={toggleFilters} setToggleFilters={setToggleFilters} searchValue={searchValue} setSearchValue={setSearchValue} selectedKCal={selectedKCal} setSelectedKCal={setSelectedKCal} selectedDietary={selectedDietary} setSelectedDietary={setSelectedDietary} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}>
+        <Route path="/menu" element={<Menu basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} toggleGrid={toggleGrid} setToggleGrid={setToggleGrid} toggleFilters={toggleFilters} setToggleFilters={setToggleFilters} searchValue={searchValue} setSearchValue={setSearchValue} selectedKCal={selectedKCal} setSelectedKCal={setSelectedKCal} selectedDietary={selectedDietary} setSelectedDietary={setSelectedDietary} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}>
           
         </Route>
         

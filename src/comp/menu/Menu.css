@@ -1,6 +1,6 @@
 
 .MenuLeftSide::-webkit-scrollbar {
-    width: 40px;
+    width: 20px;
   }
 .MenuLeftSide::-webkit-scrollbar-thumb {
     background-color: rgb(230, 230, 230);
