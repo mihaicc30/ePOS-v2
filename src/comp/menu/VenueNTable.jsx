@@ -99,7 +99,7 @@ const VenueNTable = ({ user, venues, venueNtable, setVenueNtable }) => {
 
   if (!venueNtable.table && venueNtable.venue)
     return (
-      <div className="absolute inset-0 bg-[--c60] z-10 overflow-y-scroll flex flex-col items-center">
+      <div className="fixed inset-0 bg-[--c60] z-10 overflow-y-scroll flex flex-col items-center">
         {/* table number */}
 
         <div

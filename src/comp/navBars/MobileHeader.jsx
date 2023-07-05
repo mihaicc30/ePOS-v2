@@ -6,6 +6,8 @@ import { MdRestaurantMenu } from "react-icons/md";
 import { BsLayoutTextWindowReverse, BsBoxArrowRight } from "react-icons/bs";
 import { FaRegUserCircle } from "react-icons/fa";
 import { MdOutlineSettingsSuggest } from "react-icons/md";
+import { GiRoundTable } from "react-icons/gi";
+import { SiContactlesspayment } from "react-icons/si";
 
 const MobileHeader = () => {
   const navigate = useNavigate();
@@ -19,7 +21,6 @@ const MobileHeader = () => {
 
   useEffect(() => {}, [user]);
 
-  
   const handleDivClick = (index) => {
     setActiveIndex(index);
     navigate(`/${index}`);
@@ -31,26 +32,26 @@ const MobileHeader = () => {
         <img src="./assets/d956248b8cfe7fe8fa39033b50728bcb.jpg" className="w-[100px] mx-auto" />
       </div>
       <div className="basis-[90%] flex text-center justify-center text-lg font-semibold">
-        <div className={`basis-[18%] transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-3xl flex flex-col text-center text-sm justify-center font-semibold ${loc.pathname === "/SignOut" ? "MAFA" : ""}`} onClick={() => handleDivClick("SignOut")}>
-          <span className="mx-auto text-xl">
-            <BsBoxArrowRight />
-          </span>
-          <p className={activeIndex === "SignOut" ? "" : "max-sm:hidden"}>Tables</p>
-        </div>
+          <div className={`basis-[20%] m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${loc.pathname === "/Tables" ? "MAFA" : "bg-gray-50"}`} onClick={() => handleDivClick("Tables")}>
+            <span className="mx-auto text-xl">
+              <GiRoundTable className="text-3xl" />
+            </span>
+            <p className={activeIndex === "Tables" ? "" : "max-sm:hidden"}>Tables</p>
+          </div>
 
-        <div className={`basis-[18%] transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-3xl flex flex-col text-center text-sm justify-center font-semibold ${loc.pathname === "/Settings" ? "MAFA" : ""}`} onClick={() => handleDivClick("Settings")}>
-          <span className="mx-auto text-xl">
-            <MdOutlineSettingsSuggest className="text-3xl" />
-          </span>
-          <p className={activeIndex === "Settings" ? "" : "max-sm:hidden"}>Menu</p>
-        </div>
+          <div className={`basis-[20%] m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${loc.pathname === "/Menu" ? "MAFA" : "bg-gray-50"}`} onClick={() => handleDivClick("Menu")}>
+            <span className="mx-auto text-xl">
+              <MdOutlineSettingsSuggest className="text-3xl" />
+            </span>
+            <p className={activeIndex === "Menu" ? "" : "max-sm:hidden"}>Menu</p>
+          </div>
 
-        <div className={`relative basis-[18%] transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-3xl flex flex-col text-center text-sm justify-center font-semibold ${loc.pathname === "/Basket" ? "MAFA" : ""}`} onClick={() => handleDivClick("Basket")}>
-          <span className="mx-auto text-xl">
-            <FaRegUserCircle />
-          </span>
-          <p className={activeIndex === "Basket" ? "" : "max-sm:hidden"}>Payment</p>
-        </div>
+          <div className={`relative basis-[20%] m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${loc.pathname === "/Payment" ? "MAFA" : "bg-gray-50"}`} onClick={() => handleDivClick("Payment")}>
+            <span className="mx-auto text-xl">
+              <SiContactlesspayment className="text-3xl" />
+            </span>
+            <p className={activeIndex === "Payment" ? "" : "max-sm:hidden"}>Payment</p>
+          </div>
       </div>
     </div>
   );

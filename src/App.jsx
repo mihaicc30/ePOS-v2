@@ -7,8 +7,6 @@ import { Routes, Route, Outlet, NavLink, BrowserRouter } from "react-router-dom"
 // Routes
 import Layout from "./Layout";
 
-import MenuItem from "./comp/menu/MenuItem";
-import MenuItemDetails from "./comp/menu/MenuItemDetails";
 import Menu from "./comp/menu/Menu";
 import Auth from "./comp/auth/Auth";
 import Signout from "./comp/signout/Signout";
@@ -23,6 +21,8 @@ import News from "./comp/Settings/News";
 import Privacy from "./comp/Settings/Privacy";
 import Symbol from "./comp/Settings/Symbol";
 import TC from "./comp/Settings/T&C";
+import Payment from "./comp/payment/Payment";
+import Tables from "./comp/tables/Tables";
 
 import { getVenueById } from "./utils/BasketUtils";
 
@@ -1854,38 +1854,21 @@ const App = () => {
   useEffect(() => {
     calculateTotalQuantity();
   }, [basketItems]);
-  
 
   return (
     <Routes>
       <Route path="/" element={<Layout basketQty={basketQty} />}>
+
         <Route path="/" element={<Auth />} />
+
+        <Route path="/tables" element={<Tables />} />
+
         <Route path="/menu" element={<Menu menuitems={menuitems} toggleGrid={toggleGrid} setToggleGrid={setToggleGrid} toggleFilters={toggleFilters} setToggleFilters={setToggleFilters} searchValue={searchValue} setSearchValue={setSearchValue} selectedKCal={selectedKCal} setSelectedKCal={setSelectedKCal} selectedDietary={selectedDietary} setSelectedDietary={setSelectedDietary} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}>
-          {menuitems.map((category, index) => (
-            <Route key={index} path={category.name} element={<MenuItem item={category} />}>
-              {category.items.map((item, itemIndex) => (
-                <Route key={itemIndex} path={item.name} element={<MenuItemDetails menuitems={menuitems} item={item} basketItems={basketItems} setBasketItems={setBasketItems} />} />
-              ))}
-            </Route>
-          ))}
+          
         </Route>
-        <Route
-          path="/basket"
-          element={
-            <Basket
-              user={user}
-              menuitems={menuitems}
-              basketItems={basketItems}
-              setBasketItems={setBasketItems}
-              venueNtable={{
-                venue: getVenueById(venues, venueNtable.venue),
-                table: venueNtable.table,
-              }}
-              setVenueNtable={setVenueNtable}
-            />
-          }
-        />
-        <Route path="/orderComplete" element={<OrderComplete venueNtable={{ venue: getVenueById(venues, venueNtable.venue), table: venueNtable.table }} menuitems={menuitems} venues={venues} basketItems={basketItems} setBasketItems={setBasketItems} />} />
+        
+        <Route path="/payment" element={<Payment />} />
+
         <Route path="/settings" element={<Settings venues={venues} />} />
 
         <Route path="/contact" element={<Contact />} />

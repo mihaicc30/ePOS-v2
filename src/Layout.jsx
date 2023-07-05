@@ -12,9 +12,13 @@ const Layout = ({ basketQty }) => {
     <div className="flex flex-col h-[100svh] w-[100svw] relative overflow-hidden">
       {window.location.pathname !== "/" && <MobileHeader />}
 
-      <div className={`basis-[95%] flex bg-[--c60] z-10 relative`}>
+      <div className={`basis-[95%] flex bg-gray-50 z-10 relative overflow-y-auto`}>
         {window.location.pathname !== "/" && <MobileLeftNav basketQty={basketQty} />}
-        <Outlet />
+        <div className="basis-[95%] overflow-hidden flex flex-col h-[100%] relative">
+          <div className="flex flex-col gap-4 h-[100%] w-[100%]">
+            <Outlet />
+          </div>
+        </div>
       </div>
     </div>
   );

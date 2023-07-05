@@ -13,7 +13,7 @@ const Signout = ({ user, setUser, setVenueNtable}) => {
       setVenueNtable({ venue: null, table: null });
       navigate("/");
       localStorage.clear();
-    }, 1100);
+    }, 400);
 
     return () => clearTimeout(timeout);
   }, []);

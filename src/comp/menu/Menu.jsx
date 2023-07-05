@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route, Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
 import "./Menu.css";
+import { getUser, getVenue } from "../../utils/authUser";
 import VenueNTable from "./VenueNTable";
 
 import { AiFillCaretRight, AiOutlineLeft } from "react-icons/ai";
 import { BsFilterRight } from "react-icons/bs";
 import { CiGrid2H, CiGrid41 } from "react-icons/ci";
-import MenuItem from "./MenuItem";
-import { BrowserRouter, Routes, Route, Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
 
-import {getUser, getVenue} from "../../utils/authUser"
+import MenuLeftSide from "./MenuLeftSide";
+import MenuRightSide from "./MenuRightSide";
 
 const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, searchValue, setSearchValue, selectedKCal, setSelectedKCal, selectedDietary, setSelectedDietary, venues, venueNtable, setVenueNtable }) => {
   const dbmenuitems = [
@@ -21,19 +22,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 350,
           tag: [],
           stock: 10,
-          ingredients: [
-            "free range eggs",
-            "sausage",
-            "bacon",
-            "mushroom",
-            "tomato",
-            "baked beans",
-            "toast",
-            "butter",
-          ],
+          ingredients: ["free range eggs", "sausage", "bacon", "mushroom", "tomato", "baked beans", "toast", "butter"],
           price: 10,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -61,7 +53,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           ingredients: ["scottish oats", "milk", "honey", "wallnuts", "bannana"],
           price: 6,
           allergens: ["nut free", "gluten free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -86,20 +78,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 350,
           tag: ["vegetarian"],
           stock: 10,
-          ingredients: [
-            "turmeric sourdough",
-            "smashed avocado",
-            "lemon",
-            "cherry tomatoes",
-            "feta cheese",
-            "pomegranades",
-            "watercress",
-            "poached egg",
-            "pine nuts",
-          ],
+          ingredients: ["turmeric sourdough", "smashed avocado", "lemon", "cherry tomatoes", "feta cheese", "pomegranades", "watercress", "poached egg", "pine nuts"],
           price: 9,
           allergens: [],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -127,7 +109,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           ingredients: ["eggs", "salt", "pepper", "butter"],
           price: 8,
           allergens: ["nut free", "gluten free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -153,7 +135,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           tag: ["vegetarian"],
           stock: 10,
           ingredients: ["bread", "eggs", "milk", "cinnamon", "sugar"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -183,7 +165,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           ingredients: ["yogurt", "granola", "mixed berries", "honey"],
           price: 6,
           allergens: ["nut free", "gluten free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -211,7 +193,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           ingredients: ["oats", "protein powder", "banana", "eggs", "milk"],
           price: 10,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -239,7 +221,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           ingredients: ["eggs", "bell peppers", "onions", "spinach", "cheese"],
           price: 8,
           allergens: ["nut free", "gluten free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -271,7 +253,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 2,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -291,13 +273,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           },
           cal: 300,
           img: "./assets/defaultDish.jpg",
-          ingredients: [
-            "Mozzarella cheese sticks",
-            "Breadcrumbs",
-            "Eggs",
-            "Flour",
-            "Marinara sauce",
-          ],
+          ingredients: ["Mozzarella cheese sticks", "Breadcrumbs", "Eggs", "Flour", "Marinara sauce"],
         },
         {
           name: "Kids Garlic Bread",
@@ -305,7 +281,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 2,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -333,7 +309,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 2,
           allergens: ["nut free", "dairy free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -369,7 +345,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           ingredients: ["chicken breast", "breadcrumbs", "spices"],
           price: 5,
           allergens: ["nut free", "gluten free", "dairy free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -397,7 +373,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           ingredients: ["pizza dough", "tomato sauce", "mozzarella cheese"],
           price: 7,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -423,7 +399,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           tag: ["vegetarian"],
           stock: 10,
           ingredients: ["cheddar", "cheese", "bread", "butter"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -451,7 +427,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           tag: ["vegetarian"],
           stock: 10,
           ingredients: ["peanut butter", "jelly", "bread"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -479,7 +455,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           tag: ["vegetarian"],
           stock: 10,
           ingredients: ["macaroni pasta", "cheddar cheese", "milk"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -507,7 +483,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           tag: ["vegetarian"],
           stock: 10,
           ingredients: ["pancake batter", "maple syrup", "fruits"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -541,7 +517,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 2,
           allergens: [],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -561,14 +537,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           },
           img: "./assets/defaultDrink.jpg",
           calories: "140",
-          ingredients: [
-            "Carbonated water",
-            "High fructose corn syrup",
-            "Caramel color",
-            "Phosphoric acid",
-            "Natural flavors",
-            "Caffeine",
-          ],
+          ingredients: ["Carbonated water", "High fructose corn syrup", "Caramel color", "Phosphoric acid", "Natural flavors", "Caffeine"],
         },
         {
           name: "Orange Juice",
@@ -576,7 +545,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 3,
           allergens: [],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -604,7 +573,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 3,
           allergens: [],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -632,7 +601,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 3,
           allergens: [],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -660,7 +629,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 3,
           allergens: [],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -688,7 +657,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 1,
           allergens: [],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -716,7 +685,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 4,
           allergens: [],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -744,7 +713,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 4,
           allergens: [],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -772,7 +741,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 5,
           allergens: [],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -792,12 +761,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           },
           img: "./assets/defaultDrink.jpg",
           calories: "420",
-          ingredients: [
-            "Chocolate ice cream",
-            "Milk",
-            "Whipped cream",
-            "Chocolate syrup",
-          ],
+          ingredients: ["Chocolate ice cream", "Milk", "Whipped cream", "Chocolate syrup"],
         },
         {
           name: "Vanilla Milkshake",
@@ -805,7 +769,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 5,
           allergens: [],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -825,12 +789,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           },
           img: "./assets/defaultDrink.jpg",
           calories: "380",
-          ingredients: [
-            "Vanilla ice cream",
-            "Milk",
-            "Whipped cream",
-            "Vanilla extract",
-          ],
+          ingredients: ["Vanilla ice cream", "Milk", "Whipped cream", "Vanilla extract"],
         },
         {
           name: "Coffee",
@@ -838,7 +797,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 3,
           allergens: [],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -866,7 +825,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 4,
           allergens: [],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -886,13 +845,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           },
           img: "./assets/defaultDrink.jpg",
           calories: "150",
-          ingredients: [
-            "Cocoa powder",
-            "Milk",
-            "Sugar",
-            "Whipped cream",
-            "Chocolate shavings",
-          ],
+          ingredients: ["Cocoa powder", "Milk", "Sugar", "Whipped cream", "Chocolate shavings"],
         },
       ],
     },
@@ -906,7 +859,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 6,
           allergens: ["nut free", "gluten free", "dairy free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -934,7 +887,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 5,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -954,13 +907,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           },
           cal: 300,
           img: "./assets/defaultDish.jpg",
-          ingredients: [
-            "Mozzarella cheese sticks",
-            "Breadcrumbs",
-            "Eggs",
-            "Flour",
-            "Marinara sauce",
-          ],
+          ingredients: ["Mozzarella cheese sticks", "Breadcrumbs", "Eggs", "Flour", "Marinara sauce"],
         },
         {
           name: "Garlic Bread",
@@ -968,7 +915,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 4,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -996,7 +943,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 4,
           allergens: ["nut free", "dairy free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1024,7 +971,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 5,
           allergens: ["nut free", "dairy free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1052,7 +999,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 7,
           allergens: ["nut free", "gluten free", "dairy free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1080,7 +1027,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 6,
           allergens: ["nut free", "gluten free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1100,13 +1047,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           },
           cal: 200,
           img: "./assets/defaultDish.jpg",
-          ingredients: [
-            "Tomatoes",
-            "Mozzarella cheese",
-            "Basil",
-            "Balsamic glaze",
-            "Salt",
-          ],
+          ingredients: ["Tomatoes", "Mozzarella cheese", "Basil", "Balsamic glaze", "Salt"],
         },
         {
           name: "Spinach Artichoke Dip",
@@ -1114,7 +1055,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           stock: 10,
           price: 6,
           allergens: ["nut free", "gluten free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1134,13 +1075,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           },
           cal: 300,
           img: "./assets/defaultDish.jpg",
-          ingredients: [
-            "Spinach",
-            "Artichoke hearts",
-            "Cream cheese",
-            "Sour cream",
-            "Parmesan cheese",
-          ],
+          ingredients: ["Spinach", "Artichoke hearts", "Cream cheese", "Sour cream", "Parmesan cheese"],
         },
         {
           name: "Crispy Calamari",
@@ -1150,7 +1085,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           ingredients: ["calamari rings", "flour", "spices", "lemon wedges"],
           price: 10,
           allergens: ["nut free", "gluten free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1181,17 +1116,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 400,
           tag: [],
           stock: 10,
-          ingredients: [
-            "salmon fillet",
-            "lemon",
-            "dill",
-            "olive oil",
-            "salt",
-            "pepper",
-          ],
+          ingredients: ["salmon fillet", "lemon", "dill", "olive oil", "salt", "pepper"],
           price: 15,
           allergens: ["nut free", "gluten free", "dairy free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1216,22 +1144,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 2100,
           tag: [],
           stock: 10,
-          ingredients: [
-            "pork",
-            "lamb",
-            "beef",
-            "sausage",
-            "egg",
-            "black pudding",
-            "chips",
-            "salad",
-            "tomato",
-            "mushroom",
-            "gammon",
-          ],
+          ingredients: ["pork", "lamb", "beef", "sausage", "egg", "black pudding", "chips", "salad", "tomato", "mushroom", "gammon"],
           price: 20,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1256,18 +1172,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 500,
           tag: [],
           stock: 10,
-          ingredients: [
-            "beef patty",
-            "brioche bun",
-            "lettuce",
-            "tomato",
-            "onion",
-            "cheese",
-            "pickles",
-          ],
+          ingredients: ["beef patty", "brioche bun", "lettuce", "tomato", "onion", "cheese", "pickles"],
           price: 12,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1292,17 +1200,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 300,
           tag: ["vegetarian", "vegan"],
           stock: 10,
-          ingredients: [
-            "mixed vegetables",
-            "tofu",
-            "soy sauce",
-            "ginger",
-            "garlic",
-            "sesame oil",
-          ],
+          ingredients: ["mixed vegetables", "tofu", "soy sauce", "ginger", "garlic", "sesame oil"],
           price: 10,
           allergens: ["nut free", "gluten free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1327,17 +1228,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 450,
           tag: [],
           stock: 10,
-          ingredients: [
-            "chicken breast",
-            "bread crumbs",
-            "Parmesan cheese",
-            "marinara sauce",
-            "mozzarella cheese",
-            "spaghetti",
-          ],
+          ingredients: ["chicken breast", "bread crumbs", "Parmesan cheese", "marinara sauce", "mozzarella cheese", "spaghetti"],
           price: 14,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1362,16 +1256,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 380,
           tag: ["vegetarian"],
           stock: 10,
-          ingredients: [
-            "penne pasta",
-            "basil pesto",
-            "cherry tomatoes",
-            "pine nuts",
-            "Parmesan cheese",
-          ],
+          ingredients: ["penne pasta", "basil pesto", "cherry tomatoes", "pine nuts", "Parmesan cheese"],
           price: 11,
           allergens: [],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1396,18 +1284,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 320,
           tag: [],
           stock: 10,
-          ingredients: [
-            "shrimp",
-            "breadcrumbs",
-            "lemon",
-            "tartare",
-            "chips",
-            "salad",
-            "parsley",
-          ],
+          ingredients: ["shrimp", "breadcrumbs", "lemon", "tartare", "chips", "salad", "parsley"],
           price: 16,
           allergens: ["nut free", "dairy free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1432,17 +1312,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 380,
           tag: ["vegetarian"],
           stock: 10,
-          ingredients: [
-            "arborio rice",
-            "mushrooms",
-            "onion",
-            "garlic",
-            "vegetable broth",
-            "Parmesan cheese",
-          ],
+          ingredients: ["arborio rice", "mushrooms", "onion", "garlic", "vegetable broth", "Parmesan cheese"],
           price: 13,
           allergens: ["nut free", "gluten free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1467,16 +1340,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 320,
           tag: [],
           stock: 10,
-          ingredients: [
-            "grilled chicken breast",
-            "romaine lettuce",
-            "croutons",
-            "Parmesan cheese",
-            "Caesar dressing",
-          ],
+          ingredients: ["grilled chicken breast", "romaine lettuce", "croutons", "Parmesan cheese", "Caesar dressing"],
           price: 9,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1501,18 +1368,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 480,
           tag: [],
           stock: 10,
-          ingredients: [
-            "beef sirloin",
-            "mushrooms",
-            "onion",
-            "garlic",
-            "sour cream",
-            "beef broth",
-            "egg noodles",
-          ],
+          ingredients: ["beef sirloin", "mushrooms", "onion", "garlic", "sour cream", "beef broth", "egg noodles"],
           price: 15,
           allergens: [],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1537,17 +1396,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 550,
           tag: [],
           stock: 10,
-          ingredients: [
-            "white fish fillets",
-            "flour",
-            "beer",
-            "potatoes",
-            "tartar sauce",
-            "lemon wedges",
-          ],
+          ingredients: ["white fish fillets", "flour", "beer", "potatoes", "tartar sauce", "lemon wedges"],
           price: 13,
           allergens: ["nut free", "dairy free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1572,17 +1424,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 420,
           tag: ["vegetarian"],
           stock: 10,
-          ingredients: [
-            "eggplant",
-            "bread crumbs",
-            "Parmesan cheese",
-            "marinara sauce",
-            "mozzarella cheese",
-            "spaghetti",
-          ],
+          ingredients: ["eggplant", "bread crumbs", "Parmesan cheese", "marinara sauce", "mozzarella cheese", "spaghetti"],
           price: 12,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1607,19 +1452,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 400,
           tag: [],
           stock: 10,
-          ingredients: [
-            "chicken",
-            "lemon",
-            "rosemary",
-            "thyme",
-            "garlic",
-            "butter",
-            "potatoes",
-            "carrots",
-          ],
+          ingredients: ["chicken", "lemon", "rosemary", "thyme", "garlic", "butter", "potatoes", "carrots"],
           price: 16,
           allergens: ["nut free", "gluten free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1644,18 +1480,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 360,
           tag: ["vegetarian"],
           stock: 10,
-          ingredients: [
-            "lasagna noodles",
-            "spinach",
-            "mushrooms",
-            "zucchini",
-            "ricotta cheese",
-            "marinara sauce",
-            "mozzarella cheese",
-          ],
+          ingredients: ["lasagna noodles", "spinach", "mushrooms", "zucchini", "ricotta cheese", "marinara sauce", "mozzarella cheese"],
           price: 14,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1686,18 +1514,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 350,
           tag: ["vegetarian"],
           stock: 10,
-          ingredients: [
-            "chocolate",
-            "butter",
-            "sugar",
-            "eggs",
-            "flour",
-            "vanilla extract",
-            "walnuts",
-          ],
+          ingredients: ["chocolate", "butter", "sugar", "eggs", "flour", "vanilla extract", "walnuts"],
           price: 8,
           allergens: [],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1722,19 +1542,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 450,
           tag: ["vegetarian"],
           stock: 10,
-          ingredients: [
-            "graham cracker crumbs",
-            "butter",
-            "cream cheese",
-            "sugar",
-            "sour cream",
-            "vanilla extract",
-            "eggs",
-            "strawberry topping",
-          ],
+          ingredients: ["graham cracker crumbs", "butter", "cream cheese", "sugar", "sour cream", "vanilla extract", "eggs", "strawberry topping"],
           price: 8,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1762,7 +1573,7 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           ingredients: ["cream", "sugar", "vanilla extract"],
           price: 6,
           allergens: ["nut free", "gluten free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1787,17 +1598,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 250,
           tag: ["vegetarian"],
           stock: 10,
-          ingredients: [
-            "pastry dough",
-            "pastry cream",
-            "strawberries",
-            "kiwi",
-            "blueberries",
-            "apricot glaze",
-          ],
+          ingredients: ["pastry dough", "pastry cream", "strawberries", "kiwi", "blueberries", "apricot glaze"],
           price: 10,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1822,17 +1626,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 320,
           tag: ["vegetarian"],
           stock: 10,
-          ingredients: [
-            "ladyfingers",
-            "espresso",
-            "mascarpone cheese",
-            "sugar",
-            "cocoa powder",
-            "rum or coffee liqueur",
-          ],
+          ingredients: ["ladyfingers", "espresso", "mascarpone cheese", "sugar", "cocoa powder", "rum or coffee liqueur"],
           price: 9,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1857,16 +1654,10 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
           cal: 280,
           tag: ["vegetarian"],
           stock: 10,
-          ingredients: [
-            "shortcakes",
-            "strawberries",
-            "whipped cream",
-            "sugar",
-            "vanilla extract",
-          ],
+          ingredients: ["shortcakes", "strawberries", "whipped cream", "sugar", "vanilla extract"],
           price: 6,
           allergens: ["nut free"],
-          priceOffer:null,
+          priceOffer: null,
           allergensList: {
             Meat: false,
             Celery: false,
@@ -1892,11 +1683,11 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
 
   const nav = useNavigate();
   const [menuitems, setMenuitems] = useState(dbmenuitems);
-  const [user,setUser] = useState(null)
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    getUser(setUser)
-    getVenue(setVenueNtable)
+    getUser(setUser);
+    getVenue(setVenueNtable);
   }, []);
 
   const handleInputChange = (event) => {
@@ -1920,132 +1711,31 @@ const Menu = ({ toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, sear
     nav(`/${c}/${i}`);
   };
 
-  if (!venueNtable.venue || !venueNtable.table)
-      return (
-        <VenueNTable
-          venues={venues}
-          venueNtable={venueNtable}
-          setVenueNtable={setVenueNtable}
-        />
-      );
+  if (!venueNtable.venue || !venueNtable.table) return <VenueNTable venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />;
 
-    return (
+  return (
     <>
       {!venueNtable.venue || (!venueNtable.table && <VenueNTable venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />)}
-      <div className="flex flex-col gap-4 grow">
-        <div className="searchBar flex flex-col relative gap-4">
-          <div className="relative flex  mr-4 items-center max-[350px]:flex-wrap  max-[350px]:justify-center">
-            <div className="relative grow mx-4">
-              <input type="text" placeholder="Search..." className="w-[98%] mx-auto pl-10 pr-10 py-2 my-2 rounded" value={searchValue} onChange={handleInputChange} />
-              <span className="absolute top-[28px] left-2 -translate-y-3">🔍</span>
-              <button
-                onClick={() => setSearchValue("")}
-                className={`absolute top-[28px] right-5 -translate-y-3 ${searchValue ? "" : "hidden"}
-									`}>
-                ✖
-              </button>
+
+      <div className="grid grid-cols-[2fr_3fr] gap-1 rounded h-[100%] w-[100%]">
+        <div className="h-[100%] w-[100%] rounded shadow-xl grid grid-cols-1 p-1 overflow-hidden">
+          <div className="grid grid-cols-4 gap-2">
+            <button className="text-sm bg-red-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] break-words">Delete ALL</button>
+            <div className="tableNumber m-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]">
+              <p>Table</p>
+              <p className="text-3xl">5</p>
             </div>
-            <button onClick={() => setToggleFilters(!toggleFilters)} className="whitespace-nowrap bg-[--c1] rounded px-3 border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none h-[40px] text-4xl">
-              <BsFilterRight />
-            </button>
-            <button
-              onClick={() => setToggleGrid(!toggleGrid)}
-              className={`md:hidden whitespace-nowrap bg-[--c1] rounded ml-4 px-3 border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none h-[40px] text-4xl 
-								${selectedKCal === "clear" && selectedDietary === "clear" && searchValue === "" ? "" : "hidden"}
-								}`}>
-              {toggleGrid ? <CiGrid41 /> : <CiGrid2H />}
-            </button>
+            <button className="text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]">Transfer Table</button>
+            <button className="text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]">Open Table</button>
           </div>
 
-          <div className={`${toggleFilters ? "flex" : "hidden"} gap-4 px-4 pb-2 flex-nowrap overflow-auto`}>
-            <button name="clear" onClick={handleF1} className={`whitespace-nowrap bg-[--c30] rounded px-3 py-1 font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block  active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none ${selectedKCal === "clear" ? "shadow-inner shadow-black" : "shadow-xl"}`}>
-              ✖
-            </button>
-            <button name="300" onClick={handleF1} className={`whitespace-nowrap bg-[--c1] rounded px-3 py-1 font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block  active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none ${selectedKCal === "300" ? "shadow-inner shadow-black" : "shadow-xl"}`}>
-              &#60; 300 KCal
-            </button>
-            <button name="600" onClick={handleF1} className={`whitespace-nowrap bg-[--c1] rounded px-3 py-1 font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block  active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none ${selectedKCal === "600" ? "shadow-inner shadow-black" : "shadow-xl"}`}>
-              &#60; 600 KCal
-            </button>
-            <button name="900" onClick={handleF1} className={`whitespace-nowrap bg-[--c1] rounded px-3 py-1 font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block  active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none ${selectedKCal === "900" ? "shadow-inner shadow-black" : "shadow-xl"}`}>
-              &#60; 900 KCal
-            </button>
-            <button name="1200" onClick={handleF1} className={`whitespace-nowrap bg-[--c1] rounded px-3 py-1 font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block  active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none ${selectedKCal === "1200" ? "shadow-inner shadow-black" : "shadow-xl"}`}>
-              &#60; 1200 KCal
-            </button>
-          </div>
-          <div className={`${toggleFilters ? "flex" : "hidden"} gap-4 px-4 pb-2 flex-nowrap overflow-auto`}>
-            <button name="clear" onClick={handleF2} className={`whitespace-nowrap bg-[--c30] rounded px-3 py-1 font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block  active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none ${selectedDietary === "clear" ? "shadow-inner shadow-black" : "shadow-xl"}`}>
-              ✖
-            </button>
-            <button name="dairy free" onClick={handleF2} className={`whitespace-nowrap bg-[--c1] rounded px-3 py-1 font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block  active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none ${selectedDietary === "dairy free" ? "shadow-inner shadow-black" : "shadow-xl"}`}>
-              Dairy Free
-            </button>
-            <button name="gluten free" onClick={handleF2} className={`whitespace-nowrap bg-[--c1] rounded px-3 py-1 font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block  active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none ${selectedDietary === "gluten free" ? "shadow-inner shadow-black" : "shadow-xl"}`}>
-              Gluten Free
-            </button>
-            <button name="nut free" onClick={handleF2} className={`whitespace-nowrap bg-[--c1] rounded px-3 py-1 font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block  active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none ${selectedDietary === "nut free" ? "shadow-inner shadow-black" : "shadow-xl"}`}>
-              Nut Free
-            </button>
-            <button name="vegan" onClick={handleF2} className={`whitespace-nowrap bg-[--c1] rounded px-3 py-1 font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block  active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none ${selectedDietary === "vegan" ? "shadow-inner shadow-black" : "shadow-xl"}`}>
-              Vegan
-            </button>
-            <button name="vegetarian" onClick={handleF2} className={`whitespace-nowrap bg-[--c1] rounded px-3 py-1 font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block  active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none ${selectedDietary === "vegetarian" ? "shadow-inner shadow-black" : "shadow-xl"}`}>
-              Vegetarian
-            </button>
+          <div className="MenuLeftSide flex flex-col overflow-y-scroll">
+            <MenuLeftSide />
           </div>
         </div>
 
-        <div className={`relative  ${toggleGrid ? "grid-cols-1" : "grid-cols-2"} ${selectedKCal === "clear" && selectedDietary === "clear" && searchValue === "" ? "grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2" : "flex"} `}>
-          <Outlet />
-
-          {selectedKCal === "clear" && selectedDietary === "clear" && searchValue === "" ? (
-            menuitems &&
-            menuitems.map((item, index) => (
-              <div key={index} className="p-2 flex flex-col cursor-pointer hover:scale-[0.98] transition-all border-b-2 animate-fadeUP1 opacity-0" style={{ animationDelay: `0.${index}s` }} onClick={() => nav(item.name)}>
-                <img src={item.img} className="h-[100px] w-[100%]" style={{ objectFit: "cover", overflow: "hidden" }} />
-                <div className="flex justify-between items-center">
-                  <p>{item.name}</p>
-                  <AiFillCaretRight className="bg-[--c1] rounded p-[2px] text-xl font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none" />
-                </div>
-              </div>
-            ))
-          ) : (
-            <ul className="w-[100%]">
-              {menuitems.map((menuItem, index) => {
-                // console.log(menuItem);
-                return menuItem.items
-                  .filter((item) => (item.name.toLowerCase().indexOf(searchValue.toLowerCase()) >= 0 || item.name.toLowerCase().includes(searchValue.toLowerCase()) || item.ingredients.some((ingredient) => ingredient.toLowerCase().includes(searchValue.toLowerCase()))) && (selectedKCal === "clear" || selectedKCal >= item.cal) && (selectedDietary === "clear" || item.allergens.includes(selectedDietary) || item.tag.includes(selectedDietary)))
-                  .map((menuItem2, index2) => {
-                    // console.log(menuItem2);
-                    return (
-                      <li key={index2}>
-                        <div className="flex border-b-2 p-4 active:bg-[--clsec] hover:scale-[0.98] transition gap-4" onClick={() => handleItemClick(menuItem.name, menuItem2.name)}>
-                          <div className="grow">
-                            <p className="font-bold text-xl">{menuItem2.name}</p>
-                            <p className="text-sm capitalize">
-                              {menuItem2.ingredients.map((itemz, index) => (
-                                <span key={index}>
-                                  <span>{itemz}</span>
-                                  {index !== menuItem2.ingredients.length - 1 && <span>, </span>}
-                                </span>
-                              ))}
-                            </p>
-                          </div>
-                          <div>
-                            <p className="font-bold text-xl text-end">£{parseFloat(menuItem2.price).toFixed(2)}</p>
-                            <p className="text-sm whitespace-nowrap text-end">{menuItem2.cal} kcal</p>
-                          </div>
-                          <div>
-                            <AiFillCaretRight className=" bg-[--c1] rounded my-auto p-[2px] text-xl font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none" />
-                          </div>
-                        </div>
-                      </li>
-                    );
-                  });
-              })}
-            </ul>
-          )}
+        <div className="MenuRightSide h-[100%] w-[100%] rounded shadow-xl p-1 flex flex-col">
+          <MenuRightSide />
         </div>
       </div>
     </>
