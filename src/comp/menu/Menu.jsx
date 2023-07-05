@@ -1742,17 +1742,17 @@ const Menu = ({ basketItems, setBasketItems, toggleGrid, setToggleGrid, toggleFi
           <div className="grid grid-cols-4 gap-2 h-[82px]">
             <button onClick={handleDeleteAll} className="text-sm bg-red-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] flex flex-col justify-center items-center border-b-2 border-b-black ">
               <span>Delete ALL</span>
-              <span>5</span>
+              <span>{totalProducts}</span>
             </button>
             <div className="tableNumber m-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black ">
               <p>Table</p>
-              <p className="text-3xl">5</p>
+              <p className="text-3xl">{venueNtable.table}</p>
             </div>
-            <button className="text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
+            <button onClick={()=>{setVenueNtable((prevValues) => ({ ...prevValues, table: null })); console.log("dev**to check -> confirm merge if any items -> merge -> change table in db") }} className="text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
               <span>Transfer</span>
               <span>Table</span>
             </button>
-            <button className="text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
+            <button onClick={()=>{setVenueNtable((prevValues) => ({ ...prevValues, table: null })); console.log("dev**to change table in db"); }} className="text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
               <span>Open</span>
               <span>Table</span>
             </button>

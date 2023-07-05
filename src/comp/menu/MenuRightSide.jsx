@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BsFilterRight } from "react-icons/bs";
 
 const MenuRightSide = ({ basketItems, setBasketItems }) => {
@@ -1824,6 +1824,9 @@ const MenuRightSide = ({ basketItems, setBasketItems }) => {
     setSearchValue(event.target.value);
   };
 
+  useEffect(()=>{},[searchValue])
+
+
   const [menuType, setMenuType] = useState("Beverages");
   const [menuType2, setMenuType2] = useState("");
   const [menuType3, setMenuType3] = useState("");
@@ -1831,9 +1834,9 @@ const MenuRightSide = ({ basketItems, setBasketItems }) => {
 
   // filter for beverages/food/barsnacks
   const changeMenuType = (e) => {
-      setMenuType2("");
-      setMenuType3("");
-      setMenuType(e.target.innerText);
+    setMenuType2("");
+    setMenuType3("");
+    setMenuType(e.target.innerText);
   };
 
   // filter for type of beverage
@@ -1898,18 +1901,19 @@ const MenuRightSide = ({ basketItems, setBasketItems }) => {
           </button>
         </div>
         <button
-          disabled={menuType2 === "" && menuType3 === "" && menuType4 === ""}
+          disabled={menuType2 === "" && menuType3 === "" && menuType4 === "" && searchValue === ""}
           onClick={() => {
+            setSearchValue("");
             setMenuType2("");
             setMenuType3("");
             setMenuType4("");
           }}
-          className={`p-2 ${menuType2 === "" && menuType3 === "" && menuType4 === "" ? "bg-[--c3]" : "bg-[--c1]"} rounded-xl shadow-xl border-b-2 border-b-black transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] active:shadow-[inset_0px_4px_2px_black]`}>
+          className={`p-2 ${menuType2 === "" && searchValue === "" && menuType3 === "" && menuType4 === "" ? "bg-[--c3]" : "bg-[--c1]"} rounded-xl shadow-xl border-b-2 border-b-black transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] active:shadow-[inset_0px_4px_2px_black]`}>
           Clear Filters
         </button>
       </div>
 
-      <div className="grid grid-cols-3">
+      <div className={`${searchValue !== "" ? "hidden":"grid"} grid-cols-3`}>
         <div onClick={changeMenuType} className={`${menuType === "Beverages" ? "shadow-[inset_0px_4px_2px_black] bg-[--c12]" : ""} border-b-2 border-b-black m-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`}>
           Beverages
         </div>
@@ -1970,15 +1974,29 @@ const MenuRightSide = ({ basketItems, setBasketItems }) => {
         {menuType === "Bar Snacks" && <p className="text-center col-span-3">Range Bar Snacks</p>}
       </div>
 
-      <div className="grid grid-cols-4 overflow-y-scroll h-[100%]">
+      <div className="grid grid-cols-4 grid-rows-[128px] overflow-y-scroll h-[100%]">
         {dbmenuitems
-          .filter((category) => menuType === "" || category.category.toLowerCase() === menuType.toLowerCase())
+          .filter((category) => {
+            if (searchValue !== "") {
+              // Disregard other filters if searchValue is not empty
+              return category.items.some((item) =>
+                item.name.toLowerCase().includes(searchValue.toLowerCase())
+              );
+            } else {
+              return (
+                menuType === "" || category.category.toLowerCase() === menuType.toLowerCase()
+              );
+            }
+          })
           .map((category, index) => {
             return (
               category.items
                 // .filter((item) => menuType2 === "" || item.subcategory.toLowerCase() === menuType2.toLowerCase())
                 .filter((item) => {
-                  if (category.category === "Beverages") {
+                  if (searchValue !== "") {
+                    // Disregard other filters if searchValue is not empty
+                    return item.name.toLowerCase().includes(searchValue.toLowerCase());
+                  } else if (category.category === "Beverages") {
                     return menuType2 === "" || item.subcategory.toLowerCase() === menuType2.toLowerCase();
                   } else if (category.category === "Food") {
                     return menuType3 === "" || item.subcategory.toLowerCase() === menuType3.toLowerCase();
@@ -1989,9 +2007,9 @@ const MenuRightSide = ({ basketItems, setBasketItems }) => {
                 })
                 .map((item, index2) => {
                   return (
-                    <div key={category + index2} onClick={() => handleAddToMenu(item)} className="h-[128px] w-[170px] flex flex-col shadow-xl m-1 p-1 transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]">
+                    <div key={category + index2} onClick={() => handleAddToMenu(item)} className="rounded h-[128px] w-[170px] flex flex-col shadow-xl m-1 p-1 transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]">
                       <span className="text-end">{item.stock || 1}</span>
-                      <span className="line-clamp-2 h-[48px]">{item.name}</span>
+                      <span className="line-clamp-2 h-[48px] font-bold">{item.name}</span>
                       <span>£{item.price.toFixed(2)}</span>
                       <span className="h-[24px]">{item.allergens.join(", ")}</span>
                     </div>
@@ -2002,11 +2020,10 @@ const MenuRightSide = ({ basketItems, setBasketItems }) => {
       </div>
 
       <div className="grid grid-cols-5 w-[100%] h-[100px]">
-        
         <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`}>Misc Item</div>
-        
-      <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`}>Apply Discount</div>
-      <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`}>Store</div>
+
+        <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`}>Apply Discount</div>
+        <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`}>Store</div>
         <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`}>Print Bar</div>
         <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`}>Print Kitchen</div>
       </div>
