@@ -4,9 +4,10 @@ import { getVenueById } from "../../utils/BasketUtils";
 import { AiFillCaretRight } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import "./Tables.css";
+import DraggableTables from "./DraggableTables"
 
 const Tables = ({ user, venues, venueNtable, setVenueNtable }) => {
-	const nav = useNavigate();
+  const nav = useNavigate();
   const [searchLocationValue, setLocationSearchValue] = useState("");
   const [searchTableValue, setTableSearchValue] = useState("");
   const searchInputRef = useRef(null);
@@ -31,14 +32,19 @@ const Tables = ({ user, venues, venueNtable, setVenueNtable }) => {
 
   const handleTable = (id) => {
     setVenueNtable((prevValues) => ({ ...prevValues, table: id }));
-	nav("/Menu")
+    nav("/Menu");
   };
 
   return (
-    <div className="bg-[--c60] grid grid-cols-1 gap-4 overflow-y-hidden ">
+    <div className="bg-[--c60] grid grid-cols-1 gap-4 overflow-y-hidden h-[100%]">
+   
+      <div className="relative">
+       <DraggableTables />
+      </div>
+
       <div className={`flex flex-col transition-all animate-fadeUP1 z-10 p-12 overflow-y-scroll mx-auto text-3xl whitespace-nowrap select-none`}>
-        {venueNtable.table && <p>Current Selected Table: {venueNtable.table}</p> }
-		{!venueNtable.table && <p>Select Table: </p> }
+        {venueNtable.table && <p>Current Selected Table: {venueNtable.table}</p>}
+        {!venueNtable.table && <p>Select Table: </p>}
       </div>
 
       <div className={`flex flex-col max-w-[600px] transition-all z-10 overflow-y-scroll pr-4 mx-auto w-[100%]`}>
@@ -53,7 +59,7 @@ const Tables = ({ user, venues, venueNtable, setVenueNtable }) => {
             ✖
           </button>
         </div>
-        {getVenueById(venues, localStorage.getItem("venueID"))
+        {/* {getVenueById(venues, localStorage.getItem("venueID"))
           .table.filter((venue) => String(venue).includes(String(searchTableValue)))
           .map((venue, index) => {
             return (
@@ -64,7 +70,7 @@ const Tables = ({ user, venues, venueNtable, setVenueNtable }) => {
                 </div>
               </div>
             );
-          })}
+          })} */}
       </div>
     </div>
   );
