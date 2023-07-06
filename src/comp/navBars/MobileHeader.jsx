@@ -32,21 +32,21 @@ const MobileHeader = () => {
         <img src="./assets/d956248b8cfe7fe8fa39033b50728bcb.jpg" className="w-[100px] mx-auto" />
       </div>
       <div className="basis-[90%] flex text-center justify-center text-lg font-semibold">
-          <div className={`border-b-2 border-b-black basis-[20%] m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${activeIndex === "Tables" ? "bg-[--c1] shadow-[inset_2px_2px_2px_black]" : "bg-gray-50"}`} onClick={() => handleDivClick("Tables")}>
+          <div className={`border-b-2 border-b-black basis-[20%] m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${window.location.pathname === "/Tables"  ? "bg-[--c1] shadow-[inset_2px_2px_2px_black]" : "bg-gray-50"}`} onClick={() => handleDivClick("Tables")}>
             <span className="mx-auto text-xl">
               <GiRoundTable className="text-3xl" />
             </span>
             <p className={activeIndex === "Tables" ? "" : "max-sm:hidden"}>Tables</p>
           </div>
 
-          <div className={`border-b-2 border-b-black basis-[20%] m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${activeIndex === "Menu" ? "bg-[--c1] shadow-[inset_2px_2px_2px_black]" : "bg-gray-50"}`} onClick={() => handleDivClick("Menu")}>
+          <div className={`border-b-2 border-b-black basis-[20%] m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${window.location.pathname === "/Menu" ? "bg-[--c1] shadow-[inset_2px_2px_2px_black]" : "bg-gray-50"}`} onClick={() => handleDivClick("Menu")}>
             <span className="mx-auto text-xl">
               <MdOutlineSettingsSuggest className="text-3xl" />
             </span>
             <p className={activeIndex === "Menu" ? "" : "max-sm:hidden"}>Menu</p>
           </div>
 
-          <div className={`border-b-2 border-b-black relative basis-[20%] m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${activeIndex === "Payment" ? "bg-[--c1] shadow-[inset_2px_2px_2px_black]" : "bg-gray-50"}`} onClick={() => handleDivClick("Payment")}>
+          <div className={`border-b-2 border-b-black relative basis-[20%] m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${window.location.pathname === "/Payment" ? "bg-[--c1] shadow-[inset_2px_2px_2px_black]" : "bg-gray-50"}`} onClick={() => handleDivClick("Payment")}>
             <span className="mx-auto text-xl">
               <SiContactlesspayment className="text-3xl" />
             </span>

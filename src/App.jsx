@@ -1863,7 +1863,7 @@ const App = () => {
           
         </Route>
         
-        <Route path="/payment" element={<Payment basketItems={basketItems} setBasketItems={setBasketItems} user={user}/>} />
+        <Route path="/payment" element={<Payment setVenueNtable={setVenueNtable} venueNtable={venueNtable} basketItems={basketItems} setBasketItems={setBasketItems} user={user}/>} />
 
         <Route path="/settings" element={<Settings venues={venues} />} />
 

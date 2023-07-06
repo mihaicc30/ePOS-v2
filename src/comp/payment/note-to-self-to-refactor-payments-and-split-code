@@ -1,0 +1,56 @@
+// // temp code
+
+
+
+
+// const payWholeWithStripe = async () => {
+//     setpaymentModalAwaitConfirmation(true);
+//     const stripe = Stripe(import.meta.env.VITE_S_PK);
+
+//     const api = `${import.meta.env.VITE_API}stripe/create-payment-intent3`;
+//     const res = await fetch(api, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//         "Access-Control-Allow-Credentials": true,
+//       },
+//       body: JSON.stringify({
+//         v: import.meta.env.VITE_G,
+//         amount: basketTotal,
+//       }),
+//     });
+
+//     if (res.status === 403) {
+//       setIsLoading(false);
+//       setMessage("Request denied.");
+//       return;
+//     }
+
+//     const cs = await res.json();
+//     console.log(cs.clientSecret);
+//     // Confirm the PaymentIntent
+//     const stripeConfirmPayment = await stripe.confirmPayment({
+//       clientSecret: cs.clientSecret,
+//       confirmParams: {
+//         return_url: `${window.location.origin}/PaymentComplete`,
+//       },
+//       // Uncomment below if you only want redirect for redirect-based payments
+//       redirect: "if_required",
+//     });
+
+//     setIsLoading(false);
+//     if (stripeConfirmPayment.error) {
+//       console.log(stripeConfirmPayment.error);
+//       if (error.type === "card_error" || error.type === "validation_error") {
+//         alert(error.message);
+//       } else {
+//         alert("An unexpected error occured.");
+//       }
+//     } else if (stripeConfirmPayment.paymentIntent) {
+//       console.log(stripeConfirmPayment.paymentIntent);
+//       alert(`Payment successful! £${basketTotal} has been paid.`);
+//       setpaymentModalAwaitConfirmation(false);
+//       alert(`Basket will now be cleared and data posted to the server.`);
+//       handleTableFinishCheckout();
+//     }
+//   };
