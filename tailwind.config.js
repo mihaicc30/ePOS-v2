@@ -5,7 +5,7 @@ export default {
     extend: {
       animation: {
         fadeUP1: "fadeUP .5s forwards",
-        fadeUPnDOWN: "fadeUPnDOWN 4s forwards",
+        fadeUPnDOWN: "fadeUPnDOWN 1.8s forwards",
         fadeDOWN1: "fadeDOWN .5s forwards",
         shrinkFromLeft: "shrinkFromLeft 4s forwards",
         shake: "shake .5s forwards",

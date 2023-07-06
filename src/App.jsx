@@ -1828,9 +1828,15 @@ const App = () => {
   const [venueNtable, setVenueNtable] = useState({ venue: 1, table: null });
 
   useEffect(() => {
+    let x = basketItems
+    .reduce((total, item) => {
+      return total + item.price * item.qty;
+    }, 0)
+    .toFixed(2)
+
     const handleKeyPress = (event) => {
       if (event.key === 'F9') {
-        console.log(basketItems);
+        console.log(basketItems, x);
       }
     };
     window.addEventListener('keydown', handleKeyPress);

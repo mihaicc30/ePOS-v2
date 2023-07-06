@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import "./Payment.css";
 
 import { BiSolidMessageError } from "react-icons/bi";
@@ -18,10 +18,13 @@ const appearance = {
 const stripePromise = loadStripe(import.meta.env.VITE_S_PK);
 
 const Payment = ({ user, basketItems, setBasketItems, venueNtable, setVenueNtable }) => {
-  let timer;
+  const [isCardPressed, setIsCardPressed] = useState(false);
+  const [isCashPressed, setIsCashPressed] = useState(false);
+
   const nav = useNavigate();
   const [computedBasket, setComputedBasket] = useState([]);
   const [computedBasketTotal, setComputedBasketTotal] = useState(0);
+  const [change, setChange] = useState(0.0);
   const [basketTotal, setBasketTotal] = useState(0);
   const [paymentTaken, setpaymentTaken] = useState(0);
   const [paymentType, setPaymentType] = useState(null);
@@ -54,20 +57,49 @@ const Payment = ({ user, basketItems, setBasketItems, venueNtable, setVenueNtabl
   }, [basketItems]);
 
   const handlePaymentType = async (type) => {
-    //to handle later type of payment
     if (type === "cash") {
+      setIsCashPressed(true);
       let payingAmount = padInput;
       let payIntoBill = (parseFloat(paymentTaken) + parseFloat(payingAmount)).toFixed(2);
       setpaymentTaken(payIntoBill);
-      let leftToPay = (parseFloat(basketTotal) - parseFloat(payIntoBill)).toFixed(2)
+      let leftToPay = (parseFloat(basketTotal) - parseFloat(payIntoBill)).toFixed(2);
+      let change = -(parseFloat(basketTotal) - parseFloat(payIntoBill)).toFixed(2);
+      setChange(change);
       setStripeResponse(`Payment successful! £${padInput} has been paid. ${leftToPay > 0 ? `£${leftToPay} are left to pay .` : ``}`);
-      clearTimeout(timer)
-      timer = setTimeout(() => {
-        setStripeResponse(``);
-      }, 4000);
+      if (leftToPay <= 0) {
+        console.log("Basked is Paid. Clearing the basket.");
+        setBasketItems([]);
+      }
+      setTimeout(() => {
+        setIsCashPressed(false);
+      }, 1000);
 
+      setTimeout(() => {
+        setStripeResponse(``);
+      }, 1400);
     } else if (type === "card") {
-      await stripePayment();
+      setIsCardPressed(true);
+      await stripePayment().then(async () => {
+        let payingAmount = padInput;
+        let payIntoBill = (parseFloat(paymentTaken) + parseFloat(payingAmount)).toFixed(2);
+        setpaymentTaken(payIntoBill);
+        let leftToPay = (parseFloat(basketTotal) - parseFloat(payIntoBill)).toFixed(2);
+        let change = -(parseFloat(basketTotal) - parseFloat(payIntoBill)).toFixed(2);
+        setChange(change);
+        setStripeResponse(`Payment successful! £${padInput} has been paid. ${leftToPay > 0 ? `£${leftToPay} are left to pay .` : ``}`);
+
+        setTimeout(() => {
+          setStripeResponse(``);
+        }, 1400);
+        setIsCardPressed(false);
+        if (leftToPay <= 0) {
+          console.log("Basked is Paid. Clearing the basket.");
+
+          setBasketItems([]);
+        }
+
+        console.log("so fast ?");
+      });
     }
   };
 
@@ -111,12 +143,7 @@ const Payment = ({ user, basketItems, setBasketItems, venueNtable, setVenueNtabl
   const DCOPB = () => {
     // disable condition of payment button
     // stripe minimum payment £0.3 !
-    if (padInput.length < 1 ||
-       parseFloat(padInput) <= 0.30 ||
-        padInput === 0 || padInput === "0" ||
-         padInput == "0.0" || padInput == "0." || padInput == "0.00" ||
-          padInput.endsWith(".") || (padInput[0] === "0" && !padInput[1] === ".") 
-          || parseFloat(basketTotal) < parseFloat(paymentTaken)) {
+    if (parseFloat(computedBasketTotal) <= parseFloat(paymentTaken) || padInput.length < 1 || isCardPressed || isCashPressed || parseFloat(padInput) <= 0.3 || padInput === 0 || padInput === "0" || padInput == "0.0" || padInput == "0." || padInput == "0.00" || padInput.endsWith(".") || (padInput[0] === "0" && !padInput[1] === ".") || parseFloat(basketTotal) < parseFloat(paymentTaken)) {
       return true;
     }
     return false;
@@ -124,15 +151,14 @@ const Payment = ({ user, basketItems, setBasketItems, venueNtable, setVenueNtabl
 
   const calculateAmountToPay = () => {
     const paymentTakenFloat = parseFloat(paymentTaken);
-    const basketTotalFloat = parseFloat(basketTotal);
-
-    if (basketTotalFloat > 0)
-      if (paymentTakenFloat > basketTotalFloat) {
-        return `Payment complete. Change £${(paymentTakenFloat - basketTotalFloat).toFixed(2)}`;
-      } else if (paymentTakenFloat === basketTotalFloat) {
+    const computedBasketTotalFloat = parseFloat(computedBasketTotal);
+    if (computedBasketTotalFloat >= 0)
+      if (paymentTakenFloat > computedBasketTotalFloat) {
+        return `Payment complete. Change £${change.toFixed(2)}`;
+      } else if (paymentTakenFloat === computedBasketTotalFloat) {
         return `Payment complete. No Change.`;
       } else {
-        return `£${(basketTotalFloat - paymentTakenFloat).toFixed(2)}`;
+        return `£${(computedBasketTotalFloat - paymentTakenFloat).toFixed(2)}`;
       }
   };
 
@@ -156,11 +182,11 @@ const Payment = ({ user, basketItems, setBasketItems, venueNtable, setVenueNtabl
 
       if (res.status === 403) {
         setStripeResponse(`Failure to fetch. Request Denied based on app credentials.`);
-        clearTimeout(timer)
-        timer = setTimeout(() => {
+
+        setTimeout(() => {
           setStripeResponse(``);
-        }, 4000);
-        return;
+        }, 1400);
+        return false;
       }
 
       const cs = await res.json();
@@ -180,37 +206,30 @@ const Payment = ({ user, basketItems, setBasketItems, venueNtable, setVenueNtabl
         if (error.type === "card_error" || error.type === "validation_error") {
           alert(error.message);
           setStripeResponse(error.message);
-          clearTimeout(timer)
-          timer = setTimeout(() => {
+
+          setTimeout(() => {
             setStripeResponse(``);
-          }, 4000);
+          }, 1400);
+          return false;
         } else {
           setStripeResponse("An unexpected error occured.");
-          clearTimeout(timer)
-          timer = setTimeout(() => {
+
+          setTimeout(() => {
             setStripeResponse(``);
-          }, 4000);
+          }, 1400);
+          return false;
         }
       } else if (stripeConfirmPayment.paymentIntent) {
         console.log(stripeConfirmPayment.paymentIntent);
-        
-        let payingAmount = padInput;
-        let payIntoBill = (parseFloat(paymentTaken) + parseFloat(payingAmount)).toFixed(2);
-        setpaymentTaken(payIntoBill);
-        
-        let leftToPay = (parseFloat(basketTotal) - parseFloat(payIntoBill)).toFixed(2)
-        setStripeResponse(`Payment successful! £${padInput} has been paid. ${leftToPay > 0 ? `£${leftToPay} are left to pay .` : ``}`);
-        clearTimeout(timer)
-        timer = setTimeout(() => {
-          setStripeResponse(``);
-        }, 4000);
+        return true;
       }
     } catch (error) {
       setStripeResponse(error.message);
-      clearTimeout(timer)
-      timer = setTimeout(() => {
+
+      setTimeout(() => {
         setStripeResponse(``);
-      }, 4000);
+      }, 1400);
+      return false;
     }
   };
 
@@ -223,11 +242,15 @@ const Payment = ({ user, basketItems, setBasketItems, venueNtable, setVenueNtabl
       )}
       <span></span>
       <div className={`flex flex-col justify-center items-center ${parseFloat(basketTotal) > parseFloat(paymentTaken) ? "" : "row-span-2"} `}>
-      {parseFloat(basketTotal) > parseFloat(paymentTaken) && <p className="animate-fadeUP1 text-xs" title="Stripe's minimum payment is £0.30.">Minimum pay: £0.30!</p>}
+        {parseFloat(computedBasketTotal) > parseFloat(paymentTaken) && (
+          <p className="animate-fadeUP1 text-xs" title="Stripe's minimum payment is £0.30.">
+            Minimum pay: £0.30!
+          </p>
+        )}
         <p className="animate-fadeUP1 mb-2 border-b-2 pb-2  text-3xl">Payment</p>
-        {parseFloat(basketTotal) > parseFloat(paymentTaken) && <p className="animate-fadeUP1 text-sm">Left to pay:</p>}
+        {parseFloat(computedBasketTotal) > parseFloat(paymentTaken) && <p className="animate-fadeUP1 text-sm">Left to pay:</p>}
         <p className="animate-fadeUP1 font-bold text-center text-xl">{calculateAmountToPay()}</p>
-        {parseFloat(basketTotal) < parseFloat(paymentTaken) && (
+        {parseFloat(computedBasketTotal) <= parseFloat(paymentTaken) && (
           <div className="flex flex-col gap-4 text-center">
             <p className="mt-8">Do you need a receipt?</p>
             <button
@@ -257,6 +280,7 @@ const Payment = ({ user, basketItems, setBasketItems, venueNtable, setVenueNtabl
           Confirm {padInput.length !== 0 && parseFloat(basketTotal) > parseFloat(paymentTaken) ? "£" : ""}
           {parseFloat(basketTotal) > parseFloat(paymentTaken) ? padInput : ""} Payment Taken with Cash <GiTakeMyMoney className="text-5xl mx-auto" />
         </button>
+
         <button disabled={DCOPB()} onClick={() => handlePaymentType("card")} className={`text-xl m-2 px-6 py-4 border-b-2 border-b-black relative basis-[20%] transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center justify-center font-semibold ${DCOPB() ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>
           Confirm {padInput.length !== 0 && parseFloat(basketTotal) > parseFloat(paymentTaken) ? "£" : ""}
           {parseFloat(basketTotal) > parseFloat(paymentTaken) ? padInput : ""} Payment Taken with Card <SiContactlesspayment className="text-[4rem] stroke-[0.1px] mx-auto" />
@@ -270,7 +294,7 @@ const Payment = ({ user, basketItems, setBasketItems, venueNtable, setVenueNtabl
       <div className="keypad grid grid-cols-3 grid-rows-5 gap-4 my-4 animate-fadeUP1 row-span-2">
         <p className="col-span-2 bg-white px-2 py-6 text-center my-auto text-xl h-[76px]">
           {parseFloat(basketTotal) > parseFloat(paymentTaken) && padInput.length !== 0 ? "£" : ""}
-          {parseFloat(basketTotal) < parseFloat(paymentTaken) ? "" : padInput}
+          {parseFloat(computedBasketTotal) <= parseFloat(paymentTaken) ? "" : padInput}
         </p>
         <button name="b" onClick={handlePadInput} className="bg-[--c3] rounded font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
           ◀
