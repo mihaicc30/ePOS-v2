@@ -5,7 +5,7 @@ import { auth, db, logout } from "./firebase/config.jsx";
 import MobileLeftNav from "./comp/navBars/MobileLeftNav";
 import MobileHeader from "./comp/navBars/MobileHeader";
 
-const Layout = ({ basketQty }) => {
+const Layout = () => {
   const navigate = useNavigate();
 
   return (
@@ -13,9 +13,9 @@ const Layout = ({ basketQty }) => {
       {window.location.pathname !== "/" && <MobileHeader />}
 
       <div className={`basis-[95%] flex bg-gray-50 z-10 relative overflow-y-auto`}>
-        {window.location.pathname !== "/" && <MobileLeftNav basketQty={basketQty} />}
+        {window.location.pathname !== "/" && <MobileLeftNav />}
         <div className="basis-[95%] overflow-hidden flex flex-col h-[100%] relative">
-          <div className="flex flex-col gap-4 h-[100%] w-[100%]">
+          <div className="flex flex-col gap-4 h-[100%] w-[100%] bg-[--c60]">
             <Outlet />
           </div>
         </div>

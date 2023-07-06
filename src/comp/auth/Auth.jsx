@@ -17,7 +17,7 @@ const Auth = () => {
   const fp = useRef(null);
 
   useEffect(() => {
-    if (user) navigate("/Menu");
+    if (user) navigate("/Tables");
   }, [user]);
 
   const [pin, setPin] = useState({
@@ -65,7 +65,7 @@ const Auth = () => {
       authUser(foundPin);
       setVenue(setVenue, foundPin);
       setPin({ pin: "", pin2: "" });
-      navigate("/Menu");
+      navigate("/Tables");
     } else if (!foundPin && pin.pin2.length >= 3) {
       setPin({ pin: "", pin2: "" });
     }

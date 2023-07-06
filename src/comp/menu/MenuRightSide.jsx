@@ -1974,7 +1974,7 @@ const MenuRightSide = ({ basketItems, setBasketItems }) => {
         {menuType === "Bar Snacks" && <p className="text-center col-span-3">Range Bar Snacks</p>}
       </div>
 
-      <div className="grid grid-cols-4 grid-rows-[128px] overflow-y-scroll h-[100%]">
+      <div className="flex flex-wrap grow content-start overflow-y-scroll">
         {dbmenuitems
           .filter((category) => {
             if (searchValue !== "") {
@@ -2019,14 +2019,6 @@ const MenuRightSide = ({ basketItems, setBasketItems }) => {
           })}
       </div>
 
-      <div className="grid grid-cols-5 w-[100%] h-[100px]">
-        <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={()=>console.log("dev**popup w/ custom item&price")}>Misc Item</div>
-
-        <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={()=>console.log("dev**popup w/ discounts")}>Apply Discount</div>
-        <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={()=>console.log("dev**do not print/ store table")}>Store</div>
-        <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={()=>console.log("dev**print for bar")}>Print Bar</div>
-        <div className={`border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={()=>console.log("dev**print for kitchen")}>Print Kitchen</div>
-      </div>
     </>
   );
 };

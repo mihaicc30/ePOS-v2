@@ -29,7 +29,7 @@ import { getVenueById } from "./utils/BasketUtils";
 import { loadStripe } from "@stripe/stripe-js";
 
 // mimic db fetch - temporary
-const venues = [
+let venues = [
   {
     id: 101010,
     name: "The Test Venue",
@@ -153,7 +153,7 @@ const venues = [
   },
 ];
 // mimic db fetch - temporary
-const dbmenuitems = [
+let dbmenuitems = [
   {
     name: "Breakfast",
     img: "./assets/breakfast.jpg",
@@ -1821,16 +1821,25 @@ const dbmenuitems = [
     ],
   },
 ];
-// await grabProducts()
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [basketItems, setBasketItems] = useState([]);
   const [venueNtable, setVenueNtable] = useState({ venue: 1, table: null });
 
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === 'F9') {
+        console.log(basketItems);
+      }
+    };
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [basketItems]);
+
   const [menuitems, setMenuitems] = useState([]);
-  const [toggleGrid, setToggleGrid] = useState(false);
-  const [toggleFilters, setToggleFilters] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [basketQty, setBasketQty] = useState(0);
 
@@ -1849,21 +1858,19 @@ const App = () => {
 
   useEffect(() => {
     calculateTotalQuantity();
+    console.log("🚀 ~ file: App.jsx:1855 ~ App ~ basketItems:", basketItems)
   }, [basketItems]);
 
   return (
     <Routes>
-      <Route path="/" element={<Layout basketQty={basketQty} />}>
-
+      <Route path="/" element={<Layout />}>
         <Route path="/" element={<Auth />} />
 
-        <Route path="/tables" element={<Tables />} />
+        <Route path="/tables" element={<Tables venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
 
-        <Route path="/menu" element={<Menu basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} searchValue={searchValue} setSearchValue={setSearchValue} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}>
-          
-        </Route>
-        
-        <Route path="/payment" element={<Payment setVenueNtable={setVenueNtable} venueNtable={venueNtable} basketItems={basketItems} setBasketItems={setBasketItems} user={user}/>} />
+        <Route path="/menu" element={<Menu basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} searchValue={searchValue} setSearchValue={setSearchValue} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}></Route>
+
+        <Route path="/payment" element={<Payment setVenueNtable={setVenueNtable} venueNtable={venueNtable} basketItems={basketItems} setBasketItems={setBasketItems} user={user} />} />
 
         <Route path="/settings" element={<Settings venues={venues} />} />
 

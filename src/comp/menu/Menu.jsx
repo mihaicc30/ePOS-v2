@@ -11,7 +11,11 @@ import { CiGrid2H, CiGrid41 } from "react-icons/ci";
 import MenuLeftSide from "./MenuLeftSide";
 import MenuRightSide from "./MenuRightSide";
 
-const Menu = ({ basketItems, setBasketItems, toggleGrid, setToggleGrid, toggleFilters, setToggleFilters, searchValue, setSearchValue, selectedKCal, setSelectedKCal, selectedDietary, setSelectedDietary, venues, venueNtable, setVenueNtable }) => {
+const Menu = ({ basketItems, setBasketItems, searchValue, setSearchValue, venues, venueNtable, setVenueNtable }) => {
+  useEffect(() => {
+    if (venueNtable.table === "" || !venueNtable.table) return nav("/Tables");
+  }, [venueNtable]);
+
   const dbmenuitems = [
     {
       name: "Breakfast",
@@ -1711,69 +1715,103 @@ const Menu = ({ basketItems, setBasketItems, toggleGrid, setToggleGrid, toggleFi
     nav(`/${c}/${i}`);
   };
 
-  const [basketTotal, setBasketTotal] = useState(0)
+  const [basketTotal, setBasketTotal] = useState(0);
   const [totalProducts, setTotalProducts] = useState(0);
-  useEffect(()=>{
+  useEffect(() => {
+    setBasketTotal(
+      basketItems
+        .reduce((total, item) => {
+          return total + item.price * item.qty;
+        }, 0)
+        .toFixed(2)
+    );
 
-    setBasketTotal(basketItems.reduce((total, item) => {
-      return total + item.price * item.qty;
-    }, 0).toFixed(2))
-
-  
-    setTotalProducts(basketItems.reduce((total, item) => {
-      return total + item.qty;
-    }, 0));
-
-
-  },[basketItems])
+    setTotalProducts(
+      basketItems.reduce((total, item) => {
+        return total + item.qty;
+      }, 0)
+    );
+  }, [basketItems]);
 
   const handleDeleteAll = () => {
     setBasketItems([]);
   };
 
-  if (!venueNtable.venue || !venueNtable.table) return <VenueNTable venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />;
-
   return (
     <>
-      {!venueNtable.venue || (!venueNtable.table && <VenueNTable venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />)}
-
-      <div className="grid grid-cols-[2fr_3fr] gap-1 rounded h-[100%] w-[100%]">
-        <div className="h-[100%] w-[100%] rounded shadow-xl flex flex-col p-1 overflow-hidden">
-          <div className="grid grid-cols-4 gap-2 h-[82px]">
-            <button onClick={handleDeleteAll} className="text-sm bg-red-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] flex flex-col justify-center items-center border-b-2 border-b-black ">
-              <span>Delete ALL</span>
-              <span>{totalProducts}</span>
-            </button>
-            <div className="tableNumber m-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black ">
-              <p>Table</p>
-              <p className="text-3xl">{venueNtable.table}</p>
+      <div className="flex flex-col h-[100%]">
+        <div className="grid grid-cols-[2fr_3fr] gap-1 rounded basis-[90%] overflow-y-scroll">
+          <div className="h-[100%] w-[100%] rounded shadow-xl flex flex-col p-1 overflow-hidden">
+            <div className="grid grid-cols-4 gap-2 h-[82px]">
+              <button onClick={handleDeleteAll} className="text-sm bg-red-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] flex flex-col justify-center items-center border-b-2 border-b-black ">
+                <span>Delete ALL</span>
+                <span>{totalProducts}</span>
+              </button>
+              <div className="tableNumber m-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black ">
+                <p>Table</p>
+                <p className="text-3xl">{venueNtable.table}</p>
+              </div>
+              <button
+                onClick={() => {
+                  setVenueNtable((prevValues) => ({ ...prevValues, table: null }));
+                  console.log("dev**to check -> confirm merge if any items -> merge -> change table in db");
+                }}
+                className="text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
+                <span>Transfer</span>
+                <span>Table</span>
+              </button>
+              <button
+                onClick={() => {
+                  setVenueNtable((prevValues) => ({ ...prevValues, table: null }));
+                  console.log("dev**to change table in db");
+                }}
+                className="text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
+                <span>Open</span>
+                <span>Table</span>
+              </button>
             </div>
-            <button onClick={()=>{setVenueNtable((prevValues) => ({ ...prevValues, table: null })); console.log("dev**to check -> confirm merge if any items -> merge -> change table in db") }} className="text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
-              <span>Transfer</span>
-              <span>Table</span>
-            </button>
-            <button onClick={()=>{setVenueNtable((prevValues) => ({ ...prevValues, table: null })); console.log("dev**to change table in db"); }} className="text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
-              <span>Open</span>
-              <span>Table</span>
-            </button>
-          </div>
 
-          <div className="MenuLeftSide flex flex-col overflow-hidden grow">
-            <div className="MenuLeftSide flex flex-col overflow-y-scroll">
-            <MenuLeftSide basketItems={basketItems} setBasketItems={setBasketItems} />
-            </div>
-            <div className="text-3xl text-end mt-auto flex justify-between">
-              <div>
-              <span>Items: </span><span className="font-bold">{totalProducts}</span></div>
-              <div>
-                <span>Total: </span><span className="font-bold">£{basketTotal}</span>
+            <div className="MenuLeftSide flex flex-col overflow-hidden grow">
+              <div className="MenuLeftSide flex flex-col overflow-y-scroll">
+                <MenuLeftSide basketItems={basketItems} setBasketItems={setBasketItems} />
+              </div>
+              <div className="text-3xl text-end mt-auto flex justify-between">
+                <div>
+                  <span>Items: </span>
+                  <span className="font-bold">{totalProducts}</span>
+                </div>
+                <div>
+                  <span>Total: </span>
+                  <span className="font-bold">£{basketTotal}</span>
+                </div>
               </div>
             </div>
           </div>
+
+          <div className="MenuRightSide h-[100%] w-[100%] rounded shadow-xl p-1 flex flex-col overflow-hidden">
+            <MenuRightSide basketItems={basketItems} setBasketItems={setBasketItems} />
+          </div>
         </div>
 
-        <div className="MenuRightSide h-[100%] w-[100%] rounded shadow-xl p-1 flex flex-col overflow-hidden">
-          <MenuRightSide basketItems={basketItems} setBasketItems={setBasketItems} />
+        <div className="flex justify-end basis-[10%] col-span-2">
+          <button disabled={parseFloat(basketTotal) <= 0} onClick={() => nav("/Payment")} className={`basis-[10%] items-center border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${parseFloat(basketTotal) <= 0 ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>
+            Pay Bill{basketTotal}
+          </button>
+          <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**popup w/ custom item&price")}>
+            Misc Item
+          </div>
+          <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**popup w/ discounts")}>
+            Apply Discount
+          </div>
+          <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**do not print/ store table")}>
+            Store
+          </div>
+          <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**print for bar")}>
+            Print Bar
+          </div>
+          <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**print for kitchen")}>
+            Print Kitchen
+          </div>
         </div>
       </div>
     </>
