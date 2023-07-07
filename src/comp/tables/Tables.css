@@ -1,0 +1,22 @@
+/* later development */
+/* .seat {
+  border: 2px solid #4b4949;
+  width: var(--seat-width);
+  height: var(--seat-height);
+  background: linear-gradient(#fff, #6f8ef3);
+  border-radius: 10px;
+  transform-origin: bottom;
+  transform: rotate(var(--seats)) translateX(0px) translateY(20px) ;
+  -webkit-transform: rotate(var(--seats)) translateX(0px) translateY(20px) ;
+  -moz-transform: rotate(var(--seats)) translateX(0px) translateY(20px) ;
+  -ms-transform: rotate(var(--seats)) translateX(0px) translateY(20px) ;
+  -o-transform: rotate(var(--seats)) translateX(0px) translateY(20px) ;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+} */
+
+.react-draggable-dragging{
+    z-index: 99999!important;
+}

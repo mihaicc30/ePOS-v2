@@ -1822,28 +1822,50 @@ let dbmenuitems = [
   },
 ];
 
+// mimic db fetch - temporary
+let dbtables = [
+  { id: 9, area: "Bar", tn: 0, x: 100, y: 100, type: "wall" , seats: 0 , height: 100, width: 20},
+  { id: 1, area: "Bar", tn: 1, x: 100, y: 100, type: "table" ,seats: 3 , height: 100, width: 100},
+  { id: 2, area: "Bar", tn: 2, x: 200, y: 500, type: "table" ,seats: 2 , height: 100, width: 100},
+  { id: 3, area: "Bar", tn: 3, x: 300, y: 300, type: "table" ,seats: 4 , height: 100, width: 100},
+  { id: 4, area: "Restaurant", tn: 4, x: 0, y: 0, type: "table" ,seats: 5 , height: 100, width: 100},
+  { id: 5, area: "Restaurant", tn: 5, x: 100, y: 100, type: "table" ,seats: 6 , height: 100, width: 100},
+  { id: 6, area: "Restaurant", tn: 6, x: 200, y: 500, type: "table" ,seats: 7 , height: 100, width: 100},
+  { id: 7, area: "Restaurant", tn: 7, x: 300, y: 300, type: "table" ,seats: 8 , height: 100, width: 100},
+  { id: 8, area: "Restaurant", tn: 8, x: 400, y: 300, type: "table" ,seats: 9 , height: 100, width: 100},
+];
 const App = () => {
   const [user, setUser] = useState(null);
   const [basketItems, setBasketItems] = useState([]);
   const [venueNtable, setVenueNtable] = useState({ venue: 1, table: null });
 
+  const [tables, setTables] = useState([]);
+  const [draggingIndex, setDraggingIndex] = useState(null);
+  const [showArea, setshowArea] = useState("Bar");
+  const [uniqueAreas, setuniqueAreas] = useState([]);
+
+  useEffect(() => {
+    if (!tables || tables.length < 1) return;
+    setuniqueAreas([...new Set(tables.map((table) => table.area))]);
+  }, [tables]);
+
   useEffect(() => {
     let x = basketItems
-    .reduce((total, item) => {
-      return total + item.price * item.qty;
-    }, 0)
-    .toFixed(2)
+      .reduce((total, item) => {
+        return total + item.price * item.qty;
+      }, 0)
+      .toFixed(2);
 
     const handleKeyPress = (event) => {
-      if (event.key === 'F9') {
-        console.log(basketItems, x);
+      if (event.key === "F9") {
+        console.log(basketItems, x, tables);
       }
     };
-    window.addEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
     return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [basketItems]);
+  }, [basketItems, tables]);
 
   const [menuitems, setMenuitems] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -1855,16 +1877,21 @@ const App = () => {
   };
 
   useEffect(() => {
-    async function get() {
+    async function getMenu() {
       // fetch simulation of setting the menu from the database - temporary
       setMenuitems(dbmenuitems);
     }
-    get();
+    getMenu();
+    
+    async function getTables() {
+      setTables(dbtables);
+    }
+    getTables();
   }, []);
 
   useEffect(() => {
     calculateTotalQuantity();
-    console.log("🚀 ~ file: App.jsx:1855 ~ App ~ basketItems:", basketItems)
+    console.log("🚀 ~ file: App.jsx:1855 ~ App ~ basketItems:", basketItems);
   }, [basketItems]);
 
   return (
@@ -1872,7 +1899,7 @@ const App = () => {
       <Route path="/" element={<Layout />}>
         <Route path="/" element={<Auth />} />
 
-        <Route path="/tables" element={<Tables venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
+        <Route path="/tables" element={<Tables tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
 
         <Route path="/menu" element={<Menu basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} searchValue={searchValue} setSearchValue={setSearchValue} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}></Route>
 
