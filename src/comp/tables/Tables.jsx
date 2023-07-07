@@ -19,15 +19,10 @@ const Tables = ({ tables, setTables, draggingIndex, setDraggingIndex, showArea, 
   const [seeControlls3, setseeControlls3] = useState(false);
   const areaRef = useRef(null);
 
-  useEffect(()=>{
-    console.log(uniqueAreas);
-    console.log(tables);
-  },[])
-
   useEffect(() => {}, [tables]);
 
   const saveLayout = () => {
-
+    console.log(`dev**DB Query to post tables data to the database in venues`);
   }
 
   const handleDrag = (event, data, id) => {
