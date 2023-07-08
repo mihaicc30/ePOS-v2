@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --emptyOutDir",
+    "build": "vite build --emptyOutDir && xcopy /s /e src\\assets public\\assets",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "deploy": "firebase deploy --only hosting:ccwpos"
+    "deploy": "firebase deploy --only hosting:ccwpos",
+    "copyassets":"xcopy /s /e src\\assets public\\assets"
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^2.1.1",
