@@ -1,59 +1,6 @@
 import React, { useState } from "react";
 
 const MenuLeftSide = ({ basketItems, setBasketItems }) => {
-  //mimic db
-  const [basket, setBasket] = useState([
-    {
-      qty: 22,
-      name: "Pancake Pancake Pancake Pancake Pancake Pancake Pancake",
-      price: 5.22,
-    },
-    {
-      qty: 1,
-      name: "Pancake Pancake Pancake Pancake Pancake Pancake Pancake",
-      price: 5.22,
-    },
-    {
-      qty: 1,
-      name: "Pancake Pancake Pancake Pancake Pancake Pancake Pancake",
-      price: 5.22,
-    },
-    {
-      qty: 1,
-      name: "Pancake Pancake Pancake Pancake Pancake Pancake Pancake",
-      price: 5.22,
-    },
-    {
-      qty: 1,
-      name: "Pancake Pancake Pancake Pancake Pancake Pancake Pancake",
-      price: 5.22,
-    },
-    {
-      qty: 1,
-      name: "Pancake Pancake Pancake Pancake Pancake Pancake Pancake",
-      price: 5.22,
-    },
-    {
-      qty: 1,
-      name: "Pancake Pancake Pancake Pancake Pancake Pancake Pancake",
-      price: 5.22,
-    },
-    {
-      qty: 1,
-      name: "Pancake Pancake Pancake Pancake Pancake Pancake Pancake",
-      price: 5.22,
-    },
-    {
-      qty: 1,
-      name: "Pancake Pancake Pancake Pancake Pancake Pancake Pancake",
-      price: 5.22,
-    },
-    {
-      qty: 1,
-      name: "Pancake Pancake Pancake Pancake Pancake Pancake Pancake",
-      price: 5.22,
-    },
-  ]);
 
   const handleIncrement = (index) => {
     const updatedBasket = [...basketItems];
