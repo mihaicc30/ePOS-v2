@@ -1,0 +1,136 @@
+.background-image {
+  height: calc(100vh + 400px);
+  width: calc(200vw + 400px);
+  position: absolute;
+  top: 0;
+  left: -400px;
+  z-index: -1;
+  background:url(https://www.toptal.com/designers/subtlepatterns/patterns/funky-lines.png);
+  -webkit-animation: backgroundscroll 10s linear infinite;
+  animation: backgroundscroll 10s linear infinite;
+}
+
+.animated-bg-container {
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  z-index: -1;
+}
+
+@-webkit-keyframes backgroundscroll {
+  to {
+    -webkit-transform: translate(400px, -400px);
+    transform: translate(400px, -400px);
+  }
+}
+
+@keyframes backgroundscroll {
+  to {
+    -webkit-transform: translate(400px, -400px);
+    transform: translate(400px, -400px);
+  }
+}
+
+/* icon animation */
+
+.icon-container2 {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 400px;
+}
+
+.icon2 {
+  width: 320px;
+  height: 320px;
+  background-color: #e688003b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.inner-icon2 {
+  width: 200px;
+  margin-left: 50px;
+  margin-bottom: 32px;
+}
+
+@-webkit-keyframes slidecard {
+  0% {
+    -webkit-transform: translate(170px, -60px) rotate(90deg);
+    transform: translate(170px, -60px) rotate(90deg);
+    -webkit-transform-origin: 420px 130px;
+    transform-origin: 420px 130px;
+  }
+  40% {
+    -webkit-transform: translate(60px, -20px) rotate(0deg);
+    transform: translate(60px, -20px) rotate(0deg);
+    -webkit-transform-origin: 500px 130px;
+    transform-origin: 500px 130px;
+  }
+  60% {
+    -webkit-transform: translate(0px, 0px);
+    transform: translate(0px, 0px);
+  }
+  100% {
+    -webkit-transform: translate(0px, 400px);
+    transform: translate(0px, 400px);
+  }
+}
+
+@keyframes slidecard {
+  0% {
+    -webkit-transform: translate(170px, -60px) rotate(90deg);
+    transform: translate(170px, -60px) rotate(90deg);
+    -webkit-transform-origin: 420px 130px;
+    transform-origin: 420px 130px;
+    animation-timing-function: ease;
+  }
+  15% {
+    -webkit-transform: translate(60px, -20px) rotate(0deg);
+    transform: translate(60px, -20px) rotate(0deg);
+    -webkit-transform-origin: 500px 130px;
+    transform-origin: 500px 130px;
+    animation-timing-function: ease;
+  }
+  25% {
+    -webkit-transform: translate(0px, 0px);
+    transform: translate(0px, 0px);
+    animation-timing-function: ease;
+  }
+  40% {
+    -webkit-transform: translate(0px, 400px);
+    transform: translate(0px, 490px);
+    animation-timing-function: ease;
+  }
+  50% {
+    transform: translate(140px, 481px) rotate(10deg);
+    transform-origin: 340px 176px;
+    animation-timing-function: linear;
+  }
+  60% {
+    transform: translate(294px, -29px) rotate(72deg);
+    transform-origin: 340px 176px;
+    animation-timing-function: ease;
+  }
+  75% {
+    -webkit-transform: translate(170px, -60px) rotate(90deg);
+    transform: translate(170px, -60px) rotate(90deg);
+    -webkit-transform-origin: 420px 130px;
+    transform-origin: 420px 130px;
+    animation-timing-function: ease;
+  }
+}
+
+svg g#card2 {
+  -webkit-transform: translate(170px, -60px) rotate(90deg);
+  transform: translate(170px, -60px) rotate(90deg);
+  -webkit-transform-origin: 420px 130px;
+  transform-origin: 420px 130px;
+  -webkit-animation: slidecard 2.0s .5s infinite;
+  animation: slidecard 2.0s .5s infinite;
+}
