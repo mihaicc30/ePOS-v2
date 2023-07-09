@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./Menu.css";
 import { getUser, getVenue } from "../../utils/authUser";
 import { calculateTotal, calculateBasketQTY } from "../../utils/BasketUtils";
@@ -50,7 +52,7 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
   const [totalProducts, setTotalProducts] = useState(0);
 
   useEffect(() => {
-    setBasketTotal(calculateTotal(basketItems, basketDiscount))
+    setBasketTotal(calculateTotal(basketItems, basketDiscount));
   }, [basketItems, basketDiscount]);
 
   useEffect(() => {
@@ -61,8 +63,69 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
     setBasketItems([]);
   };
 
+  const [modal, setModal] = useState(false);
+
+  const handleDiscount = () => {
+    console.log("basketDiscount", basketDiscount, basketDiscount < 1);
+    if (basketDiscount < 1) {
+      setModal(!modal);
+    } else {
+      setBasketDiscount(0);
+      toast.success(`Discount removed.`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
+
+  const setDiscount = (amount) => {
+    setBasketDiscount(amount);
+    setModal(!modal);
+    toast.success(`Discount ${amount}% added.`, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: false,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
   return (
     <>
+      <div className="absolute">
+        <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme="light" />
+      </div>
+      <div className={`modal ${modal ? "fixed inset-0 bg-black/70 flex flex-col justify-center items-center z-20 p-4" : "hidden"}`}>
+        <div className={`relative flex-flex-col bg-white/90 p-4 min-w-[300px] w-[600px]`}>
+          <button className="block mr-auto p-2 mb-8 text-3xl animate-fadeUP1" onClick={() => setModal(!modal)} onTouchStart={() => setModal(!modal)}>
+            ◀ Cancel
+          </button>
+          <p className="text-center text-3xl my-20">Apply Discount</p>
+          <div className="flex flex-nowrap mb-20 text-center gap-4">
+            <button onClick={() => setDiscount(5)} className="flex-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black">
+              5%
+            </button>
+            <button onClick={() => setDiscount(10)} className="flex-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black">
+              10%
+            </button>
+            <button onClick={() => setDiscount(25)} className="flex-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black">
+              25%
+            </button>
+            <button onClick={() => setDiscount(50)} className="flex-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black">
+              50%
+            </button>
+          </div>
+        </div>
+      </div>
       <div className="flex flex-col h-[100%]">
         <div className="grid grid-cols-[2fr_3fr] gap-1 rounded basis-[90%] overflow-y-scroll">
           <div className="h-[100%] w-[100%] rounded shadow-xl flex flex-col p-1 overflow-hidden">
@@ -118,7 +181,7 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
         </div>
 
         <div className="flex justify-end basis-[10%] col-span-2">
-          {basketDiscount > 0 && <span className={`basis-[10%] border-b-2 border-b-black mr-auto transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-green-400`}>{basketDiscount}% Discount</span> }
+          {basketDiscount > 0 && <span className={`basis-[10%] border-b-2 border-b-black mr-auto transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-green-400`}>{basketDiscount}% Discount</span>}
 
           <button disabled={parseFloat(basketTotal) <= 0} onClick={() => nav("/Payment")} className={`basis-[10%] items-center border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${parseFloat(basketTotal) <= 0 ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>
             Pay Bill
@@ -126,8 +189,8 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
           <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**popup w/ custom item&price")}>
             Misc Item
           </div>
-          <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**popup w/ discounts")}>
-            Apply Discount
+          <div className={`${basketDiscount > 0 ? "bg-[--c12] shadow-[inset_0px_4px_2px_0px_black]" : "bg-[--c1] "} basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold `} onClick={handleDiscount}>
+            {basketDiscount > 0 ? "Remove Discount" : "Apply Discount"}
           </div>
           <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**do not print-> store table into the db")}>
             Store

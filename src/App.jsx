@@ -2528,7 +2528,7 @@ const App = () => {
   const [menuitems, setMenuitems] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [basketQty, setBasketQty] = useState(0);
-  const [basketDiscount, setBasketDiscount] = useState(5);
+  const [basketDiscount, setBasketDiscount] = useState(0);
 
   const calculateTotalQuantity = () => {
     const totalQty = basketItems.reduce((total, item) => total + parseInt(item.qty), 0);

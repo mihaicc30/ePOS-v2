@@ -289,7 +289,7 @@ const Payment = ({ basketDiscount, user, basketItems, setBasketItems, venueNtabl
         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme="light" />
       </div>
       {parseFloat(basketTotal) > parseFloat(paymentTaken) && (
-        <button className="absolute top-0 left-0 p-4 text-5xl animate-fadeUP1" onClick={() => nav("/Menu")}>
+        <button className="absolute top-0 left-0 p-4 text-3xl animate-fadeUP1" onClick={() => nav("/Menu")}>
           ◀ Cancel
         </button>
       )}

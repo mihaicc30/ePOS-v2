@@ -28,7 +28,6 @@ export const calculateTotal = (basketItems, basketDiscount) => {
 };
 
 export const calculateBasketQTY = (basketItems) => {
-  console.log("🚀 ~ file: BasketUtils.jsx:31 ~ calculateBasketQTY ~ basketItems:", basketItems)
   let qty = basketItems.reduce((total, item) => {
     return total + item.qty;
   }, 0);
