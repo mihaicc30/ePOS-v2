@@ -2493,7 +2493,278 @@ let dbtables = [
 
 const App = () => {
   const [user, setUser] = useState(null);
-  const [basketItems, setBasketItems] = useState([]);
+  const [basketItems, setBasketItems] = useState([
+    {
+        "name": "Coca-Cola",
+        "tag": [
+            "carbonated",
+            "soft drink"
+        ],
+        "subcategory": "soft",
+        "stock": 10,
+        "price": 2,
+        "allergens": [],
+        "priceOffer": null,
+        "allergensList": {
+            "Meat": false,
+            "Celery": false,
+            "Crustaceans": false,
+            "Fish": false,
+            "Milk": false,
+            "Mustard": false,
+            "Peanuts": false,
+            "Soybeans": false,
+            "Gluten": false,
+            "Egg": false,
+            "Lupin": false,
+            "Moluscs": false,
+            "Nuts": false,
+            "SesameSeeds": false,
+            "Sulphur": false
+        },
+        "img": "./assets/defaultDrink.jpg",
+        "calories": "140",
+        "ingredients": [
+            "Carbonated water",
+            "High fructose corn syrup",
+            "Caramel color",
+            "Phosphoric acid",
+            "Natural flavors",
+            "Caffeine"
+        ],
+        "id": "will be unique db item menu id",
+        "qty": 1,
+        "refID": "7156420e-8a83-4ed1-87bd-8ddb8d0c4b7a",
+        "from": "Beverages",
+        "printed": false,
+        "printable": true,
+        "message": false,
+        "isDeleted": false,
+        "date": "2023-07-09T17:30:13.809Z"
+    },
+    {
+        "name": "Orange Juice",
+        "tag": [
+            "fruit juice",
+            "non-alcoholic"
+        ],
+        "subcategory": "soft",
+        "stock": 10,
+        "price": 3,
+        "allergens": [],
+        "priceOffer": null,
+        "allergensList": {
+            "Meat": false,
+            "Celery": false,
+            "Crustaceans": false,
+            "Fish": false,
+            "Milk": false,
+            "Mustard": false,
+            "Peanuts": false,
+            "Soybeans": false,
+            "Gluten": false,
+            "Egg": false,
+            "Lupin": false,
+            "Moluscs": false,
+            "Nuts": false,
+            "SesameSeeds": false,
+            "Sulphur": false
+        },
+        "img": "./assets/defaultDrink.jpg",
+        "calories": "110",
+        "ingredients": [
+            "Orange juice"
+        ],
+        "id": "will be unique db item menu id",
+        "qty": 1,
+        "refID": "d6f7549f-ce80-412f-815b-a24398b488ae",
+        "from": "Beverages",
+        "printed": false,
+        "printable": true,
+        "message": false,
+        "isDeleted": false,
+        "date": "2023-07-09T17:30:14.342Z"
+    },
+    {
+        "name": "Apple Juice",
+        "tag": [
+            "fruit juice",
+            "non-alcoholic"
+        ],
+        "subcategory": "soft",
+        "stock": 10,
+        "price": 3,
+        "allergens": [],
+        "priceOffer": null,
+        "allergensList": {
+            "Meat": false,
+            "Celery": false,
+            "Crustaceans": false,
+            "Fish": false,
+            "Milk": false,
+            "Mustard": false,
+            "Peanuts": false,
+            "Soybeans": false,
+            "Gluten": false,
+            "Egg": false,
+            "Lupin": false,
+            "Moluscs": false,
+            "Nuts": false,
+            "SesameSeeds": false,
+            "Sulphur": false
+        },
+        "img": "./assets/defaultDrink.jpg",
+        "calories": "120",
+        "ingredients": [
+            "Apple juice"
+        ],
+        "id": "will be unique db item menu id",
+        "qty": 1,
+        "refID": "e7551dc0-75e7-41ed-b540-e857eafb6c43",
+        "from": "Beverages",
+        "printed": true,
+        "printable": true,
+        "message": false,
+        "isDeleted": false,
+        "date": "2023-07-09T17:30:14.885Z"
+    },
+    {
+        "name": "Lemonade",
+        "tag": [
+            "carbonated",
+            "non-alcoholic"
+        ],
+        "subcategory": "soft",
+        "stock": 10,
+        "price": 3,
+        "allergens": [],
+        "priceOffer": null,
+        "allergensList": {
+            "Meat": false,
+            "Celery": false,
+            "Crustaceans": false,
+            "Fish": false,
+            "Milk": false,
+            "Mustard": false,
+            "Peanuts": false,
+            "Soybeans": false,
+            "Gluten": false,
+            "Egg": false,
+            "Lupin": false,
+            "Moluscs": false,
+            "Nuts": false,
+            "SesameSeeds": false,
+            "Sulphur": false
+        },
+        "img": "./assets/defaultDrink.jpg",
+        "calories": "100",
+        "ingredients": [
+            "Lemon juice",
+            "Water",
+            "Sugar"
+        ],
+        "id": "will be unique db item menu id",
+        "qty": 1,
+        "refID": "0da8aba8-fe82-45d9-b174-8b6da0c02185",
+        "from": "Beverages",
+        "printed": false,
+        "printable": true,
+        "message": false,
+        "isDeleted": false,
+        "date": "2023-07-09T17:30:15.456Z"
+    },
+    {
+        "name": "Iced Tea",
+        "tag": [
+            "beverage",
+            "non-alcoholic"
+        ],
+        "subcategory": "coffee/tea",
+        "stock": 10,
+        "price": 3,
+        "allergens": [],
+        "priceOffer": null,
+        "allergensList": {
+            "Meat": false,
+            "Celery": false,
+            "Crustaceans": false,
+            "Fish": false,
+            "Milk": false,
+            "Mustard": false,
+            "Peanuts": false,
+            "Soybeans": false,
+            "Gluten": false,
+            "Egg": false,
+            "Lupin": false,
+            "Moluscs": false,
+            "Nuts": false,
+            "SesameSeeds": false,
+            "Sulphur": false
+        },
+        "img": "./assets/defaultDrink.jpg",
+        "calories": "60",
+        "ingredients": [
+            "Black tea",
+            "Water",
+            "Sugar",
+            "Lemon"
+        ],
+        "id": "will be unique db item menu id",
+        "qty": 1,
+        "refID": "3f8863fe-6bc7-4ea7-acb0-eb397e63b0e9",
+        "from": "Beverages",
+        "printed": true,
+        "printable": true,
+        "message": "make this gluen tree!",
+        "isDeleted": false,
+        "date": "2023-07-09T17:30:17.813Z"
+    },
+    {
+        "name": "Cucumber & Lime Water",
+        "tag": [
+            "beverage",
+            "non-alcoholic"
+        ],
+        "subcategory": "soft",
+        "stock": 10,
+        "price": 1,
+        "allergens": [],
+        "priceOffer": null,
+        "allergensList": {
+            "Meat": false,
+            "Celery": false,
+            "Crustaceans": false,
+            "Fish": false,
+            "Milk": false,
+            "Mustard": false,
+            "Peanuts": false,
+            "Soybeans": false,
+            "Gluten": false,
+            "Egg": false,
+            "Lupin": false,
+            "Moluscs": false,
+            "Nuts": false,
+            "SesameSeeds": false,
+            "Sulphur": false
+        },
+        "img": "./assets/defaultDrink.jpg",
+        "calories": "0",
+        "ingredients": [
+            "Cucumber",
+            "Lime",
+            "Water"
+        ],
+        "id": "will be unique db item menu id",
+        "qty": 1,
+        "refID": "9a28efed-fb6d-4774-a3fa-a8fee3fcb9e0",
+        "from": "Beverages",
+        "printed": false,
+        "printable": true,
+        "message": false,
+        "isDeleted": false,
+        "date": "2023-07-09T17:30:18.295Z"
+    }
+]);
   const [venueNtable, setVenueNtable] = useState({ venue: 1, table: null });
 
   const [tables, setTables] = useState([]);

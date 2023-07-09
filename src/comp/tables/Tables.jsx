@@ -124,7 +124,7 @@ const Tables = ({ tables, setTables, draggingIndex, setDraggingIndex, showArea, 
       <div className={` flex w-[100%] flex-col transition-all z-10 mx-auto text-xl whitespace-nowrap select-none relative`}>
         <p className="text-center">{venueNtable.table ? `Current Selected Table: ${venueNtable.table}` : `Select a Table.`}</p>
 
-        <button onClick={saveLayout} className="absolute right-0 top-0 bg-[--c1] p-2 text-center border-b-2 border-b-black rounded-xl mx-1">
+        <button onClick={saveLayout} className="absolute right-0 top-0 bg-[--c1] active:shadow-[inset_2px_2px_2px_black] p-2 text-center border-b-2 border-b-black rounded-xl mx-1">
           Save Layout
         </button>
       </div>
@@ -132,7 +132,7 @@ const Tables = ({ tables, setTables, draggingIndex, setDraggingIndex, showArea, 
       <div className=" relative h-[100%] bg-[#ffffff6b] overflow-hidden">
         <div className={`grid grid-cols-${uniqueAreas.length} h-12 text-xl`}>
           {uniqueAreas.map((area, index) => (
-            <button key={crypto.randomUUID()} onClick={() => setshowArea(area)} onTouchStart={() => setshowArea(area)} className={`${showArea === area ? "bg-[--c1]" : "bg-[--c12]"} border-b-2 border-b-black rounded-xl mx-1 my-1`}>
+            <button key={crypto.randomUUID()} onClick={() => setshowArea(area)} onTouchStart={() => setshowArea(area)} className={`${showArea === area ? "shadow-[inset_0px_4px_2px_black] bg-[--c12]" : "bg-[--c1]"} transition border-b-2 border-b-black rounded-xl mx-1 my-1`}>
               {area}
             </button>
           ))}
@@ -146,19 +146,19 @@ const Tables = ({ tables, setTables, draggingIndex, setDraggingIndex, showArea, 
               </option>
             ))}
           </datalist>
-          <div onClick={() => pushNewElement("table")} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1] shadow-[inset_2px_2px_2px_black]">
+          <div onClick={() => pushNewElement("table")} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
             Add new table <AiOutlineArrowRight />
           </div>
-          <div onClick={() => pushNewElement("wall")} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1] shadow-[inset_2px_2px_2px_black]">
+          <div onClick={() => pushNewElement("wall")} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
             Add new wall <AiOutlineArrowRight />
           </div>
-          <div onClick={() => setseeControlls(!seeControlls)} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1] shadow-[inset_2px_2px_2px_black]">
+          <div onClick={() => setseeControlls(!seeControlls)} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
             Top Controlls {!seeControlls ? "🔴" : "🟢"}
           </div>
-          <div onClick={() => setseeControlls2(!seeControlls2)} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1] shadow-[inset_2px_2px_2px_black]">
+          <div onClick={() => setseeControlls2(!seeControlls2)} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
             Bottom Controlls {!seeControlls2 ? "🔴" : "🟢"}
           </div>
-          <div onClick={() => setseeControlls3(!seeControlls3)} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1] shadow-[inset_2px_2px_2px_black]">
+          <div onClick={() => setseeControlls3(!seeControlls3)} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
             Draggable {!seeControlls3 ? "🔴" : "🟢"}
           </div>
         </div>

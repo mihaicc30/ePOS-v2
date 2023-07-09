@@ -6,6 +6,7 @@ import "./Menu.css";
 import { getUser, getVenue } from "../../utils/authUser";
 import { calculateTotal, calculateBasketQTY } from "../../utils/BasketUtils";
 import VenueNTable from "./VenueNTable";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import { AiFillCaretRight, AiOutlineLeft } from "react-icons/ai";
 import { BsFilterRight } from "react-icons/bs";
@@ -21,6 +22,18 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
 
   const nav = useNavigate();
   const [user, setUser] = useState(null);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  const tempDisabled = () => {
+    console.log(isButtonDisabled, "isButtonDisabled");
+    if(isButtonDisabled) return
+    setIsButtonDisabled(true);
+    handlePrinting();
+    setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 1000);
+  };
+
 
   useEffect(() => {
     getUser(setUser);
@@ -98,6 +111,43 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
       theme: "light",
     });
   };
+
+  const handlePrinting = () => {
+    let areAllPrinted = basketItems.some(item => item.printed == false)
+    const updatedBasketItems = basketItems.map(item => {
+      if (!item.printed) {
+        return { ...item, printed: true };
+      }
+      return item;
+    });
+  
+    setBasketItems(updatedBasketItems);
+
+    if(areAllPrinted){
+      toast.success(`Ticket has been printed.`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+    } else {
+      toast.info(`Ticket has been re-printed.`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+    
+  }
 
   return (
     <>
@@ -195,12 +245,11 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
           <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**do not print-> store table into the db")}>
             Store
           </div>
-          <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**print for bar-> store table in db")}>
-            Print Bar
+          <div onClick={()=>{tempDisabled();}} disabled={isButtonDisabled} className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${ isButtonDisabled ? "bg-gray-200 " : "bg-[--c1]" }`} >
+            {isButtonDisabled && <AiOutlineLoading3Quarters className="animate-spin mx-auto text-5xl"/> }
+            {!isButtonDisabled && "Print" }
           </div>
-          <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**print for kitchen-> store table in db")}>
-            Print Kitchen
-          </div>
+         
         </div>
       </div>
     </>

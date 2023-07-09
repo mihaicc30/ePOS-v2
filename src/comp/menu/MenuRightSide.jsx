@@ -54,21 +54,42 @@ const MenuRightSide = ({ menuitems, basketItems, setBasketItems }) => {
   const handleAddToMenu = (item) => {
     const id = crypto.randomUUID();
     const message = "";
-    const existingItem = basketItems.find((menuItem) => menuItem.name === item.name);
-    if (existingItem) {
-      const updatedbasketItems = basketItems.map((menuItem) => {
-        if (menuItem.name === item.name) {
-          return {
-            ...menuItem,
-            qty: menuItem.qty + 1,
-          };
-        }
-        return menuItem;
-      });
-      setBasketItems(updatedbasketItems);
-    } else {
-      setBasketItems([...basketItems, { ...item, id, message, qty: 1 }]);
+
+    // to set DATABASE ID too! dont forget*
+    let newBasketItem = {
+      ...item,
+      id:"will be unique db item menu id",
+      qty: 1,
+      refID: crypto.randomUUID(),
+      from: menuType,
+      printed: false,
+      printable: true,
+      message: false,
+      isDeleted: false,
+      date: new Date().toISOString()
     }
+    setBasketItems([...basketItems, { ...newBasketItem }]);
+    console.log("🚀 ~ file: MenuRightSide.jsx:60 ~ handleAddToMenu ~ newBasketItem:", newBasketItem)
+    // const existingItem = basketItems.find((menuItem) => menuItem.name === item.name);
+    // if (existingItem) {
+    //   const updatedbasketItems = basketItems.map((menuItem) => {
+    //     if (menuItem.name === item.name) {
+    //       return {
+    //         ...menuItem,
+    //         qty: menuItem.qty + 1,
+    //         printed: false,
+    //         printable: true,
+    //         message: false,
+    //         isDeleted: false,
+    //         date: new Date(),
+    //       };
+    //     }
+    //     return menuItem;
+    //   });
+    //   setBasketItems(updatedbasketItems);
+    // } else {
+    //   setBasketItems([...basketItems, { ...item, id, message, qty: 1, printed: false, date: new Date() }]);
+    // }
   };
 
   return (
@@ -126,15 +147,16 @@ const MenuRightSide = ({ menuitems, basketItems, setBasketItems }) => {
       <div className="flex flex-row flex-wrap overflow-y-scroll">
         {menuitems.flatMap((item) => {
           if (searchValue !== "") {
-            return  item.items.map((product, index) => {
-              if(product.name.toLowerCase().includes(searchValue.toLowerCase())) return (
-                <div key={`${product.name}-${index}`} onClick={() => handleAddToMenu(product)} className="rounded h-[128px] w-[170px] flex flex-col shadow-xl m-1 p-1 transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]">
-                  <span className="text-end">{product.stock || 1}</span>
-                  <span className="line-clamp-2 h-[48px] font-bold">{product.name}</span>
-                  <span>£{product.price}</span>
-                  <span className="h-[24px]">{product.allergens}</span>
-                </div>
-              );
+            return item.items.map((product, index) => {
+              if (product.name.toLowerCase().includes(searchValue.toLowerCase()))
+                return (
+                  <div key={`${product.name}-${index}`} onClick={() => handleAddToMenu(product)} className="rounded h-[128px] w-[170px] flex flex-col shadow-xl m-1 p-1 transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]">
+                    <span className="text-end">{product.stock || 1}</span>
+                    <span className="line-clamp-2 h-[48px] font-bold">{product.name}</span>
+                    <span>£{product.price}</span>
+                    <span className="h-[24px]">{product.allergens}</span>
+                  </div>
+                );
             });
           } else {
             if (menuType !== item.category) return;
