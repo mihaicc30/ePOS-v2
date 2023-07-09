@@ -27,7 +27,7 @@ const MobileLeftNav = () => {
 
   return (
     <div className="MobileLeftNav flex flex-col p-1 relative basis-[5%] h-[100%] border-r-2">
-      <div className={`mt-auto transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-3xl flex flex-col text-center text-sm justify-center font-semibold `} onClick={() => console.log("Implement dark mode")}>
+      <div className={`mt-auto transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-3xl flex flex-col text-center text-sm justify-center font-semibold `} onClick={() => console.log("To implement dark mode")}>
         <p>Dark Mode</p>
         <label className="theme">
           <input className="input" defaultChecked="checked" type="checkbox" />
@@ -49,7 +49,7 @@ const MobileLeftNav = () => {
       </div>
 
       <span className="my-2 border-b-2"></span>
-      <div className={`transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-3xl flex flex-col text-center text-sm justify-center font-semibold `} onClick={() => console.log("Implement dark mode")}>
+      <div className={`transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-3xl flex flex-col text-center text-sm justify-center font-semibold `} onClick={() => console.log("To implement left hand mode")}>
         <p>Lefty</p>
         <label className="switch">
           <input type="checkbox" />
@@ -78,7 +78,7 @@ const MobileLeftNav = () => {
         <span className="mx-auto text-md">
           <FaRegUserCircle className="text-2xl" />
         </span>
-        <p className={`text-sm`}>User name</p>
+        <p className={`text-sm`}>{localStorage.getItem('displayName').split(" ")[0]}</p>
       </div>
     </div>
   );

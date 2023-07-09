@@ -21,7 +21,6 @@ const MenuRightSide = ({ menuitems, basketItems, setBasketItems }) => {
     setMenuType2("");
     setMenuType3("");
     setMenuType(e.target.innerText);
-    console.log(">>>>>>changeMenuType", e.target.innerText);
   };
 
   // filter for type of beverage
@@ -30,7 +29,6 @@ const MenuRightSide = ({ menuitems, basketItems, setBasketItems }) => {
       setMenuType2("");
       setMenuType3("");
     } else {
-      console.log(">>>>>>changeMenuType2", e.target.innerText);
       setMenuType2(e.target.innerText);
     }
   };
@@ -40,7 +38,6 @@ const MenuRightSide = ({ menuitems, basketItems, setBasketItems }) => {
     if (e.target.innerText === menuType3) {
       setMenuType3("");
     } else {
-      console.log(">>>>>>changeMenuType3", e.target.innerText);
       setMenuType3(e.target.innerText);
     }
   };
@@ -130,7 +127,6 @@ const MenuRightSide = ({ menuitems, basketItems, setBasketItems }) => {
         {menuitems.flatMap((item) => {
           if (searchValue !== "") {
             return  item.items.map((product, index) => {
-              // if (menuType2 !== product.subcategory && menuType2 !== "") return;
               if(product.name.toLowerCase().includes(searchValue.toLowerCase())) return (
                 <div key={`${product.name}-${index}`} onClick={() => handleAddToMenu(product)} className="rounded h-[128px] w-[170px] flex flex-col shadow-xl m-1 p-1 transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]">
                   <span className="text-end">{product.stock || 1}</span>

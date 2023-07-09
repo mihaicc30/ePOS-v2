@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
 import "./Menu.css";
 import { getUser, getVenue } from "../../utils/authUser";
+import { calculateTotal, calculateBasketQTY } from "../../utils/BasketUtils";
 import VenueNTable from "./VenueNTable";
 
 import { AiFillCaretRight, AiOutlineLeft } from "react-icons/ai";
@@ -11,11 +12,10 @@ import { CiGrid2H, CiGrid41 } from "react-icons/ci";
 import MenuLeftSide from "./MenuLeftSide";
 import MenuRightSide from "./MenuRightSide";
 
-const Menu = ({ basketItems, menuitems, setBasketItems, searchValue, setSearchValue, venues, venueNtable, setVenueNtable }) => {
+const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBasketItems, searchValue, setSearchValue, venues, venueNtable, setVenueNtable }) => {
   useEffect(() => {
     if (venueNtable.table === "" || !venueNtable.table) return nav("/Tables");
   }, [venueNtable]);
-
 
   const nav = useNavigate();
   const [user, setUser] = useState(null);
@@ -48,20 +48,13 @@ const Menu = ({ basketItems, menuitems, setBasketItems, searchValue, setSearchVa
 
   const [basketTotal, setBasketTotal] = useState(0);
   const [totalProducts, setTotalProducts] = useState(0);
-  useEffect(() => {
-    setBasketTotal(
-      basketItems
-        .reduce((total, item) => {
-          return total + item.price * item.qty;
-        }, 0)
-        .toFixed(2)
-    );
 
-    setTotalProducts(
-      basketItems.reduce((total, item) => {
-        return total + item.qty;
-      }, 0)
-    );
+  useEffect(() => {
+    setBasketTotal(calculateTotal(basketItems, basketDiscount))
+  }, [basketItems, basketDiscount]);
+
+  useEffect(() => {
+    setTotalProducts(calculateBasketQTY(basketItems));
   }, [basketItems]);
 
   const handleDeleteAll = () => {
@@ -125,7 +118,7 @@ const Menu = ({ basketItems, menuitems, setBasketItems, searchValue, setSearchVa
         </div>
 
         <div className="flex justify-end basis-[10%] col-span-2">
-          <span className={`basis-[10%] border-b-2 border-b-black mr-auto transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-green-400`}>Discount Applied "amount"</span>
+          {basketDiscount > 0 && <span className={`basis-[10%] border-b-2 border-b-black mr-auto transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-green-400`}>{basketDiscount}% Discount</span> }
 
           <button disabled={parseFloat(basketTotal) <= 0} onClick={() => nav("/Payment")} className={`basis-[10%] items-center border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${parseFloat(basketTotal) <= 0 ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>
             Pay Bill

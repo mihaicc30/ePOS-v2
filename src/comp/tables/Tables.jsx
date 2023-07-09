@@ -11,6 +11,8 @@ import { RiDeleteBin2Fill } from "react-icons/ri";
 import { BiCopy } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import "./Tables.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Tables = ({ tables, setTables, draggingIndex, setDraggingIndex, showArea, setshowArea, uniqueAreas, setuniqueAreas, venues, venueNtable, setVenueNtable }) => {
   const nav = useNavigate();
@@ -22,17 +24,27 @@ const Tables = ({ tables, setTables, draggingIndex, setDraggingIndex, showArea, 
   useEffect(() => {}, [tables]);
 
   const saveLayout = () => {
+    toast.success(`Layout has been saved!`, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: false,
+      progress: undefined,
+      theme: "light",
+    });
     console.log(`dev**DB Query to post tables data to the database in venues`);
-  }
+  };
 
   const handleDrag = (event, data, id) => {
-    if(!seeControlls3) return
+    if (!seeControlls3) return;
     setTables((prevTables) => prevTables.map((table) => (table.id === id ? { ...table, x: parseFloat(data.x.toFixed(2)), y: parseFloat(data.y.toFixed(2)) } : table)));
   };
 
   const setTable = (tableNumber) => {
     setVenueNtable((prevValues) => ({ ...prevValues, table: tableNumber }));
-    localStorage.setItem("venueID", tableNumber);
+    localStorage.setItem("tableID", tableNumber);
     nav("/Menu");
   };
 
@@ -71,7 +83,7 @@ const Tables = ({ tables, setTables, draggingIndex, setDraggingIndex, showArea, 
   };
 
   const setTableCopy = (id) => {
-    let newID = crypto.randomUUID()
+    let newID = crypto.randomUUID();
     let copyElem = tables.filter((table) => table.id === id);
     if (!copyElem[0]) return;
     let newElem = {
@@ -85,9 +97,8 @@ const Tables = ({ tables, setTables, draggingIndex, setDraggingIndex, showArea, 
       height: copyElem[0].height,
       width: copyElem[0].width,
     };
-    setTables((prevTables) => [ ...prevTables, newElem ])
+    setTables((prevTables) => [...prevTables, newElem]);
   };
-
 
   const pushNewElement = (elem) => {
     console.log(areaRef.current.value);
@@ -102,15 +113,20 @@ const Tables = ({ tables, setTables, draggingIndex, setDraggingIndex, showArea, 
       height: 110,
       width: elem === "wall" ? 30 : 110,
     };
-    setTables((prevTables) => [ ...prevTables, newElem ])
+    setTables((prevTables) => [...prevTables, newElem]);
   };
 
   return (
     <div className=" bg-[--c60] flex flex-col gap-4 overflow-y-hidden h-[100%] relative">
+      <div className="absolute">
+        <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
+      </div>
       <div className={` flex w-[100%] flex-col transition-all z-10 mx-auto text-xl whitespace-nowrap select-none relative`}>
-      <p className="text-center" >{venueNtable.table ? `Current Selected Table: ${venueNtable.table}` : `Select a Table.`}</p>
-      
-        <button onClick={saveLayout} className="absolute right-0 top-0 bg-[--c1] p-2 text-center border-b-2 border-b-black rounded-xl mx-1">Save Layout</button>
+        <p className="text-center">{venueNtable.table ? `Current Selected Table: ${venueNtable.table}` : `Select a Table.`}</p>
+
+        <button onClick={saveLayout} className="absolute right-0 top-0 bg-[--c1] p-2 text-center border-b-2 border-b-black rounded-xl mx-1">
+          Save Layout
+        </button>
       </div>
 
       <div className=" relative h-[100%] bg-[#ffffff6b] overflow-hidden">
@@ -249,11 +265,11 @@ const Tables = ({ tables, setTables, draggingIndex, setDraggingIndex, showArea, 
                       <BiCopy onClick={() => setTableCopy(table.id)} onTouchStart={() => setTableCopy(table.id)} className={`fill-[#11ce3a] ${seeControlls2 ? "block" : "hidden"} rounded border-2 border-green-500 absolute bottom-0 -right-10 text-xl`} />
 
                       <p className="z-20 inline-flex items-center text-black text-2xl border-b-2 mb-2 pb-2">
-                        <GiRoundTable className="text-2xl"/>
+                        <GiRoundTable className="text-2xl" />
                         {table.tn}
                       </p>
                       <p className="z-20 inline-flex items-center text-black text-2xl">
-                        <LuPersonStanding  className="text-3xl"/>
+                        <LuPersonStanding className="text-3xl" />
                         {table.seats}
                       </p>
                     </div>

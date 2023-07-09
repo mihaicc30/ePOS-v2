@@ -2507,6 +2507,7 @@ const App = () => {
   }, [tables]);
 
   useEffect(() => {
+    // for dev
     let x = basketItems
       .reduce((total, item) => {
         return total + item.price * item.qty;
@@ -2527,6 +2528,7 @@ const App = () => {
   const [menuitems, setMenuitems] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [basketQty, setBasketQty] = useState(0);
+  const [basketDiscount, setBasketDiscount] = useState(5);
 
   const calculateTotalQuantity = () => {
     const totalQty = basketItems.reduce((total, item) => total + parseInt(item.qty), 0);
@@ -2557,9 +2559,9 @@ const App = () => {
 
         <Route path="/tables" element={<Tables tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
 
-        <Route path="/menu" element={<Menu basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} searchValue={searchValue} setSearchValue={setSearchValue} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}></Route>
+        <Route path="/menu" element={<Menu basketDiscount={basketDiscount} setBasketDiscount={setBasketDiscount} basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} searchValue={searchValue} setSearchValue={setSearchValue} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}></Route>
 
-        <Route path="/payment" element={<Payment setVenueNtable={setVenueNtable} venueNtable={venueNtable} basketItems={basketItems} setBasketItems={setBasketItems} user={user} />} />
+        <Route path="/payment" element={<Payment basketDiscount={basketDiscount} setVenueNtable={setVenueNtable} venueNtable={venueNtable} basketItems={basketItems} setBasketItems={setBasketItems} user={user} />} />
 
         <Route path="/settings" element={<Settings venues={venues} />} />
 
