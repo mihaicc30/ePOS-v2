@@ -64,18 +64,15 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
   const [totalProducts, setTotalProducts] = useState(0);
 
   useEffect(() => {
-    setBasketTotal(calculateTotal(basketItems[localStorage.getItem("email")], basketDiscount));
-  }, [basketItems[localStorage.getItem("email")], basketDiscount]);
+    setBasketTotal(calculateTotal(basketItems, basketDiscount));
+  }, [basketItems, basketDiscount]);
 
   useEffect(() => {
-    setTotalProducts(calculateBasketQTY(basketItems[localStorage.getItem("email")]));
-  }, [basketItems[localStorage.getItem("email")]]);
+    setTotalProducts(calculateBasketQTY(basketItems));
+  }, [basketItems]);
 
   const handleDeleteAll = () => {
-    setBasketItems((prevState) => ({
-        ...prevState,
-        [localStorage.getItem("email")]: [],
-      }));
+    setBasketItems([]);
   };
 
   const [modal, setModal] = useState(false);
@@ -115,8 +112,8 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
   };
 
   const handlePrinting = () => {
-    let areAllPrinted = basketItems[localStorage.getItem("email")].some((item) => item.printed == false);
-    const updatedBasketItems = basketItems[localStorage.getItem("email")].map((item) => {
+    let areAllPrinted = basketItems.some((item) => item.printed == false);
+    const updatedBasketItems = basketItems.map((item) => {
       if (!item.printed) {
         return {
           ...item,
@@ -128,10 +125,7 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
       return item;
     });
 
-    setBasketItems((prevState) => ({
-      ...prevState,
-      [localStorage.getItem("email")]: updatedBasketItems,
-    }));
+    setBasketItems(updatedBasketItems);
 
     if (areAllPrinted) {
       toast.success(`Ticket has been printed.`, {

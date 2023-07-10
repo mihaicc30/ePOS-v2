@@ -8,28 +8,8 @@ const MenuLeftSide = ({ basketItems, setBasketItems }) => {
   const [messageModalData, setMessageModalData] = useState(false);
   const modalMessageRef = useRef(null);
 
-  // const handleIncrement = (index) => {
-  //   const updatedBasket = [...basketItems];
-  //   updatedBasket[index] = {
-  //     ...updatedBasket[index],
-  //     qty: updatedBasket[index].qty + 1,
-  //   };
-  //   setBasketItems(updatedBasket);
-  // };
-
-  // const handleDecrement = (index) => {
-  //   const updatedBasket = [...basketItems];
-  //   if (updatedBasket[index].qty > 1) {
-  //     updatedBasket[index] = {
-  //       ...updatedBasket[index],
-  //       qty: updatedBasket[index].qty - 1,
-  //     };
-  //     setBasketItems(updatedBasket);
-  //   }
-  // };
-
   const handleCourseChange = (refID, value) => {
-    const updatedBasketItems = basketItems[localStorage.getItem("email")].map((item) => {
+    const updatedBasketItems = basketItems.map((item) => {
       if (item.refID === refID) {
         return {
           ...item,
@@ -38,20 +18,13 @@ const MenuLeftSide = ({ basketItems, setBasketItems }) => {
       }
       return item;
     });
-    setBasketItems((prevState) => ({
-      ...prevState,
-      [localStorage.getItem("email")]: updatedBasketItems,
-    }));
+    setBasketItems(updatedBasketItems);
   };
 
   const handleRemoveItem = (refID, printed) => {
     if (printed) console.log("dev**to check level access as item is already printed.");
-    const updatedBasketItems = basketItems[localStorage.getItem("email")].filter((basketItem) => basketItem.refID !== refID);
-    console.log(updatedBasketItems);
-    setBasketItems((prevState) => ({
-      ...prevState,
-      [localStorage.getItem("email")]: updatedBasketItems,
-    }));
+    const updatedBasketItems = basketItems.filter((basketItem) => basketItem.refID !== refID);
+    setBasketItems(updatedBasketItems);
   };
 
   const handleMessage = (msg, refID, name, printed) => {
@@ -69,16 +42,13 @@ const MenuLeftSide = ({ basketItems, setBasketItems }) => {
       return;
     }
     if (msg) {
-      const updatedBasket = basketItems[localStorage.getItem("email")].map((item) => {
+      const updatedBasket = basketItems.map((item) => {
         if (item.refID === refID) {
           return { ...item, message: false };
         }
         return item;
       });
-      setBasketItems((prevState) => ({
-        ...prevState,
-        [localStorage.getItem("email")]: updatedBasket,
-      }));
+      setBasketItems(updatedBasket);
       openMessageModal(false);
     } else {
       if (!messageModal) openMessageModal(!messageModal);
@@ -92,16 +62,13 @@ const MenuLeftSide = ({ basketItems, setBasketItems }) => {
   const handleAddMessage = () => {
     const message = modalMessageRef.current.value;
     if (message !== "") {
-      const updatedBasket = basketItems[localStorage.getItem("email")].map((item) => {
+      const updatedBasket = basketItems.map((item) => {
         if (item.refID === messageModalData.refID) {
           return { ...item, message: message, messageBy: localStorage.getItem("email") };
         }
         return item;
       });
-      setBasketItems((prevState) => ({
-        ...prevState,
-        [localStorage.getItem("email")]: updatedBasket,
-      }));
+      setBasketItems(updatedBasket);
     }
     openMessageModal(false);
   };
@@ -116,8 +83,7 @@ const MenuLeftSide = ({ basketItems, setBasketItems }) => {
   };
 
   const getUniqueCourses = () => {
-    let basket = basketItems[localStorage.getItem("email")] || [];
-    const uniqueCourses = [...new Set(basket.map((item2) => item2.subcategory_course))];
+    const uniqueCourses = [...new Set(basketItems.map((item2) => item2.subcategory_course))];
     return uniqueCourses.sort((a, b) => a - b);
   };
 
@@ -129,7 +95,7 @@ const MenuLeftSide = ({ basketItems, setBasketItems }) => {
       {getUniqueCourses().map((course) => (
         <div key={course}>
           {course < 1 ? <p className="border-t-4 px-4 mt-4 border-t-orange-300">Beverages</p> : <p className="border-t-4 px-4 mt-4 border-t-orange-300">Course {course}</p>}
-          {basketItems[localStorage.getItem("email")]
+          {basketItems
             .filter((menuItem) => menuItem.subcategory_course === course)
             .sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded))
             .map((menuItem, index) => (
@@ -175,7 +141,7 @@ const MenuLeftSide = ({ basketItems, setBasketItems }) => {
         </div>
       ))}
 
-      {basketItems[localStorage.getItem("email")]?.length == 0 && <p className="text-center">Basket is empty.</p>}
+      {basketItems.length == 0 && <p className="text-center">Basket is empty.</p>}
       {messageModal && (
         <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
           <button className="absolute top-0 left-0 p-4 text-3xl animate-fadeUP1" onClick={() => openMessageModal(!messageModal)}>

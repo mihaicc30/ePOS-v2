@@ -21,10 +21,7 @@ const appearance = {
   theme: "flat",
 };
 const stripePromise = loadStripe(import.meta.env.VITE_S_PK);
-// setBasketItems((prevState) => ({
-//   ...prevState,
-//   [localStorage.getItem("email")]: updatedBasketItems,
-// }));
+
 const Payment = ({ basketDiscount, user, basketItems, setBasketItems, venueNtable, setVenueNtable }) => {
   const [isCardPressed, setIsCardPressed] = useState(false);
   const [isCashPressed, setIsCashPressed] = useState(false);
@@ -40,16 +37,16 @@ const Payment = ({ basketDiscount, user, basketItems, setBasketItems, venueNtabl
 
   useEffect(() => {
     if (venueNtable.table === "" || !venueNtable.table) return nav("/Tables");
-    if (basketItems[localStorage.getItem('email')].length < 1) return nav("/Menu");
+    if (basketItems.length < 1) return nav("/Menu");
   }, [venueNtable]);
 
   useEffect(() => {
-    setComputedBasketTotal(calculateTotal(basketItems[localStorage.getItem("email")], basketDiscount));
-    setBasketTotal(calculateTotal(basketItems[localStorage.getItem("email")], basketDiscount));
+    setComputedBasketTotal(calculateTotal(basketItems, basketDiscount));
+    setBasketTotal(calculateTotal(basketItems, basketDiscount));
   }, [computedBasket]);
 
   useEffect(() => {
-    setComputedBasket(basketItems[localStorage.getItem("email")]);
+    setComputedBasket(basketItems);
   }, [basketItems]);
 
   const handlePaymentType = async (type) => {
@@ -73,10 +70,7 @@ const Payment = ({ basketDiscount, user, basketItems, setBasketItems, venueNtabl
       });
       if (leftToPay <= 0) {
         console.log("Basked is Paid. Clearing the basket.");
-        setBasketItems((prevState) => ({
-          ...prevState,
-          [localStorage.getItem("email")]: [],
-        }));
+        setBasketItems([]);
       }
       setTimeout(() => {
         setIsCashPressed(false);
@@ -122,10 +116,7 @@ const Payment = ({ basketDiscount, user, basketItems, setBasketItems, venueNtabl
         });
         if (leftToPay <= 0) {
           console.log("Basket is paid. Clearing the basket.");
-          setBasketItems((prevState) => ({
-            ...prevState,
-            [localStorage.getItem("email")]: [],
-          }));
+          setBasketItems([]);
         }
         console.log("Payment successful:", response);
       } catch (error) {

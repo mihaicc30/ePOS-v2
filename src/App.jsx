@@ -2445,7 +2445,7 @@ let dbtables = [
 
 const App = () => {
   const [user, setUser] = useState(null);
-  const [basketItems, setBasketItems] = useState({});
+  const [basketItems, setBasketItems] = useState([]);
   const [venueNtable, setVenueNtable] = useState({ venue: 1, table: null });
 
   const [tables, setTables] = useState([]);
@@ -2459,24 +2459,23 @@ const App = () => {
   }, [tables]);
 
   useEffect(() => {
-    
     // for dev
-    let x = basketItems[localStorage.getItem('email')]?.reduce((total, item) => {
+    let x = basketItems
+      .reduce((total, item) => {
         return total + item.price * item.qty;
       }, 0)
       .toFixed(2);
 
     const handleKeyPress = (event) => {
       if (event.key === "F9") {
-        console.log(basketItems);
-        console.log(basketItems[localStorage.getItem('email')]);
+        console.log(basketItems, `total to pay${x}`);
       }
     };
     window.addEventListener("keydown", handleKeyPress);
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [basketItems[localStorage.getItem('email')], tables]);
+  }, [basketItems, tables]);
 
   const [menuitems, setMenuitems] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -2484,7 +2483,7 @@ const App = () => {
   const [basketDiscount, setBasketDiscount] = useState(0);
 
   const calculateTotalQuantity = () => {
-    const totalQty = basketItems[localStorage.getItem('email')]?.reduce((total, item) => total + parseInt(item.qty), 0) || 0
+    const totalQty = basketItems.reduce((total, item) => total + parseInt(item.qty), 0);
     setBasketQty(totalQty);
   };
 
@@ -2503,12 +2502,12 @@ const App = () => {
 
   useEffect(() => {
     calculateTotalQuantity();
-  }, [basketItems[localStorage.getItem('email')]]);
+  }, [basketItems]);
 
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route path="/" element={<Auth setBasketItems={setBasketItems} />} />
+        <Route path="/" element={<Auth />} />
 
         <Route path="/tables" element={<Tables tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
 

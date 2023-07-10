@@ -9,7 +9,7 @@ export const isConsecutive = (arr) => {
 };
 
 export const calculateTotalPrice = (basketItems) => {
-  const totalPrice = basketItems[localStorage.getItem("email")].reduce((total, item) => total + parseFloat(item.price * item.qty), 0);
+  const totalPrice = basketItems.reduce((total, item) => total + parseFloat(item.price * item.qty), 0);
   return totalPrice.toFixed(2);
 };
 

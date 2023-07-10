@@ -77,7 +77,7 @@ const MenuRightSide = ({ menuitems, basketItems, setBasketItems }) => {
     const email = localStorage.getItem('email');
     const existingBasketItems = basketItems[email] || [];
     const updatedBasketItems = [...existingBasketItems, { ...newBasketItem }];
-    setBasketItems({ ...basketItems, [email]: updatedBasketItems });
+    setBasketItems([...basketItems, { ...newBasketItem }]);
     // const existingItem = basketItems[localStorage.getItem('email')].find((menuItem) => menuItem.name === item.name);
     // if (existingItem) {
     //   const updatedbasketItems = basketItems[localStorage.getItem('email')].map((menuItem) => {
