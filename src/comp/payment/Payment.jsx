@@ -60,7 +60,7 @@ const Payment = ({ basketDiscount, user, basketItems, setBasketItems, venueNtabl
       setChange(change);
       toast.success(`Payment successful! £${padInput} has been paid. ${leftToPay > 0 ? `£${leftToPay} are left to pay .` : ``}`, {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -106,7 +106,7 @@ const Payment = ({ basketDiscount, user, basketItems, setBasketItems, venueNtabl
         setIsCardPressed(false);
         toast.success(`Success! Payment of £${padInput} has been made. ${leftToPay > 0 ? `£${leftToPay} are left to pay.` : ``}`, {
           position: "top-right",
-          autoClose: 3000,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,

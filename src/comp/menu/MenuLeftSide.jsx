@@ -42,8 +42,11 @@ const MenuLeftSide = ({ basketItems, setBasketItems }) => {
       openMessageModal(false);
     } else {
       if (!messageModal) openMessageModal(!messageModal);
-
       setMessageModalData({ refID, name });
+      setTimeout(() => {
+        modalMessageRef.current.focus()
+        
+      }, 111);
     }
   };
 
@@ -57,6 +60,16 @@ const MenuLeftSide = ({ basketItems, setBasketItems }) => {
     });
     setBasketItems(updatedBasket);
     openMessageModal(false);
+  };
+
+  const handleEnterKey = (event) => {
+    console.log("🚀 ~ file: MenuLeftSide.jsx:64 ~ handleEnterKey ~ event.keyCode:", event.keyCode);
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      handleAddMessage();
+      // Perform your logic here when Enter key is pressed
+      // For example, you can call a function or submit the form
+    }
   };
 
   return (
@@ -90,7 +103,6 @@ const MenuLeftSide = ({ basketItems, setBasketItems }) => {
                     ➕
                   </button>
                   <button onClick={() => handleMessage(menuItem.message, menuItem.refID, menuItem.name)} className={`${menuItem.message ? "bg-red-300" : "bg-green-300"} px-2 py-1 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md`}>
-                    {" "}
                     {menuItem.message ? "-Message" : "+Message"}
                   </button>
                 </div>
@@ -108,7 +120,7 @@ const MenuLeftSide = ({ basketItems, setBasketItems }) => {
           <p className="text-center text-xl mt-20 border-b-2 border-b-[--c1]">Add Message Form</p>
           <p className="text-center mt-10">Add Message to {messageModalData.name}</p>
 
-          <input ref={modalMessageRef} type="text" defaultValue={``} className="border-b-2 border-b-black border-t-2 border-t-gray-200 rounded-xl p-4 mx-auto mb-12 text-center w-[80%]" placeholder="Type your message here.." />
+          <input ref={modalMessageRef} onKeyDown={handleEnterKey} type="text" defaultValue={``} className="border-b-2 border-b-black border-t-2 border-t-gray-200 rounded-xl p-4 mx-auto mb-12 text-center w-[80%]" placeholder="Type your message here.." />
           <button onClick={handleAddMessage} className="tableNumber mx-auto w-1/2 p-6 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black ">
             Add ▶
           </button>

@@ -161,7 +161,7 @@ let dbmenuitems = [
       {
         name: "Grilled Hake with Lemon Butter Sauce",
         tag: ["gluten-free"],
-        subcategory: "special",
+        subcategory: "Special",
         subcategory_course: "2",
         stock: 5,
         price: 15,
@@ -191,7 +191,7 @@ let dbmenuitems = [
       {
         name: "Kids Mozzarella Sticks",
         tag: ["vegetarian"],
-        subcategory: "kids",
+        subcategory: "Kids",
         subcategory_course: "1",
         stock: 10,
         price: 2,
@@ -220,7 +220,7 @@ let dbmenuitems = [
       },
       {
         name: "Kids Garlic Bread",
-        subcategory: "kids",
+        subcategory: "Kids",
         subcategory_course: "1",
         tag: ["vegetarian"],
         stock: 10,
@@ -250,7 +250,7 @@ let dbmenuitems = [
       },
       {
         name: "Kids Onion Rings",
-        subcategory: "kids",
+        subcategory: "Kids",
         subcategory_course: "1",
         tag: ["vegetarian", "vegan"],
         stock: 10,
@@ -280,7 +280,7 @@ let dbmenuitems = [
       },
       {
         name: "Kids Chicken Nuggets",
-        subcategory: "kids",
+        subcategory: "Kids",
         subcategory_course: "2",
         cal: 250,
         tag: [],
@@ -310,7 +310,7 @@ let dbmenuitems = [
       },
       {
         name: "Kids Cheese Pizza",
-        subcategory: "kids",
+        subcategory: "Kids",
         subcategory_course: "2",
         cal: 350,
         tag: ["vegetarian"],
@@ -340,7 +340,7 @@ let dbmenuitems = [
       },
       {
         name: "Kids Grilled Cheese Sandwich",
-        subcategory: "kids",
+        subcategory: "Kids",
         subcategory_course: "2",
         cal: 300,
         tag: ["vegetarian"],
@@ -370,7 +370,7 @@ let dbmenuitems = [
       },
       {
         name: "Kids Peanut Butter and Jelly Sandwich",
-        subcategory: "kids",
+        subcategory: "Kids",
         subcategory_course: "2",
         cal: 280,
         tag: ["vegetarian"],
@@ -400,7 +400,7 @@ let dbmenuitems = [
       },
       {
         name: "Kids Macaroni and Cheese",
-        subcategory: "kids",
+        subcategory: "Kids",
         subcategory_course: "2",
         cal: 450,
         tag: ["vegetarian"],
@@ -430,7 +430,7 @@ let dbmenuitems = [
       },
       {
         name: "Kids Mini Pancakes",
-        subcategory: "kids",
+        subcategory: "Kids",
         subcategory_course: "2",
         cal: 300,
         tag: ["vegetarian"],
@@ -461,7 +461,7 @@ let dbmenuitems = [
 
       {
         name: "Chocolate Brownie",
-        subcategory: "desert",
+        subcategory: "Desert",
         subcategory_course: "3",
         cal: 350,
         tag: ["vegetarian"],
@@ -491,7 +491,7 @@ let dbmenuitems = [
       },
       {
         name: "Cheesecake",
-        subcategory: "desert",
+        subcategory: "Desert",
         subcategory_course: "3",
         cal: 450,
         tag: ["vegetarian"],
@@ -521,7 +521,7 @@ let dbmenuitems = [
       },
       {
         name: "Vanilla Ice Cream",
-        subcategory: "desert",
+        subcategory: "Desert",
         subcategory_course: "3",
         cal: 200,
         tag: ["vegetarian"],
@@ -551,7 +551,7 @@ let dbmenuitems = [
       },
       {
         name: "Fruit Tart",
-        subcategory: "desert",
+        subcategory: "Desert",
         subcategory_course: "3",
         cal: 250,
         tag: ["vegetarian"],
@@ -581,7 +581,7 @@ let dbmenuitems = [
       },
       {
         name: "Tiramisu",
-        subcategory: "desert",
+        subcategory: "Desert",
         subcategory_course: "3",
         cal: 320,
         tag: ["vegetarian"],
@@ -611,7 +611,7 @@ let dbmenuitems = [
       },
       {
         name: "Strawberry Shortcake",
-        subcategory: "desert",
+        subcategory: "Desert",
         subcategory_course: "3",
         cal: 280,
         tag: ["vegetarian"],
@@ -643,7 +643,7 @@ let dbmenuitems = [
       // (((((((((((((((((((((((())))))))))))))))))))))))
       {
         name: "Grilled Salmon",
-        subcategory: "main",
+        subcategory: "Main",
         subcategory_course: "2",
         cal: 400,
         tag: [],
@@ -673,7 +673,7 @@ let dbmenuitems = [
       },
       {
         name: "Mixed Grill",
-        subcategory: "main",
+        subcategory: "Main",
         subcategory_course: "2",
         cal: 2100,
         tag: [],
@@ -703,7 +703,7 @@ let dbmenuitems = [
       },
       {
         name: "Beef Burger",
-        subcategory: "main",
+        subcategory: "Main",
         subcategory_course: "2",
         cal: 500,
         tag: [],
@@ -733,7 +733,7 @@ let dbmenuitems = [
       },
       {
         name: "Vegetable Stir-Fry",
-        subcategory: "main",
+        subcategory: "Main",
         subcategory_course: "2",
         cal: 300,
         tag: ["vegetarian", "vegan"],
@@ -763,7 +763,7 @@ let dbmenuitems = [
       },
       {
         name: "Chicken Parmesan",
-        subcategory: "main",
+        subcategory: "Main",
         subcategory_course: "2",
         cal: 450,
         tag: [],
@@ -793,7 +793,7 @@ let dbmenuitems = [
       },
       {
         name: "Pesto Pasta",
-        subcategory: "main",
+        subcategory: "Main",
         subcategory_course: "2",
         cal: 380,
         tag: ["vegetarian"],
@@ -823,7 +823,7 @@ let dbmenuitems = [
       },
       {
         name: "Shrimp Scampi",
-        subcategory: "main",
+        subcategory: "Main",
         subcategory_course: "2",
         cal: 320,
         tag: [],
@@ -853,7 +853,7 @@ let dbmenuitems = [
       },
       {
         name: "Mushroom Risotto",
-        subcategory: "main",
+        subcategory: "Main",
         subcategory_course: "2",
         cal: 380,
         tag: ["vegetarian"],
@@ -883,7 +883,7 @@ let dbmenuitems = [
       },
       {
         name: "Grilled Chicken Caesar Salad",
-        subcategory: "main",
+        subcategory: "Main",
         subcategory_course: "2",
         cal: 320,
         tag: [],
@@ -913,7 +913,7 @@ let dbmenuitems = [
       },
       {
         name: "Beef Stroganoff",
-        subcategory: "main",
+        subcategory: "Main",
         subcategory_course: "2",
         cal: 480,
         tag: [],
@@ -943,7 +943,7 @@ let dbmenuitems = [
       },
       {
         name: "Fish and Chips",
-        subcategory: "main",
+        subcategory: "Main",
         subcategory_course: "2",
         cal: 550,
         tag: [],
@@ -973,7 +973,7 @@ let dbmenuitems = [
       },
       {
         name: "Eggplant Parmesan",
-        subcategory: "main",
+        subcategory: "Main",
         subcategory_course: "2",
         cal: 420,
         tag: ["vegetarian"],
@@ -1003,7 +1003,7 @@ let dbmenuitems = [
       },
       {
         name: "Lemon Herb Roasted Chicken",
-        subcategory: "main",
+        subcategory: "Main",
         subcategory_course: "2",
         cal: 400,
         tag: [],
@@ -1033,7 +1033,7 @@ let dbmenuitems = [
       },
       {
         name: "Vegetable Lasagna",
-        subcategory: "main",
+        subcategory: "Main",
         subcategory_course: "2",
         cal: 360,
         tag: ["vegetarian"],
@@ -1065,7 +1065,7 @@ let dbmenuitems = [
       // ((((((((((((((((((((((((((((((()))))))))))))))))))))))))))))))
       {
         name: "Chicken Wings",
-        subcategory: "starter",
+        subcategory: "Starter",
         subcategory_course: "1",
         tag: ["chicken", "spicy"],
         stock: 10,
@@ -1095,7 +1095,7 @@ let dbmenuitems = [
       },
       {
         name: "Mozzarella Sticks",
-        subcategory: "starter",
+        subcategory: "Starter",
         subcategory_course: "1",
         tag: ["vegetarian"],
         stock: 10,
@@ -1125,7 +1125,7 @@ let dbmenuitems = [
       },
       {
         name: "Garlic Bread",
-        subcategory: "starter",
+        subcategory: "Starter",
         subcategory_course: "1",
         tag: ["vegetarian"],
         stock: 10,
@@ -1155,7 +1155,7 @@ let dbmenuitems = [
       },
       {
         name: "Onion Rings",
-        subcategory: "starter",
+        subcategory: "Starter",
         subcategory_course: "1",
         tag: ["vegetarian", "vegan"],
         stock: 10,
@@ -1185,7 +1185,7 @@ let dbmenuitems = [
       },
       {
         name: "Bruschetta",
-        subcategory: "starter",
+        subcategory: "Starter",
         subcategory_course: "1",
         tag: ["vegetarian", "vegan"],
         stock: 10,
@@ -1215,7 +1215,7 @@ let dbmenuitems = [
       },
       {
         name: "Shrimp Cocktail",
-        subcategory: "starter",
+        subcategory: "Starter",
         subcategory_course: "1",
         tag: ["shrimp", "seafood"],
         stock: 10,
@@ -1245,7 +1245,7 @@ let dbmenuitems = [
       },
       {
         name: "Caprese Salad",
-        subcategory: "starter",
+        subcategory: "Starter",
         subcategory_course: "1",
         tag: ["vegetarian"],
         stock: 10,
@@ -1275,7 +1275,7 @@ let dbmenuitems = [
       },
       {
         name: "Spinach Artichoke Dip",
-        subcategory: "starter",
+        subcategory: "Starter",
         subcategory_course: "1",
         tag: ["vegetarian", "vegan"],
         stock: 10,
@@ -1305,7 +1305,7 @@ let dbmenuitems = [
       },
       {
         name: "Crispy Calamari",
-        subcategory: "starter",
+        subcategory: "Starter",
         subcategory_course: "1",
         cal: 300,
         tag: [],
@@ -1337,7 +1337,7 @@ let dbmenuitems = [
       // (((((((((((((((((((((((((((((((())))))))))))))))))))))))))))))))
       {
         name: "Full Breakfast",
-        subcategory: "breakfast",
+        subcategory: "Breakfast",
         subcategory_course: "2",
         cal: 350,
         tag: [],
@@ -1368,7 +1368,7 @@ let dbmenuitems = [
       {
         name: "Porridge",
         cal: 350,
-        subcategory: "breakfast",
+        subcategory: "Breakfast",
         subcategory_course: "2",
         tag: ["vegetarian"],
         stock: 10,
@@ -1398,7 +1398,7 @@ let dbmenuitems = [
       {
         name: "Avocado on Toast",
         cal: 350,
-        subcategory: "breakfast",
+        subcategory: "Breakfast",
         subcategory_course: "2",
         tag: ["vegetarian"],
         stock: 10,
@@ -1428,7 +1428,7 @@ let dbmenuitems = [
       {
         name: "Scrambled Eggs",
         cal: 300,
-        subcategory: "breakfast",
+        subcategory: "Breakfast",
         subcategory_course: "2",
         tag: ["vegetarian"],
         stock: 10,
@@ -1458,7 +1458,7 @@ let dbmenuitems = [
       {
         name: "French Toast",
         cal: 400,
-        subcategory: "breakfast",
+        subcategory: "Breakfast",
         subcategory_course: "2",
         tag: ["vegetarian"],
         stock: 10,
@@ -1488,7 +1488,7 @@ let dbmenuitems = [
       {
         name: "Yogurt Parfait",
         cal: 250,
-        subcategory: "breakfast",
+        subcategory: "Breakfast",
         subcategory_course: "2",
         tag: ["vegetarian"],
         stock: 10,
@@ -1518,7 +1518,7 @@ let dbmenuitems = [
       {
         name: "Protein Pancakes",
         cal: 450,
-        subcategory: "breakfast",
+        subcategory: "Breakfast",
         subcategory_course: "2",
         tag: [],
         stock: 10,
@@ -1548,7 +1548,7 @@ let dbmenuitems = [
       {
         name: "Veggie Omelette",
         cal: 300,
-        subcategory: "breakfast",
+        subcategory: "Breakfast",
         subcategory_course: "2",
         tag: ["vegetarian"],
         stock: 10,
@@ -1585,7 +1585,7 @@ let dbmenuitems = [
       {
         name: "Coca-Cola",
         tag: ["carbonated", "soft drink"],
-        subcategory: "soft",
+        subcategory: "Soft",
         stock: 10,
         price: 2,
         allergens: [],
@@ -1614,7 +1614,7 @@ let dbmenuitems = [
       {
         name: "Orange Juice",
         tag: ["fruit juice", "non-alcoholic"],
-        subcategory: "soft",
+        subcategory: "Soft",
         stock: 10,
         price: 3,
         allergens: [],
@@ -1643,7 +1643,7 @@ let dbmenuitems = [
       {
         name: "Apple Juice",
         tag: ["fruit juice", "non-alcoholic"],
-        subcategory: "soft",
+        subcategory: "Soft",
         stock: 10,
         price: 3,
         allergens: [],
@@ -1672,7 +1672,7 @@ let dbmenuitems = [
       {
         name: "Lemonade",
         tag: ["carbonated", "non-alcoholic"],
-        subcategory: "soft",
+        subcategory: "Soft",
         stock: 10,
         price: 3,
         allergens: [],
@@ -1701,7 +1701,7 @@ let dbmenuitems = [
       {
         name: "Iced Tea",
         tag: ["beverage", "non-alcoholic"],
-        subcategory: "coffee/tea",
+        subcategory: "Coffee/Tea",
         stock: 10,
         price: 3,
         allergens: [],
@@ -1730,7 +1730,7 @@ let dbmenuitems = [
       {
         name: "Cucumber & Lime Water",
         tag: ["beverage", "non-alcoholic"],
-        subcategory: "soft",
+        subcategory: "Soft",
         stock: 10,
         price: 1,
         allergens: [],
@@ -1759,7 +1759,7 @@ let dbmenuitems = [
       {
         name: "Mango Smoothie",
         tag: ["smoothie", "non-alcoholic"],
-        subcategory: "mocktails",
+        subcategory: "Mocktails",
         stock: 10,
         price: 4,
         allergens: [],
@@ -1788,7 +1788,7 @@ let dbmenuitems = [
       {
         name: "Strawberry Banana Smoothie",
         tag: ["smoothie", "non-alcoholic"],
-        subcategory: "mocktails",
+        subcategory: "Mocktails",
         stock: 10,
         price: 4,
         allergens: [],
@@ -1817,7 +1817,7 @@ let dbmenuitems = [
       {
         name: "Chocolate Milkshake",
         tag: ["milkshake", "non-alcoholic"],
-        subcategory: "mocktails",
+        subcategory: "Mocktails",
         stock: 10,
         price: 5,
         allergens: [],
@@ -1846,7 +1846,7 @@ let dbmenuitems = [
       {
         name: "Vanilla Milkshake",
         tag: ["milkshake", "non-alcoholic"],
-        subcategory: "mocktails",
+        subcategory: "Mocktails",
         stock: 10,
         price: 5,
         allergens: [],
@@ -1875,7 +1875,7 @@ let dbmenuitems = [
       {
         name: "Coffee",
         tag: ["hot beverage", "caffeinated"],
-        subcategory: "coffee/tea",
+        subcategory: "Coffee/Tea",
         stock: 10,
         price: 3,
         allergens: [],
@@ -1904,7 +1904,7 @@ let dbmenuitems = [
       {
         name: "Hot Chocolate",
         tag: ["hot beverage", "non-alcoholic"],
-        subcategory: "coffee/tea",
+        subcategory: "Coffee/Tea",
         stock: 10,
         price: 4,
         allergens: [],
@@ -1939,7 +1939,7 @@ let dbmenuitems = [
       {
         name: "Roasted Mixed Nuts",
         tag: ["vegetarian", "vegan"],
-        subcategory: "bar snacks",
+        subcategory: "Bar Snacks",
         subcategory_course: "1",
         stock: 20,
         price: 3,
@@ -2500,7 +2500,7 @@ const App = () => {
             "carbonated",
             "soft drink"
         ],
-        "subcategory": "soft",
+        "subcategory": "Soft",
         "stock": 10,
         "price": 2,
         "allergens": [],
@@ -2548,7 +2548,7 @@ const App = () => {
             "fruit juice",
             "non-alcoholic"
         ],
-        "subcategory": "soft",
+        "subcategory": "Soft",
         "stock": 10,
         "price": 3,
         "allergens": [],
@@ -2591,7 +2591,7 @@ const App = () => {
             "fruit juice",
             "non-alcoholic"
         ],
-        "subcategory": "soft",
+        "subcategory": "Soft",
         "stock": 10,
         "price": 3,
         "allergens": [],
@@ -2634,7 +2634,7 @@ const App = () => {
             "carbonated",
             "non-alcoholic"
         ],
-        "subcategory": "soft",
+        "subcategory": "Soft",
         "stock": 10,
         "price": 3,
         "allergens": [],
@@ -2725,7 +2725,7 @@ const App = () => {
             "beverage",
             "non-alcoholic"
         ],
-        "subcategory": "soft",
+        "subcategory": "Soft",
         "stock": 10,
         "price": 1,
         "allergens": [],
