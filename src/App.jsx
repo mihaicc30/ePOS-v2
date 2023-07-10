@@ -162,10 +162,9 @@ let dbmenuitems = [
         name: "Grilled Hake with Lemon Butter Sauce",
         tag: ["gluten-free"],
         subcategory: "Special",
-        subcategory_course: "2",
+        subcategory_course: 2,
         stock: 5,
         price: 15,
-        allergens: ["fish"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -192,10 +191,9 @@ let dbmenuitems = [
         name: "Kids Mozzarella Sticks",
         tag: ["vegetarian"],
         subcategory: "Kids",
-        subcategory_course: "1",
+        subcategory_course: 1,
         stock: 10,
         price: 2,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -221,11 +219,10 @@ let dbmenuitems = [
       {
         name: "Kids Garlic Bread",
         subcategory: "Kids",
-        subcategory_course: "1",
+        subcategory_course: 1,
         tag: ["vegetarian"],
         stock: 10,
         price: 2,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -251,11 +248,10 @@ let dbmenuitems = [
       {
         name: "Kids Onion Rings",
         subcategory: "Kids",
-        subcategory_course: "1",
+        subcategory_course: 1,
         tag: ["vegetarian", "vegan"],
         stock: 10,
         price: 2,
-        allergens: ["nut free", "dairy free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -281,13 +277,12 @@ let dbmenuitems = [
       {
         name: "Kids Chicken Nuggets",
         subcategory: "Kids",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 250,
         tag: [],
         stock: 10,
         ingredients: ["chicken breast", "breadcrumbs", "spices"],
         price: 5,
-        allergens: ["nut free", "gluten free", "dairy free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -311,13 +306,12 @@ let dbmenuitems = [
       {
         name: "Kids Cheese Pizza",
         subcategory: "Kids",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 350,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["pizza dough", "tomato sauce", "mozzarella cheese"],
         price: 7,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -341,7 +335,7 @@ let dbmenuitems = [
       {
         name: "Kids Grilled Cheese Sandwich",
         subcategory: "Kids",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 300,
         tag: ["vegetarian"],
         stock: 10,
@@ -365,13 +359,12 @@ let dbmenuitems = [
           Sulphur: false,
         },
         price: 4,
-        allergens: ["nut free"],
         img: "./assets/defaultDish.jpg",
       },
       {
         name: "Kids Peanut Butter and Jelly Sandwich",
         subcategory: "Kids",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 280,
         tag: ["vegetarian"],
         stock: 10,
@@ -395,13 +388,12 @@ let dbmenuitems = [
           Sulphur: false,
         },
         price: 3,
-        allergens: [],
         img: "./assets/defaultDish.jpg",
       },
       {
         name: "Kids Macaroni and Cheese",
         subcategory: "Kids",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 450,
         tag: ["vegetarian"],
         stock: 10,
@@ -425,13 +417,12 @@ let dbmenuitems = [
           Sulphur: false,
         },
         price: 7,
-        allergens: ["nut free"],
         img: "./assets/defaultDish.jpg",
       },
       {
         name: "Kids Mini Pancakes",
         subcategory: "Kids",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 300,
         tag: ["vegetarian"],
         stock: 10,
@@ -455,20 +446,18 @@ let dbmenuitems = [
           Sulphur: false,
         },
         price: 6,
-        allergens: ["nut free"],
         img: "./assets/defaultDish.jpg",
       },
 
       {
         name: "Chocolate Brownie",
         subcategory: "Desert",
-        subcategory_course: "3",
+        subcategory_course: 3,
         cal: 350,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["chocolate", "butter", "sugar", "eggs", "flour", "vanilla extract", "walnuts"],
         price: 8,
-        allergens: [],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -492,13 +481,12 @@ let dbmenuitems = [
       {
         name: "Cheesecake",
         subcategory: "Desert",
-        subcategory_course: "3",
+        subcategory_course: 3,
         cal: 450,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["graham cracker crumbs", "butter", "cream cheese", "sugar", "sour cream", "vanilla extract", "eggs", "strawberry topping"],
         price: 8,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -522,13 +510,12 @@ let dbmenuitems = [
       {
         name: "Vanilla Ice Cream",
         subcategory: "Desert",
-        subcategory_course: "3",
+        subcategory_course: 3,
         cal: 200,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["cream", "sugar", "vanilla extract"],
         price: 6,
-        allergens: ["nut free", "gluten free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -552,13 +539,12 @@ let dbmenuitems = [
       {
         name: "Fruit Tart",
         subcategory: "Desert",
-        subcategory_course: "3",
+        subcategory_course: 3,
         cal: 250,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["pastry dough", "pastry cream", "strawberries", "kiwi", "blueberries", "apricot glaze"],
         price: 10,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -582,13 +568,12 @@ let dbmenuitems = [
       {
         name: "Tiramisu",
         subcategory: "Desert",
-        subcategory_course: "3",
+        subcategory_course: 3,
         cal: 320,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["ladyfingers", "espresso", "mascarpone cheese", "sugar", "cocoa powder", "rum or coffee liqueur"],
         price: 9,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -612,13 +597,12 @@ let dbmenuitems = [
       {
         name: "Strawberry Shortcake",
         subcategory: "Desert",
-        subcategory_course: "3",
+        subcategory_course: 3,
         cal: 280,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["shortcakes", "strawberries", "whipped cream", "sugar", "vanilla extract"],
         price: 6,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -644,13 +628,12 @@ let dbmenuitems = [
       {
         name: "Grilled Salmon",
         subcategory: "Main",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 400,
         tag: [],
         stock: 10,
         ingredients: ["salmon fillet", "lemon", "dill", "olive oil", "salt", "pepper"],
         price: 15,
-        allergens: ["nut free", "gluten free", "dairy free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -674,13 +657,12 @@ let dbmenuitems = [
       {
         name: "Mixed Grill",
         subcategory: "Main",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 2100,
         tag: [],
         stock: 10,
         ingredients: ["pork", "lamb", "beef", "sausage", "egg", "black pudding", "chips", "salad", "tomato", "mushroom", "gammon"],
         price: 20,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -704,13 +686,12 @@ let dbmenuitems = [
       {
         name: "Beef Burger",
         subcategory: "Main",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 500,
         tag: [],
         stock: 10,
         ingredients: ["beef patty", "brioche bun", "lettuce", "tomato", "onion", "cheese", "pickles"],
         price: 12,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -734,13 +715,12 @@ let dbmenuitems = [
       {
         name: "Vegetable Stir-Fry",
         subcategory: "Main",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 300,
         tag: ["vegetarian", "vegan"],
         stock: 10,
         ingredients: ["mixed vegetables", "tofu", "soy sauce", "ginger", "garlic", "sesame oil"],
         price: 10,
-        allergens: ["nut free", "gluten free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -764,13 +744,12 @@ let dbmenuitems = [
       {
         name: "Chicken Parmesan",
         subcategory: "Main",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 450,
         tag: [],
         stock: 10,
         ingredients: ["chicken breast", "bread crumbs", "Parmesan cheese", "marinara sauce", "mozzarella cheese", "spaghetti"],
         price: 14,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -794,13 +773,12 @@ let dbmenuitems = [
       {
         name: "Pesto Pasta",
         subcategory: "Main",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 380,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["penne pasta", "basil pesto", "cherry tomatoes", "pine nuts", "Parmesan cheese"],
         price: 11,
-        allergens: [],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -824,13 +802,12 @@ let dbmenuitems = [
       {
         name: "Shrimp Scampi",
         subcategory: "Main",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 320,
         tag: [],
         stock: 10,
         ingredients: ["shrimp", "breadcrumbs", "lemon", "tartare", "chips", "salad", "parsley"],
         price: 16,
-        allergens: ["nut free", "dairy free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -854,13 +831,12 @@ let dbmenuitems = [
       {
         name: "Mushroom Risotto",
         subcategory: "Main",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 380,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["arborio rice", "mushrooms", "onion", "garlic", "vegetable broth", "Parmesan cheese"],
         price: 13,
-        allergens: ["nut free", "gluten free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -884,13 +860,12 @@ let dbmenuitems = [
       {
         name: "Grilled Chicken Caesar Salad",
         subcategory: "Main",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 320,
         tag: [],
         stock: 10,
         ingredients: ["grilled chicken breast", "romaine lettuce", "croutons", "Parmesan cheese", "Caesar dressing"],
         price: 9,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -914,13 +889,12 @@ let dbmenuitems = [
       {
         name: "Beef Stroganoff",
         subcategory: "Main",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 480,
         tag: [],
         stock: 10,
         ingredients: ["beef sirloin", "mushrooms", "onion", "garlic", "sour cream", "beef broth", "egg noodles"],
         price: 15,
-        allergens: [],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -944,13 +918,12 @@ let dbmenuitems = [
       {
         name: "Fish and Chips",
         subcategory: "Main",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 550,
         tag: [],
         stock: 10,
         ingredients: ["white fish fillets", "flour", "beer", "potatoes", "tartar sauce", "lemon wedges"],
         price: 13,
-        allergens: ["nut free", "dairy free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -974,13 +947,12 @@ let dbmenuitems = [
       {
         name: "Eggplant Parmesan",
         subcategory: "Main",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 420,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["eggplant", "bread crumbs", "Parmesan cheese", "marinara sauce", "mozzarella cheese", "spaghetti"],
         price: 12,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1004,13 +976,12 @@ let dbmenuitems = [
       {
         name: "Lemon Herb Roasted Chicken",
         subcategory: "Main",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 400,
         tag: [],
         stock: 10,
         ingredients: ["chicken", "lemon", "rosemary", "thyme", "garlic", "butter", "potatoes", "carrots"],
         price: 16,
-        allergens: ["nut free", "gluten free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1034,13 +1005,12 @@ let dbmenuitems = [
       {
         name: "Vegetable Lasagna",
         subcategory: "Main",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 360,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["lasagna noodles", "spinach", "mushrooms", "zucchini", "ricotta cheese", "marinara sauce", "mozzarella cheese"],
         price: 14,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1066,11 +1036,10 @@ let dbmenuitems = [
       {
         name: "Chicken Wings",
         subcategory: "Starter",
-        subcategory_course: "1",
+        subcategory_course: 1,
         tag: ["chicken", "spicy"],
         stock: 10,
         price: 6,
-        allergens: ["nut free", "gluten free", "dairy free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1096,11 +1065,10 @@ let dbmenuitems = [
       {
         name: "Mozzarella Sticks",
         subcategory: "Starter",
-        subcategory_course: "1",
+        subcategory_course: 1,
         tag: ["vegetarian"],
         stock: 10,
         price: 5,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1126,11 +1094,10 @@ let dbmenuitems = [
       {
         name: "Garlic Bread",
         subcategory: "Starter",
-        subcategory_course: "1",
+        subcategory_course: 1,
         tag: ["vegetarian"],
         stock: 10,
         price: 4,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1156,11 +1123,10 @@ let dbmenuitems = [
       {
         name: "Onion Rings",
         subcategory: "Starter",
-        subcategory_course: "1",
+        subcategory_course: 1,
         tag: ["vegetarian", "vegan"],
         stock: 10,
         price: 4,
-        allergens: ["nut free", "dairy free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1186,11 +1152,10 @@ let dbmenuitems = [
       {
         name: "Bruschetta",
         subcategory: "Starter",
-        subcategory_course: "1",
+        subcategory_course: 1,
         tag: ["vegetarian", "vegan"],
         stock: 10,
         price: 5,
-        allergens: ["nut free", "dairy free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1216,11 +1181,10 @@ let dbmenuitems = [
       {
         name: "Shrimp Cocktail",
         subcategory: "Starter",
-        subcategory_course: "1",
+        subcategory_course: 1,
         tag: ["shrimp", "seafood"],
         stock: 10,
         price: 7,
-        allergens: ["nut free", "gluten free", "dairy free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1246,11 +1210,10 @@ let dbmenuitems = [
       {
         name: "Caprese Salad",
         subcategory: "Starter",
-        subcategory_course: "1",
+        subcategory_course: 1,
         tag: ["vegetarian"],
         stock: 10,
         price: 6,
-        allergens: ["nut free", "gluten free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1276,11 +1239,10 @@ let dbmenuitems = [
       {
         name: "Spinach Artichoke Dip",
         subcategory: "Starter",
-        subcategory_course: "1",
+        subcategory_course: 1,
         tag: ["vegetarian", "vegan"],
         stock: 10,
         price: 6,
-        allergens: ["nut free", "gluten free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1306,13 +1268,12 @@ let dbmenuitems = [
       {
         name: "Crispy Calamari",
         subcategory: "Starter",
-        subcategory_course: "1",
+        subcategory_course: 1,
         cal: 300,
         tag: [],
         stock: 10,
         ingredients: ["calamari rings", "flour", "spices", "lemon wedges"],
         price: 10,
-        allergens: ["nut free", "gluten free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1338,13 +1299,12 @@ let dbmenuitems = [
       {
         name: "Full Breakfast",
         subcategory: "Breakfast",
-        subcategory_course: "2",
+        subcategory_course: 2,
         cal: 350,
         tag: [],
         stock: 10,
         ingredients: ["free range eggs", "sausage", "bacon", "mushroom", "tomato", "baked beans", "toast", "butter"],
         price: 10,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1369,12 +1329,11 @@ let dbmenuitems = [
         name: "Porridge",
         cal: 350,
         subcategory: "Breakfast",
-        subcategory_course: "2",
+        subcategory_course: 2,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["scottish oats", "milk", "honey", "wallnuts", "bannana"],
         price: 6,
-        allergens: ["nut free", "gluten free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1399,12 +1358,11 @@ let dbmenuitems = [
         name: "Avocado on Toast",
         cal: 350,
         subcategory: "Breakfast",
-        subcategory_course: "2",
+        subcategory_course: 2,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["turmeric sourdough", "smashed avocado", "lemon", "cherry tomatoes", "feta cheese", "pomegranades", "watercress", "poached egg", "pine nuts"],
         price: 9,
-        allergens: [],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1429,12 +1387,11 @@ let dbmenuitems = [
         name: "Scrambled Eggs",
         cal: 300,
         subcategory: "Breakfast",
-        subcategory_course: "2",
+        subcategory_course: 2,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["eggs", "salt", "pepper", "butter"],
         price: 8,
-        allergens: ["nut free", "gluten free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1459,7 +1416,7 @@ let dbmenuitems = [
         name: "French Toast",
         cal: 400,
         subcategory: "Breakfast",
-        subcategory_course: "2",
+        subcategory_course: 2,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["bread", "eggs", "milk", "cinnamon", "sugar"],
@@ -1482,19 +1439,17 @@ let dbmenuitems = [
           Sulphur: false,
         },
         price: 7,
-        allergens: ["nut free"],
         img: "./assets/defaultDish.jpg",
       },
       {
         name: "Yogurt Parfait",
         cal: 250,
         subcategory: "Breakfast",
-        subcategory_course: "2",
+        subcategory_course: 2,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["yogurt", "granola", "mixed berries", "honey"],
         price: 6,
-        allergens: ["nut free", "gluten free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1519,12 +1474,11 @@ let dbmenuitems = [
         name: "Protein Pancakes",
         cal: 450,
         subcategory: "Breakfast",
-        subcategory_course: "2",
+        subcategory_course: 2,
         tag: [],
         stock: 10,
         ingredients: ["oats", "protein powder", "banana", "eggs", "milk"],
         price: 10,
-        allergens: ["nut free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1549,12 +1503,11 @@ let dbmenuitems = [
         name: "Veggie Omelette",
         cal: 300,
         subcategory: "Breakfast",
-        subcategory_course: "2",
+        subcategory_course: 2,
         tag: ["vegetarian"],
         stock: 10,
         ingredients: ["eggs", "bell peppers", "onions", "spinach", "cheese"],
         price: 8,
-        allergens: ["nut free", "gluten free"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1587,8 +1540,8 @@ let dbmenuitems = [
         tag: ["carbonated", "soft drink"],
         subcategory: "Soft",
         stock: 10,
+        subcategory_course: 0,
         price: 2,
-        allergens: [],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1616,8 +1569,8 @@ let dbmenuitems = [
         tag: ["fruit juice", "non-alcoholic"],
         subcategory: "Soft",
         stock: 10,
+        subcategory_course: 0,
         price: 3,
-        allergens: [],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1645,8 +1598,8 @@ let dbmenuitems = [
         tag: ["fruit juice", "non-alcoholic"],
         subcategory: "Soft",
         stock: 10,
+        subcategory_course: 0,
         price: 3,
-        allergens: [],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1674,8 +1627,8 @@ let dbmenuitems = [
         tag: ["carbonated", "non-alcoholic"],
         subcategory: "Soft",
         stock: 10,
+        subcategory_course: 0,
         price: 3,
-        allergens: [],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1702,9 +1655,9 @@ let dbmenuitems = [
         name: "Iced Tea",
         tag: ["beverage", "non-alcoholic"],
         subcategory: "Coffee/Tea",
+        subcategory_course: 0,
         stock: 10,
         price: 3,
-        allergens: [],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1732,8 +1685,8 @@ let dbmenuitems = [
         tag: ["beverage", "non-alcoholic"],
         subcategory: "Soft",
         stock: 10,
+        subcategory_course: 0,
         price: 1,
-        allergens: [],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1760,9 +1713,9 @@ let dbmenuitems = [
         name: "Mango Smoothie",
         tag: ["smoothie", "non-alcoholic"],
         subcategory: "Mocktails",
+        subcategory_course: 0,
         stock: 10,
         price: 4,
-        allergens: [],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1789,9 +1742,9 @@ let dbmenuitems = [
         name: "Strawberry Banana Smoothie",
         tag: ["smoothie", "non-alcoholic"],
         subcategory: "Mocktails",
+        subcategory_course: 0,
         stock: 10,
         price: 4,
-        allergens: [],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1818,9 +1771,9 @@ let dbmenuitems = [
         name: "Chocolate Milkshake",
         tag: ["milkshake", "non-alcoholic"],
         subcategory: "Mocktails",
+        subcategory_course: 0,
         stock: 10,
         price: 5,
-        allergens: [],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1847,9 +1800,9 @@ let dbmenuitems = [
         name: "Vanilla Milkshake",
         tag: ["milkshake", "non-alcoholic"],
         subcategory: "Mocktails",
+        subcategory_course: 0,
         stock: 10,
         price: 5,
-        allergens: [],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1876,9 +1829,9 @@ let dbmenuitems = [
         name: "Coffee",
         tag: ["hot beverage", "caffeinated"],
         subcategory: "Coffee/Tea",
+        subcategory_course: 0,
         stock: 10,
         price: 3,
-        allergens: [],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1905,9 +1858,9 @@ let dbmenuitems = [
         name: "Hot Chocolate",
         tag: ["hot beverage", "non-alcoholic"],
         subcategory: "Coffee/Tea",
+        subcategory_course: 0,
         stock: 10,
         price: 4,
-        allergens: [],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -1940,10 +1893,9 @@ let dbmenuitems = [
         name: "Roasted Mixed Nuts",
         tag: ["vegetarian", "vegan"],
         subcategory: "Bar Snacks",
-        subcategory_course: "1",
+        subcategory_course: 0,
         stock: 20,
         price: 3,
-        allergens: ["nuts"],
         priceOffer: null,
         allergensList: {
           Meat: false,
@@ -2493,278 +2445,7 @@ let dbtables = [
 
 const App = () => {
   const [user, setUser] = useState(null);
-  const [basketItems, setBasketItems] = useState([
-    {
-        "name": "Coca-Cola",
-        "tag": [
-            "carbonated",
-            "soft drink"
-        ],
-        "subcategory": "Soft",
-        "stock": 10,
-        "price": 2,
-        "allergens": [],
-        "priceOffer": null,
-        "allergensList": {
-            "Meat": false,
-            "Celery": false,
-            "Crustaceans": false,
-            "Fish": false,
-            "Milk": false,
-            "Mustard": false,
-            "Peanuts": false,
-            "Soybeans": false,
-            "Gluten": false,
-            "Egg": false,
-            "Lupin": false,
-            "Moluscs": false,
-            "Nuts": false,
-            "SesameSeeds": false,
-            "Sulphur": false
-        },
-        "img": "./assets/defaultDrink.jpg",
-        "calories": "140",
-        "ingredients": [
-            "Carbonated water",
-            "High fructose corn syrup",
-            "Caramel color",
-            "Phosphoric acid",
-            "Natural flavors",
-            "Caffeine"
-        ],
-        "id": "will be unique db item menu id",
-        "qty": 1,
-        "refID": "7156420e-8a83-4ed1-87bd-8ddb8d0c4b7a",
-        "from": "Beverages",
-        "printed": false,
-        "printable": true,
-        "message": false,
-        "isDeleted": false,
-        "date": "2023-07-09T17:30:13.809Z"
-    },
-    {
-        "name": "Orange Juice",
-        "tag": [
-            "fruit juice",
-            "non-alcoholic"
-        ],
-        "subcategory": "Soft",
-        "stock": 10,
-        "price": 3,
-        "allergens": [],
-        "priceOffer": null,
-        "allergensList": {
-            "Meat": false,
-            "Celery": false,
-            "Crustaceans": false,
-            "Fish": false,
-            "Milk": false,
-            "Mustard": false,
-            "Peanuts": false,
-            "Soybeans": false,
-            "Gluten": false,
-            "Egg": false,
-            "Lupin": false,
-            "Moluscs": false,
-            "Nuts": false,
-            "SesameSeeds": false,
-            "Sulphur": false
-        },
-        "img": "./assets/defaultDrink.jpg",
-        "calories": "110",
-        "ingredients": [
-            "Orange juice"
-        ],
-        "id": "will be unique db item menu id",
-        "qty": 1,
-        "refID": "d6f7549f-ce80-412f-815b-a24398b488ae",
-        "from": "Beverages",
-        "printed": false,
-        "printable": true,
-        "message": false,
-        "isDeleted": false,
-        "date": "2023-07-09T17:30:14.342Z"
-    },
-    {
-        "name": "Apple Juice",
-        "tag": [
-            "fruit juice",
-            "non-alcoholic"
-        ],
-        "subcategory": "Soft",
-        "stock": 10,
-        "price": 3,
-        "allergens": [],
-        "priceOffer": null,
-        "allergensList": {
-            "Meat": false,
-            "Celery": false,
-            "Crustaceans": false,
-            "Fish": false,
-            "Milk": false,
-            "Mustard": false,
-            "Peanuts": false,
-            "Soybeans": false,
-            "Gluten": false,
-            "Egg": false,
-            "Lupin": false,
-            "Moluscs": false,
-            "Nuts": false,
-            "SesameSeeds": false,
-            "Sulphur": false
-        },
-        "img": "./assets/defaultDrink.jpg",
-        "calories": "120",
-        "ingredients": [
-            "Apple juice"
-        ],
-        "id": "will be unique db item menu id",
-        "qty": 1,
-        "refID": "e7551dc0-75e7-41ed-b540-e857eafb6c43",
-        "from": "Beverages",
-        "printed": true,
-        "printable": true,
-        "message": false,
-        "isDeleted": false,
-        "date": "2023-07-09T17:30:14.885Z"
-    },
-    {
-        "name": "Lemonade",
-        "tag": [
-            "carbonated",
-            "non-alcoholic"
-        ],
-        "subcategory": "Soft",
-        "stock": 10,
-        "price": 3,
-        "allergens": [],
-        "priceOffer": null,
-        "allergensList": {
-            "Meat": false,
-            "Celery": false,
-            "Crustaceans": false,
-            "Fish": false,
-            "Milk": false,
-            "Mustard": false,
-            "Peanuts": false,
-            "Soybeans": false,
-            "Gluten": false,
-            "Egg": false,
-            "Lupin": false,
-            "Moluscs": false,
-            "Nuts": false,
-            "SesameSeeds": false,
-            "Sulphur": false
-        },
-        "img": "./assets/defaultDrink.jpg",
-        "calories": "100",
-        "ingredients": [
-            "Lemon juice",
-            "Water",
-            "Sugar"
-        ],
-        "id": "will be unique db item menu id",
-        "qty": 1,
-        "refID": "0da8aba8-fe82-45d9-b174-8b6da0c02185",
-        "from": "Beverages",
-        "printed": false,
-        "printable": true,
-        "message": false,
-        "isDeleted": false,
-        "date": "2023-07-09T17:30:15.456Z"
-    },
-    {
-        "name": "Iced Tea",
-        "tag": [
-            "beverage",
-            "non-alcoholic"
-        ],
-        "subcategory": "coffee/tea",
-        "stock": 10,
-        "price": 3,
-        "allergens": [],
-        "priceOffer": null,
-        "allergensList": {
-            "Meat": false,
-            "Celery": false,
-            "Crustaceans": false,
-            "Fish": false,
-            "Milk": false,
-            "Mustard": false,
-            "Peanuts": false,
-            "Soybeans": false,
-            "Gluten": false,
-            "Egg": false,
-            "Lupin": false,
-            "Moluscs": false,
-            "Nuts": false,
-            "SesameSeeds": false,
-            "Sulphur": false
-        },
-        "img": "./assets/defaultDrink.jpg",
-        "calories": "60",
-        "ingredients": [
-            "Black tea",
-            "Water",
-            "Sugar",
-            "Lemon"
-        ],
-        "id": "will be unique db item menu id",
-        "qty": 1,
-        "refID": "3f8863fe-6bc7-4ea7-acb0-eb397e63b0e9",
-        "from": "Beverages",
-        "printed": true,
-        "printable": true,
-        "message": "make this gluen tree!",
-        "isDeleted": false,
-        "date": "2023-07-09T17:30:17.813Z"
-    },
-    {
-        "name": "Cucumber & Lime Water",
-        "tag": [
-            "beverage",
-            "non-alcoholic"
-        ],
-        "subcategory": "Soft",
-        "stock": 10,
-        "price": 1,
-        "allergens": [],
-        "priceOffer": null,
-        "allergensList": {
-            "Meat": false,
-            "Celery": false,
-            "Crustaceans": false,
-            "Fish": false,
-            "Milk": false,
-            "Mustard": false,
-            "Peanuts": false,
-            "Soybeans": false,
-            "Gluten": false,
-            "Egg": false,
-            "Lupin": false,
-            "Moluscs": false,
-            "Nuts": false,
-            "SesameSeeds": false,
-            "Sulphur": false
-        },
-        "img": "./assets/defaultDrink.jpg",
-        "calories": "0",
-        "ingredients": [
-            "Cucumber",
-            "Lime",
-            "Water"
-        ],
-        "id": "will be unique db item menu id",
-        "qty": 1,
-        "refID": "9a28efed-fb6d-4774-a3fa-a8fee3fcb9e0",
-        "from": "Beverages",
-        "printed": false,
-        "printable": true,
-        "message": false,
-        "isDeleted": false,
-        "date": "2023-07-09T17:30:18.295Z"
-    }
-]);
+  const [basketItems, setBasketItems] = useState({});
   const [venueNtable, setVenueNtable] = useState({ venue: 1, table: null });
 
   const [tables, setTables] = useState([]);
@@ -2778,23 +2459,24 @@ const App = () => {
   }, [tables]);
 
   useEffect(() => {
+    
     // for dev
-    let x = basketItems
-      .reduce((total, item) => {
+    let x = basketItems[localStorage.getItem('email')]?.reduce((total, item) => {
         return total + item.price * item.qty;
       }, 0)
       .toFixed(2);
 
     const handleKeyPress = (event) => {
       if (event.key === "F9") {
-        console.log(basketItems, `total to pay${x}`);
+        console.log(basketItems);
+        console.log(basketItems[localStorage.getItem('email')]);
       }
     };
     window.addEventListener("keydown", handleKeyPress);
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [basketItems, tables]);
+  }, [basketItems[localStorage.getItem('email')], tables]);
 
   const [menuitems, setMenuitems] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -2802,7 +2484,7 @@ const App = () => {
   const [basketDiscount, setBasketDiscount] = useState(0);
 
   const calculateTotalQuantity = () => {
-    const totalQty = basketItems.reduce((total, item) => total + parseInt(item.qty), 0);
+    const totalQty = basketItems[localStorage.getItem('email')]?.reduce((total, item) => total + parseInt(item.qty), 0) || 0
     setBasketQty(totalQty);
   };
 
@@ -2821,12 +2503,12 @@ const App = () => {
 
   useEffect(() => {
     calculateTotalQuantity();
-  }, [basketItems]);
+  }, [basketItems[localStorage.getItem('email')]]);
 
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route path="/" element={<Auth />} />
+        <Route path="/" element={<Auth setBasketItems={setBasketItems} />} />
 
         <Route path="/tables" element={<Tables tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
 

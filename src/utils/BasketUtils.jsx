@@ -9,7 +9,7 @@ export const isConsecutive = (arr) => {
 };
 
 export const calculateTotalPrice = (basketItems) => {
-  const totalPrice = basketItems.reduce((total, item) => total + parseFloat(item.price * item.qty), 0);
+  const totalPrice = basketItems[localStorage.getItem("email")].reduce((total, item) => total + parseFloat(item.price * item.qty), 0);
   return totalPrice.toFixed(2);
 };
 
@@ -19,7 +19,7 @@ export const getVenueById = (venues, id) => {
 };
 
 export const calculateTotal = (basketItems, basketDiscount) => {
-  const total = basketItems.reduce((acc, item) => {
+  const total = basketItems?.reduce((acc, item) => {
     return acc + item.price * item.qty;
   }, 0);
   const discountAmount = (total * basketDiscount) / 100;
@@ -28,8 +28,16 @@ export const calculateTotal = (basketItems, basketDiscount) => {
 };
 
 export const calculateBasketQTY = (basketItems) => {
-  let qty = basketItems.reduce((total, item) => {
+  let qty = basketItems?.reduce((total, item) => {
     return total + item.qty;
   }, 0);
-  return qty
+  return qty;
+};
+
+export const processAllergenList = (AL) => {
+  const allergens = Object.entries(AL)
+    .filter(([allergen, value]) => value)
+    .map(([allergen]) => allergen);
+
+  return allergens.join(", ");
 };

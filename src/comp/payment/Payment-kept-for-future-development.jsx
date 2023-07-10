@@ -14,7 +14,7 @@ const Payment = ({ user, basketItems, setBasketItems }) => {
 
   useEffect(() => {
     setComputedBasket(basketItems);
-  }, [basketItems]);
+  }, basketItems[localStorage.getItem('email')]);
 
   const handleIncrement = (index) => {
     console.log("dev**to check for access level");
@@ -40,7 +40,7 @@ const Payment = ({ user, basketItems, setBasketItems }) => {
 
   const handleRemoveItem = (id) => {
     console.log("dev**to check for access level");
-    const updatedBasketItems = basketItems.filter((basketItem) => basketItem.id !== id);
+    const updatedBasketItems = basketItems[localStorage.getItem('email')].filter((basketItem) => basketItem.id !== id);
     setBasketItems(updatedBasketItems);
   };
 
@@ -65,14 +65,14 @@ const Payment = ({ user, basketItems, setBasketItems }) => {
     );
 
     setTotalProducts(
-      basketItems.reduce((total, item) => {
+      basketItems[localStorage.getItem('email')].reduce((total, item) => {
         return total + item.qty;
       }, 0)
     );
-  }, [basketItems]);
+  }, basketItems[localStorage.getItem('email')]);
 
   const handleItemMove = (id) => {
-    const originalItem = basketItems.find((item) => item.id === id);
+    const originalItem = basketItems[localStorage.getItem('email')].find((item) => item.id === id);
     const splitItem = splitBill.find((item) => item.id === id);
     const remainingQty = originalItem.qty - 1;
     const updatedOriginalItem = { ...originalItem, qty: remainingQty };
@@ -94,12 +94,12 @@ const Payment = ({ user, basketItems, setBasketItems }) => {
 
   const handleItemMoveReverse = (id) => {
     const originalItem = splitBill.find((item) => item.id === id);
-    const splitItem = basketItems.find((item) => item.id === id);
+    const splitItem = basketItems[localStorage.getItem('email')].find((item) => item.id === id);
     const remainingQty = originalItem.qty - 1;
     const updatedOriginalItem = { ...originalItem, qty: remainingQty };
 
     if (splitItem) {
-      let splitItem = basketItems.find((item) => item.id === id);
+      let splitItem = basketItems[localStorage.getItem('email')].find((item) => item.id === id);
       let newsi = splitItem.qty + 1;
       setBasketItems((prevState) => prevState.map((item) => (item.id === id ? { ...item, qty: newsi } : item)));
     } else if (!splitItem) {
@@ -185,7 +185,7 @@ const Payment = ({ user, basketItems, setBasketItems }) => {
           )}
           <div className="MenuLeftSide flex flex-col flex-nowrap overflow-y-scroll">
             {currentTable &&
-              basketItems.map((menuItem, index) => (
+              basketItems[localStorage.getItem('email')].map((menuItem, index) => (
                 <div key={crypto.randomUUID()} className="item grid grid-cols-1 bg-gray-100 rounded m-1 p-2 select-none shadow-md">
                   <div className="grid grid-cols-[50px_5fr_1fr]">
                     <p className="itemQty text-4xl row-span-2">{menuItem.qty}</p>

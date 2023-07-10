@@ -26,14 +26,13 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
 
   const tempDisabled = () => {
     console.log(isButtonDisabled, "isButtonDisabled");
-    if(isButtonDisabled) return
+    if (isButtonDisabled) return;
     setIsButtonDisabled(true);
     handlePrinting();
     setTimeout(() => {
       setIsButtonDisabled(false);
     }, 1000);
   };
-
 
   useEffect(() => {
     getUser(setUser);
@@ -65,15 +64,18 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
   const [totalProducts, setTotalProducts] = useState(0);
 
   useEffect(() => {
-    setBasketTotal(calculateTotal(basketItems, basketDiscount));
-  }, [basketItems, basketDiscount]);
+    setBasketTotal(calculateTotal(basketItems[localStorage.getItem("email")], basketDiscount));
+  }, [basketItems[localStorage.getItem("email")], basketDiscount]);
 
   useEffect(() => {
-    setTotalProducts(calculateBasketQTY(basketItems));
-  }, [basketItems]);
+    setTotalProducts(calculateBasketQTY(basketItems[localStorage.getItem("email")]));
+  }, [basketItems[localStorage.getItem("email")]]);
 
   const handleDeleteAll = () => {
-    setBasketItems([]);
+    setBasketItems((prevState) => ({
+        ...prevState,
+        [localStorage.getItem("email")]: [],
+      }));
   };
 
   const [modal, setModal] = useState(false);
@@ -113,17 +115,25 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
   };
 
   const handlePrinting = () => {
-    let areAllPrinted = basketItems.some(item => item.printed == false)
-    const updatedBasketItems = basketItems.map(item => {
+    let areAllPrinted = basketItems[localStorage.getItem("email")].some((item) => item.printed == false);
+    const updatedBasketItems = basketItems[localStorage.getItem("email")].map((item) => {
       if (!item.printed) {
-        return { ...item, printed: true };
+        return {
+          ...item,
+          printed: true,
+          datePrinted: new Date().toISOString(),
+          printedBy: localStorage.getItem("displayName"),
+        };
       }
       return item;
     });
-  
-    setBasketItems(updatedBasketItems);
 
-    if(areAllPrinted){
+    setBasketItems((prevState) => ({
+      ...prevState,
+      [localStorage.getItem("email")]: updatedBasketItems,
+    }));
+
+    if (areAllPrinted) {
       toast.success(`Ticket has been printed.`, {
         position: "top-right",
         autoClose: 3000,
@@ -146,8 +156,7 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
         theme: "light",
       });
     }
-    
-  }
+  };
 
   return (
     <>
@@ -232,7 +241,7 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
 
         <div className="flex justify-end basis-[10%] col-span-2">
           {basketDiscount > 0 && <span className={`basis-[10%] border-b-2 border-b-black mr-auto transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-green-400`}>{basketDiscount}% Discount</span>}
-
+          <button className={`basis-[10%] items-center border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${parseFloat(basketTotal) <= 0 ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>View Bill Timeline</button>
           <button disabled={parseFloat(basketTotal) <= 0} onClick={() => nav("/Payment")} className={`basis-[10%] items-center border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${parseFloat(basketTotal) <= 0 ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>
             Pay Bill
           </button>
@@ -245,11 +254,15 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
           <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**do not print-> store table into the db")}>
             Store
           </div>
-          <div onClick={()=>{tempDisabled();}} disabled={isButtonDisabled} className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${ isButtonDisabled ? "bg-gray-200 " : "bg-[--c1]" }`} >
-            {isButtonDisabled && <AiOutlineLoading3Quarters className="animate-spin mx-auto text-5xl"/> }
-            {!isButtonDisabled && "Print" }
+          <div
+            onClick={() => {
+              tempDisabled();
+            }}
+            disabled={isButtonDisabled}
+            className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${isButtonDisabled ? "bg-gray-200 " : "bg-[--c1]"}`}>
+            {isButtonDisabled && <AiOutlineLoading3Quarters className="animate-spin mx-auto text-5xl" />}
+            {!isButtonDisabled && "Print"}
           </div>
-         
         </div>
       </div>
     </>

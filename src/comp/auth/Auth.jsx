@@ -10,7 +10,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { authUser, setVenue } from "../../utils/authUser";
 
-const Auth = () => {
+const Auth = ({setBasketItems}) => {
   const [user, setUser] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -63,6 +63,10 @@ const Auth = () => {
     const foundPin = userTable.find((userpin) => userpin.pin === pin.pin2);
     if (foundPin && pin.pin2.length == 3) {
       authUser(foundPin);
+      setBasketItems(prevState => ({
+        ...prevState,
+        [localStorage.getItem('email')]: []
+       }));
       setVenue(setVenue, foundPin);
       setPin({ pin: "", pin2: "" });
       navigate("/Tables");

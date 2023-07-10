@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BsFilterRight } from "react-icons/bs";
+import { processAllergenList } from "../../utils/BasketUtils";
 
 const MenuRightSide = ({ menuitems, basketItems, setBasketItems }) => {
   // mimic db fetch - temporary
@@ -58,21 +59,28 @@ const MenuRightSide = ({ menuitems, basketItems, setBasketItems }) => {
     // to set DATABASE ID too! dont forget*
     let newBasketItem = {
       ...item,
-      id:"will be unique db item menu id",
+      id: "will be unique db item menu id",
       qty: 1,
       refID: crypto.randomUUID(),
       from: menuType,
       printed: false,
+      printedBy: false,
       printable: true,
       message: false,
+      messageBy: false,
       isDeleted: false,
-      date: new Date().toISOString()
-    }
-    setBasketItems([...basketItems, { ...newBasketItem }]);
-    console.log("🚀 ~ file: MenuRightSide.jsx:60 ~ handleAddToMenu ~ newBasketItem:", newBasketItem)
-    // const existingItem = basketItems.find((menuItem) => menuItem.name === item.name);
+      isDeletedBy: false,
+      dateAdded: new Date().toISOString(),
+      addedBy: localStorage.getItem('displayName'),
+      datePrinted: false,
+    };
+    const email = localStorage.getItem('email');
+    const existingBasketItems = basketItems[email] || [];
+    const updatedBasketItems = [...existingBasketItems, { ...newBasketItem }];
+    setBasketItems({ ...basketItems, [email]: updatedBasketItems });
+    // const existingItem = basketItems[localStorage.getItem('email')].find((menuItem) => menuItem.name === item.name);
     // if (existingItem) {
-    //   const updatedbasketItems = basketItems.map((menuItem) => {
+    //   const updatedbasketItems = basketItems[localStorage.getItem('email')].map((menuItem) => {
     //     if (menuItem.name === item.name) {
     //       return {
     //         ...menuItem,
@@ -167,7 +175,7 @@ const MenuRightSide = ({ menuitems, basketItems, setBasketItems }) => {
                   <span className="text-end">{product.stock || 1}</span>
                   <span className="line-clamp-2 h-[48px] font-bold">{product.name}</span>
                   <span>£{product.price}</span>
-                  <span className="h-[24px]">{product.allergens}</span>
+                  <span className="h-[24px]">{processAllergenList(product.allergensList)}</span>
                 </div>
               );
             });

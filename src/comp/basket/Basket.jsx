@@ -21,17 +21,17 @@ const Basket = ({ menuitems, basketItems, setBasketItems, venueNtable, setVenueN
   useEffect(() => {
     const matchingItems = menuitems.reduce((items, category) => {
       const matchedItems = category.items
-        .filter((item) => basketItems.some((basketItem) => basketItem.item === item.name))
+        .filter((item) => basketItems[localStorage.getItem('email')].some((basketItem) => basketItem.item === item.name))
         .map((item) => ({
           ...item,
-          course: parseInt(basketItems.find((basketItem) => basketItem.item === item.name).course),
-          qty: parseInt(basketItems.find((basketItem) => basketItem.item === item.name).qty),
+          course: parseInt(basketItems[localStorage.getItem('email')].find((basketItem) => basketItem.item === item.name).course),
+          qty: parseInt(basketItems[localStorage.getItem('email')].find((basketItem) => basketItem.item === item.name).qty),
         }));
       return [...items, ...matchedItems];
     }, []);
     setComputedBasket(matchingItems);
-    if (basketItems.length > 0) checkIfCoursesNeedRefactoring();
-  }, [basketItems]);
+    if (basketItems[localStorage.getItem('email')].length > 0) checkIfCoursesNeedRefactoring();
+  }, basketItems[localStorage.getItem('email')]);
 
   useEffect(() => {
     const totalPrice = calculateTotalPrice(computedBasket);
@@ -39,12 +39,12 @@ const Basket = ({ menuitems, basketItems, setBasketItems, venueNtable, setVenueN
   }, [computedBasket]);
 
   const checkIfCoursesNeedRefactoring = () => {
-    const uniqueCourses = [...new Set(basketItems.map((item) => item.course))];
+    const uniqueCourses = [...new Set(basketItems[localStorage.getItem('email')].map((item) => item.course))];
     if (!uniqueCourses || uniqueCourses == 0) return;
     const areCoursesConsecutive = isConsecutive(uniqueCourses);
     if (!uniqueCourses.includes(1) || !areCoursesConsecutive) {
       console.log("Basket needs refactoring.");
-      const updatedBasketItems = basketItems.map((item) => {
+      const updatedBasketItems = basketItems[localStorage.getItem('email')].map((item) => {
         const newCourse = item.course > 1 && !uniqueCourses.includes(item.course - 1) ? item.course - 1 : item.course;
         return {
           ...item,
@@ -69,7 +69,7 @@ const Basket = ({ menuitems, basketItems, setBasketItems, venueNtable, setVenueN
       return basketItem;
     });
 
-    const updatedBasketItems = basketItems.map((basketItem) => {
+    const updatedBasketItems = basketItems[localStorage.getItem('email')].map((basketItem) => {
       if (basketItem.item === item.name) {
         const updatedQty = parseInt(basketItem.qty) + 1;
         return {
@@ -87,7 +87,7 @@ const Basket = ({ menuitems, basketItems, setBasketItems, venueNtable, setVenueN
   const handleDecrement = (item) => {
     if (item.qty == 1) {
       const updatedBasket = computedBasket.filter((basketItem) => basketItem.name !== item.name);
-      const updatedBasketItems = basketItems.filter((basketItem) => basketItem.item !== item.name);
+      const updatedBasketItems = basketItems[localStorage.getItem('email')].filter((basketItem) => basketItem.item !== item.name);
       setComputedBasket(updatedBasket);
       setBasketItems(updatedBasketItems);
     } else {
@@ -102,7 +102,7 @@ const Basket = ({ menuitems, basketItems, setBasketItems, venueNtable, setVenueN
         return basketItem;
       });
 
-      const updatedBasketItems = basketItems.map((basketItem) => {
+      const updatedBasketItems = basketItems[localStorage.getItem('email')].map((basketItem) => {
         if (basketItem.item === item.name && parseInt(basketItem.qty) > 0) {
           const updatedQty = parseInt(basketItem.qty) - 1;
           return {
@@ -119,7 +119,7 @@ const Basket = ({ menuitems, basketItems, setBasketItems, venueNtable, setVenueN
   };
 
   const getUniqueCourses = (basket) => {
-    const uniqueCourses = basketItems.reduce((courses, item) => {
+    const uniqueCourses = basketItems[localStorage.getItem('email')].reduce((courses, item) => {
       if (!courses.includes(item.course)) {
         courses.push(item.course);
       }
@@ -130,7 +130,7 @@ const Basket = ({ menuitems, basketItems, setBasketItems, venueNtable, setVenueN
   };
 
   const handleCourseChange = (itemz, e) => {
-    const updatedBasketItems = basketItems.map((item) => {
+    const updatedBasketItems = basketItems[localStorage.getItem('email')].map((item) => {
       if (item.item === itemz) {
         return {
           ...item,
