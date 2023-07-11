@@ -5,7 +5,7 @@ import { auth, db, logout } from "./firebase/config.jsx";
 import MobileLeftNav from "./comp/navBars/MobileLeftNav";
 import MobileHeader from "./comp/navBars/MobileHeader";
 
-const Layout = () => {
+const Layout = ({ lefty, setLefty }) => {
   const navigate = useNavigate();
 
   return (
@@ -13,7 +13,7 @@ const Layout = () => {
       {window.location.pathname !== "/" && <MobileHeader />}
 
       <div className={`basis-[95%] flex bg-gray-50 z-10 relative overflow-y-auto`}>
-        {window.location.pathname !== "/" && <MobileLeftNav />}
+        {window.location.pathname !== "/" && <MobileLeftNav lefty={lefty} setLefty={setLefty} />}
         <div className="basis-[95%] overflow-hidden flex flex-col h-[100%] relative">
           <div className="flex flex-col gap-4 h-[100%] w-[100%] bg-[--c60]">
             <Outlet />

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BsFilterRight } from "react-icons/bs";
 import { processAllergenList } from "../../utils/BasketUtils";
 
-const MenuRightSide = ({ menuitems, basketItems, setBasketItems }) => {
+const MenuRightSide = ({ lefty, menuitems, basketItems, setBasketItems }) => {
   // mimic db fetch - temporary
 
   const [searchValue, setSearchValue] = useState("");
@@ -74,30 +74,7 @@ const MenuRightSide = ({ menuitems, basketItems, setBasketItems }) => {
       addedBy: localStorage.getItem('displayName'),
       datePrinted: false,
     };
-    const email = localStorage.getItem('email');
-    const existingBasketItems = basketItems[email] || [];
-    const updatedBasketItems = [...existingBasketItems, { ...newBasketItem }];
     setBasketItems([...basketItems, { ...newBasketItem }]);
-    // const existingItem = basketItems[localStorage.getItem('email')].find((menuItem) => menuItem.name === item.name);
-    // if (existingItem) {
-    //   const updatedbasketItems = basketItems[localStorage.getItem('email')].map((menuItem) => {
-    //     if (menuItem.name === item.name) {
-    //       return {
-    //         ...menuItem,
-    //         qty: menuItem.qty + 1,
-    //         printed: false,
-    //         printable: true,
-    //         message: false,
-    //         isDeleted: false,
-    //         date: new Date(),
-    //       };
-    //     }
-    //     return menuItem;
-    //   });
-    //   setBasketItems(updatedbasketItems);
-    // } else {
-    //   setBasketItems([...basketItems, { ...item, id, message, qty: 1, printed: false, date: new Date() }]);
-    // }
   };
 
   return (
@@ -171,7 +148,7 @@ const MenuRightSide = ({ menuitems, basketItems, setBasketItems }) => {
             return item.items.map((product, index) => {
               if (menuType2 !== product.subcategory && menuType2 !== "") return;
               return (
-                <div key={`${item.name}-${product.name}-${index}`} onClick={() => handleAddToMenu(product)} className="rounded h-[128px] w-[170px] flex flex-col shadow-xl m-1 p-1 transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]">
+                <div key={`${item.name}-${product.name}-${index}`} onClick={() => handleAddToMenu(product)} className={`rounded h-[128px] w-[170px] flex flex-col shadow-xl m-1 p-1 transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]`}>
                   <span className="text-end">{product.stock || 1}</span>
                   <span className="line-clamp-2 h-[48px] font-bold">{product.name}</span>
                   <span>£{product.price}</span>

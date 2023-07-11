@@ -2444,6 +2444,9 @@ let dbtables = [
 ];
 
 const App = () => {
+  //app settings
+  const [lefty, setLefty] = useState(false);
+
   const [user, setUser] = useState(null);
   const [basketItems, setBasketItems] = useState([]);
   const [venueNtable, setVenueNtable] = useState({ venue: 1, table: null });
@@ -2506,14 +2509,14 @@ const App = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
+      <Route path="/" element={<Layout lefty={lefty} setLefty={setLefty}/>}>
         <Route path="/" element={<Auth />} />
 
         <Route path="/tables" element={<Tables tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
 
-        <Route path="/menu" element={<Menu basketDiscount={basketDiscount} setBasketDiscount={setBasketDiscount} basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} searchValue={searchValue} setSearchValue={setSearchValue} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}></Route>
+        <Route path="/menu" element={<Menu lefty={lefty} basketDiscount={basketDiscount} setBasketDiscount={setBasketDiscount} basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} searchValue={searchValue} setSearchValue={setSearchValue} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}></Route>
 
-        <Route path="/payment" element={<Payment basketDiscount={basketDiscount} setVenueNtable={setVenueNtable} venueNtable={venueNtable} basketItems={basketItems} setBasketItems={setBasketItems} user={user} />} />
+        <Route path="/payment" element={<Payment lefty={lefty} basketDiscount={basketDiscount} setVenueNtable={setVenueNtable} venueNtable={venueNtable} basketItems={basketItems} setBasketItems={setBasketItems} user={user} />} />
 
         <Route path="/settings" element={<Settings venues={venues} />} />
 

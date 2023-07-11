@@ -9,6 +9,29 @@ import { BsFacebook } from "react-icons/bs";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { authUser, setVenue } from "../../utils/authUser";
+// mimic db
+const userTable = [
+  {
+    displayName: "Mihai C",
+    email: "alemihai25@gmail.com",
+    autoStore:false,
+    darkMode:false,
+    lefty:false,
+    pin: "111",
+    fingerprint: "",
+    venueID: 1,
+  },
+  {
+    displayName: "Test User",
+    email: "Test@Test.Test",
+    autoStore:false,
+    darkMode:false,
+    lefty:false,
+    pin: "000",
+    fingerprint: "",
+    venueID: 101010,
+  },
+];
 
 const Auth = () => {
   const [user, setUser] = useState(null);
@@ -70,24 +93,6 @@ const Auth = () => {
       setPin({ pin: "", pin2: "" });
     }
   }, [pin.pin2]);
-
-  // mimic db
-  const userTable = [
-    {
-      displayName: "Mihai C",
-      email: "alemihai25@gmail.com",
-      pin: "111",
-      fingerprint: "",
-      venueID: 1,
-    },
-    {
-      displayName: "Test User",
-      email: "Test@Test.Test",
-      pin: "000",
-      fingerprint: "",
-      venueID: 101010,
-    },
-  ];
 
   const [isScanning, setIsScanning] = useState(false);
 

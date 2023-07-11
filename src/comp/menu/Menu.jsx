@@ -7,6 +7,7 @@ import { getUser, getVenue } from "../../utils/authUser";
 import { calculateTotal, calculateBasketQTY } from "../../utils/BasketUtils";
 import VenueNTable from "./VenueNTable";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import BillTimeline from "../modals/BillTimeline"
 
 import { AiFillCaretRight, AiOutlineLeft } from "react-icons/ai";
 import { BsFilterRight } from "react-icons/bs";
@@ -15,7 +16,7 @@ import { CiGrid2H, CiGrid41 } from "react-icons/ci";
 import MenuLeftSide from "./MenuLeftSide";
 import MenuRightSide from "./MenuRightSide";
 
-const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBasketItems, searchValue, setSearchValue, venues, venueNtable, setVenueNtable }) => {
+const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems, setBasketItems, searchValue, setSearchValue, venues, venueNtable, setVenueNtable }) => {
   useEffect(() => {
     if (venueNtable.table === "" || !venueNtable.table) return nav("/Tables");
   }, [venueNtable]);
@@ -23,6 +24,7 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
   const nav = useNavigate();
   const [user, setUser] = useState(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [billTimeline, setBillTimeline] = useState(false);
 
   const tempDisabled = () => {
     console.log(isButtonDisabled, "isButtonDisabled");
@@ -155,11 +157,12 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
   return (
     <>
       <div className="absolute">
+        { billTimeline && <BillTimeline setBillTimeline={setBillTimeline} basketItems={basketItems}/> }
         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme="light" />
       </div>
       <div className={`modal ${modal ? "fixed inset-0 bg-black/70 flex flex-col justify-center items-center z-20 p-4" : "hidden"}`}>
         <div className={`relative flex-flex-col bg-white/90 p-4 min-w-[300px] w-[600px]`}>
-          <button className="block mr-auto p-2 mb-8 text-3xl animate-fadeUP1" onClick={() => setModal(!modal)} onTouchStart={() => setModal(!modal)}>
+          <button className="block mr-auto p-2 mb-8 text-3xl animate-fadeUP1" onClick={() => setModal(!modal)}>
             ◀ Cancel
           </button>
           <p className="text-center text-3xl my-20">Apply Discount</p>
@@ -180,8 +183,8 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
         </div>
       </div>
       <div className="flex flex-col h-[100%]">
-        <div className="grid grid-cols-[2fr_3fr] gap-1 rounded basis-[90%] overflow-y-scroll">
-          <div className="h-[100%] w-[100%] rounded shadow-xl flex flex-col p-1 overflow-hidden">
+        <div className={`flex ${lefty ? "flex-row-reverse": ""} gap-1 rounded basis-[90%] overflow-y-scroll`}>
+          <div className="basis-[40%] h-[100%] w-[100%] rounded shadow-xl flex flex-col p-1 overflow-hidden">
             <div className="grid grid-cols-4 gap-2 h-[82px]">
               <button onClick={handleDeleteAll} className="text-sm bg-red-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] flex flex-col justify-center items-center border-b-2 border-b-black ">
                 <span>Delete ALL</span>
@@ -213,9 +216,9 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
 
             <div className="MenuLeftSide flex flex-col overflow-hidden grow">
               <div className="MenuLeftSide flex flex-col overflow-y-scroll">
-                <MenuLeftSide basketItems={basketItems} setBasketItems={setBasketItems} />
+                <MenuLeftSide lefty={lefty} basketItems={basketItems} setBasketItems={setBasketItems} />
               </div>
-              <div className="text-3xl text-end mt-auto flex justify-between">
+              <div className={`text-3xl text-end mt-auto flex justify-between ${lefty ? "flex-row-reverse": ""}`}>
                 <div>
                   <span>Items: </span>
                   <span className="font-bold">{totalProducts}</span>
@@ -228,14 +231,14 @@ const Menu = ({ basketDiscount, setBasketDiscount, basketItems, menuitems, setBa
             </div>
           </div>
 
-          <div className="MenuRightSide h-[100%] w-[100%] rounded shadow-xl p-1 flex flex-col overflow-hidden">
-            <MenuRightSide menuitems={menuitems} basketItems={basketItems} setBasketItems={setBasketItems} />
+          <div className="basis-[60%] MenuRightSide h-[100%] w-[100%] rounded shadow-xl p-1 flex flex-col overflow-hidden">
+            <MenuRightSide lefty={lefty} menuitems={menuitems} basketItems={basketItems} setBasketItems={setBasketItems} />
           </div>
         </div>
 
-        <div className="flex justify-end basis-[10%] col-span-2">
+        <div className={`flex ${lefty ? "flex-row-reverse": ""} justify-end basis-[10%] col-span-2`}>
           {basketDiscount > 0 && <span className={`basis-[10%] border-b-2 border-b-black mr-auto transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-green-400`}>{basketDiscount}% Discount</span>}
-          <button className={`basis-[10%] items-center border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${parseFloat(basketTotal) <= 0 ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>View Bill Timeline</button>
+          <button onClick={()=>setBillTimeline(!billTimeline)} className={`basis-[10%] items-center border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${parseFloat(basketTotal) <= 0 ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>View Bill Timeline</button>
           <button disabled={parseFloat(basketTotal) <= 0} onClick={() => nav("/Payment")} className={`basis-[10%] items-center border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${parseFloat(basketTotal) <= 0 ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>
             Pay Bill
           </button>

@@ -3,7 +3,7 @@ import { AiOutlineLeft, AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const MenuLeftSide = ({ basketItems, setBasketItems }) => {
+const MenuLeftSide = ({ lefty, basketItems, setBasketItems }) => {
   const [messageModal, openMessageModal] = useState(false);
   const [messageModalData, setMessageModalData] = useState(false);
   const modalMessageRef = useRef(null);
@@ -99,15 +99,17 @@ const MenuLeftSide = ({ basketItems, setBasketItems }) => {
             .filter((menuItem) => menuItem.subcategory_course === course)
             .sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded))
             .map((menuItem, index) => (
-              <div key={crypto.randomUUID()} onClick={() => console.log("printed?:", menuItem.printed, menuItem.dateAdded)} className={`item grid grid-cols-1 ${menuItem.printed ? "bg-blue-300/50" : "bg-gray-100"} rounded p-2 select-none shadow-md`} title={`${menuItem.printed ? "Printed." : "Not printed."}`}>
-                <div className="grid grid-cols-[5fr_1fr]">
+              <div key={crypto.randomUUID()} onClick={() => console.log("printed?:", menuItem.printed, menuItem.dateAdded)} className={`item flex flex-col ${menuItem.printed ? "bg-blue-300/50" : "bg-gray-100"} rounded p-2 select-none shadow-md`} title={`${menuItem.printed ? "Printed." : "Not printed."}`}>
+                <div className="flex flex-col">
                   {/* <p className="itemQty text-4xl row-span-2">{menuItem.qty}</p> */}
-                  <p title={menuItem.name} className="itemName line-clamp-1">
-                    {menuItem.name}
-                  </p>
-                  <p>£{(menuItem.price * menuItem.qty).toFixed(2)}</p>
+                  <div className={`flex basis-[100%] ${lefty? "flex-row-reverse": ""}`}>
+                    <p title={menuItem.name} className={`itemName line-clamp-1 basis-[80%] ${lefty? "text-end": "text-start"}`}>
+                      {menuItem.name}
+                    </p>
+                    <p className={`basis-[20%] ${lefty? "text-start": "text-end"}`}>£{(menuItem.price * menuItem.qty).toFixed(2)}</p>
+                  </div>
 
-                  <div className="flex justify-center flex-wrap gap-4 text-xs my-1 col-span-1">
+                  <div className={`flex justify-center ${lefty? "flex-row-reverse": ""} flex-wrap gap-4 text-xs my-1  basis-[100%]`}>
                     <div className="flex flex-col gap-2 mr-auto">
                       {menuItem.subcategory_course > 0 && (
                         <select className="appearance-none bg-[--c1] rounded px-3 text-center font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none" name="courseNumber" defaultValue={menuItem.subcategory_course} onChange={(event) => handleCourseChange(menuItem.refID, event.target.value)}>
