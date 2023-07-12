@@ -3,7 +3,7 @@ import { AiOutlineLeft, AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const MenuLeftSide = ({ lefty, basketItems, setBasketItems }) => {
+const MenuLeftSide = ({ lefty, basketItems, setBasketItems, menuitems }) => {
   const [messageModal, openMessageModal] = useState(false);
   const [messageModalData, setMessageModalData] = useState(false);
   const modalMessageRef = useRef(null);
@@ -21,9 +21,13 @@ const MenuLeftSide = ({ lefty, basketItems, setBasketItems }) => {
     setBasketItems(updatedBasketItems);
   };
 
-  const handleRemoveItem = (refID, printed) => {
-    if (printed) console.log("dev**to check level access as item is already printed.");
-    const updatedBasketItems = basketItems.filter((basketItem) => basketItem.refID !== refID);
+  const handleRemoveItem = (basketItem) => {
+    if (basketItem.printed) console.log("dev**to check level access as item is already printed.");
+
+    const itemCategory = menuitems.find((category) => category.category === basketItem.category);
+    const dbitem = itemCategory.items.find((dbitem) => dbitem.name === basketItem.name);
+    dbitem.stock += 1;
+    const updatedBasketItems = basketItems.filter((bask_item) => bask_item.refID !== basketItem.refID);
     setBasketItems(updatedBasketItems);
   };
 
@@ -102,14 +106,14 @@ const MenuLeftSide = ({ lefty, basketItems, setBasketItems }) => {
               <div key={crypto.randomUUID()} onClick={() => console.log("printed?:", menuItem.printed, menuItem.dateAdded)} className={`item flex flex-col ${menuItem.printed ? "bg-blue-300/50" : "bg-gray-100"} rounded p-2 select-none shadow-md`} title={`${menuItem.printed ? "Printed." : "Not printed."}`}>
                 <div className="flex flex-col">
                   {/* <p className="itemQty text-4xl row-span-2">{menuItem.qty}</p> */}
-                  <div className={`flex basis-[100%] ${lefty? "flex-row-reverse": ""}`}>
-                    <p title={menuItem.name} className={`itemName line-clamp-1 basis-[80%] ${lefty? "text-end": "text-start"}`}>
+                  <div className={`flex basis-[100%] ${lefty ? "flex-row-reverse" : ""}`}>
+                    <p title={menuItem.name} className={`itemName line-clamp-1 basis-[80%] ${lefty ? "text-end" : "text-start"}`}>
                       {menuItem.name}
                     </p>
-                    <p className={`basis-[20%] ${lefty? "text-start": "text-end"}`}>£{(menuItem.price * menuItem.qty).toFixed(2)}</p>
+                    <p className={`basis-[20%] ${lefty ? "text-start" : "text-end"}`}>£{(menuItem.price * menuItem.qty).toFixed(2)}</p>
                   </div>
 
-                  <div className={`flex justify-center ${lefty? "flex-row-reverse": ""} flex-wrap gap-4 text-xs my-1  basis-[100%]`}>
+                  <div className={`flex justify-center ${lefty ? "flex-row-reverse" : ""} flex-wrap gap-4 text-xs my-1  basis-[100%]`}>
                     <div className="flex flex-col gap-2 mr-auto">
                       {menuItem.subcategory_course > 0 && (
                         <select className="appearance-none bg-[--c1] rounded px-3 text-center font-bold border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none" name="courseNumber" defaultValue={menuItem.subcategory_course} onChange={(event) => handleCourseChange(menuItem.refID, event.target.value)}>
@@ -128,7 +132,7 @@ const MenuLeftSide = ({ lefty, basketItems, setBasketItems }) => {
                       )}
                     </div>
 
-                    <button className="bg-orange-300 px-2 py-3 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md" onClick={() => handleRemoveItem(menuItem.refID, menuItem.printed)}>
+                    <button className="bg-orange-300 px-2 py-3 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md" onClick={() => handleRemoveItem(menuItem)}>
                       Remove
                     </button>
 

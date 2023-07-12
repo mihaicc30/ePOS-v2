@@ -7,7 +7,7 @@ import { getUser, getVenue } from "../../utils/authUser";
 import { calculateTotal, calculateBasketQTY } from "../../utils/BasketUtils";
 import VenueNTable from "./VenueNTable";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import BillTimeline from "../modals/BillTimeline"
+import BillTimeline from "../modals/BillTimeline";
 
 import { AiFillCaretRight, AiOutlineLeft } from "react-icons/ai";
 import { BsFilterRight } from "react-icons/bs";
@@ -72,10 +72,6 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
   useEffect(() => {
     setTotalProducts(calculateBasketQTY(basketItems));
   }, [basketItems]);
-
-  const handleDeleteAll = () => {
-    setBasketItems([]);
-  };
 
   const [modal, setModal] = useState(false);
 
@@ -157,7 +153,7 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
   return (
     <>
       <div className="absolute">
-        { billTimeline && <BillTimeline setBillTimeline={setBillTimeline} basketItems={basketItems}/> }
+        {billTimeline && <BillTimeline setBillTimeline={setBillTimeline} basketItems={basketItems} />}
         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme="light" />
       </div>
       <div className={`modal ${modal ? "fixed inset-0 bg-black/70 flex flex-col justify-center items-center z-20 p-4" : "hidden"}`}>
@@ -183,13 +179,9 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
         </div>
       </div>
       <div className="flex flex-col h-[100%]">
-        <div className={`flex ${lefty ? "flex-row-reverse": ""} gap-1 rounded basis-[90%] overflow-y-scroll`}>
+        <div className={`flex ${lefty ? "flex-row-reverse" : ""} gap-1 rounded basis-[90%] overflow-y-scroll`}>
           <div className="basis-[40%] h-[100%] w-[100%] rounded shadow-xl flex flex-col p-1 overflow-hidden">
-            <div className="grid grid-cols-4 gap-2 h-[82px]">
-              <button onClick={handleDeleteAll} className="text-sm bg-red-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] flex flex-col justify-center items-center border-b-2 border-b-black ">
-                <span>Delete ALL</span>
-                <span>{totalProducts}</span>
-              </button>
+            <div className="grid grid-cols-3 gap-2 h-[82px]">
               <div className="tableNumber m-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black ">
                 <p>Table</p>
                 <p className="text-3xl">{venueNtable.table}</p>
@@ -216,9 +208,9 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
 
             <div className="MenuLeftSide flex flex-col overflow-hidden grow">
               <div className="MenuLeftSide flex flex-col overflow-y-scroll">
-                <MenuLeftSide lefty={lefty} basketItems={basketItems} setBasketItems={setBasketItems} />
+                <MenuLeftSide lefty={lefty} menuitems={menuitems} basketItems={basketItems} setBasketItems={setBasketItems} />
               </div>
-              <div className={`text-3xl text-end mt-auto flex justify-between ${lefty ? "flex-row-reverse": ""}`}>
+              <div className={`text-3xl text-end mt-auto flex justify-between ${lefty ? "flex-row-reverse" : ""}`}>
                 <div>
                   <span>Items: </span>
                   <span className="font-bold">{totalProducts}</span>
@@ -236,9 +228,11 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
           </div>
         </div>
 
-        <div className={`flex ${lefty ? "flex-row-reverse": ""} justify-end basis-[10%] col-span-2`}>
+        <div className={`flex ${lefty ? "flex-row-reverse" : ""} justify-end basis-[10%] col-span-2`}>
           {basketDiscount > 0 && <span className={`basis-[10%] border-b-2 border-b-black mr-auto transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-green-400`}>{basketDiscount}% Discount</span>}
-          <button onClick={()=>setBillTimeline(!billTimeline)} className={`basis-[10%] items-center border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${parseFloat(basketTotal) <= 0 ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>View Bill Timeline</button>
+          <button onClick={() => setBillTimeline(!billTimeline)} className={`basis-[10%] items-center border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${parseFloat(basketTotal) <= 0 ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>
+            View Bill Timeline
+          </button>
           <button disabled={parseFloat(basketTotal) <= 0} onClick={() => nav("/Payment")} className={`basis-[10%] items-center border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${parseFloat(basketTotal) <= 0 ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>
             Pay Bill
           </button>

@@ -41,3 +41,14 @@ export const processAllergenList = (AL) => {
 
   return allergens.join(", ");
 };
+
+
+export const getStockColour = (stock) => {
+  if(stock >= 1 && stock <= 4) {
+    return "bg-red-400"
+  } else if(stock >= 5 && stock <= 10) {
+    return "bg-orange-400"
+  } else if(stock >= 20) {
+    return "text-transparent"
+  }
+}

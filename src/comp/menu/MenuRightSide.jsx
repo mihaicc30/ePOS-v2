@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BsFilterRight } from "react-icons/bs";
-import { processAllergenList } from "../../utils/BasketUtils";
+import { processAllergenList, getStockColour } from "../../utils/BasketUtils";
 
 const MenuRightSide = ({ lefty, menuitems, basketItems, setBasketItems }) => {
   // mimic db fetch - temporary
@@ -56,25 +56,32 @@ const MenuRightSide = ({ lefty, menuitems, basketItems, setBasketItems }) => {
     const id = crypto.randomUUID();
     const message = "";
 
-    // to set DATABASE ID too! dont forget*
-    let newBasketItem = {
-      ...item,
-      id: "will be unique db item menu id",
-      qty: 1,
-      refID: crypto.randomUUID(),
-      from: menuType,
-      printed: false,
-      printedBy: false,
-      printable: true,
-      message: false,
-      messageBy: false,
-      isDeleted: false,
-      isDeletedBy: false,
-      dateAdded: new Date().toISOString(),
-      addedBy: localStorage.getItem('displayName'),
-      datePrinted: false,
-    };
-    setBasketItems([...basketItems, { ...newBasketItem }]);
+    const itemCategory = menuitems.find((category) => category.category === menuType);
+    const dbitem = itemCategory.items.find((dbitem) => dbitem.name === item.name);
+    if (dbitem.stock >= 1) {
+      // if over 100 will mean infinite stock
+      if(dbitem.stock < 100) dbitem.stock -= 1;
+      
+      // to set DATABASE ID too! dont forget*
+      let newBasketItem = {
+        ...item,
+        id: "will be unique db item menu id",
+        qty: 1,
+        refID: crypto.randomUUID(),
+        category: menuType,
+        printed: false,
+        printedBy: false,
+        printable: true,
+        message: false,
+        messageBy: false,
+        isDeleted: false,
+        isDeletedBy: false,
+        dateAdded: new Date().toISOString(),
+        addedBy: localStorage.getItem("displayName"),
+        datePrinted: false,
+      };
+      setBasketItems([...basketItems, { ...newBasketItem }]);
+    }
   };
 
   return (
@@ -129,14 +136,14 @@ const MenuRightSide = ({ lefty, menuitems, basketItems, setBasketItems }) => {
       })}
 
       {/* subcategories items */}
-      <div className="flex flex-row flex-wrap overflow-y-scroll">
+      <div className="flex flex-row flex-wrap overflow-y-scroll gap-2">
         {menuitems.flatMap((item) => {
           if (searchValue !== "") {
             return item.items.map((product, index) => {
               if (product.name.toLowerCase().includes(searchValue.toLowerCase()))
                 return (
-                  <div key={`${product.name}-${index}`} onClick={() => handleAddToMenu(product)} className="rounded h-[128px] w-[170px] flex flex-col shadow-xl m-1 p-1 transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]">
-                    <span className="text-end">{product.stock || 1}</span>
+                  <div key={`${product.name}-${index}`} onClick={() => handleAddToMenu(product)} className="rounded h-[128px] w-[170px] p-2 flex flex-col shadow-xl transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]">
+                    <span className={`ml-auto px-2 rounded-bl-lg rounded-tr-lg text-end ${getStockColour(product.stock)}`}>{product.stock}</span>
                     <span className="line-clamp-2 h-[48px] font-bold">{product.name}</span>
                     <span>£{product.price}</span>
                     <span className="h-[24px]">{product.allergens}</span>
@@ -148,8 +155,8 @@ const MenuRightSide = ({ lefty, menuitems, basketItems, setBasketItems }) => {
             return item.items.map((product, index) => {
               if (menuType2 !== product.subcategory && menuType2 !== "") return;
               return (
-                <div key={`${item.name}-${product.name}-${index}`} onClick={() => handleAddToMenu(product)} className={`rounded h-[128px] w-[170px] flex flex-col shadow-xl m-1 p-1 transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]`}>
-                  <span className="text-end">{product.stock || 1}</span>
+                <div key={`${item.name}-${product.name}-${index}`} onClick={() => handleAddToMenu(product)} className={`rounded h-[128px] p-2 w-[170px] flex flex-col shadow-xl transition duration-100 cursor-pointer ${product.stock >= 1 ? "hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]":"text-gray-300"}`}>
+                  <span className={`ml-auto px-2 rounded-bl-lg rounded-tr-lg text-end ${getStockColour(product.stock)}`}>{product.stock}</span>
                   <span className="line-clamp-2 h-[48px] font-bold">{product.name}</span>
                   <span>£{product.price}</span>
                   <span className="h-[24px]">{processAllergenList(product.allergensList)}</span>
