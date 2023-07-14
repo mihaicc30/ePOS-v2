@@ -7,6 +7,7 @@ import { Routes, Route, Outlet, NavLink, BrowserRouter } from "react-router-dom"
 // Routes
 import Layout from "./Layout";
 
+import Admin from "./comp/admin/Admin";
 import Menu from "./comp/menu/Menu";
 import Auth from "./comp/auth/Auth";
 import Signout from "./comp/signout/Signout";
@@ -2512,6 +2513,7 @@ const App = () => {
       <Route path="/" element={<Layout lefty={lefty} setLefty={setLefty}/>}>
         <Route path="/" element={<Auth />} />
 
+        <Route path="/admin/*" element={<Admin />} />
         <Route path="/tables" element={<Tables tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
 
         <Route path="/menu" element={<Menu lefty={lefty} basketDiscount={basketDiscount} setBasketDiscount={setBasketDiscount} basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} searchValue={searchValue} setSearchValue={setSearchValue} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}></Route>
