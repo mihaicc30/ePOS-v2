@@ -15,7 +15,12 @@ const tf = require("@tensorflow/tfjs");
 // business level 0 - 100
 
 router.post("/forecast", async (req, res) => {
+  console.log("Getting forecast", new Date().toISOString());
+  console.log(req.body)
   const { cloudy, humidity, windspeed, temp, daytype, isholiday } = req.body;
+
+  //to check in db first if forecast has been already done
+  //else do it
   let data = []
 
   data.push([cloudy, humidity, windspeed, temp, daytype, isholiday]);
@@ -1039,10 +1044,11 @@ router.post("/forecast", async (req, res) => {
   const predictions = [];
 
   async function generatePredicton() {
+
     // Train the model
     const xTrain = tf.tensor2d(trainingData);
     const yTrain = tf.tensor2d(targetData);
-    await model.fit(xTrain, yTrain, { epochs: 20, shuffle: true }).then(() => {
+    await model.fit(xTrain, yTrain, { epochs: 10, shuffle: true }).then(() => {
       console.log("Model trained.");
       let xTest;
       let prediction;
@@ -1052,11 +1058,13 @@ router.post("/forecast", async (req, res) => {
       predictedBusinessLevel = prediction.dataSync()[0].toFixed();
 
       if (parseFloat(predictedBusinessLevel) < 1) {
-        console.log("predictedBusinessLevel is invalid", predictedBusinessLevel);
+        // to calculate  on the real data, and get like from a box and whisker plot the Q1
+        console.log("predictedBusinessLevel is invalid/outlier", predictedBusinessLevel);
         return "invalid";
       } else if (parseFloat(predictedBusinessLevel) > 10000) {
+        // to calculate  on the real data, and get like from a box and whisker plot the Q3
         predictions.push("10000");
-        console.log("predictedBusinessLevel " + predictedBusinessLevel + " is adjusted as too high", "10000");
+        console.log("predictedBusinessLevel " + predictedBusinessLevel + " is adjusted as too high/outlier", "10000");
         return "10000";
       } else {
         predictions.push(predictedBusinessLevel);
@@ -1069,6 +1077,8 @@ router.post("/forecast", async (req, res) => {
   Promise.all([await generatePredicton(), await generatePredicton(), await generatePredicton(), await generatePredicton(), await generatePredicton(), await generatePredicton(), await generatePredicton()]).then(() => {
     const sum = predictions.reduce((acc, prediction) => acc + parseInt(prediction), 0);
     const average = (sum / predictions.length).toFixed(2);
+    console.log("Sending forecast.", new Date().toISOString());
+    //push and set forecast in db for present date and venue
     res.json({ average, predictions });
   });
 });
