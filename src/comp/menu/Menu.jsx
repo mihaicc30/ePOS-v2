@@ -17,14 +17,15 @@ import MenuLeftSide from "./MenuLeftSide";
 import MenuRightSide from "./MenuRightSide";
 
 const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems, setBasketItems, searchValue, setSearchValue, venues, venueNtable, setVenueNtable }) => {
-  useEffect(() => {
-    if (venueNtable.table === "" || !venueNtable.table) return nav("/Tables");
-  }, [venueNtable]);
-
+  
   const nav = useNavigate();
   const [user, setUser] = useState(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [billTimeline, setBillTimeline] = useState(false);
+
+  useEffect(() => {
+    if (venueNtable.table === "" || !venueNtable.table) return nav("/Tables");
+  }, [venueNtable]);
 
   const tempDisabled = () => {
     console.log(isButtonDisabled, "isButtonDisabled");

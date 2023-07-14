@@ -12,7 +12,7 @@ import { authUser, setVenue } from "../../utils/authUser";
 // mimic db
 const userTable = [
   {
-    displayName: "Mihai C",
+    displayName: "Mihai1",
     email: "alemihai25@gmail.com",
     autoStore:false,
     darkMode:false,
@@ -21,6 +21,17 @@ const userTable = [
     fingerprint: "",
     venueID: 1,
     isAdmin: 1,
+  },
+  {
+    displayName: "Mihai2",
+    email: "alemihai25@gmail.com",
+    autoStore:false,
+    darkMode:false,
+    lefty:false,
+    pin: "222",
+    fingerprint: "",
+    venueID: 1,
+    isAdmin: 0,
   },
   {
     displayName: "Test User",

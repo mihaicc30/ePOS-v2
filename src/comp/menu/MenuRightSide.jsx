@@ -60,8 +60,8 @@ const MenuRightSide = ({ lefty, menuitems, basketItems, setBasketItems }) => {
     const dbitem = itemCategory.items.find((dbitem) => dbitem.name === item.name);
     if (dbitem.stock >= 1) {
       // if over 100 will mean infinite stock
-      if(dbitem.stock < 100) dbitem.stock -= 1;
-      
+      if (dbitem.stock < 100) dbitem.stock -= 1;
+
       // to set DATABASE ID too! dont forget*
       let newBasketItem = {
         ...item,
@@ -155,11 +155,14 @@ const MenuRightSide = ({ lefty, menuitems, basketItems, setBasketItems }) => {
             return item.items.map((product, index) => {
               if (menuType2 !== product.subcategory && menuType2 !== "") return;
               return (
-                <div key={`${item.name}-${product.name}-${index}`} onClick={() => handleAddToMenu(product)} className={`rounded h-[128px] p-2 w-[170px] flex flex-col shadow-xl transition duration-100 cursor-pointer ${product.stock >= 1 ? "hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]":"text-gray-300"}`}>
-                  <span className={`ml-auto px-2 rounded-bl-lg rounded-tr-lg text-end ${getStockColour(product.stock)}`}>{product.stock}</span>
+                <div key={`${item.name}-${product.name}-${index}`} onClick={() => handleAddToMenu(product)} className={`rounded h-[150px] p-2 w-[170px] flex flex-col shadow-xl transition duration-100 cursor-pointer ${product.stock >= 1 ? "hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]" : "text-gray-300"}`}>
+                  <div className="flex justify-between">
+                    <span>£{product.price}</span>
+
+                    <span className={`ml-auto px-2 rounded-bl-lg rounded-tr-lg text-end ${getStockColour(product.stock)}`}>{product.stock}</span>
+                  </div>
                   <span className="line-clamp-2 h-[48px] font-bold">{product.name}</span>
-                  <span>£{product.price}</span>
-                  <span className="h-[24px]">{processAllergenList(product.allergensList)}</span>
+                  <span className="mt-auto h-[24px]">{processAllergenList(product.allergensList)}</span>
                 </div>
               );
             });

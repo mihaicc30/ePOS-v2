@@ -7,6 +7,7 @@ import { BsLayoutTextWindowReverse, BsBoxArrowRight } from "react-icons/bs";
 import { FaRegUserCircle, FaWind } from "react-icons/fa";
 import { MdOutlineSettingsSuggest } from "react-icons/md";
 import { GiRoundTable } from "react-icons/gi";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { SiContactlesspayment } from "react-icons/si";
 import { TiWeatherCloudy } from "react-icons/ti";
 import { WiHumidity } from "react-icons/wi";
@@ -65,7 +66,7 @@ const MobileHeader = () => {
   }, []);
 
   useEffect(() => {
-    if(!weather) return
+    if (!weather) return;
     const fetchForecast = async () => {
       setTimeout(async () => {
         try {
@@ -103,7 +104,6 @@ const MobileHeader = () => {
     navigate(`/${index}`);
   };
 
-
   useEffect(() => {
     const updateTime = () => {
       setTime(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
@@ -117,15 +117,30 @@ const MobileHeader = () => {
     };
   }, []);
 
+  const getVenueStatus = () => {
+    if (!dayForecast) return <AiOutlineLoading3Quarters className="animate-spin mx-auto text-xl" />
+  
+    if (dayForecast > 5000) {
+      return <p className="text-center">Busy</p>;
+    } else if (dayForecast < 1500) {
+      return <p className="text-center">Quiet</p>;
+    } else {
+      return <p className="text-center">Average</p>;
+    }
+  };
+
   return (
     <div className="MobileHeader basis-[10%] flex min-sm:gap-4 bg-[--c30] min-sm:py-4 relative max-sm:flex-col">
       {localStorage.getItem("isAdmin") !== "1" && (
         <>
+        <div className="flex items-center text-5xl border-r-2 pr-2 mr-2 ">
+          <p>{time}</p>
+        </div>
           <div ref={weatherRef}>
             {!weather && <p>Loading weather..</p>}
             {weather && (
               <div className="flex gap-4">
-                <div className="text-2xl p-1 flex flex-col justify-evenly">
+                <div className="text-2xl p-1 flex flex-col justify-evenly border-r-2 pr-2 mr-2">
                   <p>{weather.location.country}</p>
                   <p>{weather.location.name}</p>
                 </div>
@@ -158,16 +173,13 @@ const MobileHeader = () => {
               </div>
             )}
           </div>
-          <div className="flex items-center text-3xl border-r-2 pr-2 mr-2 ">
-            <p>{time}</p>
-          </div>
           <div className="flex flex-col justify-center border-r-2 pr-2 mr-2 ">
-            <p>Forecast</p>
-            <div ref={forecastRef}>
-              {!dayForecast && <p>Loading forecast..</p>}
-              {dayForecast && <p className={`${dayForecast > 5000 ? "text-green-400" : dayForecast < 1500 ? "text-red-400" : "text-yellow-400"} `}>£{dayForecast}</p>}
+            <p className="text-center">Forecast</p>
+            <div ref={forecastRef} className="text-center">
+              {!dayForecast && <p className="text-center">Loading forecast..</p>}
+              {dayForecast && <p className={`text-center text-xl ${dayForecast > 5000 ? "text-green-400" : dayForecast < 1500 ? "text-red-400" : "text-yellow-400"} `}>£{dayForecast}</p>}
             </div>
-              {dayForecast > 5000 ? <p>Busy</p> : dayForecast < 1500 ? <p>Quiet</p> : <p>Average</p>}
+            {getVenueStatus()}
           </div>
         </>
       )}

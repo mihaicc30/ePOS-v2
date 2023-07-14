@@ -9,7 +9,12 @@ export const authUser = (foundPin) => {
 };
 
 export const getUser = (setUser) => {
-    setUser({ email:localStorage.getItem('email'), displayName:localStorage.getItem('displayName') });
+    if(localStorage.getItem('email')) {
+        setUser({ email:localStorage.getItem('email'), displayName:localStorage.getItem('displayName') });
+        return
+    } else {
+        return false
+    }
 }
 export const setVenue = (setVenueNtable, foundPin) => {
     setVenueNtable((prevValues) => ({ ...prevValues, venue: foundPin.venueID }));

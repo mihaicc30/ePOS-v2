@@ -1,12 +1,18 @@
 import React, { useState, useRef } from "react";
 import { AiOutlineLeft, AiOutlineUp, AiOutlineDown } from "react-icons/ai";
+import { TbInfoTriangle } from "react-icons/tb";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import Allergens from "../modals/Allergens"
 
 const MenuLeftSide = ({ lefty, basketItems, setBasketItems, menuitems }) => {
   const [messageModal, openMessageModal] = useState(false);
   const [messageModalData, setMessageModalData] = useState(false);
   const modalMessageRef = useRef(null);
+
+  const [modalAllergens, setModalAllergens] = useState(false);
+  const [modalAllergensData, setModalAllergensData] = useState(false);
 
   const handleCourseChange = (refID, value) => {
     const updatedBasketItems = basketItems.map((item) => {
@@ -93,6 +99,7 @@ const MenuLeftSide = ({ lefty, basketItems, setBasketItems, menuitems }) => {
 
   return (
     <>
+      {modalAllergens && <Allergens data={modalAllergensData} modal={modalAllergens} setModal={setModalAllergens} />}
       <div className="absolute">
         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme="light" />
       </div>
@@ -131,6 +138,10 @@ const MenuLeftSide = ({ lefty, basketItems, setBasketItems, menuitems }) => {
                         </select>
                       )}
                     </div>
+
+                    <button className="bg-orange-100 px-2 py-3 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md" onClick={() => {setModalAllergensData(menuItem);setModalAllergens(!modalAllergens)}}>
+                      <TbInfoTriangle className="text-3xl mx-1" />
+                    </button>
 
                     <button className="bg-orange-300 px-2 py-3 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md" onClick={() => handleRemoveItem(menuItem)}>
                       Remove
