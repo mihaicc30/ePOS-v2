@@ -123,10 +123,11 @@ const Tables = ({ tables, setTables, draggingIndex, setDraggingIndex, showArea, 
       </div>
       <div className={` flex w-[100%] flex-col transition-all z-10 mx-auto text-xl whitespace-nowrap select-none relative`}>
         <p className="text-center">{venueNtable.table ? `Current Selected Table: ${venueNtable.table}` : `Select a Table.`}</p>
-
-        <button onClick={saveLayout} className="absolute right-0 top-0 bg-[--c1] active:shadow-[inset_2px_2px_2px_black] p-2 text-center border-b-2 border-b-black rounded-xl mx-1">
-          Save Layout
-        </button>
+        {localStorage.getItem("isAdmin") === "1" && (
+          <button onClick={saveLayout} className="absolute right-0 top-0 bg-[--c1] active:shadow-[inset_2px_2px_2px_black] p-2 text-center border-b-2 border-b-black rounded-xl mx-1">
+            Save Layout
+          </button>
+        )}
       </div>
 
       <div className=" relative h-[100%] bg-[#ffffff6b] overflow-hidden">
@@ -137,32 +138,33 @@ const Tables = ({ tables, setTables, draggingIndex, setDraggingIndex, showArea, 
             </button>
           ))}
         </div>
-        <div className={`grid grid-cols-7 h-12 text-xl relative`}>
-          <input ref={areaRef} list="areaslist" type="text" placeholder="Area name.." className="p-2 col-span-2 border-b-2 border-b-black rounded-xl mx-1 my-1" />
-          <datalist id="areaslist">
-            {uniqueAreas.map((area, index) => (
-              <option value={area} key={crypto.randomUUID()}>
-                {area}
-              </option>
-            ))}
-          </datalist>
-          <div onClick={() => pushNewElement("table")} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
-            Add new table <AiOutlineArrowRight />
+        {localStorage.getItem("isAdmin") === "1" && (
+          <div className={`grid grid-cols-7 h-12 text-xl relative`}>
+            <input ref={areaRef} list="areaslist" type="text" placeholder="Area name.." className="p-2 col-span-2 border-b-2 border-b-black rounded-xl mx-1 my-1" />
+            <datalist id="areaslist">
+              {uniqueAreas.map((area, index) => (
+                <option value={area} key={crypto.randomUUID()}>
+                  {area}
+                </option>
+              ))}
+            </datalist>
+            <div onClick={() => pushNewElement("table")} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
+              Add new table <AiOutlineArrowRight />
+            </div>
+            <div onClick={() => pushNewElement("wall")} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
+              Add new wall <AiOutlineArrowRight />
+            </div>
+            <div onClick={() => setseeControlls(!seeControlls)} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
+              Top Controlls {!seeControlls ? "🔴" : "🟢"}
+            </div>
+            <div onClick={() => setseeControlls2(!seeControlls2)} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
+              Bottom Controlls {!seeControlls2 ? "🔴" : "🟢"}
+            </div>
+            <div onClick={() => setseeControlls3(!seeControlls3)} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
+              Draggable {!seeControlls3 ? "🔴" : "🟢"}
+            </div>
           </div>
-          <div onClick={() => pushNewElement("wall")} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
-            Add new wall <AiOutlineArrowRight />
-          </div>
-          <div onClick={() => setseeControlls(!seeControlls)} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
-            Top Controlls {!seeControlls ? "🔴" : "🟢"}
-          </div>
-          <div onClick={() => setseeControlls2(!seeControlls2)} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
-            Bottom Controlls {!seeControlls2 ? "🔴" : "🟢"}
-          </div>
-          <div onClick={() => setseeControlls3(!seeControlls3)} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
-            Draggable {!seeControlls3 ? "🔴" : "🟢"}
-          </div>
-        </div>
-
+        )}
         {tables
           .filter((table, index) => table.area === showArea)
           .map((table, index) => {

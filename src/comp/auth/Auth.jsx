@@ -20,6 +20,7 @@ const userTable = [
     pin: "111",
     fingerprint: "",
     venueID: 1,
+    isAdmin: 1,
   },
   {
     displayName: "Test User",
@@ -30,6 +31,7 @@ const userTable = [
     pin: "000",
     fingerprint: "",
     venueID: 101010,
+    isAdmin: 0,
   },
 ];
 

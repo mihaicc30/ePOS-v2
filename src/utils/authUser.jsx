@@ -5,6 +5,7 @@ export const authUser = (foundPin) => {
     localStorage.setItem("lefty", foundPin.lefty);
     localStorage.setItem("darkMode", foundPin.darkMode);
     localStorage.setItem("autoStore", foundPin.autoStore);
+    localStorage.setItem("isAdmin", foundPin.isAdmin);
 };
 
 export const getUser = (setUser) => {
