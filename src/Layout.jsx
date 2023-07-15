@@ -5,8 +5,7 @@ import { auth, db, logout } from "./firebase/config.jsx";
 import MobileLeftNav from "./comp/navBars/MobileLeftNav";
 import MobileHeader from "./comp/navBars/MobileHeader";
 
-const Layout = ({ lefty, setLefty }) => {
-  const [dayForecast, setDayForecast] = useState(false);
+const Layout = ({ lefty, setLefty, dayForecast, setDayForecast }) => {
   const navigate = useNavigate();
   const [showNav, setShowNav] = useState(false);
   let isNotHomePage;

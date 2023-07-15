@@ -2457,6 +2457,8 @@ const App = () => {
   const [showArea, setshowArea] = useState("Bar");
   const [uniqueAreas, setuniqueAreas] = useState([]);
 
+  const [dayForecast, setDayForecast] = useState(false);
+
   useEffect(() => {
     if (!tables || tables.length < 1) return;
     setuniqueAreas([...new Set(tables.map((table) => table.area))]);
@@ -2510,10 +2512,10 @@ const App = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Layout lefty={lefty} setLefty={setLefty}/>}>
+      <Route path="/" element={<Layout lefty={lefty} setLefty={setLefty} dayForecast={dayForecast} setDayForecast={setDayForecast}/>}>
         <Route path="/" element={<Auth />} />
 
-        <Route path="/admin/*" element={<Admin />} />
+        <Route path="/admin/*" element={<Admin menuitems={menuitems} dayForecast={dayForecast} setDayForecast={setDayForecast} tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable}/>} />
         <Route path="/tables" element={<Tables tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
 
         <Route path="/menu" element={<Menu lefty={lefty} basketDiscount={basketDiscount} setBasketDiscount={setBasketDiscount} basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} searchValue={searchValue} setSearchValue={setSearchValue} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}></Route>
