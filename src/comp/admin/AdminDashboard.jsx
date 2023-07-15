@@ -58,7 +58,6 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
       const response = await fetch("http://api.weatherapi.com/v1/forecast.json?key=df0973195a8141f99d8195727231207&q=worcester%20uk&days=7&aqi=no&alerts=no");
       const data = await response.json();
       setWeeklyWeather(data);
-      console.log("🚀 ~ file: AdminDashboard.jsx:61 ~ fetchWeeklyWeather ~ data:", data);
     } catch (error) {
       console.error("Error fetching weather:", error);
     }
@@ -122,6 +121,8 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
     if (localStorage.getItem("forecast7") === "true") return;
     localStorage.setItem("forecast7", true);
 
+    console.log(weeklyholiday);
+
     for (let n = 1; n < 7; n++) {
       let dayt = (new Date().getDay() + n) % 7;
 
@@ -132,7 +133,7 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
           windspeed: weeklyWeather.forecast.forecastday[`${n - 1}`].hour[12].wind_mph,
           temp: weeklyWeather.forecast.forecastday[`${n - 1}`].hour[12].temp_c,
           daytype: dayt,
-          isholiday: holiday[1]?.title ? 1 : 0,
+          isholiday: weeklyholiday[`${n - 1}`]?.title ? 1 : 0,
         };
         console.log(`calling api with this data:`, tempz);
         try {
