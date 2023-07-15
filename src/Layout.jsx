@@ -7,17 +7,25 @@ import MobileHeader from "./comp/navBars/MobileHeader";
 
 const Layout = ({ lefty, setLefty }) => {
   const navigate = useNavigate();
-  const isNotHomePage = window.location.pathname !== "/";
-  const isAdminPage = window.location.pathname.startsWith("/Admin");
-  useEffect(()=>{console.log(window.location.pathname, window.location.pathname !== "/Admin")},[])
+  const [showNav, setShowNav] = useState(false);
+  let isNotHomePage;
+  let isNotAdminPage;
 
+  useEffect(() => {
+    isNotHomePage = window.location.pathname !== "/";
+    isNotAdminPage = !window.location.pathname.startsWith("/Admin");
+    if (isNotHomePage && isNotAdminPage) {
+      setShowNav(true);
+    } else {
+      setShowNav(false);
+    }
+  }, [window.location.pathname]);
 
   return (
     <div className="flex flex-col h-[100svh] w-[100svw] relative overflow-hidden">
-      {isNotHomePage || isAdminPage  && <MobileHeader />}
-
+      {showNav && <MobileHeader />}
       <div className={`basis-[95%] flex bg-gray-50 z-10 relative overflow-y-auto`}>
-        {isNotHomePage || isAdminPage  && <MobileLeftNav lefty={lefty} setLefty={setLefty} />}
+        {showNav && <MobileLeftNav lefty={lefty} setLefty={setLefty} />}
         <div className="basis-[95%] overflow-hidden flex flex-col h-[100%] relative">
           <div className="flex flex-col gap-4 h-[100%] w-[100%] bg-[--c60]">
             <Outlet />

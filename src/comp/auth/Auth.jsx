@@ -101,7 +101,11 @@ const Auth = () => {
       authUser(foundPin);
       setVenue(setVenue, foundPin);
       setPin({ pin: "", pin2: "" });
-      navigate("/Tables");
+      if(foundPin.isAdmin == 1){
+        navigate("/Admin");
+      } else if (foundPin.isAdmin == 0) {
+        navigate("/Tables");
+      }
     } else if (!foundPin && pin.pin2.length >= 3) {
       setPin({ pin: "", pin2: "" });
     }

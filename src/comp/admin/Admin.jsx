@@ -1,3 +1,13 @@
+import AdminDashboard from './AdminDashboard';
+import AdminForecasts from './AdminForecasts';
+import AdminTablePlan from './AdminTablePlan';
+import AdminProducts from './AdminProducts';
+import AdminReceipts from './AdminReceipts';
+import AdminROTA from './AdminROTA';
+import AdminPayroll from './AdminPayroll';
+import AdminSignout from './AdminSignout';
+
+
 import React, { useState, useEffect } from "react";
 import AdminLayout from "./AdminLayout";
 import Page404 from "../Page404";
@@ -9,8 +19,13 @@ const Admin = () => {
     <Routes>
       <Route path="/" element={<AdminLayout />}>
         <Route path="/" element={<AdminDashboard />} />
+        <Route path="/Forecasts" element={<AdminForecasts />} />
         <Route path="/TablesPlan" element={<AdminTablePlan />} />
         <Route path="/Products" element={<AdminProducts />} />
+        <Route path="/Receipts" element={<AdminReceipts />} />
+        <Route path="/ROTA" element={<AdminROTA />} />
+        <Route path="/Payroll" element={<AdminPayroll />} />
+        <Route path="/Signout" element={<AdminSignout />} />
 
         <Route path="*" element={<Page404 />} />
       </Route>
@@ -19,26 +34,3 @@ const Admin = () => {
 };
 
 export default Admin;
-
-const AdminDashboard = () => {
-  return (
-    <div>
-      <p>hi AdminDashboard</p>
-    </div>
-  );
-};
-
-const AdminTablePlan = () => {
-  return (
-    <div>
-      <p>hi AdminTablePlan</p>
-    </div>
-  );
-};
-const AdminProducts = () => {
-  return (
-    <div>
-      <p>hi AdminProducts</p>
-    </div>
-  );
-};

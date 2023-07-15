@@ -99,7 +99,7 @@ const MobileLeftNav = ({ lefty, setLefty }) => {
         <span className="mx-auto text-md">
           <FaRegUserCircle className="text-2xl" />
         </span>
-        <p className={`text-sm`}>{user && localStorage.getItem("displayName").split(" ")[0]}</p>
+        <p className={`text-sm`}>{user && localStorage.getItem("displayName")?.split(" ")[0]}</p>
       </div>
     </div>
   );
