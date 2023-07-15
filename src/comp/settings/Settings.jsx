@@ -5,6 +5,11 @@ import { AiFillCaretRight } from "react-icons/ai";
 import { auth } from "../../firebase/config.jsx";
 import { getVenueById } from "../../utils/BasketUtils";
 
+import { AiOutlineLeft } from "react-icons/ai";
+
+
+
+
 const Settings = ({ venues }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -19,6 +24,10 @@ const Settings = ({ venues }) => {
   return (
     <>
       <div className="flex flex-col gap-4 p-4 h-[100%] w-[100%] overflow-auto">
+        
+      <button className="mr-auto p-2 text-3xl" onClick={() => navigate(-1)}>
+        <AiOutlineLeft />
+      </button>
         <p className="font-bold text-lg pb-4 border-b-2">Account Services</p>
 
         <div className="grid grid-cols-2 border-b-2 p-4 m-4 gap-4 max-[500px]:grid-cols-1">
