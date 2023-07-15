@@ -6,6 +6,7 @@ import MobileLeftNav from "./comp/navBars/MobileLeftNav";
 import MobileHeader from "./comp/navBars/MobileHeader";
 
 const Layout = ({ lefty, setLefty }) => {
+  const [dayForecast, setDayForecast] = useState(false);
   const navigate = useNavigate();
   const [showNav, setShowNav] = useState(false);
   let isNotHomePage;
@@ -23,7 +24,7 @@ const Layout = ({ lefty, setLefty }) => {
 
   return (
     <div className="flex flex-col h-[100svh] w-[100svw] relative overflow-hidden">
-      {showNav && <MobileHeader />}
+      {showNav && <MobileHeader dayForecast={dayForecast} setDayForecast={setDayForecast} />}
       <div className={`basis-[95%] flex bg-gray-50 z-10 relative overflow-y-auto`}>
         {showNav && <MobileLeftNav lefty={lefty} setLefty={setLefty} />}
         <div className="basis-[95%] overflow-hidden flex flex-col h-[100%] relative">

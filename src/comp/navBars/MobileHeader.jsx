@@ -9,10 +9,11 @@ import { MdOutlineSettingsSuggest } from "react-icons/md";
 import { GiRoundTable } from "react-icons/gi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { SiContactlesspayment } from "react-icons/si";
+import { IoMdRefreshCircle } from "react-icons/io";
 import { TiWeatherCloudy } from "react-icons/ti";
 import { WiHumidity } from "react-icons/wi";
 
-const MobileHeader = () => {
+const MobileHeader = ({dayForecast, setDayForecast}) => {
   const weatherRef = useRef(null);
   const holidayRef = useRef(null);
   const forecastRef = useRef(null);
@@ -24,7 +25,6 @@ const MobileHeader = () => {
   const [weather, setWeather] = useState(false);
   const [holiday, setHoliday] = useState(false);
   const [time, setTime] = useState(false);
-  const [dayForecast, setDayForecast] = useState(false);
 
   useEffect(() => {
     getUser(setUser);
@@ -65,34 +65,36 @@ const MobileHeader = () => {
     }
   }, []);
 
+  const fetchForecast = async () => {
+    setTimeout(async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API}forecast`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credentials": true,
+          },
+          body: JSON.stringify({
+            cloudy: weather.current.cloud,
+            humidity: weather.current.humidity,
+            windspeed: weather.current.wind_mph,
+            temp: weather.current.temp_c,
+            daytype: new Date().getDay(),
+            isholiday: holiday[1]?.title ? 1 : 0,
+          }),
+        });
+        const data = await response.json();
+        console.log(data);
+        setDayForecast(data.average);
+      } catch (error) {
+        console.error("Error fetching weather:", error);
+      }
+    }, 1111);
+  };
+
   useEffect(() => {
     if (!weather) return;
-    const fetchForecast = async () => {
-      setTimeout(async () => {
-        try {
-          const response = await fetch(`${import.meta.env.VITE_API}forecast`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Credentials": true,
-            },
-            body: JSON.stringify({
-              cloudy: weather.current.cloud,
-              humidity: weather.current.humidity,
-              windspeed: weather.current.wind_mph,
-              temp: weather.current.temp_c,
-              daytype: new Date().getDay(),
-              isholiday: holiday[1]?.title ? 1 : 0,
-            }),
-          });
-          const data = await response.json();
-          console.log(data);
-          setDayForecast(data.average);
-        } catch (error) {
-          console.error("Error fetching weather:", error);
-        }
-      }, 1111);
-    };
+    
 
     if (localStorage.getItem("isAdmin") !== "1" && forecastRef.current.innerText === "Loading forecast..") {
       fetchForecast();
@@ -118,8 +120,8 @@ const MobileHeader = () => {
   }, []);
 
   const getVenueStatus = () => {
-    if (!dayForecast) return <AiOutlineLoading3Quarters className="animate-spin mx-auto text-xl" />
-  
+    if (!dayForecast) return <AiOutlineLoading3Quarters className="animate-spin mx-auto text-xl" />;
+
     if (dayForecast > 5000) {
       return <p className="text-center">Busy</p>;
     } else if (dayForecast < 1500) {
@@ -133,9 +135,18 @@ const MobileHeader = () => {
     <div className="MobileHeader basis-[10%] flex min-sm:gap-4 bg-[--c30] min-sm:py-4 relative max-sm:flex-col">
       {localStorage.getItem("isAdmin") !== "1" && (
         <>
-        <div className="flex items-center text-5xl border-r-2 pr-2 mr-2 ">
-          <p>{time}</p>
-        </div>
+          <div className="flex items-center text-5xl border-r-2 pr-2 mr-2 ">
+            <p>{time}</p>
+          </div>
+          <div ref={holidayRef} className="border-r-2 pr-2 mr-2">
+            {!holiday && <p>Loading holiday..</p>}
+            {holiday && (
+              <div className="flex flex-col justify-evenly h-[100%]">
+                <p className="text-xl">{holiday[0]}</p>
+                {holiday[1]?.title ? <p className="text-xl">{holiday[1].title}</p> : "No events today."}
+              </div>
+            )}
+          </div>
           <div ref={weatherRef}>
             {!weather && <p>Loading weather..</p>}
             {weather && (
@@ -164,22 +175,18 @@ const MobileHeader = () => {
               </div>
             )}
           </div>
-          <div ref={holidayRef} className="border-l-2 pl-2 ml-2 border-r-2 pr-2 mr-2">
-            {!holiday && <p>Loading holiday..</p>}
-            {holiday && (
-              <div className="flex flex-col justify-evenly h-[100%]">
-                <p className="text-xl">{holiday[0]}</p>
-                {holiday[1]?.title ? <p className="text-xl">{holiday[1].title}</p> : "No events today."}
+          <div className="flex flex-nowrap justify-center items-center border-r-2 pr-2 mr-2 border-l-2 pl-2 ml-2 ">
+            <div>
+              <p className="text-center">Forecast</p>
+              <div ref={forecastRef} className="text-center">
+                {!dayForecast && <p className="text-center">Loading forecast..</p>}
+                {dayForecast && <p className={`text-center font-[600] text-xl ${dayForecast > 5000 ? "text-green-400" : dayForecast < 1500 ? "text-red-400" : "text-yellow-500"} `}>£{dayForecast}</p>}
               </div>
-            )}
-          </div>
-          <div className="flex flex-col justify-center border-r-2 pr-2 mr-2 ">
-            <p className="text-center">Forecast</p>
-            <div ref={forecastRef} className="text-center">
-              {!dayForecast && <p className="text-center">Loading forecast..</p>}
-              {dayForecast && <p className={`text-center text-xl ${dayForecast > 5000 ? "text-green-400" : dayForecast < 1500 ? "text-red-400" : "text-yellow-400"} `}>£{dayForecast}</p>}
+              {getVenueStatus()}
             </div>
-            {getVenueStatus()}
+            {dayForecast && <button onClick={()=>{setDayForecast(false);fetchForecast()}}>
+              <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-xl rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition"/>
+            </button> }
           </div>
         </>
       )}
