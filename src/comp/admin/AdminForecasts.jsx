@@ -26,16 +26,6 @@ const AdminForecasts = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
       <div className="flex-1 flex flex-wrap flex-col">
         <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center">
           <div className="flex flex-wrap justify-center items-center gap-4">
-            {dayForecast && (
-              <button
-                onClick={() => {
-                  setDayForecast(false);
-                  fetchForecast();
-                  reloadWeeklyForecast();
-                }}>
-                <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-xl rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition" />
-              </button>
-            )}
             <div className="shadow-xl p-3">
               {dayForecast && <p className="text-center">{new Date().toISOString().split("T")[0]}</p>}
               {dayForecast && <p className="text-center">Forecast</p>}

@@ -58,6 +58,7 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
       const response = await fetch("http://api.weatherapi.com/v1/forecast.json?key=df0973195a8141f99d8195727231207&q=worcester%20uk&days=7&aqi=no&alerts=no");
       const data = await response.json();
       setWeeklyWeather(data);
+      console.log("🚀 ~ file: AdminDashboard.jsx:61 ~ fetchWeeklyWeather ~ data:", data);
     } catch (error) {
       console.error("Error fetching weather:", error);
     }
@@ -89,6 +90,8 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
 
   const fetchForecast = async () => {
     if (!weather) return;
+    if (localStorage.getItem("forecast1") === "true") return;
+    localStorage.setItem("forecast1", true);
     setTimeout(async () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_API}forecast`, {
@@ -116,45 +119,56 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
 
   const fetchForecastWeek = async (n) => {
     if (!weather) return;
-    let dayt;
-    let tempdayt = new Date().getDay() + n;
-    if (tempdayt > 6) {
-      dayt = new Date().getDay() + n - new Date().getDay();
+    if (localStorage.getItem("forecast7") === "true") return;
+    localStorage.setItem("forecast7", true);
+
+    for (let n = 1; n < 7; n++) {
+      let dayt = (new Date().getDay() + n) % 7;
+
+      setTimeout(async () => {
+        let tempz = {
+          cloudy: weeklyWeather.forecast.forecastday[`${n - 1}`].hour[12].cloud,
+          humidity: weeklyWeather.forecast.forecastday[`${n - 1}`].hour[12].humidity,
+          windspeed: weeklyWeather.forecast.forecastday[`${n - 1}`].hour[12].wind_mph,
+          temp: weeklyWeather.forecast.forecastday[`${n - 1}`].hour[12].temp_c,
+          daytype: dayt,
+          isholiday: holiday[1]?.title ? 1 : 0,
+        };
+        console.log(`calling api with this data:`, tempz);
+        try {
+          const response = await fetch(`${import.meta.env.VITE_API}forecast-quick`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify({
+              cloudy: weeklyWeather.forecast.forecastday[n - 1].hour[12].cloud,
+              humidity: weeklyWeather.forecast.forecastday[n - 1].hour[12].humidity,
+              windspeed: weeklyWeather.forecast.forecastday[n - 1].hour[12].wind_mph,
+              temp: weeklyWeather.forecast.forecastday[n - 1].hour[12].temp_c,
+              daytype: dayt,
+              isholiday: holiday[1]?.title ? 1 : 0,
+            }),
+          });
+          const data = await response.json();
+          console.log(data);
+
+          const currentDate = new Date();
+          currentDate.setDate(currentDate.getDate() + n);
+          const year = currentDate.getFullYear();
+          const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+          const day = String(currentDate.getDate()).padStart(2, "0");
+
+          setWeeklyForecast((prevState) => ({
+            ...prevState,
+            [n]: { date: `${year}-${month}-${day}`, average: data.average },
+          }));
+        } catch (error) {
+          console.error("Error fetching weather:", error);
+        }
+      }, 1111);
     }
-    setTimeout(async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API}forecast-quick`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Credentials": true,
-          },
-          body: JSON.stringify({
-            cloudy: weather.current.cloud,
-            humidity: weather.current.humidity,
-            windspeed: weather.current.wind_mph,
-            temp: weather.current.temp_c,
-            daytype: new Date().getDay() + n > 6 ? "" : "",
-            isholiday: holiday[1]?.title ? 1 : 0,
-          }),
-        });
-        const data = await response.json();
-        console.log(data);
-
-        const currentDate = new Date();
-        currentDate.setDate(currentDate.getDate() + n);
-        const year = currentDate.getFullYear();
-        const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-        const day = String(currentDate.getDate()).padStart(2, "0");
-
-        setWeeklyForecast((prevState) => ({
-          ...prevState,
-          [n]: { date: `${year}-${month}-${day}`, average: data.average },
-        }));
-      } catch (error) {
-        console.error("Error fetching weather:", error);
-      }
-    }, 1111);
   };
 
   useEffect(() => {
@@ -174,10 +188,29 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
       5: { date: null, average: null },
       6: { date: null, average: null },
     });
+    fetchForecastWeek();
+  };
 
-    for (let i = 1; i < 7; i++) {
-      fetchForecastWeek(i);
+  const resetForecastQuery = () => {
+    localStorage.setItem("forecast1", "false");
+    localStorage.setItem("forecast7", "false");
+  };
+  const getDaysTillPayday = () => {
+    const payDay = 15;
+    const currentDate = new Date();
+    const currentDay = currentDate.getDate();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    const nextPayDate = new Date(currentYear, currentMonth, payDay);
+    if (nextPayDate < currentDate) {
+      nextPayDate.setMonth(currentMonth + 1);
     }
+
+    const timeDifference = nextPayDate.getTime() - currentDate.getTime();
+    const daysUntilPay = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+    return daysUntilPay;
   };
 
   return (
@@ -271,7 +304,7 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
             </svg>
           </span>
           <p>
-            <span className="text-xl font-bold">5</span> Days until payday
+            <span className="text-xl font-bold">{getDaysTillPayday()}</span> Days until next payday
           </p>
         </div>
         <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center flex-col items-center min-w-[200px] min-h-[120px]">
@@ -365,16 +398,15 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
       <div className="flex-1 flex flex-wrap flex-col">
         <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center">
           <div className="flex flex-wrap justify-center items-center gap-4">
-            {dayForecast && (
-              <button
-                onClick={() => {
-                  setDayForecast(false);
-                  fetchForecast();
-                  reloadWeeklyForecast();
-                }}>
-                <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-xl rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition" />
-              </button>
-            )}
+            <button
+              onClick={() => {
+                resetForecastQuery();
+                setDayForecast(false);
+                fetchForecast();
+                reloadWeeklyForecast();
+              }}>
+              <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-xl rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition" />
+            </button>
             <div className="shadow-xl p-3">
               {dayForecast && <p className="text-center">{new Date().toISOString().split("T")[0]}</p>}
               {dayForecast && <p className="text-center">Forecast</p>}
