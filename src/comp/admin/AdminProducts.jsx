@@ -61,7 +61,6 @@ const AdminProducts = ({ menuitems }) => {
   const handleEdit = (product) => {
     setModal(!modal);
     setModalData(product);
-    console.log("🚀 ~ file: AdminProducts.jsx:62 ~ handleEdit ~ product:", product);
   };
 
   const notContains = <BsCheck2Circle className="fill-green-400 text-3xl" />;
@@ -69,6 +68,7 @@ const AdminProducts = ({ menuitems }) => {
 
   const handleSave = () => {
     console.log("dev**update item in db using id from modalData");
+    console.log("dev**also will show correct message depending if item has an ID or not :)");
     setModal(!modal);
 
     toast.success(`Item has been saved.`, {
@@ -111,6 +111,41 @@ const AdminProducts = ({ menuitems }) => {
     }));
   };
 
+  const handleAdd = () => {
+    let newProduct = {
+      name: "",
+      tag: [],
+      subcategory: "",
+      subcategory_course: 0,
+      stock: 0,
+      price: 0,
+      priceOffer: null,
+      allergensList: {
+        Meat: false,
+        Celery: false,
+        Crustaceans: false,
+        Fish: false,
+        Milk: false,
+        Mustard: false,
+        Peanuts: false,
+        Soybeans: false,
+        Gluten: false,
+        Egg: false,
+        Lupin: false,
+        Moluscs: false,
+        Nuts: false,
+        SesameSeeds: false,
+        Sulphur: false,
+      },
+      img: "./assets/defaultDrink.jpg",
+      calories: "0",
+      ingredients: [],
+    };
+
+    setModal(!modal);
+    setModalData(newProduct);
+  };
+
   return (
     <div className="flex flex-col relative">
       <div className="absolute">
@@ -122,13 +157,13 @@ const AdminProducts = ({ menuitems }) => {
             <button className="absolute top-0 left-0 p-4 text-3xl animate-fadeUP1" onClick={() => setModal(!modal)}>
               ◀ Cancel
             </button>
-            <button className="absolute bottom-0 left-0 p-4 text-3xl animate-fadeUP1 border-y-red-400 border-y-2" onClick={handleDelete}>
+            <button className="absolute bottom-0 left-0 p-4 text-3xl animate-fadeUP1 border-y-red-400 border-y-2" onClick={() => console.log("dev**will remove button when item is fetch from the databse and will have an id i can check with to hide the button :)")}>
               ◀ Delete
             </button>
             <button className="absolute top-0 right-0 p-4 text-3xl animate-fadeUP1 border-y-green-400 border-y-2" onClick={handleSave}>
               Save ▶
             </button>
-            <img src={"../." + modalData.img} className="h-[100px] w-[100%]" style={{ objectFit: "cover", overflow: "hidden" }} onClick={()=>console.log("dev**to create..")}/>
+            <img src={"../." + modalData.img} className="h-[100px] w-[100%]" style={{ objectFit: "cover", overflow: "hidden" }} onClick={() => console.log("dev**to create..")} />
 
             <div className="overflow-auto px-2">
               <div className="flex">
@@ -136,7 +171,8 @@ const AdminProducts = ({ menuitems }) => {
               </div>
 
               <div className="flex">
-                Name:<input type="text" className="ml-auto text-end text-2xl font-bold" defaultValue={modalData.name} />
+                Name:
+                <input type="text" className="ml-auto text-end text-2xl font-bold" defaultValue={modalData.name} />
               </div>
 
               <div className="flex">
@@ -144,11 +180,40 @@ const AdminProducts = ({ menuitems }) => {
                 <input type="text" className="ml-auto text-end text-2xl font-bold" defaultValue={modalData.calories} />
               </div>
 
+              <div className="grid grid-cols-2 gap-4 my-8">
+                <div>
+                  <p>Category</p>
+                  <input list="cats" type="text" placeholder="Category name.." className="p-2 col-span-2 border-b-2 border-b-black rounded-xl mx-1 my-1" />
+                  <datalist id="cats">
+                    {menuitems.map((item) => (
+                      <option key={item.category + "c"} value={item.category}>
+                        {item.category}
+                      </option>
+                    ))}
+                  </datalist>
+                </div>
+                <div>
+                  <p>Subcategory</p>
+                  <input list="subcats" type="text" placeholder="Subcategory name.." className="p-2 col-span-2 border-b-2 border-b-black rounded-xl mx-1 my-1" />
+                  <datalist id="subcats">
+                    {menuitems.map((item) => {
+                      const subcategories = [...new Set(item.items.map((item2) => item2.subcategory))];
+
+                      return subcategories.map((subcat, index) => (
+                        <option key={index + "c"} value={subcat}>
+                          {subcat}
+                        </option>
+                      ));
+                    })}
+                  </datalist>
+                </div>
+              </div>
+
               <p className="text-xl text-center pb-4 mb-4">Ingredients</p>
               <div className="flex flex-wrap justify-center gap-2 border-b-4 pb-4 mb-4">
                 <textarea className="border-2" name="ingredients" cols="40" rows="4" defaultValue={modalData.ingredients.join(", ")}></textarea>
               </div>
-              
+
               <p className="text-xl text-center pb-4 mb-4">Tags</p>
               <div className="flex flex-wrap justify-center gap-2 border-b-4 pb-4 mb-4">
                 <textarea className="border-2" name="ingredients" cols="40" rows="4" defaultValue={modalData.tag.join(", ")}></textarea>
@@ -216,6 +281,9 @@ const AdminProducts = ({ menuitems }) => {
       <div className="grow flex flex-wrap flex-col">
         <>
           <div className="relative flex  mr-4 items-center max-[350px]:flex-wrap  max-[350px]:justify-center">
+            <button onClick={handleAdd} className={`p-2 bg-green-400 rounded-xl shadow-xl border-b-2 border-b-black transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] active:shadow-[inset_0px_4px_2px_black]`}>
+              Add New
+            </button>
             <div className="relative grow mx-4 overflow-hidden">
               <input type="text" placeholder="Search..." className="w-[100%] mx-auto pl-10 pr-10 py-2 my-2 rounded" value={searchValue} onChange={handleInputChange} />
               <span className="absolute top-[28px] left-2 -translate-y-3">🔍</span>
