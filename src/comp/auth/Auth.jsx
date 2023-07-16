@@ -14,9 +14,9 @@ const userTable = [
   {
     displayName: "Mihai1",
     email: "alemihai25@gmail.com",
-    autoStore:false,
-    darkMode:false,
-    lefty:false,
+    autoStore: false,
+    darkMode: false,
+    lefty: false,
     pin: "111",
     fingerprint: "",
     venueID: 1,
@@ -25,9 +25,9 @@ const userTable = [
   {
     displayName: "Mihai2",
     email: "alemihai25@gmail.com",
-    autoStore:false,
-    darkMode:false,
-    lefty:false,
+    autoStore: false,
+    darkMode: false,
+    lefty: false,
     pin: "222",
     fingerprint: "",
     venueID: 1,
@@ -36,9 +36,9 @@ const userTable = [
   {
     displayName: "Test User",
     email: "Test@Test.Test",
-    autoStore:false,
-    darkMode:false,
-    lefty:false,
+    autoStore: false,
+    darkMode: false,
+    lefty: false,
     pin: "000",
     fingerprint: "",
     venueID: 101010,
@@ -51,6 +51,11 @@ const Auth = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const fp = useRef(null);
+  const pinInput = useRef(null);
+
+  useEffect(() => {
+    pinInput.current.focus();
+  }, []);
 
   useEffect(() => {
     if (user) navigate("/Tables");
@@ -84,14 +89,23 @@ const Auth = () => {
   };
 
   const handlePinInput = (e) => {
-    const { name } = e.target;
+    const { name, value } = e.target;
+    console.log("v", value, "n", name);
 
-    if (name === "b") {
-      handleBackspace();
-    } else if (name === "c") {
-      handleClear();
+    if (value) {
+      handleNumber(value);
     } else {
-      handleNumber(name);
+      switch (name) {
+        case "b":
+          handleBackspace();
+          break;
+        case "c":
+          handleClear();
+          break;
+        default:
+          handleNumber(name);
+          break;
+      }
     }
   };
 
@@ -101,7 +115,7 @@ const Auth = () => {
       authUser(foundPin);
       setVenue(setVenue, foundPin);
       setPin({ pin: "", pin2: "" });
-      if(foundPin.isAdmin == 1){
+      if (foundPin.isAdmin == 1) {
         navigate("/Admin");
       } else if (foundPin.isAdmin == 0) {
         navigate("/Tables");
@@ -164,7 +178,7 @@ const Auth = () => {
           </div>
 
           <div className="grow flex flex-col">
-            <input type="text" className="text-center" defaultValue={pin.pin} />
+            <input type="text" className="text-center" value={pin.pin} ref={pinInput} onChange={handlePinInput} autoComplete="" />
             <div className="keypad grid grid-cols-3 gap-4 my-4 animate-fadeUP1">
               <button name="1" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                 1

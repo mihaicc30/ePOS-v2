@@ -12,24 +12,16 @@ import AdminLayout from "./AdminLayout";
 import Page404 from "../Page404";
 import { Routes, Route, Outlet, NavLink, BrowserRouter } from "react-router-dom";
 
-const Admin = ({ menuitems, dayForecast, setDayForecast, tables, setTables, draggingIndex, setDraggingIndex, showArea, setshowArea, uniqueAreas, setuniqueAreas, venues, venueNtable, setVenueNtable }) => {
+const Admin = ({ weeklyForecast, setWeeklyForecast, menuitems, dayForecast, setDayForecast, tables, setTables, draggingIndex, setDraggingIndex, showArea, setshowArea, uniqueAreas, setuniqueAreas, venues, venueNtable, setVenueNtable }) => {
   const [user, setUser] = useState(null);
 
-  const [weeklyForecast, setWeeklyForecast] = useState({
-    1: null,
-    2: null,
-    3: null,
-    4: null,
-    5: null,
-    6: null,
-  });
   return (
     <Routes>
       <Route path="/" element={<AdminLayout />}>
-        <Route path="/" element={<AdminDashboard dayForecast={dayForecast} setDayForecast={setDayForecast} weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} />} />
+        <Route path="/" element={<AdminDashboard weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} dayForecast={dayForecast} setDayForecast={setDayForecast} />} />
         <Route path="/Forecasts" element={<AdminForecasts dayForecast={dayForecast} setDayForecast={setDayForecast} weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} />} />
         <Route path="/TablesPlan" element={<AdminTablePlan tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
-        <Route path="/Products" element={<AdminProducts menuitems={menuitems}/>} />
+        <Route path="/Products" element={<AdminProducts menuitems={menuitems} />} />
         <Route path="/Receipts" element={<AdminReceipts />} />
         <Route path="/ROTA" element={<AdminROTA />} />
         <Route path="/Payroll" element={<AdminPayroll />} />

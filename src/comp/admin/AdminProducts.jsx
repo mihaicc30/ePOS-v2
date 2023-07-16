@@ -166,18 +166,23 @@ const AdminProducts = ({ menuitems }) => {
             <img src={"../." + modalData.img} className="h-[100px] w-[100%]" style={{ objectFit: "cover", overflow: "hidden" }} onClick={() => console.log("dev**to create..")} />
 
             <div className="overflow-auto px-2">
-              <div className="flex">
-                £<input className="ml-auto text-end text-xl" type="number" defaultValue={modalData.price.toFixed(2)} />
+              <div className="flex pr-4">
+                £<input className="ml-auto text-end pr-4 text-xl" type="number" defaultValue={modalData.price.toFixed(2)} />
               </div>
 
-              <div className="flex">
+              <div className="flex pr-4">
                 Name:
-                <input type="text" className="ml-auto text-end text-2xl font-bold" defaultValue={modalData.name} />
+                <input type="text" className="ml-auto text-end pr-4 text-2xl font-bold" defaultValue={modalData.name} />
               </div>
 
-              <div className="flex">
+              <div className="flex pr-4">
                 kcal:
-                <input type="text" className="ml-auto text-end text-2xl font-bold" defaultValue={modalData.calories} />
+                <input type="text" className="ml-auto text-end pr-4 text-2xl font-bold" defaultValue={modalData.calories} />
+              </div>
+
+              <div className="flex pr-4">
+                stock:
+                <input type="number" className="ml-auto text-end pr-4 text-2xl font-bold" defaultValue={modalData.stock} />
               </div>
 
               <div className="grid grid-cols-2 gap-4 my-8">
@@ -211,12 +216,12 @@ const AdminProducts = ({ menuitems }) => {
 
               <p className="text-xl text-center pb-4 mb-4">Ingredients</p>
               <div className="flex flex-wrap justify-center gap-2 border-b-4 pb-4 mb-4">
-                <textarea className="border-2" name="ingredients" cols="40" rows="4" defaultValue={modalData.ingredients.join(", ")}></textarea>
+                <textarea className="border-2 p-2" name="ingredients" cols="44" rows="4" defaultValue={modalData.ingredients.join(", ")}></textarea>
               </div>
 
               <p className="text-xl text-center pb-4 mb-4">Tags</p>
               <div className="flex flex-wrap justify-center gap-2 border-b-4 pb-4 mb-4">
-                <textarea className="border-2" name="ingredients" cols="40" rows="4" defaultValue={modalData.tag.join(", ")}></textarea>
+                <textarea className="border-2 p-2" name="ingredients" cols="44" rows="4" defaultValue={modalData.tag.join(", ")}></textarea>
               </div>
 
               <p className="text-xl text-center pb-4 mb-4">Allergens</p>

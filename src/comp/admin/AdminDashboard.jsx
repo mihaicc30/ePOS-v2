@@ -118,10 +118,9 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
 
   const fetchForecastWeek = async (n) => {
     if (!weather) return;
+    if (!weeklyWeather) return;
     if (localStorage.getItem("forecast7") === "true") return;
     localStorage.setItem("forecast7", true);
-
-    console.log(weeklyholiday);
 
     for (let n = 1; n < 7; n++) {
       let dayt = (new Date().getDay() + n) % 7;
@@ -153,7 +152,6 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
             }),
           });
           const data = await response.json();
-          console.log(data);
 
           const currentDate = new Date();
           currentDate.setDate(currentDate.getDate() + n);
@@ -216,7 +214,7 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-xl font-bold p-2 underline">-Dashboard-</p>
+      <p className="text-xl font-bold p-2 ">-Dashboard-</p>
 
       <p className="text-xl font-bold p-2">General Info</p>
       <div className="flex-1 flex flex-wrap">
@@ -398,7 +396,7 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
       <p className="text-xl font-bold p-2">Weekly Forecast</p>
       <div className="flex-1 flex flex-wrap flex-col">
         <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center">
-          <div className="flex flex-wrap justify-center items-center gap-4">
+          <div className="flex flex-wrap justify-center items-center gap-4 p-4">
             <button
               onClick={() => {
                 resetForecastQuery();
@@ -408,8 +406,10 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               }}>
               <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-xl rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition" />
             </button>
-            <div className="shadow-xl p-3">
+            <div className="shadow-xl p-3 flex flex-col">
+              <p className="text-center">{new Date(new Date().toISOString().split("T")[0]).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               {dayForecast && <p className="text-center">{new Date().toISOString().split("T")[0]}</p>}
+              <span className="border-b-2 border-b-orange-400 flex-1"></span>
               {dayForecast && <p className="text-center">Forecast</p>}
               <div ref={forecastRef} className="text-center">
                 {!dayForecast && <p className="text-center">Loading forecast..</p>}
@@ -418,8 +418,10 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               {getVenueStatus(dayForecast)}
             </div>
 
-            <div className="shadow-xl p-3">
+            <div className="shadow-xl p-3 flex flex-col">
+              <p className="text-center">{new Date(weeklyForecast["1"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["1"]?.date}</p>
+              <span className="border-b-2 border-b-orange-400 flex-1"></span>
               {dayForecast && <p className="text-center">Forecast</p>}
               <div className="text-center">
                 {!weeklyForecast["1"]?.date && <p className="text-center">Loading forecast..</p>}
@@ -427,8 +429,10 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               </div>
               {getVenueStatus(weeklyForecast["1"]?.average)}
             </div>
-            <div className="shadow-xl p-3">
+            <div className="shadow-xl p-3 flex flex-col">
+              <p className="text-center">{new Date(weeklyForecast["2"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["2"]?.date}</p>
+              <span className="border-b-2 border-b-orange-400 flex-1"></span>
               {dayForecast && <p className="text-center">Forecast</p>}
               <div className="text-center">
                 {!weeklyForecast["2"]?.date && <p className="text-center">Loading forecast..</p>}
@@ -437,8 +441,10 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               {getVenueStatus(weeklyForecast["2"]?.average)}
             </div>
 
-            <div className="shadow-xl p-3">
+            <div className="shadow-xl p-3 flex flex-col">
+              <p className="text-center">{new Date(weeklyForecast["3"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["3"]?.date}</p>
+              <span className="border-b-2 border-b-orange-400 flex-1"></span>
               {dayForecast && <p className="text-center">Forecast</p>}
               <div className="text-center">
                 {!weeklyForecast["3"]?.date && <p className="text-center">Loading forecast..</p>}
@@ -446,8 +452,10 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               </div>
               {getVenueStatus(weeklyForecast["3"]?.average)}
             </div>
-            <div className="shadow-xl p-3">
+            <div className="shadow-xl p-3 flex flex-col">
+              <p className="text-center">{new Date(weeklyForecast["4"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["4"]?.date}</p>
+              <span className="border-b-2 border-b-orange-400 flex-1"></span>
               {dayForecast && <p className="text-center">Forecast</p>}
               <div className="text-center">
                 {!weeklyForecast["4"]?.date && <p className="text-center">Loading forecast..</p>}
@@ -456,8 +464,10 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               {getVenueStatus(weeklyForecast["4"]?.average)}
             </div>
 
-            <div className="shadow-xl p-3">
+            <div className="shadow-xl p-3 flex flex-col">
+              <p className="text-center">{new Date(weeklyForecast["5"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["5"]?.date}</p>
+              <span className="border-b-2 border-b-orange-400 flex-1"></span>
               {dayForecast && <p className="text-center">Forecast</p>}
               <div className="text-center">
                 {!weeklyForecast["5"]?.date && <p className="text-center">Loading forecast..</p>}
@@ -466,8 +476,10 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               {getVenueStatus(weeklyForecast["5"]?.average)}
             </div>
 
-            <div className="shadow-xl p-3">
+            <div className="shadow-xl p-3 flex flex-col">
+              <p className="text-center">{new Date(weeklyForecast["6"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["6"]?.date}</p>
+              <span className="border-b-2 border-b-orange-400 flex-1"></span>
               {dayForecast && <p className="text-center">Forecast</p>}
               <div className="text-center">
                 {!weeklyForecast["6"]?.date && <p className="text-center">Loading forecast..</p>}
@@ -495,13 +507,15 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
         </span>
       </div>
       <div className="widget flex-1 px-2 py-4 my-2 shadow-xl flex justify-center">
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap p-4">
           <div ref={weatherRef}>{!weather && <p>Loading weather..</p>}</div>
           {weeklyWeather &&
             weeklyWeather.forecast.forecastday.map((day, index) => {
               return (
                 <div key={index + "b"} className="grid grid-cols-1 m-2 w-[130px] shadow-xl p-1">
-                  <p className="cols col-span-1 text-center underline m-0 h-[24px]">{day.date}</p>
+                  <p className="text-center">{new Date(day.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
+                  <p className="cols col-span-1 text-center  m-0 h-[24px]">{day.date}</p>
+                  <span className="border-b-2 border-b-orange-400 flex-1"></span>
                   <div className="h-[80px]">
                     <p className="text-2xl font-bold text-center">{parseFloat(day.hour[timeOfWeather].temp_c).toFixed(1)}&deg;</p>
                     <p title={weather.current?.condition.text} className="line-clamp-2">
@@ -529,11 +543,13 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
 
       <p className="text-xl font-bold p-2">Weekly Holidays</p>
       <div className="widget flex-1 px-2 py-4 my-2 flex justify-center">
-        <div ref={holidayRef} className="flex flex-wrap justify-center shadow-xl items-center gap-4">
+        <div ref={holidayRef} className="flex flex-wrap justify-center shadow-xl items-center gap-4 p-4">
           {!holiday && <p>Loading holiday..</p>}
           {holiday && (
             <div className="flex flex-col justify-evenly h-[100%] shadow-xl p-2">
-              <p className="text-center underline">{holiday[0]}</p>
+              <p className="text-center">{new Date(holiday[0]).toLocaleDateString("en-GB", { weekday: "long" })}</p>
+              <p className="text-center ">{holiday[0]}</p>
+              <span className="border-b-2 border-b-orange-400 flex-1"></span>
               {holiday[1]?.title ? <p className="text-xl">{holiday[1].title}</p> : "No events."}
             </div>
           )}
@@ -543,7 +559,9 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               if (index > 0)
                 return (
                   <div key={index + "a"} className="flex flex-col justify-evenly h-[100%] shadow-xl p-2">
-                    <p className="underline text-center">{day[0]}</p>
+                    <p className="text-center">{new Date(day[0]).toLocaleDateString("en-GB", { weekday: "long" })}</p>
+                    <p className=" text-center">{day[0]}</p>
+                    <span className="border-b-2 border-b-orange-400 flex-1"></span>
                     {day[1]?.title ? <p className="text-xl">{day[1].title}</p> : "No events."}
                   </div>
                 );
