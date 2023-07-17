@@ -165,12 +165,13 @@ const NetProfit = () => {
           <Legend />
           <ReferenceLine y={0} stroke="#000" />
           <Bar dataKey="NetProfit" fill="#413ea0ae" stackId="stack" />
+          <Line type="monotone" dataKey="Trendline" stroke="#ff7300" />
         </BarChart>
       </ResponsiveContainer>
-      <div className="flex flex-col">
-        <p>Total OperatingExpenses: £{totalOperatingExpenses}</p>
-        <p>Total GrossSales: £{totalGrossSales}</p>
-        <p>Total NetProfit: £{totalNetProfit}</p>
+      <div className="flex flex-wrap text-center items-center justify-center">
+        <p className="mx-4">Total OperatingExpenses: £{totalOperatingExpenses}</p>
+        <p className="mx-4">Total GrossSales: £{totalGrossSales}</p>
+        <p className="mx-4">Total NetProfit: £{totalNetProfit}</p>
       </div>
     </>
   );

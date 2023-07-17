@@ -90,7 +90,6 @@ const Auth = () => {
 
   const handlePinInput = (e) => {
     const { name, value } = e.target;
-    console.log("v", value, "n", name);
 
     if (value) {
       handleNumber(value);

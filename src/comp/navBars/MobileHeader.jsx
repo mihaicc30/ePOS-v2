@@ -97,7 +97,7 @@ const MobileHeader = ({dayForecast, setDayForecast}) => {
     
 
     if (localStorage.getItem("isAdmin") !== "1" && forecastRef.current.innerText === "Loading forecast..") {
-      fetchForecast();
+      // fetchForecast();
     }
   }, [weather]);
 

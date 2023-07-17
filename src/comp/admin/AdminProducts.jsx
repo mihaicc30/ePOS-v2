@@ -190,26 +190,24 @@ const AdminProducts = ({ menuitems }) => {
                   <p>Category</p>
                   <input list="cats" type="text" placeholder="Category name.." className="p-2 col-span-2 border-b-2 border-b-black rounded-xl mx-1 my-1" />
                   <datalist id="cats">
-                    {menuitems.map((item) => (
-                      <option key={item.category + "c"} value={item.category}>
-                        {item.category}
-                      </option>
-                    ))}
+                    {[...new Set(menuitems.map((item) => item.category))].map((item, index) => {
+                      return (
+                        <option key={item + "d"} value={item}>
+                          {item}
+                        </option>
+                      );
+                    })}
                   </datalist>
                 </div>
                 <div>
                   <p>Subcategory</p>
                   <input list="subcats" type="text" placeholder="Subcategory name.." className="p-2 col-span-2 border-b-2 border-b-black rounded-xl mx-1 my-1" />
                   <datalist id="subcats">
-                    {menuitems.map((item) => {
-                      const subcategories = [...new Set(item.items.map((item2) => item2.subcategory))];
-
-                      return subcategories.map((subcat, index) => (
-                        <option key={index + "c"} value={subcat}>
-                          {subcat}
-                        </option>
-                      ));
-                    })}
+                    {[...new Set(menuitems.map((item) => item.subcategory))].map((subcat, index) => (
+                      <option key={index + "h"} value={subcat}>
+                        {subcat}
+                      </option>
+                    ))}
                   </datalist>
                 </div>
               </div>
@@ -321,60 +319,53 @@ const AdminProducts = ({ menuitems }) => {
         <>
           {/* categories */}
           <div className={`${searchValue !== "" ? "hidden" : "grid"} `} style={{ gridTemplateColumns: `repeat(${[...new Set(menuitems.map((item) => item.category))].length}, 1fr)` }}>
-            {menuitems.map((item) => {
+            {[...new Set(menuitems.map((item) => item.category))].map((item) => {
               return (
-                <div key={crypto.randomUUID()} onClick={changeMenuType} className={`${menuType === item.category ? "shadow-[inset_0px_4px_2px_black] bg-[--c12]" : "bg-[--c1]"} border-b-2 border-b-black m-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold `}>
-                  {item.category}
+                <div key={crypto.randomUUID()} onClick={changeMenuType} className={`${menuType === item ? "shadow-[inset_0px_4px_2px_black] bg-[--c12]" : "bg-[--c1]"} border-b-2 border-b-black m-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold `}>
+                  {item}
                 </div>
               );
             })}
           </div>
 
           {/* subcategories */}
-          {menuitems.map((item) => {
-            const subcategories = [...new Set(item.items.map((item2) => item2.subcategory))];
-            return (
-              <div key={crypto.randomUUID()} className={`${item.category} transition ${menuType === item.category ? "" : "hidden"} ${searchValue !== "" ? "hidden" : "grid"}`} style={{ gridTemplateColumns: `repeat(${subcategories.length}, 1fr)` }}>
-                {subcategories.map((subcat) => (
-                  <div key={crypto.randomUUID()} onClick={changeMenuType2} className={`${menuType2 === subcat ? "shadow-[inset_0px_4px_2px_black] bg-[--c12]" : " bg-[--c1]"} border-b-2 border-b-black m-1 px-1 py-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold`}>
-                    {subcat}
-                  </div>
-                ))}
-              </div>
-            );
-          })}
+          <div className={`transition grid  ${searchValue !== "" ? "hidden" : "grid"}`} style={{ gridTemplateColumns: `repeat(${[...new Set(menuitems.filter((item) => item.category === menuType).map((item) => item.subcategory))].length}, 1fr)` }}>
+            {[...new Set(menuitems.filter((item) => item.category === menuType).map((item) => item.subcategory))].map((item) => {
+              return (
+                <div key={crypto.randomUUID()} onClick={changeMenuType2} className={` ${menuType2 === item ? "shadow-[inset_0px_4px_2px_black] bg-[--c12]" : " bg-[--c1]"} border-b-2 border-b-black m-1 px-1 py-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold`}>
+                  {item}
+                </div>
+              );
+            })}
+          </div>
 
           {/* subcategories items */}
-          <div className="flex flex-wrap w-[100%] gap-2 p-2 overflow-y-scroll ">
-            {menuitems.flatMap((item) => {
+          <div className="flex flex-row flex-wrap overflow-y-scroll gap-2">
+            {menuitems.map((item, index) => {
               if (searchValue !== "") {
-                return item.items.map((product, index) => {
-                  if (product.name.toLowerCase().includes(searchValue.toLowerCase()))
-                    return (
-                      <div key={`${product.name}-${index}`} onClick={() => handleEdit(product)} className="rounded h-[128px] w-[170px] p-2 flex flex-col shadow-xl transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]">
-                        <span className={`ml-auto px-2 rounded-bl-lg rounded-tr-lg text-end ${getStockColour(product.stock)}`}>{product.stock}</span>
-                        <span className="line-clamp-2 h-[48px] font-bold">{product.name}</span>
-                        <span>£{product.price}</span>
-                        <span className="h-[24px]">{product.allergens}</span>
-                      </div>
-                    );
-                });
-              } else {
-                if (menuType !== item.category) return;
-                return item.items.map((product, index) => {
-                  if (menuType2 !== product.subcategory && menuType2 !== "") return;
+                if (item.name.toLowerCase().includes(searchValue.toLowerCase()))
                   return (
-                    <div key={`${item.name}-${product.name}-${index}`} onClick={() => handleEdit(product)} className={`rounded h-[auto] p-2 w-[170px] flex flex-col shadow-xl transition duration-100 cursor-pointer ${product.stock >= 1 ? "" : "text-gray-300"}`}>
-                      <div className="flex justify-between">
-                        <span>£{product.price}</span>
-
-                        <span className={`ml-auto px-2 rounded-bl-lg rounded-tr-lg text-end ${getStockColour(product.stock)}`}>{product.stock}</span>
-                      </div>
-                      <span className="line-clamp-2 h-[48px] font-bold">{product.name}</span>
-                      <span className="mt-auto h-[24px]">{processAllergenList(product.allergensList)}</span>
+                    <div key={`${item.name}-f`} onClick={() => handleEdit(item)} className="rounded h-[128px] w-[170px] p-2 flex flex-col shadow-xl transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]">
+                      <span className={`ml-auto px-2 rounded-bl-lg rounded-tr-lg text-end ${getStockColour(item.stock)}`}>{item.stock}</span>
+                      <span className="line-clamp-2 h-[48px] font-bold">{item.name}</span>
+                      <span>£{item.price}</span>
+                      <span className="h-[24px]">{item.allergens}</span>
                     </div>
                   );
-                });
+              } else {
+                if (menuType !== item.category) return;
+                if (menuType2 !== item.subcategory && menuType2 !== "") return;
+                return (
+                  <div key={`${item.name}-g`} onClick={() => handleEdit(item)} className={`rounded h-[150px] p-2 w-[170px] flex flex-col shadow-xl transition duration-100 cursor-pointer ${item.stock >= 1 ? "hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]" : "text-gray-300"}`}>
+                    <div className="flex justify-between">
+                      <span>£{item.price}</span>
+
+                      <span className={`ml-auto px-2 rounded-bl-lg rounded-tr-lg text-end ${getStockColour(item.stock)}`}>{item.stock}</span>
+                    </div>
+                    <span className="line-clamp-2 h-[48px] font-bold">{item.name}</span>
+                    <span className="mt-auto h-[24px]">{processAllergenList(item.allergensList)}</span>
+                  </div>
+                );
               }
             })}
           </div>

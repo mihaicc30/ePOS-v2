@@ -12,8 +12,6 @@ const AdminStaff = () => {
   };
 
   useEffect(()=>{
-    console.log(searchStaff);
-
   },[searchStaff])
 
   return (
@@ -333,23 +331,25 @@ const AdminStaff = () => {
         </div>
         {/* stats end*/}
 
-        <div className="staffList grid grid-cols-5 w-[100%] gap-12">
-          <div className="staffCard flex flex-col">
+        <div className="staffList grid grid-cols-5 w-[100%] gap-12 p-4">
+          <div className="staffCard shadow-xl flex flex-col">
             <img src={`https://randomuser.me/api/portraits/men/1.jpg`} className="h-[100px] rounded-full aspect-square mx-auto" />
-            <div className="flex flex-col text-xl text-center">
-              <p className="font-bold border-b-[1px]">Mihai Culea</p>
+            <div className="flex flex-col text-xl text-center grow">
+              <p className="font-bold">Mihai Culea</p>
+              <span className=" border-b-[1px] grow"></span>
               <p>Manager</p>
-              <p>Management Team</p>
+              <p>Management</p>
               <p>Full-Time</p>
             </div>
             <button onClick={() => setModal(!modal)} className="mt-auto ml-auto col-span-2 w-[100%] bg-orange-400 p-2 rounded-lg shadow-md border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
               Info ▶
             </button>
           </div>
-          <div className="staffCard flex flex-col">
+          <div className="staffCard shadow-xl flex flex-col">
             <img src={`https://randomuser.me/api/portraits/women/12.jpg`} className="h-[100px] rounded-full aspect-square mx-auto" />
-            <div className="flex flex-col text-xl text-center">
-              <p className="font-bold border-b-[1px]">Ioana Culea</p>
+            <div className="flex flex-col text-xl text-center grow">
+              <p className="font-bold">Ioana Culea</p>
+              <span className=" border-b-[1px] grow"></span>
               <p>Assistant Manager</p>
               <p>Management</p>
               <p>Full-Time</p>
@@ -358,10 +358,11 @@ const AdminStaff = () => {
               Info ▶
             </button>
           </div>
-          <div className="staffCard flex flex-col">
+          <div className="staffCard shadow-xl flex flex-col">
             <img src={`https://randomuser.me/api/portraits/men/13.jpg`} className="h-[100px] rounded-full aspect-square mx-auto" />
-            <div className="flex flex-col text-xl text-center">
-              <p className="font-bold border-b-[1px]">Petrisor Predescu</p>
+            <div className="flex flex-col text-xl text-center grow">
+              <p className="font-bold">Petrisor Predescu</p>
+              <span className=" border-b-[1px] grow"></span>
               <p>Supervisor</p>
               <p>Management</p>
               <p>Full-Time</p>
@@ -370,10 +371,11 @@ const AdminStaff = () => {
               Info ▶
             </button>
           </div>
-          <div className="staffCard flex flex-col">
+          <div className="staffCard shadow-xl flex flex-col">
             <img src={`https://randomuser.me/api/portraits/men/14.jpg`} className="h-[100px] rounded-full aspect-square mx-auto" />
-            <div className="flex flex-col text-xl text-center">
-              <p className="font-bold border-b-[1px]">Cristian Constantin Florea</p>
+            <div className="flex flex-col text-xl text-center grow">
+              <p className="font-bold">Cristian Constantin Florea</p>
+              <span className=" border-b-[1px] grow"></span>
               <p>Barman</p>
               <p>Staff</p>
               <p>Part-Time</p>

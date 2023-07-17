@@ -30,8 +30,7 @@ const MenuLeftSide = ({ lefty, basketItems, setBasketItems, menuitems }) => {
   const handleRemoveItem = (basketItem) => {
     if (basketItem.printed) console.log("dev**to check level access as item is already printed.");
 
-    const itemCategory = menuitems.find((category) => category.category === basketItem.category);
-    const dbitem = itemCategory.items.find((dbitem) => dbitem.name === basketItem.name);
+    const dbitem = menuitems.find((dbitem) => dbitem.name === basketItem.name);
     dbitem.stock += 1;
     const updatedBasketItems = basketItems.filter((bask_item) => bask_item.refID !== basketItem.refID);
     setBasketItems(updatedBasketItems);
@@ -143,7 +142,7 @@ const MenuLeftSide = ({ lefty, basketItems, setBasketItems, menuitems }) => {
                       <TbInfoTriangle className="text-3xl mx-1" />
                     </button>
 
-                    <button className="bg-orange-300 px-2 py-3 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md" onClick={() => handleRemoveItem(menuItem)}>
+                    <button className="bg-red-300 px-2 py-3 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md" onClick={() => handleRemoveItem(menuItem)}>
                       Remove
                     </button>
 
