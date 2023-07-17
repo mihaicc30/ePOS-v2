@@ -147,25 +147,25 @@ const AdminProducts = ({ menuitems }) => {
   };
 
   return (
-    <div className="flex flex-col relative">
+    <div className="flex flex-col overflow-y-auto relative">
       <div className="absolute">
         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme="light" />
       </div>
       {modal && (
         <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModal(!modal) : null)}>
           <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
-            <button className="absolute top-0 left-0 p-4 text-3xl animate-fadeUP1" onClick={() => setModal(!modal)}>
+            <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1" onClick={() => setModal(!modal)}>
               ◀ Cancel
             </button>
-            <button className="absolute bottom-0 left-0 p-4 text-3xl animate-fadeUP1 border-y-red-400 border-y-2" onClick={() => console.log("dev**will remove button when item is fetch from the databse and will have an id i can check with to hide the button :)")}>
+            <button className="absolute bottom-0 left-0 p-4 text-xl animate-fadeUP1 border-y-red-400 border-y-2" onClick={() => console.log("dev**will remove button when item is fetch from the databse and will have an id i can check with to hide the button :)")}>
               ◀ Delete
             </button>
-            <button className="absolute top-0 right-0 p-4 text-3xl animate-fadeUP1 border-y-green-400 border-y-2" onClick={handleSave}>
+            <button className="absolute top-0 right-0 p-4 text-xl animate-fadeUP1 border-y-green-400 border-y-2" onClick={handleSave}>
               Save ▶
             </button>
             <img src={"../." + modalData.img} className="h-[100px] w-[100%]" style={{ objectFit: "cover", overflow: "hidden" }} onClick={() => console.log("dev**to create..")} />
 
-            <div className="overflow-auto px-2">
+            <div className="overflow-auto px-2 w-[70%]">
               <div className="flex pr-4">
                 £<input className="ml-auto text-end pr-4 text-xl" type="number" defaultValue={modalData.price.toFixed(2)} />
               </div>
@@ -278,40 +278,47 @@ const AdminProducts = ({ menuitems }) => {
                 <p className="inline-flex gap-4 text-xl">Vegetarians {modalData.allergensList.Meat ? <AiOutlineMinusCircle className="fill-red-400 text-3xl" /> : <BsCheck2Circle className="fill-green-400 text-3xl" />}</p>
                 <p className="inline-flex gap-4 text-xl">Vegans {modalData.allergensList.Meat || modalData.allergensList.Milk || modalData.allergensList.Egg || modalData.allergensList.Fish || modalData.allergensList.Crustaceans ? <AiOutlineMinusCircle className="fill-red-400 text-3xl" /> : <BsCheck2Circle className="fill-green-400 text-3xl" />}</p>
               </div>
+
+              <p className="text-xl text-center pb-4 mb-4 border-t-4 pt-4 mt-4">Statistics</p>
+
+              <div className="border-b-4 pb-4 mb-4 flex justify-evenly">
+                <p>Menu Item Profitability = (Number of Items Sold x Menu Price) – (Number of Items Sold x Item Portion Cost)</p>
+                <p>item sold along the year chart</p>
+              </div>
             </div>
           </div>
         </div>
       )}
       <p className="text-xl font-bold p-2 underline">Products</p>
-      <div className="grow flex flex-wrap flex-col">
-        <>
-          <div className="relative flex  mr-4 items-center max-[350px]:flex-wrap  max-[350px]:justify-center">
-            <button onClick={handleAdd} className={`p-2 bg-green-400 rounded-xl shadow-xl border-b-2 border-b-black transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] active:shadow-[inset_0px_4px_2px_black]`}>
-              Add New
-            </button>
-            <div className="relative grow mx-4 overflow-hidden">
-              <input type="text" placeholder="Search..." className="w-[100%] mx-auto pl-10 pr-10 py-2 my-2 rounded" value={searchValue} onChange={handleInputChange} />
-              <span className="absolute top-[28px] left-2 -translate-y-3">🔍</span>
-              <button
-                onClick={() => setSearchValue("")}
-                className={`absolute top-[28px] right-5 -translate-y-3 ${searchValue ? "" : "hidden"}
+      <div className="relative flex  mr-4 items-center max-[350px]:flex-wrap  max-[350px]:justify-center">
+        <button onClick={handleAdd} className={`p-2 bg-green-400 rounded-xl shadow-xl border-b-2 border-b-black transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] active:shadow-[inset_0px_4px_2px_black]`}>
+          Add New
+        </button>
+        <div className="relative grow mx-4">
+          <input type="text" placeholder="Search..." className="w-[100%] mx-auto pl-10 pr-10 py-2 my-2 rounded" value={searchValue} onChange={handleInputChange} />
+          <span className="absolute top-[28px] left-2 -translate-y-3">🔍</span>
+          <button
+            onClick={() => setSearchValue("")}
+            className={`absolute top-[28px] right-5 -translate-y-3 ${searchValue ? "" : "hidden"}
 									`}>
-                ✖
-              </button>
-            </div>
-            <button
-              disabled={menuType2 === "" && menuType3 === "" && menuType4 === "" && searchValue === ""}
-              onClick={() => {
-                setSearchValue("");
-                setMenuType2("");
-                setMenuType3("");
-                setMenuType4("");
-              }}
-              className={`p-2 ${menuType2 === "" && searchValue === "" && menuType3 === "" && menuType4 === "" ? "bg-[--c3]" : "bg-[--c1]"} rounded-xl shadow-xl border-b-2 border-b-black transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] active:shadow-[inset_0px_4px_2px_black]`}>
-              Clear Filters
-            </button>
-          </div>
+            ✖
+          </button>
+        </div>
+        <button
+          disabled={menuType2 === "" && menuType3 === "" && menuType4 === "" && searchValue === ""}
+          onClick={() => {
+            setSearchValue("");
+            setMenuType2("");
+            setMenuType3("");
+            setMenuType4("");
+          }}
+          className={`p-2 ${menuType2 === "" && searchValue === "" && menuType3 === "" && menuType4 === "" ? "bg-[--c3]" : "bg-[--c1]"} rounded-xl shadow-xl border-b-2 border-b-black transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] active:shadow-[inset_0px_4px_2px_black]`}>
+          Clear Filters
+        </button>
+      </div>
 
+      <div className="flex flex-col overflow-y-auto w-[100%]">
+        <>
           {/* categories */}
           <div className={`${searchValue !== "" ? "hidden" : "grid"} `} style={{ gridTemplateColumns: `repeat(${[...new Set(menuitems.map((item) => item.category))].length}, 1fr)` }}>
             {menuitems.map((item) => {
@@ -338,7 +345,7 @@ const AdminProducts = ({ menuitems }) => {
           })}
 
           {/* subcategories items */}
-          <div className="flex flex-row flex-wrap overflow-y-scroll gap-2 p-2">
+          <div className="flex flex-wrap w-[100%] gap-2 p-2 overflow-y-scroll ">
             {menuitems.flatMap((item) => {
               if (searchValue !== "") {
                 return item.items.map((product, index) => {
@@ -371,8 +378,6 @@ const AdminProducts = ({ menuitems }) => {
               }
             })}
           </div>
-
-          <div className="flex flex-wrap grow content-start overflow-y-scroll"></div>
         </>
       </div>
     </div>

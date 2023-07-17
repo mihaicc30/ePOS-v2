@@ -20,13 +20,14 @@ const AdminForecasts = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
 
   return (
     <div className="flex flex-col">
-      <p className="text-xl font-bold p-2 underline">-Forecasts-</p>
+      <p className="text-xl font-bold p-2">-Forecasts-</p>
 
       <p className="text-xl font-bold p-2">Weekly Forecast</p>
       <div className="flex-1 flex flex-wrap flex-col">
         <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center">
           <div className="flex flex-wrap justify-center items-center gap-4">
             <div className="shadow-xl p-3">
+              <p className="text-center">{new Date(new Date().toISOString().split("T")[0]).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               {dayForecast && <p className="text-center">{new Date().toISOString().split("T")[0]}</p>}
               {dayForecast && <p className="text-center">Forecast</p>}
               <div ref={forecastRef} className="text-center">
@@ -37,6 +38,7 @@ const AdminForecasts = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
             </div>
 
             <div className="shadow-xl p-3">
+              <p className="text-center">{new Date(weeklyForecast["1"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["1"]?.date}</p>
               {dayForecast && <p className="text-center">Forecast</p>}
               <div className="text-center">
@@ -46,6 +48,7 @@ const AdminForecasts = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               {getVenueStatus(weeklyForecast["1"]?.average)}
             </div>
             <div className="shadow-xl p-3">
+              <p className="text-center">{new Date(weeklyForecast["2"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["2"]?.date}</p>
               {dayForecast && <p className="text-center">Forecast</p>}
               <div className="text-center">
@@ -56,6 +59,7 @@ const AdminForecasts = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
             </div>
 
             <div className="shadow-xl p-3">
+              <p className="text-center">{new Date(weeklyForecast["3"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["3"]?.date}</p>
               {dayForecast && <p className="text-center">Forecast</p>}
               <div className="text-center">
@@ -65,6 +69,7 @@ const AdminForecasts = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               {getVenueStatus(weeklyForecast["3"]?.average)}
             </div>
             <div className="shadow-xl p-3">
+              <p className="text-center">{new Date(weeklyForecast["4"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["4"]?.date}</p>
               {dayForecast && <p className="text-center">Forecast</p>}
               <div className="text-center">
@@ -75,6 +80,7 @@ const AdminForecasts = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
             </div>
 
             <div className="shadow-xl p-3">
+              <p className="text-center">{new Date(weeklyForecast["5"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["5"]?.date}</p>
               {dayForecast && <p className="text-center">Forecast</p>}
               <div className="text-center">
@@ -85,6 +91,7 @@ const AdminForecasts = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
             </div>
 
             <div className="shadow-xl p-3">
+              <p className="text-center">{new Date(weeklyForecast["6"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["6"]?.date}</p>
               {dayForecast && <p className="text-center">Forecast</p>}
               <div className="text-center">
@@ -99,14 +106,14 @@ const AdminForecasts = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
 
       <p className="text-xl font-bold p-2">Weekly Sales Target</p>
       <div className="flex-1 flex flex-wrap flex-col">
-        <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center flex-wrap">
+        <div className="widget grid grid-cols-7 p-2 m-1 shadow-xl">
           <div className="shadow-xl p-2 flex flex-col">
             <p className="text-xl text-center">Sunday</p>
             <div className="flex p-2">
               <span>£</span>
               <input type="text" className="text-center bg-gray-50" defaultValue={`1111`} />
             </div>
-            <button className="bg-[--c1] p-2 rounded">Update</button>
+            <button className="bg-[--c1] p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Update</button>
           </div>
           <div className="shadow-xl p-2 flex flex-col">
             <p className="text-xl text-center">Monday</p>
@@ -114,7 +121,7 @@ const AdminForecasts = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               <span>£</span>
               <input type="text" className="text-center bg-gray-50" defaultValue={`1111`} />
             </div>
-            <button className="bg-[--c1] p-2 rounded">Update</button>
+            <button className="bg-[--c1] p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Update</button>
           </div>
           <div className="shadow-xl p-2 flex flex-col">
             <p className="text-xl text-center">Tuesday</p>
@@ -122,7 +129,7 @@ const AdminForecasts = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               <span>£</span>
               <input type="text" className="text-center bg-gray-50" defaultValue={`1111`} />
             </div>
-            <button className="bg-[--c1] p-2 rounded">Update</button>
+            <button className="bg-[--c1] p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Update</button>
           </div>
           <div className="shadow-xl p-2 flex flex-col">
             <p className="text-xl text-center">Wednesday</p>
@@ -130,7 +137,7 @@ const AdminForecasts = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               <span>£</span>
               <input type="text" className="text-center bg-gray-50" defaultValue={`1111`} />
             </div>
-            <button className="bg-[--c1] p-2 rounded">Update</button>
+            <button className="bg-[--c1] p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Update</button>
           </div>
           <div className="shadow-xl p-2 flex flex-col">
             <p className="text-xl text-center">Thursday</p>
@@ -138,7 +145,7 @@ const AdminForecasts = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               <span>£</span>
               <input type="text" className="text-center bg-gray-50" defaultValue={`1111`} />
             </div>
-            <button className="bg-[--c1] p-2 rounded">Update</button>
+            <button className="bg-[--c1] p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Update</button>
           </div>
           <div className="shadow-xl p-2 flex flex-col">
             <p className="text-xl text-center">Friday</p>
@@ -146,7 +153,7 @@ const AdminForecasts = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               <span>£</span>
               <input type="text" className="text-center bg-gray-50" defaultValue={`1111`} />
             </div>
-            <button className="bg-[--c1] p-2 rounded">Update</button>
+            <button className="bg-[--c1] p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Update</button>
           </div>
           <div className="shadow-xl p-2 flex flex-col">
             <p className="text-xl text-center">Saturday</p>
@@ -154,7 +161,7 @@ const AdminForecasts = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               <span>£</span>
               <input type="text" className="text-center bg-gray-50" defaultValue={`1111`} />
             </div>
-            <button className="bg-[--c1] p-2 rounded">Update</button>
+            <button className="bg-[--c1] p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Update</button>
           </div>
         </div>
       </div>

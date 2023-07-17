@@ -13,7 +13,6 @@ const AdminReceipts = () => {
         const query = await fetch(`${import.meta.env.VITE_API}receipts-pos`, {
           method: "POST",
           headers: {
-            
             "Content-Type": "application/json",
             "Access-Control-Allow-Credentials": true,
           },
@@ -43,11 +42,10 @@ const AdminReceipts = () => {
     return Array.from(months).filter((month) => month);
   };
 
-
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col grow  overflow-y-hidden">
       <p className="text-xl font-bold p-2 underline">Receipts</p>
-      <div className="basis-[80%] bg-[--c60] z-10 overflow-y-scroll px-2">
+      <div className="basis-[100%] bg-[--c60] z-10 px-2  overflow-y-auto">
         <div className="relative w-[100%] flex">
           <input ref={searchInputRef} name="venuesearchinput" type="text" placeholder="Receipt number..." className="w-[98%] mx-auto pl-10 pr-10 py-2 my-2 rounded" value={searchReceipts} onChange={(e) => setSearchReceipts(e.target.value)} />
           <span className="absolute top-[28px] left-4 -translate-y-3">🔍</span>
@@ -55,14 +53,6 @@ const AdminReceipts = () => {
             ✖
           </button>
         </div>
-{/* 
-        {receipts.length < 1 && (
-          <div>
-            <p className="text-center my-auto under text-xl">You have no orders. </p>
-          
-          </div>
-        )} */}
-
         {getUniqueYears().map((year) => (
           <details className="pl-1" key={year}>
             <summary className="py-2 border-b-2 bg-[--c12]">{year}</summary>

@@ -4,6 +4,7 @@ import AdminTablePlan from "./AdminTablePlan";
 import AdminProducts from "./AdminProducts";
 import AdminReceipts from "./AdminReceipts";
 import AdminROTA from "./AdminROTA";
+import AdminStaff from "./AdminStaff";
 import AdminPayroll from "./AdminPayroll";
 import AdminSignout from "./AdminSignout";
 
@@ -24,6 +25,7 @@ const Admin = ({ weeklyForecast, setWeeklyForecast, menuitems, dayForecast, setD
         <Route path="/Products" element={<AdminProducts menuitems={menuitems} />} />
         <Route path="/Receipts" element={<AdminReceipts />} />
         <Route path="/ROTA" element={<AdminROTA />} />
+        <Route path="/Staff" element={<AdminStaff />} />
         <Route path="/Payroll" element={<AdminPayroll />} />
         <Route path="/Signout" element={<AdminSignout />} />
 
