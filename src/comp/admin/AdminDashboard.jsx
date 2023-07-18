@@ -4,35 +4,13 @@ import { IoMdRefreshCircle } from "react-icons/io";
 import { TiWeatherCloudy } from "react-icons/ti";
 import { WiHumidity } from "react-icons/wi";
 import { FaRegUserCircle, FaWind } from "react-icons/fa";
-
+import { fetchWeeklyWeather, fetchHoliday } from "../../utils/DataTools";
 import ChartSales from "./AdminComp/ChartSales";
 import NetProfit from "./AdminComp/NetProfit";
 
-const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeeklyForecast }) => {
-  const [weather, setWeather] = useState(false);
-  const [weeklyWeather, setWeeklyWeather] = useState(false);
-  const [holiday, setHoliday] = useState(false);
-  const [weeklyholiday, setWeeklyHoliday] = useState(false);
-  const [time, setTime] = useState(false);
-
+const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWeeklyForecast, weeklyWeather, setWeeklyWeather }) => {
   const [timeOfWeather, setTimeOfWeather] = useState(12);
-
-  const weatherRef = useRef(null);
-  const holidayRef = useRef(null);
-  const forecastRef = useRef(null);
-
-  useEffect(() => {
-    if (localStorage.getItem("isAdmin") == "1" && weatherRef.current.innerText === "Loading weather..") {
-      fetchWeather();
-      fetchWeeklyWeather();
-    }
-  }, [timeOfWeather]);
-
-  useEffect(() => {
-    if (localStorage.getItem("isAdmin") == "1" && holidayRef.current.innerText === "Loading holiday..") {
-      fetchHoliday();
-    }
-  }, []);
+  const [time, setTime] = useState(false);
 
   const getVenueStatus = (day) => {
     if (!day) return <AiOutlineLoading3Quarters className="animate-spin mx-auto text-xl" />;
@@ -46,99 +24,39 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
     }
   };
 
-  const fetchWeather = async () => {
-    try {
-      const response = await fetch("https://api.weatherapi.com/v1/current.json?key=df0973195a8141f99d8195727231207&q=worcester%20uk&aqi=no");
-      const data = await response.json();
-      setWeather(data);
-    } catch (error) {
-      console.error("Error fetching weather:", error);
-    }
+  const reloadWeeklyForecast = () => {
+    localStorage.setItem("forecast7", "false");
+    setWeeklyForecast({
+      0: { date: null, average: null },
+      1: { date: null, average: null },
+      2: { date: null, average: null },
+      3: { date: null, average: null },
+      4: { date: null, average: null },
+      5: { date: null, average: null },
+      6: { date: null, average: null },
+    });
+    fetchForecastWeek();
   };
 
-  const fetchWeeklyWeather = async () => {
-    try {
-      const response = await fetch("http://api.weatherapi.com/v1/forecast.json?key=df0973195a8141f99d8195727231207&q=worcester%20uk&days=7&aqi=no&alerts=no");
-      const data = await response.json();
-      setWeeklyWeather(data);
-    } catch (error) {
-      console.error("Error fetching weather:", error);
-    }
-  };
-
-  const fetchHoliday = async () => {
-    try {
-      const response = await fetch("https://www.gov.uk/bank-holidays.json");
-      const data = (await response.json())["england-and-wales"].events;
-      let todaysDate = new Date();
-
-      let formattedDate = todaysDate.toISOString().split("T")[0];
-      const event = data.find((event) => event.date === formattedDate);
-
-      let currentDate = new Date();
-      let holidays = [];
-      for (let i = 0; i < 7; i++) {
-        let formattedDate = currentDate.toISOString().split("T")[0];
-        const event = data.find((event) => event.date === formattedDate);
-        holidays.push([formattedDate, event]);
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-
-      setWeeklyHoliday(holidays);
-      setHoliday([formattedDate, event]);
-    } catch (error) {
-      console.error("Error fetching weather:", error);
-    }
-  };
-
-  const fetchForecast = async () => {
-    if (!weather) return;
-    if (localStorage.getItem("forecast1") === "true") return;
-    localStorage.setItem("forecast1", true);
-    setTimeout(async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API}forecast`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Credentials": true,
-          },
-          body: JSON.stringify({
-            cloudy: weather.current.cloud,
-            humidity: weather.current.humidity,
-            windspeed: weather.current.wind_mph,
-            temp: weather.current.temp_c,
-            daytype: new Date().getDay(),
-            isholiday: holiday[1]?.title ? 1 : 0,
-          }),
-        });
-        const data = await response.json();
-        setDayForecast(data.average);
-      } catch (error) {
-        console.error("Error fetching weather:", error);
-      }
-    }, 1111);
-  };
-
-  const fetchForecastWeek = async (n) => {
-    if (!weather) return;
-    if (!weeklyWeather) return;
-    if (localStorage.getItem("forecast7") === "true") return;
+  
+  const fetchForecastWeek = async () => {
+    if(!weeklyWeather) return
+    if (localStorage.getItem("forecast7") === "true" || !localStorage.getItem("forecast7")) return;
     localStorage.setItem("forecast7", true);
 
-    for (let n = 1; n < 7; n++) {
+    for (let n = 0; n < 7; n++) {
       let dayt = (new Date().getDay() + n) % 7;
 
       setTimeout(async () => {
         let tempz = {
-          cloudy: weeklyWeather.forecast.forecastday[`${n - 1}`].hour[12].cloud,
-          humidity: weeklyWeather.forecast.forecastday[`${n - 1}`].hour[12].humidity,
-          windspeed: weeklyWeather.forecast.forecastday[`${n - 1}`].hour[12].wind_mph,
-          temp: weeklyWeather.forecast.forecastday[`${n - 1}`].hour[12].temp_c,
+          cloudy: weeklyWeather.forecast.forecastday[`${n}`].hour[12].cloud,
+          humidity: weeklyWeather.forecast.forecastday[`${n}`].hour[12].humidity,
+          windspeed: weeklyWeather.forecast.forecastday[`${n}`].hour[12].wind_mph,
+          temp: weeklyWeather.forecast.forecastday[`${n}`].hour[12].temp_c,
           daytype: dayt,
-          isholiday: weeklyholiday[`${n - 1}`]?.title ? 1 : 0,
+          isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
         };
-        console.log(`calling api with this data:`, tempz);
+        console.log(`calling forecast api with this data:`, tempz);
         try {
           const response = await fetch(`${import.meta.env.VITE_API}forecast-quick`, {
             method: "POST",
@@ -147,12 +65,12 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               "Access-Control-Allow-Credentials": true,
             },
             body: JSON.stringify({
-              cloudy: weeklyWeather.forecast.forecastday[n - 1].hour[12].cloud,
-              humidity: weeklyWeather.forecast.forecastday[n - 1].hour[12].humidity,
-              windspeed: weeklyWeather.forecast.forecastday[n - 1].hour[12].wind_mph,
-              temp: weeklyWeather.forecast.forecastday[n - 1].hour[12].temp_c,
+              cloudy: weeklyWeather.forecast.forecastday[n].hour[12].cloud,
+              humidity: weeklyWeather.forecast.forecastday[n].hour[12].humidity,
+              windspeed: weeklyWeather.forecast.forecastday[n].hour[12].wind_mph,
+              temp: weeklyWeather.forecast.forecastday[n].hour[12].temp_c,
               daytype: dayt,
-              isholiday: holiday[1]?.title ? 1 : 0,
+              isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
             }),
           });
           const data = await response.json();
@@ -170,34 +88,10 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
         } catch (error) {
           console.error("Error fetching weather:", error);
         }
-      }, 1111);
+      }, 500);
     }
   };
-
-  useEffect(() => {
-    const isAdmin = localStorage.getItem("isAdmin") === "1";
-    const isForecastLoading = forecastRef.current.innerText === "Loading forecast..";
-
-    if (isAdmin && isForecastLoading) fetchForecast();
-    if (!weeklyForecast["1"]?.date) reloadWeeklyForecast();
-  }, [weather]);
-
-  const reloadWeeklyForecast = () => {
-    setWeeklyForecast({
-      1: { date: null, average: null },
-      2: { date: null, average: null },
-      3: { date: null, average: null },
-      4: { date: null, average: null },
-      5: { date: null, average: null },
-      6: { date: null, average: null },
-    });
-    fetchForecastWeek();
-  };
-
-  const resetForecastQuery = () => {
-    localStorage.setItem("forecast1", "false");
-    localStorage.setItem("forecast7", "false");
-  };
+  
   const getDaysTillPayday = () => {
     const payDay = 15;
     const currentDate = new Date();
@@ -215,8 +109,10 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
 
     return daysUntilPay;
   };
+
   // https://www.touchbistro.com/blog/21-restaurant-metrics-and-how-to-calculate-them/
   // just an usefull link https://recharts.org/en-US/examples/BrushBarChart
+
   return (
     <div className="flex flex-col gap-4 overflow-y-auto relative">
       <p className="text-xl font-bold p-2 ">-Dashboard-</p>
@@ -243,23 +139,17 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               <p className="text-xl font-bold p-2 text-center whitespace-nowrap">Today's Forecast</p>
               <button
                 onClick={() => {
-                  resetForecastQuery();
-                  setDayForecast(false);
-                  fetchForecast();
                   reloadWeeklyForecast();
                 }}>
                 <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-xl rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition" />
               </button>
-              <div className="p-3 flex flex-col">
-                <p className="text-center">{new Date(new Date().toISOString().split("T")[0]).toLocaleDateString("en-GB", { weekday: "long" })}</p>
-                {dayForecast && <p className="text-center">{new Date().toISOString().split("T")[0]}</p>}
-                <span className="border-b-2 border-b-orange-400 flex-1"></span>
-                {dayForecast && <p className="text-center">Forecast</p>}
-                <div ref={forecastRef} className="text-center">
-                  {!dayForecast && <p className="text-center">Loading forecast..</p>}
-                  {dayForecast && <p className={`text-center font-[600] text-xl ${dayForecast > 5000 ? "text-green-400" : dayForecast < 1500 ? "text-red-400" : "text-yellow-500"} `}>£{dayForecast}</p>}
-                </div>
-                {getVenueStatus(dayForecast)}
+
+              <div className="shadow-xl p-3">
+                <p className="text-center">{new Date(weeklyForecast["0"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
+                <p className="text-center"> {weeklyForecast["0"]?.date}</p>
+                <p className="text-center">Forecast</p>
+                <div className="text-center">{weeklyForecast["0"]?.date && <p className={`text-center font-[600] text-xl ${weeklyForecast["0"]?.average > 5000 ? "text-green-400" : weeklyForecast["0"]?.average < 1500 ? "text-red-400" : "text-yellow-500"} `}>£{weeklyForecast["0"]?.average}</p>}</div>
+                {getVenueStatus(weeklyForecast["0"]?.average)}
               </div>
             </div>
           </div>
@@ -879,22 +769,20 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
               </svg>
             </span>
             <p className="text-xl font-bold">Weekly Holidays</p>
-            <div ref={holidayRef} className="grid grid-cols-1 shadow-xlp-4">
-              {!holiday && <p>Loading holiday..</p>}
-              {holiday &&
-                weeklyholiday.map((item, index) => {
-                  if (item[1]) {
-                    return (
-                      <div key={index + "a"} className="flex flex-col justify-evenly my-2">
-                        <p>{new Date(item[0]).toLocaleDateString("en-GB", { weekday: "long" })}</p>
-                        <p>{item[1].date}</p>
-                        <span className="border-b-2 border-b-orange-400 flex-1"></span>
-                        <p className="text-xl">{item[1].title}</p>
-                      </div>
-                    );
-                  }
-                })}
-              {holiday && !weeklyholiday.every((item) => item[1]) ? <p className="text-center">No official holiday in the next 7 days.</p> : null}
+            <div className="grid grid-cols-1 shadow-xlp-4">
+              {weeklyholiday.map((item, index) => {
+                if (item[1]) {
+                  return (
+                    <div key={index + "a"} className="flex flex-col justify-evenly my-2">
+                      <p>{new Date(item[0]).toLocaleDateString("en-GB", { weekday: "long" })}</p>
+                      <p>{item[1].date}</p>
+                      <span className="border-b-2 border-b-orange-400 flex-1"></span>
+                      <p className="text-xl">{item[1].title}</p>
+                    </div>
+                  );
+                }
+              })}
+              {!weeklyholiday.every((item) => item[1]) ? <p className="text-center">No official holiday in the next 7 days.</p> : null}
             </div>
           </div>
         </div>
@@ -917,7 +805,6 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
         </div>
         <div className="widget flex-1 px-2 py-4 my-2 shadow-xl flex justify-center">
           <div className="flex flex-wrap p-4 justify-center">
-            <div ref={weatherRef}>{!weather && <p>Loading weather..</p>}</div>
             {weeklyWeather &&
               weeklyWeather.forecast.forecastday.map((day, index) => {
                 return (
@@ -927,9 +814,7 @@ const AdminDashboard = ({ dayForecast, setDayForecast, weeklyForecast, setWeekly
                     <span className="border-b-2 border-b-orange-400 flex-1"></span>
                     <div className="h-[80px]">
                       <p className="text-2xl font-bold text-center">{parseFloat(day.hour[timeOfWeather].temp_c).toFixed(1)}&deg;</p>
-                      <p title={weather.current?.condition.text} className="line-clamp-2">
-                        {day.day.condition.text}
-                      </p>
+                      <p className="line-clamp-2">{day.day.condition.text}</p>
                     </div>
                     <div className=" mt-auto">
                       <p className="flex flex-col">

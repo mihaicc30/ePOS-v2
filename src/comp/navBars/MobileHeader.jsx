@@ -13,10 +13,7 @@ import { IoMdRefreshCircle } from "react-icons/io";
 import { TiWeatherCloudy } from "react-icons/ti";
 import { WiHumidity } from "react-icons/wi";
 
-const MobileHeader = ({dayForecast, setDayForecast}) => {
-  const weatherRef = useRef(null);
-  const holidayRef = useRef(null);
-  const forecastRef = useRef(null);
+const MobileHeader = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, weeklyWeather }) => {
   const navigate = useNavigate();
   const loc = useLocation();
   const [activeIndex, setActiveIndex] = useState("Menu");
@@ -26,80 +23,78 @@ const MobileHeader = ({dayForecast, setDayForecast}) => {
   const [holiday, setHoliday] = useState(false);
   const [time, setTime] = useState(false);
 
+  const reloadWeeklyForecast = () => {
+    localStorage.setItem("forecast7", "false");
+    setWeeklyForecast({
+      0: { date: null, average: null },
+      1: { date: null, average: null },
+      2: { date: null, average: null },
+      3: { date: null, average: null },
+      4: { date: null, average: null },
+      5: { date: null, average: null },
+      6: { date: null, average: null },
+    });
+    fetchForecastWeek();
+  };
+
+  const fetchForecastWeek = async () => {
+    if (!weeklyWeather) return;
+    if (localStorage.getItem("forecast7") === "true" || !localStorage.getItem("forecast7")) return;
+    localStorage.setItem("forecast7", true);
+
+    for (let n = 0; n < 7; n++) {
+      let dayt = (new Date().getDay() + n) % 7;
+
+      setTimeout(async () => {
+        let tempz = {
+          cloudy: weeklyWeather.forecast.forecastday[`${n}`].hour[12].cloud,
+          humidity: weeklyWeather.forecast.forecastday[`${n}`].hour[12].humidity,
+          windspeed: weeklyWeather.forecast.forecastday[`${n}`].hour[12].wind_mph,
+          temp: weeklyWeather.forecast.forecastday[`${n}`].hour[12].temp_c,
+          daytype: dayt,
+          isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
+        };
+        console.log(`calling forecast api with this data:`, tempz);
+        try {
+          const response = await fetch(`${import.meta.env.VITE_API}forecast-quick`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify({
+              cloudy: weeklyWeather.forecast.forecastday[n].hour[12].cloud,
+              humidity: weeklyWeather.forecast.forecastday[n].hour[12].humidity,
+              windspeed: weeklyWeather.forecast.forecastday[n].hour[12].wind_mph,
+              temp: weeklyWeather.forecast.forecastday[n].hour[12].temp_c,
+              daytype: dayt,
+              isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
+            }),
+          });
+          const data = await response.json();
+
+          const currentDate = new Date();
+          currentDate.setDate(currentDate.getDate() + n);
+          const year = currentDate.getFullYear();
+          const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+          const day = String(currentDate.getDate()).padStart(2, "0");
+
+          setWeeklyForecast((prevState) => ({
+            ...prevState,
+            [n]: { date: `${year}-${month}-${day}`, average: data.average },
+          }));
+        } catch (error) {
+          console.error("Error fetching weather:", error);
+        }
+      }, 500);
+    }
+  };
+
   useEffect(() => {
     getUser(setUser);
   }, [window.location.pathname]);
 
   useEffect(() => {}, [user]);
-
-  useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const response = await fetch("https://api.weatherapi.com/v1/current.json?key=df0973195a8141f99d8195727231207&q=worcester%20uk&aqi=no");
-        const data = await response.json();
-        setWeather(data);
-      } catch (error) {
-        console.error("Error fetching weather:", error);
-      }
-    };
-
-    const fetchHoliday = async () => {
-      try {
-        const response = await fetch("https://www.gov.uk/bank-holidays.json");
-        const data = (await response.json())["england-and-wales"].events;
-        let todaysDate = new Date();
-        let formattedDate = todaysDate.toISOString().split("T")[0];
-        const event = data.find((event) => event.date === formattedDate);
-        setHoliday([formattedDate, event]);
-      } catch (error) {
-        console.error("Error fetching weather:", error);
-      }
-    };
-
-    if (localStorage.getItem("isAdmin") !== "1" && weatherRef.current.innerText === "Loading weather..") {
-      fetchWeather();
-    }
-
-    if (localStorage.getItem("isAdmin") !== "1" && holidayRef.current.innerText === "Loading holiday..") {
-      fetchHoliday();
-    }
-  }, []);
-
-  const fetchForecast = async () => {
-    setTimeout(async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API}forecast`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Credentials": true,
-          },
-          body: JSON.stringify({
-            cloudy: weather.current.cloud,
-            humidity: weather.current.humidity,
-            windspeed: weather.current.wind_mph,
-            temp: weather.current.temp_c,
-            daytype: new Date().getDay(),
-            isholiday: holiday[1]?.title ? 1 : 0,
-          }),
-        });
-        const data = await response.json();
-        console.log(data);
-        setDayForecast(data.average);
-      } catch (error) {
-        console.error("Error fetching weather:", error);
-      }
-    }, 1111);
-  };
-
-  useEffect(() => {
-    if (!weather) return;
-    
-
-    if (localStorage.getItem("isAdmin") !== "1" && forecastRef.current.innerText === "Loading forecast..") {
-      // fetchForecast();
-    }
-  }, [weather]);
 
   const handleDivClick = (index) => {
     setActiveIndex(index);
@@ -119,12 +114,10 @@ const MobileHeader = ({dayForecast, setDayForecast}) => {
     };
   }, []);
 
-  const getVenueStatus = () => {
-    if (!dayForecast) return <AiOutlineLoading3Quarters className="animate-spin mx-auto text-xl" />;
-
-    if (dayForecast > 5000) {
+  const getVenueStatus = (AVG) => {
+    if (AVG > 5000) {
       return <p className="text-center">Busy</p>;
-    } else if (dayForecast < 1500) {
+    } else if (AVG < 1500) {
       return <p className="text-center">Quiet</p>;
     } else {
       return <p className="text-center">Average</p>;
@@ -133,64 +126,56 @@ const MobileHeader = ({dayForecast, setDayForecast}) => {
 
   return (
     <div className="MobileHeader basis-[10%] flex min-sm:gap-4 bg-[--c30] min-sm:py-4 relative max-sm:flex-col">
-      {localStorage.getItem("isAdmin") !== "1" && (
+      {localStorage.getItem("isAdmin") !== true && (
         <>
           <div className="flex items-center text-5xl border-r-2 pr-2 mr-2 ">
             <p>{time}</p>
           </div>
-          <div ref={holidayRef} className="border-r-2 pr-2 mr-2">
-            {!holiday && <p>Loading holiday..</p>}
-            {holiday && (
-              <div className="flex flex-col justify-evenly h-[100%]">
-                <p className="text-xl">{holiday[0]}</p>
-                {holiday[1]?.title ? <p className="text-xl">{holiday[1].title}</p> : "No events today."}
-              </div>
-            )}
-          </div>
-          <div ref={weatherRef}>
-            {!weather && <p>Loading weather..</p>}
-            {weather && (
-              <div className="flex gap-4">
-                <div className="text-2xl p-1 flex flex-col justify-evenly border-r-2 pr-2 mr-2">
-                  <p>{weather.location.country}</p>
-                  <p>{weather.location.name}</p>
-                </div>
-                <div>
-                  <p className="text-5xl font-bold">{weather.current.temp_c}&deg;</p>
-                  <p>{weather.current.condition.text}</p>
-                </div>
-                <div>
-                  <p className="flex flex-col">
-                    <span className="grid grid-cols-[20px_1fr] gap-1">
-                      <TiWeatherCloudy className="text-2xl" /> {weather.current.cloud}%
-                    </span>
-                    <span className="grid grid-cols-[20px_1fr] gap-1">
-                      <WiHumidity className="text-2xl" /> {weather.current.humidity}%
-                    </span>
-                    <span className="grid grid-cols-[20px_1fr] gap-1">
-                      <FaWind className="text-xl" /> {weather.current.wind_mph}mph
-                    </span>
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="flex flex-nowrap justify-center items-center border-r-2 pr-2 mr-2 border-l-2 pl-2 ml-2 ">
-            <div>
-              <p className="text-center">Forecast</p>
-              <div ref={forecastRef} className="text-center">
-                {!dayForecast && <p className="text-center">Loading forecast..</p>}
-                {dayForecast && <p className={`text-center font-[600] text-xl ${dayForecast > 5000 ? "text-green-400" : dayForecast < 1500 ? "text-red-400" : "text-yellow-500"} `}>£{dayForecast}</p>}
-              </div>
-              {getVenueStatus()}
+          <div className="border-r-2 pr-2 mr-2">
+            <div className="flex flex-col justify-evenly h-[100%]">
+            {weeklyholiday && <p className="text-xl">{weeklyholiday[0][0] || "0"}</p> }
+              {weeklyholiday && weeklyholiday[0][1]?.title ? <p className="text-xl">{weeklyholiday[0][1].title}</p> : "No events today."}
             </div>
-            {dayForecast && <button onClick={()=>{setDayForecast(false);fetchForecast()}}>
-              <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-xl rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition"/>
-            </button> }
+          </div>
+          <div className="flex flex-col justify-center">
+            <div className="flex gap-4">
+              <div className="text-2xl p-1 flex flex-col justify-evenly border-r-2 pr-2 mr-2">
+                <p> {weeklyWeather && weeklyWeather.location.name}</p>
+                <p> {weeklyWeather && weeklyWeather.location.country}</p>
+              </div>
+              <div>
+                <p className="text-5xl font-bold"> {weeklyWeather && weeklyWeather.forecast.forecastday[0].hour[12].temp_c}&deg;</p>
+                <p> {weeklyWeather && weeklyWeather.forecast.forecastday[0].hour[12].condition.text}</p>
+              </div>
+              <div>
+                <p className="flex flex-col">
+                  <span className="grid grid-cols-[20px_1fr] gap-1">
+                    <TiWeatherCloudy className="text-2xl" /> {weeklyWeather && weeklyWeather.forecast.forecastday[0].hour[12].cloud}%
+                  </span>
+                  <span className="grid grid-cols-[20px_1fr] gap-1">
+                    <WiHumidity className="text-2xl" /> {weeklyWeather && weeklyWeather.forecast.forecastday[0].hour[12].humidity}%
+                  </span>
+                  <span className="grid grid-cols-[20px_1fr] gap-1">
+                    <FaWind className="text-xl" /> {weeklyWeather && weeklyWeather.forecast.forecastday[0].hour[12].wind_mph}mph
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-nowrap justify-center items-center border-r-2 pr-2 mr-2 border-l-2 pl-2 ml-2 ">
+            <div className="shadow-xl p-3">
+              <p className="text-center">Forecast</p>
+              <div className="text-center"> {weeklyholiday && weeklyForecast["0"]?.date && <p className={`text-center font-[600] text-xl ${weeklyForecast["0"]?.average > 5000 ? "text-green-400" : weeklyForecast["0"]?.average < 1500 ? "text-red-400" : "text-yellow-500"} `}>£{weeklyForecast["0"]?.average}</p>}</div>
+              {getVenueStatus(weeklyForecast["0"]?.average)}
+            </div>
+            <button onClick={() => reloadWeeklyForecast()}>
+              <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-xl rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition" />
+            </button>
           </div>
         </>
       )}
-      {localStorage.getItem("isAdmin") === "1" && (
+      {localStorage.getItem("isAdmin") == true && (
         <>
           <div className="basis-[10%] flex flex-col text-center text-lg font-semibold">
             <img src="./assets/d956248b8cfe7fe8fa39033b50728bcb.jpg" className="w-[100px] mx-auto" />

@@ -9,42 +9,6 @@ import { BsFacebook } from "react-icons/bs";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { authUser, setVenue } from "../../utils/authUser";
-// mimic db
-const userTable = [
-  {
-    displayName: "Mihai1",
-    email: "alemihai25@gmail.com",
-    autoStore: false,
-    darkMode: false,
-    lefty: false,
-    pin: "111",
-    fingerprint: "",
-    venueID: 1,
-    isAdmin: 1,
-  },
-  {
-    displayName: "Mihai2",
-    email: "alemihai25@gmail.com",
-    autoStore: false,
-    darkMode: false,
-    lefty: false,
-    pin: "222",
-    fingerprint: "",
-    venueID: 1,
-    isAdmin: 0,
-  },
-  {
-    displayName: "Test User",
-    email: "Test@Test.Test",
-    autoStore: false,
-    darkMode: false,
-    lefty: false,
-    pin: "000",
-    fingerprint: "",
-    venueID: 101010,
-    isAdmin: 0,
-  },
-];
 
 const Auth = () => {
   const [user, setUser] = useState(null);
@@ -52,9 +16,30 @@ const Auth = () => {
   const navigate = useNavigate();
   const fp = useRef(null);
   const pinInput = useRef(null);
+  const [userTable, setUserTable] = useState([]);
 
   useEffect(() => {
     pinInput.current.focus();
+    async function getUserTable() {
+      try {
+        const query = await fetch(`http://localhost:3000/posusers`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credentials": true,
+          },
+          body: JSON.stringify({
+            v: import.meta.env.VITE_G,
+          }),
+        });
+        const response = await query.json();
+        console.log("Receied pos users.", new Date().toUTCString());
+        setUserTable(response);
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+    getUserTable();
   }, []);
 
   useEffect(() => {

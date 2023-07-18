@@ -127,7 +127,7 @@ const AdminTablePlan = ({ tables, setTables, draggingIndex, setDraggingIndex, sh
               </button>
             ))}
           </div>
-          {localStorage.getItem("isAdmin") === "1" && (
+          {localStorage.getItem("isAdmin") == true && (
             <div className={`grid grid-cols-7 h-12 text-xl relative m-2 `}>
               <input ref={areaRef} list="areaslist" type="text" placeholder="Area name.." className="p-2 col-span-2 border-b-2 border-b-black rounded-xl mx-1 my-1" />
               <datalist id="areaslist">

@@ -13,6 +13,7 @@ const Signout = ({ user, setUser, setVenueNtable}) => {
       setVenueNtable({ venue: null, table: null });
       navigate("/");
       localStorage.clear();
+      localStorage.setItem('forecast7', "true")
     }, 400);
 
     return () => clearTimeout(timeout);
