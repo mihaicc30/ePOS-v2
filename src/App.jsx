@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import { auth, db, logout } from "./firebase/config.jsx";
 import { Routes, Route, Outlet, NavLink, BrowserRouter } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Routes
 import Layout from "./Layout";
@@ -73,9 +75,9 @@ const App = () => {
   }, []);
 
   // useEffect(() => {
-      // setTimeout(async() => {
-      //   await fetchForecastWeek();
-      // }, 1444);
+  // setTimeout(async() => {
+  //   await fetchForecastWeek();
+  // }, 1444);
   // }, [weeklyWeather]);
 
   useEffect(() => {
@@ -93,7 +95,7 @@ const App = () => {
   };
 
   const fetchForecastWeek = async () => {
-    if(!weeklyWeather) return
+    if (!weeklyWeather) return;
     if (localStorage.getItem("forecast7") === "true" || !localStorage.getItem("forecast7")) return;
     localStorage.setItem("forecast7", true);
 
@@ -150,7 +152,7 @@ const App = () => {
 
     const handleKeyPress = (event) => {
       if (event.key === "F9") {
-        console.log("weeklyholiday", weeklyholiday);
+        console.log("basketItems", basketItems, basketQty);
       }
     };
     window.addEventListener("keydown", handleKeyPress);
@@ -164,8 +166,8 @@ const App = () => {
       <Route path="/" element={<Layout weeklyholiday={weeklyholiday} weeklyForecast={weeklyForecast} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} setWeeklyForecast={setWeeklyForecast} lefty={lefty} setLefty={setLefty} />}>
         <Route path="/" element={<Auth />} />
 
-        <Route path="/admin/*" element={<Admin  weeklyholiday={weeklyholiday} setWeeklyHoliday={setWeeklyHoliday} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} menuitems={menuitems} tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
-        <Route path="/tables" element={<Tables tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
+        <Route path="/admin/*" element={<Admin weeklyholiday={weeklyholiday} setWeeklyHoliday={setWeeklyHoliday} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} menuitems={menuitems} tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
+        <Route path="/tables" element={<Tables setBasketDiscount={setBasketDiscount} basketItems={basketItems} setBasketItems={setBasketItems} tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
 
         <Route path="/menu" element={<Menu lefty={lefty} basketDiscount={basketDiscount} setBasketDiscount={setBasketDiscount} basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} searchValue={searchValue} setSearchValue={setSearchValue} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}></Route>
 
@@ -181,7 +183,7 @@ const App = () => {
         <Route path="/symbol" element={<Symbol />} />
         <Route path="/t&c" element={<TC />} />
 
-        <Route path="/signout" element={<Signout setUser={setUser} setVenueNtable={setVenueNtable} />} />
+        <Route path="/signout" element={<Signout setUser={setUser} setVenueNtable={setVenueNtable} venueNtable={venueNtable} />} />
 
         <Route path="*" element={<Page404 />} />
       </Route>

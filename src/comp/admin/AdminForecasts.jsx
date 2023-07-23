@@ -104,13 +104,14 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
       </div>
 
       <p className="text-xl font-bold p-2">Weekly Sales Target</p>
+      <p className="text-xs">*To be set by general manager/ head office</p>
       <div className="flex-1 flex flex-wrap flex-col">
         <div className="widget grid grid-cols-7 p-2 m-1 shadow-xl">
           <div className="shadow-xl p-2 flex flex-col">
             <p className="text-xl text-center">Sunday</p>
             <div className="flex p-2">
               <span>£</span>
-              <input type="text" className="text-center bg-gray-50" defaultValue={`1111`} />
+              <input type="text" className="bg-gray-50 text-start" defaultValue={`0`} />
             </div>
             <button className="bg-[--c1] p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Update</button>
           </div>
@@ -118,7 +119,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
             <p className="text-xl text-center">Monday</p>
             <div className="flex p-2">
               <span>£</span>
-              <input type="text" className="text-center bg-gray-50" defaultValue={`1111`} />
+              <input type="text" className="bg-gray-50 text-start" defaultValue={`0`} />
             </div>
             <button className="bg-[--c1] p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Update</button>
           </div>
@@ -126,7 +127,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
             <p className="text-xl text-center">Tuesday</p>
             <div className="flex p-2">
               <span>£</span>
-              <input type="text" className="text-center bg-gray-50" defaultValue={`1111`} />
+              <input type="text" className="bg-gray-50 text-start" defaultValue={`0`} />
             </div>
             <button className="bg-[--c1] p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Update</button>
           </div>
@@ -134,7 +135,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
             <p className="text-xl text-center">Wednesday</p>
             <div className="flex p-2">
               <span>£</span>
-              <input type="text" className="text-center bg-gray-50" defaultValue={`1111`} />
+              <input type="text" className="bg-gray-50 text-start" defaultValue={`0`} />
             </div>
             <button className="bg-[--c1] p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Update</button>
           </div>
@@ -142,7 +143,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
             <p className="text-xl text-center">Thursday</p>
             <div className="flex p-2">
               <span>£</span>
-              <input type="text" className="text-center bg-gray-50" defaultValue={`1111`} />
+              <input type="text" className="bg-gray-50 text-start" defaultValue={`0`} />
             </div>
             <button className="bg-[--c1] p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Update</button>
           </div>
@@ -150,7 +151,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
             <p className="text-xl text-center">Friday</p>
             <div className="flex p-2">
               <span>£</span>
-              <input type="text" className="text-center bg-gray-50" defaultValue={`1111`} />
+              <input type="text" className="bg-gray-50 text-start" defaultValue={`0`} />
             </div>
             <button className="bg-[--c1] p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Update</button>
           </div>
@@ -158,7 +159,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
             <p className="text-xl text-center">Saturday</p>
             <div className="flex p-2">
               <span>£</span>
-              <input type="text" className="text-center bg-gray-50" defaultValue={`1111`} />
+              <input type="text" className="bg-gray-50 text-start" defaultValue={`0`} />
             </div>
             <button className="bg-[--c1] p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Update</button>
           </div>

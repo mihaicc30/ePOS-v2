@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
+import BillTimeline from "../modals/BillTimeline";
 
 const AdminReceipts = () => {
   const [receipts, setReceipts] = useState([]);
   const [searchReceipts, setSearchReceipts] = useState("");
   const searchInputRef = useRef(null);
+  const [billTimeline, setBillTimeline] = useState(false);
+  const [billTimelineData, setBillTimelineData] = useState(false);
+  const [billTimelineAdminData, setBillTimelineAdminData] = useState(false);
 
   useEffect(() => {
     searchInputRef.current.focus();
@@ -44,6 +48,7 @@ const AdminReceipts = () => {
 
   return (
     <div className="flex flex-col grow  overflow-y-hidden">
+      <div className="absolute">{billTimeline && <BillTimeline setBillTimeline={setBillTimeline} basketItems={billTimelineData} billTimelineAdminData={billTimelineAdminData}/>}</div>
       <p className="text-xl font-bold p-2 underline">Receipts</p>
       <div className="basis-[100%] bg-[--c60] z-10 px-2  overflow-y-auto">
         <div className="relative w-[100%] flex">
@@ -72,7 +77,18 @@ const AdminReceipts = () => {
                               <p>Address: {receipt.address}</p>
                               <p>Phone: {receipt.phone}</p>
                               <p>Website: {receipt.website}</p>
-                              <p className="font-bold">Date: {receipt.dateTime}</p>
+                              <div className="grid grid-cols-[1fr_100px]">
+                                <p className="font-bold">Date: {new Date(receipt.tableOpenAt).toLocaleString()}</p>
+                                <button
+                                  onClick={() => {
+                                    setBillTimelineData(receipt.items);
+                                    setBillTimelineAdminData(receipt);
+                                    setBillTimeline(!billTimeline);
+                                  }}
+                                  className="bg-[--c1] transition border-b-2 border-b-black rounded-xl mx-1 my-1 active:shadow-inner ">
+                                  Timeline
+                                </button>
+                              </div>
                               <div className="flex flex-1">
                                 <table className="w-[100%]">
                                   <thead>
@@ -86,19 +102,26 @@ const AdminReceipts = () => {
                                   <tbody>
                                     {receipt.items.map((item, itemIndex) => (
                                       <tr key={itemIndex} className="text-center">
-                                        <td className="line-clamp-2 border-2">{item.name}</td>
-                                        <td className="border-2">{item.qty}</td>
-                                        <td className="border-2">£{item.price}</td>
-                                        <td className="border-2">£{(item.qty * item.price).toFixed(2)}</td>
+                                        <td className="line-clamp-2 border-b-2 border-l-2">{item.name}</td>
+                                        <td className="border-b-2 border-l-2 border-r-2">{item.qty}</td>
+                                        <td className="border-b-2 border-l-2 border-r-2">£{item.price.toFixed(2)}</td>
+                                        <td className="border-b-2 border-l-2 border-r-2">£{(item.qty * item.price).toFixed(2)}</td>
                                       </tr>
                                     ))}
                                   </tbody>
                                 </table>
                               </div>
-                              <p>VAT: £{receipt.vat.toFixed(2)}</p>
+                              <p className="font-bold">Subtotal: £{receipt.subtotal.toFixed(2)}</p>
+                              { receipt.discount > 0 &&   <p>Discount: {receipt.discount}%</p> }
                               <p className="font-bold">Total Amount: £{receipt.totalAmount.toFixed(2)}</p>
-                              <p>Payment Method: {receipt.paymentMethod}</p>
-                              <p>Card Number: {receipt.cardNumber}</p>
+                              <p>VAT: £{receipt.vat.toFixed(2)}</p>
+                              <p>
+                                Payment: Cash: £{parseFloat(receipt.paymentMethod[0].cash).toFixed(2)}, Card: £{parseFloat(receipt.paymentMethod[0].card).toFixed(2)}, Voucher: £{parseFloat(receipt.paymentMethod[0].voucher).toFixed(2)}, Deposit: £{parseFloat(receipt.paymentMethod[0].deposit).toFixed(2)}
+                              </p>
+                              <p>
+                                Change: £
+                                {(Math.abs(( parseFloat(receipt.totalAmount) - parseFloat( Object.values(receipt.paymentMethod[0]).reduce((acc, val) => acc + val, 0).toFixed(2))).toFixed(2))).toFixed(2)}
+                              </p>
                             </div>
                           </details>
                         </div>

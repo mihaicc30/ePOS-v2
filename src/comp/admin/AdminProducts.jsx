@@ -154,18 +154,18 @@ const AdminProducts = ({ menuitems }) => {
       {modal && (
         <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModal(!modal) : null)}>
           <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
-            <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1" onClick={() => setModal(!modal)}>
+            <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1 border-b-gray-400 border-b-2" onClick={() => setModal(!modal)}>
               ◀ Cancel
             </button>
-            <button className="absolute bottom-0 left-0 p-4 text-xl animate-fadeUP1 border-y-red-400 border-y-2" onClick={() => console.log("dev**will remove button when item is fetch from the databse and will have an id i can check with to hide the button :)")}>
+            <button className="absolute top-[15%] left-0 p-4 text-xl animate-fadeUP1 border-b-red-400 border-b-2" onClick={() => console.log("dev**will remove button when item is fetch from the databse and will have an id i can check with to hide the button :)")}>
               ◀ Delete
             </button>
-            <button className="absolute top-0 right-0 p-4 text-xl animate-fadeUP1 border-y-green-400 border-y-2" onClick={handleSave}>
-              Save ▶
+            <button className="absolute top-[30%] left-0 p-4 text-xl animate-fadeUP1 border-b-green-400 border-b-2" onClick={handleSave}>
+            ◀ Save
             </button>
             <img src={"../." + modalData.img} className="h-[100px] w-[100%]" style={{ objectFit: "cover", overflow: "hidden" }} onClick={() => console.log("dev**to create..")} />
 
-            <div className="overflow-auto px-2 w-[70%]">
+            <div className="overflow-auto px-2 w-[80%] ml-auto">
               <div className="flex pr-4">
                 £<input className="ml-auto text-end pr-4 text-xl" type="number" defaultValue={modalData.price.toFixed(2)} />
               </div>

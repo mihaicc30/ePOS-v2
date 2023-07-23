@@ -164,7 +164,7 @@ const MobileHeader = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, weekly
           </div>
 
           <div className="flex flex-nowrap justify-center items-center border-r-2 pr-2 mr-2 border-l-2 pl-2 ml-2 ">
-            <div className="shadow-xl p-3">
+            <div>
               <p className="text-center">Forecast</p>
               <div className="text-center"> {weeklyholiday && weeklyForecast["0"]?.date && <p className={`text-center font-[600] text-xl ${weeklyForecast["0"]?.average > 5000 ? "text-green-400" : weeklyForecast["0"]?.average < 1500 ? "text-red-400" : "text-yellow-500"} `}>£{weeklyForecast["0"]?.average}</p>}</div>
               {getVenueStatus(weeklyForecast["0"]?.average)}

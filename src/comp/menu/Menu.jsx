@@ -17,7 +17,6 @@ import MenuLeftSide from "./MenuLeftSide";
 import MenuRightSide from "./MenuRightSide";
 
 const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems, setBasketItems, searchValue, setSearchValue, venues, venueNtable, setVenueNtable }) => {
-  
   const nav = useNavigate();
   const [user, setUser] = useState(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -27,8 +26,40 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
     if (venueNtable.table === "" || !venueNtable.table) return nav("/Tables");
   }, [venueNtable]);
 
+  const handleMenuOpenTable = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API}leaveTable`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
+        },
+        body: JSON.stringify({
+          tableNumber: localStorage.getItem("tableID"),
+          user: { displayName: localStorage.getItem("displayName"), email: localStorage.getItem("email") },
+          venue: localStorage.getItem("venueID"),
+        }),
+      });
+      const data = await response.json();
+
+      setVenueNtable((prevValues) => ({ ...prevValues, table: null }));
+      console.log(data.message);
+    } catch (error) {
+      console.error("Error fetching:", error);
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
+
   const tempDisabled = () => {
-    console.log(isButtonDisabled, "isButtonDisabled");
     if (isButtonDisabled) return;
     setIsButtonDisabled(true);
     handlePrinting();
@@ -111,6 +142,19 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
   };
 
   const handlePrinting = () => {
+    if(basketItems.length < 1) {
+      toast.warn(`There are no items to print.`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+      return
+    }
     let areAllPrinted = basketItems.some((item) => item.printed == false);
     const updatedBasketItems = basketItems.map((item) => {
       if (!item.printed) {
@@ -123,7 +167,6 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
       }
       return item;
     });
-
     setBasketItems(updatedBasketItems);
 
     if (areAllPrinted) {
@@ -151,10 +194,63 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
     }
   };
 
+  
+  useEffect(() => {
+    const waitingTime = setTimeout(async () => {
+      // do query
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API}updateTableBasket`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credentials": true,
+          },
+          body: JSON.stringify({
+            tableNumber: localStorage.getItem("tableID"),
+            user: { displayName: localStorage.getItem("displayName"), email: localStorage.getItem("email") },
+            venue: localStorage.getItem("venueID"),
+            basket: basketItems,
+            tableDiscount: basketDiscount,
+          }),
+        });
+
+        const data = await response.json();
+        if (response.status == 200) {
+          console.log(`Updating basket for table ${localStorage.getItem("tableID")}.`);
+        } else {
+          toast.error(`${data.message}`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching:", error);
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    }, 1500);
+
+    return () => clearTimeout(waitingTime);
+  }, [basketItems, basketDiscount]);
+
   return (
     <>
       <div className="absolute">
-        {billTimeline && <BillTimeline setBillTimeline={setBillTimeline} basketItems={basketItems} />}
+        {billTimeline && <BillTimeline setBillTimeline={setBillTimeline} basketItems={basketItems} venueNtable={venueNtable} venues={venues}/>}
         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme="light" />
       </div>
       <div className={`modal ${modal ? "fixed inset-0 bg-black/70 flex flex-col justify-center items-center z-20 p-4" : "hidden"}`}>
@@ -196,12 +292,7 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
                 <span>Transfer</span>
                 <span>Table</span>
               </button>
-              <button
-                onClick={() => {
-                  setVenueNtable((prevValues) => ({ ...prevValues, table: null }));
-                  console.log("dev**to change table in db");
-                }}
-                className="text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
+              <button onClick={handleMenuOpenTable} className="text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
                 <span>Open</span>
                 <span>Table</span>
               </button>
@@ -231,7 +322,7 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
 
         <div className={`flex ${lefty ? "flex-row-reverse" : ""} justify-end basis-[10%] col-span-2`}>
           {basketDiscount > 0 && <span className={`basis-[10%] border-b-2 border-b-black mr-auto transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-green-400`}>{basketDiscount}% Discount</span>}
-          <button onClick={() => setBillTimeline(!billTimeline)} className={`basis-[10%] items-center border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${parseFloat(basketTotal) <= 0 ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>
+          <button disabled={basketItems.length < 1} onClick={() => setBillTimeline(!billTimeline)} className={`basis-[10%] items-center border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${parseFloat(basketTotal) <= 0 ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>
             View Bill Timeline
           </button>
           <button disabled={parseFloat(basketTotal) <= 0} onClick={() => nav("/Payment")} className={`basis-[10%] items-center border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${parseFloat(basketTotal) <= 0 ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>

@@ -78,6 +78,7 @@ const MenuRightSide = ({ lefty, menuitems, basketItems, setBasketItems }) => {
         addedBy: localStorage.getItem("displayName"),
         datePrinted: false,
       };
+
       setBasketItems([...basketItems, { ...newBasketItem }]);
     }
   };
@@ -134,17 +135,15 @@ const MenuRightSide = ({ lefty, menuitems, basketItems, setBasketItems }) => {
       <div className="flex flex-row flex-wrap overflow-y-scroll gap-2">
         {menuitems.map((item, index) => {
           if (searchValue !== "") {
-
-              if (item.name.toLowerCase().includes(searchValue.toLowerCase()))
-                return (
-                  <div key={`${item.name}-${index}`} onClick={() => handleAddToMenu(item)} className="rounded h-[128px] w-[170px] p-2 flex flex-col shadow-xl transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]">
-                    <span className={`ml-auto px-2 rounded-bl-lg rounded-tr-lg text-end ${getStockColour(item.stock)}`}>{item.stock}</span>
-                    <span className="line-clamp-2 h-[48px] font-bold">{item.name}</span>
-                    <span>£{item.price}</span>
-                    <span className="h-[24px]">{item.allergens}</span>
-                  </div>
-                )
-            
+            if (item.name.toLowerCase().includes(searchValue.toLowerCase()))
+              return (
+                <div key={`${item.name}-${index}`} onClick={() => handleAddToMenu(item)} className="rounded h-[128px] w-[170px] p-2 flex flex-col shadow-xl transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]">
+                  <span className={`ml-auto px-2 rounded-bl-lg rounded-tr-lg text-end ${getStockColour(item.stock)}`}>{item.stock}</span>
+                  <span className="line-clamp-2 h-[48px] font-bold">{item.name}</span>
+                  <span>£{item.price}</span>
+                  <span className="h-[24px]">{item.allergens}</span>
+                </div>
+              );
           } else {
             if (menuType !== item.category) return;
             if (menuType2 !== item.subcategory && menuType2 !== "") return;

@@ -35,6 +35,71 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
   const [paymentTaken, setpaymentTaken] = useState(0);
   const [paymentType, setPaymentType] = useState(null);
 
+  const [paidin, setPaidin] = useState({
+    cash: 0,
+    card: 0,
+    voucher: 0,
+    deposit: 0,
+  });
+
+  useEffect(() => {
+    if (venueNtable.table === "" || !venueNtable.table) return nav("/Tables");
+    if (basketItems.length < 1) return nav("/Menu");
+
+    const getPaidin = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API}getPaidin`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credentials": true,
+          },
+          body: JSON.stringify({
+            tableNumber: localStorage.getItem("tableID") ? localStorage.getItem("tableID") : "signout",
+            user: { displayName: localStorage.getItem("displayName"), email: localStorage.getItem("email") },
+            venue: localStorage.getItem("venueID"),
+          }),
+        });
+
+        const data = await response.json();
+        if (response.status == 200) {
+          setPaidin(data.table.paidin);
+
+          const sumPaidin = parseFloat(
+            Object.values(data.table.paidin)
+              .reduce((acc, val) => acc + val, 0)
+              .toFixed(2)
+          );
+          setpaymentTaken(sumPaidin);
+        } else {
+          toast.error(`${data.message}`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching:", error);
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    };
+    getPaidin();
+  }, []);
+
   useEffect(() => {
     if (venueNtable.table === "" || !venueNtable.table) return nav("/Tables");
     if (basketItems.length < 1) return nav("/Menu");
@@ -49,6 +114,66 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
     setComputedBasket(basketItems);
   }, [basketItems]);
 
+  const generateReceipt = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API}addreceipt`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
+        },
+        body: JSON.stringify({
+          tableNumber: localStorage.getItem("tableID"),
+          user: { displayName: localStorage.getItem("displayName"), email: localStorage.getItem("email") },
+          venue: localStorage.getItem("venueID"),
+          basketTotal,
+          basketDiscount,
+          paymentTaken,
+          paidin,
+        }),
+      });
+
+      const data = await response.json();
+      if (response.status !== 200) {
+        toast.error(`${data.message}`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching:", error);
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
+
+  const handleCheckout = async () => {
+    console.log("Basked is Paid. Generating receipt. Clearing the basket.");
+    await generateReceipt();
+    // setBasketItems([]);
+    // setpaymentTaken(0)
+    // setPaidin({
+    //   cash: 0,
+    //   card: 0,
+    //   voucher: 0,
+    //   deposit: 0,
+    // })
+  };
+
   const handlePaymentType = async (type) => {
     if (type === "cash") {
       setIsCashPressed(true);
@@ -58,7 +183,7 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
       let leftToPay = (parseFloat(basketTotal) - parseFloat(payIntoBill)).toFixed(2);
       let change = -(parseFloat(basketTotal) - parseFloat(payIntoBill)).toFixed(2);
       setChange(change);
-      setPadInput(0)
+      setPadInput(0);
       toast.success(`Payment successful! £${padInput} has been paid. ${leftToPay > 0 ? `£${leftToPay} are left to pay .` : ``}`, {
         position: "top-right",
         autoClose: 1000,
@@ -69,9 +194,11 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
         progress: undefined,
         theme: "light",
       });
+      submitPayment(type, payingAmount);
       if (leftToPay <= 0) {
-        console.log("Basked is Paid. Clearing the basket.");
-        setBasketItems([]);
+        handleCheckout();
+        // console.log("Basked is Paid. Clearing the basket.");
+        // setBasketItems([]);
       }
       setTimeout(() => {
         setIsCashPressed(false);
@@ -105,7 +232,7 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
         const change = -(parseFloat(basketTotal) - parseFloat(payIntoBill)).toFixed(2);
         setChange(change);
         setIsCardPressed(false);
-        setPadInput(0)
+        setPadInput(0);
         toast.success(`Success! Payment of £${padInput} has been made. ${leftToPay > 0 ? `£${leftToPay} are left to pay.` : ``}`, {
           position: "top-right",
           autoClose: 1000,
@@ -116,9 +243,12 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
           progress: undefined,
           theme: "light",
         });
+
+        submitPayment(type, payingAmount);
         if (leftToPay <= 0) {
-          console.log("Basket is paid. Clearing the basket.");
-          setBasketItems([]);
+          handleCheckout();
+          // console.log("Basket is paid. Clearing the basket.");
+          // setBasketItems([]);
         }
         console.log("Payment successful:", response);
       } catch (error) {
@@ -186,6 +316,7 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
   const calculateAmountToPay = () => {
     const paymentTakenFloat = parseFloat(paymentTaken);
     const computedBasketTotalFloat = parseFloat(computedBasketTotal);
+
     if (computedBasketTotalFloat >= 0)
       if (paymentTakenFloat > computedBasketTotalFloat) {
         return `Payment complete. Change £${change.toFixed(2)}`;
@@ -194,6 +325,53 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
       } else {
         return `£${(computedBasketTotalFloat - paymentTakenFloat).toFixed(2)}`;
       }
+  };
+
+  const submitPayment = async (type, amount) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API}addPaymentToTable`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
+        },
+        body: JSON.stringify({
+          tableNumber: localStorage.getItem("tableID") ? localStorage.getItem("tableID") : "signout",
+          user: { displayName: localStorage.getItem("displayName"), email: localStorage.getItem("email") },
+          venue: localStorage.getItem("venueID"),
+          type,
+          amount,
+        }),
+      });
+
+      const data = await response.json();
+      if (response.status == 200) {
+        setPaidin(data.updatedPaidin);
+      } else {
+        toast.error(`${data.message}`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching:", error);
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+    }
   };
 
   const stripePayment = async () => {
@@ -531,13 +709,18 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
       <div className="basis-[32%] flex flex-col justify-evenly gap-12">
         <div className={`flex flex-col justify-center items-center ${parseFloat(basketTotal) > parseFloat(paymentTaken) ? "" : "row-span-2"} `}>
           {parseFloat(computedBasketTotal) > parseFloat(paymentTaken) && (
-            <p className="animate-fadeUP1 text-xs" title="Stripe's minimum payment is £0.30.">
-              Minimum pay: £0.30!
+            <p className="animate-fadeUP1 text-xs" title="Stripe's minimum payment is £0.31.">
+              Minimum pay: £0.31!
             </p>
           )}
           <p className="animate-fadeUP1 mb-2 border-b-2 pb-2  text-3xl">Payment</p>
           {parseFloat(computedBasketTotal) > parseFloat(paymentTaken) && <p className="animate-fadeUP1 text-sm">Left to pay:</p>}
-          <p className="animate-fadeUP1 font-bold text-center text-xl">{calculateAmountToPay()}</p>
+          <p className="animate-fadeUP1 font-bold text-center text-3xl">{calculateAmountToPay()}</p>
+          {parseFloat(computedBasketTotal) > parseFloat(paymentTaken) && (
+            <p>
+              £{paymentTaken} / £{computedBasketTotal}
+            </p>
+          )}
           {parseFloat(computedBasketTotal) <= parseFloat(paymentTaken) && (
             <div className="flex flex-col gap-4 text-center">
               <p className="mt-8">Do you need a receipt?</p>

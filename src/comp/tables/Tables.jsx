@@ -14,16 +14,12 @@ import "./Tables.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Tables = ({ tables, setTables, draggingIndex, setDraggingIndex, showArea, setshowArea, uniqueAreas, setuniqueAreas, venues, venueNtable, setVenueNtable }) => {
+const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTables, draggingIndex, setDraggingIndex, showArea, setshowArea, uniqueAreas, setuniqueAreas, venues, venueNtable, setVenueNtable }) => {
   const nav = useNavigate();
   const [seeControlls, setseeControlls] = useState(false);
   const [seeControlls2, setseeControlls2] = useState(false);
   const [seeControlls3, setseeControlls3] = useState(false);
   const areaRef = useRef(null);
-
-  useEffect(() => {
-  }, []);
-  useEffect(() => {}, [tables]);
 
   const saveLayout = () => {
     toast.success(`Layout has been saved!`, {
@@ -44,10 +40,53 @@ const Tables = ({ tables, setTables, draggingIndex, setDraggingIndex, showArea, 
     setTables((prevTables) => prevTables.map((table) => (table.id === id ? { ...table, x: parseFloat(data.x.toFixed(2)), y: parseFloat(data.y.toFixed(2)) } : table)));
   };
 
-  const setTable = (tableNumber) => {
-    setVenueNtable((prevValues) => ({ ...prevValues, table: tableNumber }));
-    localStorage.setItem("tableID", tableNumber);
-    nav("/Menu");
+  const setTable = async (tableNumber) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API}getTable`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
+        },
+        body: JSON.stringify({
+          tableNumber,
+          venue: localStorage.getItem('venueID'),
+          user: { displayName: localStorage.getItem("displayName"), email: localStorage.getItem("email") },
+        }),
+      });
+      const data = await response.json();
+      if (response.status == 200) {
+        setBasketItems(data.basket)
+        setBasketDiscount(data.tableDiscount)
+        setVenueNtable((prevValues) => ({ ...prevValues, table: tableNumber }));
+        localStorage.setItem("tableID", tableNumber);
+        nav("/Menu");
+        console.log(`Received table data. Table locked. `)
+      } else {
+        toast.error(`${data.message}`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching:", error);
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+    }
   };
 
   const setTableSeats = (id, seats) => {
