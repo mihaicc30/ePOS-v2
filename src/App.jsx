@@ -29,7 +29,7 @@ import Tables from "./comp/tables/Tables";
 import { getVenueById } from "./utils/BasketUtils";
 
 import { loadStripe } from "@stripe/stripe-js";
-import { fetchWeeklyWeather, getTables, getVenues, getMenu, fetchHoliday } from "./utils/DataTools";
+import { fetchWeeklyWeather, getTableLayout, getVenues, getMenu, fetchHoliday } from "./utils/DataTools";
 
 const App = () => {
   //app settings
@@ -68,7 +68,7 @@ const App = () => {
       setMenuitems(await getMenu());
       setVenues(await getVenues());
       setWeeklyWeather(await fetchWeeklyWeather());
-      setTables(await getTables());
+      setTables(await getTableLayout()); // table layout
       fetchForecastWeek();
     }
     getAsyncData();
@@ -166,7 +166,7 @@ const App = () => {
       <Route path="/" element={<Layout weeklyholiday={weeklyholiday} weeklyForecast={weeklyForecast} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} setWeeklyForecast={setWeeklyForecast} lefty={lefty} setLefty={setLefty} />}>
         <Route path="/" element={<Auth />} />
 
-        <Route path="/admin/*" element={<Admin weeklyholiday={weeklyholiday} setWeeklyHoliday={setWeeklyHoliday} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} menuitems={menuitems} tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
+        <Route path="/admin/*" element={<Admin weeklyholiday={weeklyholiday} setWeeklyHoliday={setWeeklyHoliday} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} menuitems={menuitems} setMenuitems={setMenuitems} tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
         <Route path="/tables" element={<Tables setBasketDiscount={setBasketDiscount} basketItems={basketItems} setBasketItems={setBasketItems} tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
 
         <Route path="/menu" element={<Menu lefty={lefty} basketDiscount={basketDiscount} setBasketDiscount={setBasketDiscount} basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} searchValue={searchValue} setSearchValue={setSearchValue} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}></Route>

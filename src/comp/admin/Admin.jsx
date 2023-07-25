@@ -13,7 +13,7 @@ import AdminLayout from "./AdminLayout";
 import Page404 from "../Page404";
 import { Routes, Route, Outlet, NavLink, BrowserRouter } from "react-router-dom";
 
-const Admin = ({ weeklyholiday, setWeeklyHoliday, weeklyWeather, setWeeklyWeather, weeklyForecast, setWeeklyForecast, menuitems, tables, setTables, draggingIndex, setDraggingIndex, showArea, setshowArea, uniqueAreas, setuniqueAreas, venues, venueNtable, setVenueNtable }) => {
+const Admin = ({ setMenuitems, weeklyholiday, setWeeklyHoliday, weeklyWeather, setWeeklyWeather, weeklyForecast, setWeeklyForecast, menuitems, tables, setTables, draggingIndex, setDraggingIndex, showArea, setshowArea, uniqueAreas, setuniqueAreas, venues, venueNtable, setVenueNtable }) => {
   const [user, setUser] = useState(null);
 
   return (
@@ -22,7 +22,7 @@ const Admin = ({ weeklyholiday, setWeeklyHoliday, weeklyWeather, setWeeklyWeathe
         <Route path="/" element={<AdminDashboard weeklyholiday={weeklyholiday} setWeeklyHoliday={setWeeklyHoliday} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} />} />
         <Route path="/Forecasts" element={<AdminForecasts weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} />} />
         <Route path="/TablesPlan" element={<AdminTablePlan tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
-        <Route path="/Products" element={<AdminProducts menuitems={menuitems} />} />
+        <Route path="/Products" element={<AdminProducts menuitems={menuitems} setMenuitems={setMenuitems}/>} />
         <Route path="/Receipts" element={<AdminReceipts />} />
         <Route path="/ROTA" element={<AdminROTA />} />
         <Route path="/Staff" element={<AdminStaff />} />

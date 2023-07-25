@@ -1,97 +1,359 @@
 import React, { useState, useEffect, useRef } from "react";
+import { getStaffMembers, savePosUser, handleRemove } from "../../utils/DataTools";
+import { AiOutlineUser } from "react-icons/ai";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const AdminStaff = () => {
   const [searchStaff, setSearchStaff] = useState("");
   const searchInputRef = useRef(null);
   const [modal, setModal] = useState(false);
+  const [modalAddStaff, setModalAddStaff] = useState(false);
   const [modalData, setModalData] = useState(false);
+  const [staff, setStaff] = useState([]);
+  const [errors, setErrors] = useState([]);
+  const [tempUser, setTempUser] = useState({
+    displayName: "",
+    position: "",
+    venueID: localStorage.getItem("venueID"),
+    team: "",
+    worktype: "",
+    courses: [],
+    email: "",
+    autoStore: false,
+    darkMode: false,
+    lefty: false,
+    pin: "",
+    fingerprint: "",
+    isAdmin: false,
+    phone: "",
+  });
 
   const openPopup = (user) => {
     setModalData(user);
     setModal(!modal);
   };
 
-  useEffect(()=>{
-  },[searchStaff])
+  useEffect(() => {}, [searchStaff]);
+
+  useEffect(() => {
+    (async () => {
+      setStaff(await getStaffMembers());
+    })();
+  }, []);
+
+  const handleStaffRemoval = async (data) => {
+    const query = await handleRemove(data);
+    console.log("🚀 ~ file: AdminStaff.jsx:48 ~ handleStaffRemoval ~ query:", query);
+
+    if (query.message === "POS User deleted.") {
+      console.log(data);
+      setModal(!modal);
+      const updatedStaff = staff.filter((user) => user._id !== data);
+      setStaff(updatedStaff);
+
+      toast.success(`User has been deleted.`, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+    } else {
+      toast.error(`${query.message}`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
+
+  const handleAddNewStaff = async () => {
+    setErrors([<AiOutlineLoading3Quarters className="animate-spin mx-auto text-5xl" />]);
+    let errors = [];
+    let testingString = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+    if (!tempUser.displayName) {
+      errors.push("Full Name required.");
+    } else if (tempUser.displayName.length < 6) {
+      errors.push("Full Name too short.");
+    }
+
+    if (!tempUser.email) {
+      errors.push("Email required.");
+    } else if (!testingString.test(tempUser.email)) {
+      errors.push("Email invalid.");
+    }
+
+    if (!tempUser.pin) {
+      errors.push("Pin required.");
+    } else if (tempUser.pin.length < 3) {
+      errors.push("Pin too short.");
+    }
+
+    if (!tempUser.phone) {
+      errors.push("Phone required.");
+    } else if (tempUser.phone.length < 11) {
+      errors.push("Phone number too short.");
+    }
+
+    if (!tempUser.position) {
+      errors.push("Role required.");
+    } else if (tempUser.position.length < 2) {
+      errors.push("Role name too short.");
+    }
+    if (!tempUser.team) {
+      errors.push("Team required.");
+    } else if (tempUser.team.length < 3) {
+      errors.push("Team name too short.");
+    }
+
+    if (!tempUser.worktype) {
+      errors.push("Type of Contract required.");
+    } else if (tempUser.worktype.length < 3) {
+      errors.push("Type of Contract name too short.");
+    }
+    if (errors.length > 0) {
+      setErrors([]);
+      errors.map((err, i) => setErrors((prevErrors) => [...prevErrors, err]));
+    } else {
+      const query = await savePosUser(tempUser);
+      console.log("🚀 ~ file: AdminStaff.jsx:92 ~ handleAddNewStaff ~ query:", query);
+      if (query.message === "POS User saved.") {
+        setErrors([]);
+        setModalAddStaff(!modalAddStaff);
+        setStaff((prev) => [...prev, query.user])
+        toast.success(`User has been saved.`, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        setErrors([query.message]);
+        toast.error(`${query.message}`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    }
+  };
 
   return (
     <div className="flex flex-col overflow-y-auto relative">
+      <div className="absolute">
+        <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme="light" />
+      </div>
+      {modalAddStaff && (
+        <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModalAddStaff(!modalAddStaff) : null)}>
+          <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
+            <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1" onClick={() => setModalAddStaff(!modalAddStaff)}>
+              ◀ Cancel
+            </button>
+
+            <AiOutlineUser className="my-12 text-5xl" />
+
+            <div className="overflow-auto px-2 w-[86%] gap-4 ml-auto pr-4 relative grid grid-cols-6">
+              <div className="flex my-3 relative flex-col col-span-4">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">User Name</span>
+                <input
+                  onChange={(e) =>
+                    setTempUser((prev) => ({
+                      ...prev,
+                      displayName: e.target.value,
+                    }))
+                  }
+                  type="text"
+                  className="p-4 text-lg border-y-2 border-y-black/30 shadow-lg rounded-xl"
+                  defaultValue={tempUser.displayName}
+                  placeholder="Name: John Doe.."
+                />
+              </div>
+              <div className="flex my-3 relative flex-col col-span-2">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">User Pin</span>
+                <input
+                  onChange={(e) =>
+                    setTempUser((prev) => ({
+                      ...prev,
+                      pin: e.target.value,
+                    }))
+                  }
+                  type="text"
+                  className="p-4 text-lg border-y-2 border-y-black/30 shadow-lg rounded-xl"
+                  defaultValue={tempUser.pin}
+                  placeholder="Pin: 123..."
+                />
+              </div>
+
+              <div className="flex my-1 relative flex-col col-span-3">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">User Email</span>
+                <input
+                  onChange={(e) =>
+                    setTempUser((prev) => ({
+                      ...prev,
+                      email: e.target.value,
+                    }))
+                  }
+                  type="text"
+                  className="p-4 text-lg border-y-2 border-y-black/30 shadow-lg rounded-xl"
+                  defaultValue={tempUser.email}
+                  placeholder="Email: JohnDoe@email.com.."
+                />
+              </div>
+
+              <div className="flex my-1 relative flex-col col-span-3">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">User Phone</span>
+                <input
+                  onChange={(e) =>
+                    setTempUser((prev) => ({
+                      ...prev,
+                      phone: e.target.value,
+                    }))
+                  }
+                  type="text"
+                  className="p-4 text-lg border-y-2 border-y-black/30 shadow-lg rounded-xl"
+                  defaultValue={tempUser.phone}
+                  placeholder="Phone: 07712123123.."
+                />
+              </div>
+
+              <div className="flex my-1 relative flex-col col-span-2">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Role</span>
+                <input
+                  onChange={(e) =>
+                    setTempUser((prev) => ({
+                      ...prev,
+                      position: e.target.value,
+                    }))
+                  }
+                  type="text"
+                  className="p-4 text-lg border-y-2 border-y-black/30 shadow-lg rounded-xl"
+                  defaultValue={tempUser.role}
+                  placeholder="Role: Waiter, Chef.."
+                />
+              </div>
+
+              <div className="flex my-1 relative flex-col col-span-2">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Team</span>
+                <input
+                  onChange={(e) =>
+                    setTempUser((prev) => ({
+                      ...prev,
+                      team: e.target.value,
+                    }))
+                  }
+                  type="text"
+                  className="p-4 text-lg border-y-2 border-y-black/30 shadow-lg rounded-xl"
+                  defaultValue={tempUser.team}
+                  placeholder="Team: Management, Chef, Staff.."
+                />
+              </div>
+
+              <div className="flex my-1 relative flex-col col-span-2">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Type of Contract</span>
+                <input
+                  onChange={(e) =>
+                    setTempUser((prev) => ({
+                      ...prev,
+                      worktype: e.target.value,
+                    }))
+                  }
+                  type="text"
+                  className="p-4 text-lg border-y-2 border-y-black/30 shadow-lg rounded-xl"
+                  defaultValue={tempUser.worktype}
+                  placeholder="Type: Full Time, Part Time.."
+                />
+              </div>
+
+              {errors && errors.length > 0 && (
+                <>
+                  <div className="flex my-1 relative flex-col col-span-6 mx-auto border-l-4 border-l-red-400 text-start">
+                    {errors.map((err, index) => {
+                      return (
+                        <span className=" bg-white rounded-lg pl-4" key={index + "err"}>
+                          {err}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+              <div className="my-3 relative col-span-6 grid grid-cols-3 gap-4 w-[100%]">
+                <span></span>
+                <button onClick={handleAddNewStaff} className="bg-orange-400 p-2 rounded-lg shadow-md border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
+                  Submit ▶
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {modal && (
         <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModal(!modal) : null)}>
           <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
             <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1" onClick={() => setModal(!modal)}>
               ◀ Cancel
             </button>
-
-            <div className="overflow-auto px-4 grid grid-cols-2 gap-4 m-2 w-[70%]">
+            <div className="overflow-auto px-4 grid grid-cols-2 gap-4 ml-auto w-[86%]  pt-20">
               <div className="col-span-2 grid grid-cols-2 gap-4">
-                <button className="bg-red-400 p-2 rounded-lg shadow-md border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Remove</button>
-
                 <div className="flex flex-col text-xl text-start row-span-4">
-                  <p className="font-bold border-b-[1px]">Member ID Name</p>
-                  <p>Manager</p>
-                  <p>Management Team</p>
-                  <p>Full-Time</p>
-                  <p>07123 123 123</p>
+                  <p className="font-bold border-b-[1px]">{modalData.displayName}</p>
+                  <p>{modalData.position}</p>
+                  <p>{modalData.team}</p>
+                  <p>{modalData.worktype}</p>
+                  <p>{modalData.phone}</p>
+                  <p>{modalData.email}</p>
                 </div>
-                <img src={"../assets/drinks.jpg"} className="h-[160px] w-[auto] rounded-full aspect-square row-span-4" />
-                <button className="bg-orange-300 p-2 rounded-lg shadow-md border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Email</button>
+                <button onClick={() => handleStaffRemoval(modalData._id)} className="bg-red-400 p-2 rounded-lg shadow-md border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
+                  Remove
+                </button>
+                <AiOutlineUser className="text-[10rem] my-4 rounded-full aspect-square row-span-4 mx-auto border-2 shadow-lg p-1" />
+                {/* <img src={"../assets/drinks.jpg"} className="h-[160px] w-[auto] rounded-full aspect-square row-span-4 mx-auto" /> */}
+                <a href={`mailto:${modalData.email}?subject=Query&amp;body=Your message...`} className="bg-orange-300 p-2 rounded-lg shadow-md border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
+                  Email
+                </a>
               </div>
 
               <div className="col-span-2 grid grid-cols-2 gap-4">
                 <p className="text-xl border-b-2 col-span-2">
-                  <span className="font-bold">3</span>/<span>6</span> Training
+                  <span className="font-bold">{modalData.courses.filter((course) => course.status === "Passed!").length}</span>/<span>{modalData.courses.length}</span> Training
                 </p>
 
-                <div className="trainingCard bg-gray-50 flex justify-center items-center text-5xl shadow-md p-2 transition active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">+</div>
-
-                <div className="trainingCard bg-green-200 shadow-md p-2">
-                  <p className="font-bold border-b-[1px] border-b-gray-500">Staff Management</p>
-                  <p>Progress: 100%</p>
-                  <p>Exam Started: 2 times</p>
-                  <p>Mark: 90%</p>
-                  <p>Passed!</p>
+                <div onClick={() => console.log(`dev**to open modal to add courses for ${modalData.displayName}`)} className="trainingCard bg-gray-50 flex justify-center items-center text-5xl shadow-md p-2 transition active:shadow-inner active:border-2 active:border-black/50 active:border-b-0">
+                  +
                 </div>
 
-                <div className="trainingCard bg-green-200 shadow-md p-2">
-                  <p className="font-bold border-b-[1px] border-b-gray-500">Health & Safety</p>
-                  <p>Progress: 100%</p>
-                  <p>Exam Started: 3 times</p>
-                  <p>Mark: 96%</p>
-                  <p>Passed!</p>
-                </div>
-
-                <div className="trainingCard bg-gray-50 shadow-md p-2">
-                  <p className="font-bold border-b-[1px] border-b-gray-500">Fire Safety</p>
-                  <p>Progress: 30%</p>
-                  <p>Exam Started: 0 times</p>
-                  <p>Mark: --</p>
-                  <p>Not Passed!</p>
-                </div>
-
-                <div className="trainingCard bg-red-200 shadow-md p-2">
-                  <p className="font-bold border-b-[1px] border-b-gray-500">Food Allergens</p>
-                  <p>Progress: 100%</p>
-                  <p>Exam Started: 2 times</p>
-                  <p>Mark: 35%</p>
-                  <p>Not Passed!</p>
-                </div>
-
-                <div className="trainingCard bg-green-200 shadow-md p-2">
-                  <p className="font-bold border-b-[1px] border-b-gray-500">Food Safety</p>
-                  <p>Progress: 100%</p>
-                  <p>Exam Started: 1 times</p>
-                  <p>Mark: 98%</p>
-                  <p>Passed!</p>
-                </div>
-
-                <div className="trainingCard bg-gray-50 shadow-md p-2">
-                  <p className="font-bold border-b-[1px] border-b-gray-500">Food Safety</p>
-                  <p>Progress: 0%</p>
-                  <p>Exam Started: 0 times</p>
-                  <p>Mark: --</p>
-                  <p>Not Passed!</p>
-                </div>
+                {modalData.courses.map((course, index) => {
+                  console.log(course.courseName ,course.progress, course.progress < 1)
+                  return (
+                    <div className={`trainingCard ${course.examStarted < 1 && "bg-yellow-100"} ${course.progress === 100 && course.status !== "Passed!" && "bg-red-100"} ${course.status === "Passed!" && "bg-green-100"} shadow-md p-2`} key={crypto.randomUUID()}>
+                      <p className="font-bold border-b-[1px] border-b-gray-500">{course.courseName}</p>
+                      <p>Progress: {course.progress}%</p>
+                      <p>Exam Started: {course.examStarted} times</p>
+                      <p>Mark: {course.mark}%</p>
+                      <p>{course.status}</p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -102,21 +364,25 @@ const AdminStaff = () => {
       </p>
 
       <div className="relative w-[100%] flex gap-4 flex-nowrap p-1">
-        <button onClick={() => console.log("")} className={`bg-orange-300 py-2 px-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0`}>
+        <button onClick={() => setModalAddStaff(!modalAddStaff)} className={`bg-orange-300 py-2 px-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0 whitespace-nowrap`}>
           Add New
         </button>
         <div className="relative flex w-[100%]">
           <input list="stafflist" ref={searchInputRef} name="venuesearchinput" type="text" placeholder="Staff Name..." className="w-[98%] pl-10 pr-16 rounded" value={searchStaff} onChange={(e) => setSearchStaff(e.target.value)} />
-          <span className="absolute top-[28px] left-[10px] -translate-y-[10px]">🔍</span>
-          <button onClick={() => setSearchStaff("")} className={`absolute top-[16px] right-[26px] -translate-y-[10px] ${searchStaff ? "" : "hidden"} border-2 p-3 shadow-lg`}>
+          <span className="absolute top-[18px] left-[10px] -translate-y-[10px]">🔍</span>
+          <button onClick={() => setSearchStaff("")} className={`absolute top-[8px] right-[26px] -translate-y-[10px] ${searchStaff ? "" : "hidden"} border-2 p-2 shadow-lg`}>
             ✖
           </button>
 
           <datalist id="stafflist">
-            <option value={"Mihai Culea"} >{"Mihai Culea"} </option>
-            <option value={"Ionela Culea"} >{"Ionela Culea"} </option>
-            <option value={"Petrisor Predescu"} >{"Petrisor Predescu"} </option>
-            <option value={"Cristian Constantin Florea"} >{"Cristian Constantin Florea"} </option>
+            {staff &&
+              staff.map((staffi, index) => {
+                return (
+                  <option key={"gx" + crypto.randomUUID()} value={staffi.displayName}>
+                    {staffi.displayName}
+                  </option>
+                );
+              })}
           </datalist>
         </div>
       </div>
@@ -331,60 +597,26 @@ const AdminStaff = () => {
         </div>
         {/* stats end*/}
 
-        <div className="staffList grid grid-cols-5 w-[100%] gap-12 p-4">
-          <div className="staffCard shadow-xl flex flex-col">
-            <img src={`https://randomuser.me/api/portraits/men/1.jpg`} className="h-[100px] rounded-full aspect-square mx-auto" />
-            <div className="flex flex-col text-xl text-center grow">
-              <p className="font-bold">Mihai Culea</p>
-              <span className=" border-b-[1px] grow"></span>
-              <p>Manager</p>
-              <p>Management</p>
-              <p>Full-Time</p>
-            </div>
-            <button onClick={() => setModal(!modal)} className="mt-auto ml-auto col-span-2 w-[100%] bg-orange-400 p-2 rounded-lg shadow-md border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
-              Info ▶
-            </button>
-          </div>
-          <div className="staffCard shadow-xl flex flex-col">
-            <img src={`https://randomuser.me/api/portraits/women/12.jpg`} className="h-[100px] rounded-full aspect-square mx-auto" />
-            <div className="flex flex-col text-xl text-center grow">
-              <p className="font-bold">Ioana Culea</p>
-              <span className=" border-b-[1px] grow"></span>
-              <p>Assistant Manager</p>
-              <p>Management</p>
-              <p>Full-Time</p>
-            </div>
-            <button onClick={() => setModal(!modal)} className="mt-auto ml-auto col-span-2 w-[100%] bg-orange-400 p-2 rounded-lg shadow-md border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
-              Info ▶
-            </button>
-          </div>
-          <div className="staffCard shadow-xl flex flex-col">
-            <img src={`https://randomuser.me/api/portraits/men/13.jpg`} className="h-[100px] rounded-full aspect-square mx-auto" />
-            <div className="flex flex-col text-xl text-center grow">
-              <p className="font-bold">Petrisor Predescu</p>
-              <span className=" border-b-[1px] grow"></span>
-              <p>Supervisor</p>
-              <p>Management</p>
-              <p>Full-Time</p>
-            </div>
-            <button onClick={() => setModal(!modal)} className="mt-auto ml-auto col-span-2 w-[100%] bg-orange-400 p-2 rounded-lg shadow-md border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
-              Info ▶
-            </button>
-          </div>
-          <div className="staffCard shadow-xl flex flex-col">
-            <img src={`https://randomuser.me/api/portraits/men/14.jpg`} className="h-[100px] rounded-full aspect-square mx-auto" />
-            <div className="flex flex-col text-xl text-center grow">
-              <p className="font-bold">Cristian Constantin Florea</p>
-              <span className=" border-b-[1px] grow"></span>
-              <p>Barman</p>
-              <p>Staff</p>
-              <p>Part-Time</p>
-            </div>
-
-            <button onClick={() => setModal(!modal)} className="mt-auto ml-auto col-span-2 w-[100%] bg-orange-400 p-2 rounded-lg shadow-md border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
-              Info ▶
-            </button>
-          </div>
+        <div className="staffList grid grid-cols-4 w-[100%] gap-4 p-1">
+          {staff.map((staffMember, index) => {
+            if (staffMember.displayName.split(" ").some((item) => item.toLowerCase().includes(searchStaff.toLowerCase())) || searchStaff === "")
+              return (
+                <div className="staffCard shadow-xl flex flex-col p-2" key={crypto.randomUUID()}>
+                  {/* <img src={`https://randomuser.me/api/portraits/men/1.jpg`} className="h-[100px] rounded-full aspect-square mx-auto" /> temp disabled */}
+                  <AiOutlineUser className="h-[100px] rounded-full aspect-square mx-auto text-5xl" />
+                  <div className="flex flex-col text-xl text-center grow">
+                    <p className="font-bold">{staffMember.displayName}</p>
+                    <span className=" border-b-[1px] grow"></span>
+                    <p>{staffMember.position}</p>
+                    <p>{staffMember.team}</p>
+                    <p>{staffMember.worktype}</p>
+                  </div>
+                  <button onClick={() => openPopup(staffMember)} className="my-4 col-span-2 w-[100%] bg-orange-400 p-2 rounded-lg shadow-md border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
+                    Info ▶
+                  </button>
+                </div>
+              );
+          })}
         </div>
       </div>
     </div>

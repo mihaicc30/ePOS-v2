@@ -3,20 +3,50 @@ import { BsFilterRight } from "react-icons/bs";
 import { AiOutlineLeft, AiOutlineMinusCircle } from "react-icons/ai";
 import { BsCheck2Circle } from "react-icons/bs";
 import { processAllergenList, getStockColour } from "../../utils/BasketUtils";
+import { addNewProduct, updateProduct, deleteProduct } from "../../utils/DataTools";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AdminProducts = ({ menuitems }) => {
+const AdminProducts = ({ menuitems, setMenuitems }) => {
   // mimic db fetch - temporary
   const [modal, setModal] = useState(false);
   const [modalData, setModalData] = useState(false);
+
+  const [tempProduct, setTempProduct] = useState({
+    name: "",
+    tag: [],
+    category: "",
+    subcategory: "",
+    subcategory_course: 0,
+    stock: 0,
+    price: 0,
+    priceOffer: null,
+    allergensList: {
+      Meat: false,
+      Celery: false,
+      Crustaceans: false,
+      Fish: false,
+      Milk: false,
+      Mustard: false,
+      Peanuts: false,
+      Soybeans: false,
+      Gluten: false,
+      Egg: false,
+      Lupin: false,
+      Moluscs: false,
+      Nuts: false,
+      SesameSeeds: false,
+      Sulphur: false,
+    },
+    img: "",
+    calories: 0,
+    ingredients: [],
+  });
 
   const [searchValue, setSearchValue] = useState("");
   const handleInputChange = (event) => {
     setSearchValue(event.target.value);
   };
-
-  useEffect(() => {}, [searchValue]);
 
   const [menuType, setMenuType] = useState("Beverages");
   const [menuType2, setMenuType2] = useState("");
@@ -61,41 +91,73 @@ const AdminProducts = ({ menuitems }) => {
   const handleEdit = (product) => {
     setModal(!modal);
     setModalData(product);
+    setTempProduct(product);
   };
 
   const notContains = <BsCheck2Circle className="fill-green-400 text-3xl" />;
   const contains = <AiOutlineMinusCircle className="fill-red-400 text-3xl" />;
 
-  const handleSave = () => {
-    console.log("dev**update item in db using id from modalData");
-    console.log("dev**also will show correct message depending if item has an ID or not :)");
-    setModal(!modal);
-
-    toast.success(`Item has been saved.`, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: false,
-      progress: undefined,
-      theme: "light",
-    });
+  const handleSave = async () => {
+    // Find the index of the item in menuitems with matching _id
+    const index = menuitems.find((item) => item?._id === tempProduct._id);
+    // If the item is found, update it in menuitems
+    if (index) {
+      console.log("Updating item.");
+      const query = await updateProduct(tempProduct);
+      if (query.matchedCount === 1) {
+        setModal(!modal);
+        menuitems[index] = tempProduct;
+        toast.success(`Item has been saved.`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    } else {
+      console.log("Creating new item.");
+      const query = await addNewProduct(tempProduct);
+      if (query.message === "Product added successfully.") {
+        setModal(!modal);
+        tempProduct._id = query.pid;
+        setTimeout(() => {
+          menuitems.push(tempProduct);
+        }, 333);
+        toast.success(`New item has been added.`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    }
   };
 
-  const handleDelete = () => {
-    console.log("dev**update item in db using id from modalData");
-    setModal(!modal);
-
-    toast.info(`Item has been deleted.`, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: false,
-      progress: undefined,
-      theme: "light",
+  const handleDelete = async (product) => {
+    await deleteProduct(product).then((r) => {
+      if (r.message == "Product deleted successfully.") {
+        setModal(!modal);
+        const updatedMenuItems = menuitems.filter((item) => item._id !== tempProduct._id);
+        setMenuitems(updatedMenuItems);
+        toast.info(`Item has been deleted.`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     });
   };
 
@@ -104,8 +166,11 @@ const AdminProducts = ({ menuitems }) => {
       ...modalData.allergensList,
       [product]: !modalData.allergensList[product],
     };
-    console.log(updatedAllergensList[product]);
     setModalData((prev) => ({
+      ...prev,
+      allergensList: updatedAllergensList,
+    }));
+    setTempProduct((prev) => ({
       ...prev,
       allergensList: updatedAllergensList,
     }));
@@ -115,6 +180,7 @@ const AdminProducts = ({ menuitems }) => {
     let newProduct = {
       name: "",
       tag: [],
+      category: "",
       subcategory: "",
       subcategory_course: 0,
       stock: 0,
@@ -138,12 +204,13 @@ const AdminProducts = ({ menuitems }) => {
         Sulphur: false,
       },
       img: "./assets/defaultDrink.jpg",
-      calories: "0",
+      calories: 0,
       ingredients: [],
     };
 
     setModal(!modal);
     setModalData(newProduct);
+    setTempProduct(newProduct);
   };
 
   return (
@@ -154,41 +221,96 @@ const AdminProducts = ({ menuitems }) => {
       {modal && (
         <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModal(!modal) : null)}>
           <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
-            <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1 border-b-gray-400 border-b-2" onClick={() => setModal(!modal)}>
+            <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1" onClick={() => setModal(!modal)}>
               ◀ Cancel
             </button>
-            <button className="absolute top-[15%] left-0 p-4 text-xl animate-fadeUP1 border-b-red-400 border-b-2" onClick={() => console.log("dev**will remove button when item is fetch from the databse and will have an id i can check with to hide the button :)")}>
-              ◀ Delete
+            {modalData.name && (
+              <button className="absolute top-[15%] left-0 p-4 text-xl animate-fadeUP1" onClick={() => handleDelete(modalData)}>
+                <span className="text-red-400">◀</span> Delete
+              </button>
+            )}
+            <button className="absolute top-[30%] left-0 p-4 text-xl animate-fadeUP1" onClick={handleSave}>
+              <span className="text-green-400">◀</span> Save
             </button>
-            <button className="absolute top-[30%] left-0 p-4 text-xl animate-fadeUP1 border-b-green-400 border-b-2" onClick={handleSave}>
-            ◀ Save
-            </button>
-            <img src={"../." + modalData.img} className="h-[100px] w-[100%]" style={{ objectFit: "cover", overflow: "hidden" }} onClick={() => console.log("dev**to create..")} />
 
-            <div className="overflow-auto px-2 w-[80%] ml-auto">
-              <div className="flex pr-4">
-                £<input className="ml-auto text-end pr-4 text-xl" type="number" defaultValue={modalData.price.toFixed(2)} />
+            <div className="overflow-auto px-2 w-[80%] ml-auto pr-4 relative grid grid-cols-3">
+              <img src={"../." + modalData.img} className="h-[100px] w-[fit] mx-auto col-span-3" style={{ objectFit: "cover", overflow: "hidden" }} onClick={() => console.log("dev**to create..")} />
+
+              <div className="flex my-3 relative flex-col col-span-3">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Name</span>
+                <input
+                  onChange={(e) =>
+                    setTempProduct((prev) => ({
+                      ...prev,
+                      name: e.target.value,
+                    }))
+                  }
+                  type="text"
+                  className="p-4 text-2xl border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl"
+                  defaultValue={modalData.name}
+                  placeholder="Product name.."
+                />
               </div>
 
-              <div className="flex pr-4">
-                Name:
-                <input type="text" className="ml-auto text-end pr-4 text-2xl font-bold" defaultValue={modalData.name} />
+              <div className="flex my-3 relative flex-col mr-4">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Price</span>
+                <input
+                  onChange={(e) =>
+                    setTempProduct((prev) => ({
+                      ...prev,
+                      price: parseFloat(e.target.value),
+                    }))
+                  }
+                  type="text"
+                  className="p-4 text-2xl border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl"
+                  defaultValue={modalData.price.toFixed(2)}
+                />
               </div>
 
-              <div className="flex pr-4">
-                kcal:
-                <input type="text" className="ml-auto text-end pr-4 text-2xl font-bold" defaultValue={modalData.calories} />
+              <div className="flex my-3 relative flex-col">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">KCal</span>
+                <input
+                  onChange={(e) =>
+                    setTempProduct((prev) => ({
+                      ...prev,
+                      calories: parseInt(e.target.value),
+                    }))
+                  }
+                  type="text"
+                  className="p-4 text-2xl border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl"
+                  defaultValue={modalData.calories}
+                />
               </div>
 
-              <div className="flex pr-4">
-                stock:
-                <input type="number" className="ml-auto text-end pr-4 text-2xl font-bold" defaultValue={modalData.stock} />
+              <div className="flex my-3 relative flex-col ml-4">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Stock</span>
+                <input
+                  onChange={(e) =>
+                    setTempProduct((prev) => ({
+                      ...prev,
+                      stock: parseInt(e.target.value),
+                    }))
+                  }
+                  type="text"
+                  className="p-4 text-2xl border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl"
+                  defaultValue={modalData.stock}
+                />
               </div>
 
-              <div className="grid grid-cols-2 gap-4 my-8">
-                <div>
-                  <p>Category</p>
-                  <input list="cats" type="text" placeholder="Category name.." className="p-2 col-span-2 border-b-2 border-b-black rounded-xl mx-1 my-1" />
+              <div className="grid grid-cols-2 gap-4 my-4 col-span-3 ">
+                <div className="relative ">
+                  <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Category</span>
+                  <input
+                    onChange={(e) => {
+                      const category = e.target.value;
+                      setTempProduct((prev) => ({ ...prev, category: category }));
+                    }}
+                    list="cats"
+                    type="text"
+                    placeholder="Category name.."
+                    defaultValue={modalData.category}
+                    className="p-4 text-xl border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl w-[100%]"
+                  />
                   <datalist id="cats">
                     {[...new Set(menuitems.map((item) => item.category))].map((item, index) => {
                       return (
@@ -199,9 +321,21 @@ const AdminProducts = ({ menuitems }) => {
                     })}
                   </datalist>
                 </div>
-                <div>
-                  <p>Subcategory</p>
-                  <input list="subcats" type="text" placeholder="Subcategory name.." className="p-2 col-span-2 border-b-2 border-b-black rounded-xl mx-1 my-1" />
+                <div className="relative">
+                  <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Subcategory</span>
+                  <input
+                    onChange={(e) => {
+                      setTempProduct((prev) => ({
+                        ...prev,
+                        subcategory: e.target.value,
+                      }));
+                    }}
+                    list="subcats"
+                    type="text"
+                    placeholder="Subcategory name.."
+                    defaultValue={modalData.subcategory}
+                    className="p-4 text-xl border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl w-[100%]"
+                  />
                   <datalist id="subcats">
                     {[...new Set(menuitems.map((item) => item.subcategory))].map((subcat, index) => (
                       <option key={index + "h"} value={subcat}>
@@ -212,19 +346,45 @@ const AdminProducts = ({ menuitems }) => {
                 </div>
               </div>
 
-              <p className="text-xl text-center pb-4 mb-4">Ingredients</p>
-              <div className="flex flex-wrap justify-center gap-2 border-b-4 pb-4 mb-4">
-                <textarea className="border-2 p-2" name="ingredients" cols="44" rows="4" defaultValue={modalData.ingredients.join(", ")}></textarea>
+              <div className="grid grid-cols-2 gap-4 my-4 col-span-3 relative">
+                <div className="flex flex-wrap justify-center gap-2 shadow-lg">
+                  <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Ingredients</span>
+                  <textarea
+                    onChange={(e) =>
+                      setTempProduct((prev) => ({
+                        ...prev,
+                        ingredients: e.target.value.split(","),
+                      }))
+                    }
+                    placeholder=""
+                    className="p-4 border-y-2 border-y-black/40 rounded-xl"
+                    name="ingredients"
+                    cols="44"
+                    rows="4"
+                    defaultValue={modalData.ingredients.join(", ")}></textarea>
+                </div>
+
+                <div className="flex flex-wrap justify-center gap-2 relative shadow-lg">
+                  <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Tags</span>
+                  <textarea
+                    onChange={(e) =>
+                      setTempProduct((prev) => ({
+                        ...prev,
+                        tag: e.target.value.split(","),
+                      }))
+                    }
+                    placeholder=""
+                    className="p-4 border-y-2 border-y-black/40 rounded-xl"
+                    name="ingredients"
+                    cols="44"
+                    rows="4"
+                    defaultValue={modalData.tag.join(", ")}></textarea>
+                </div>
               </div>
 
-              <p className="text-xl text-center pb-4 mb-4">Tags</p>
-              <div className="flex flex-wrap justify-center gap-2 border-b-4 pb-4 mb-4">
-                <textarea className="border-2 p-2" name="ingredients" cols="44" rows="4" defaultValue={modalData.tag.join(", ")}></textarea>
-              </div>
-
-              <p className="text-xl text-center pb-4 mb-4">Allergens</p>
-              <div className="grid grid-cols-2 justify-items-center mx-auto max-w-[400px]">
-                <div className="grid grid-cols-1 justify-items-start max-w-[200px] mx-auto whitespace-nowrap">
+              <div className="grid grid-cols-2 justify-items-center mx-auto my-4 col-span-3 gap-20 relative p-4 border-y-2 border-y-black/40 rounded-xl shadow-lg">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Allergens</span>
+                <div className="grid grid-cols-1 justify-items-start max-w-[200px] mx-auto whitespace-nowrap ">
                   <p onClick={(e) => toggleAllergy("Nuts")} className="capitalize inline-flex">
                     {modalData.allergensList.Nuts ? notContains : contains}Nuts
                   </p>
@@ -271,15 +431,16 @@ const AdminProducts = ({ menuitems }) => {
                   </p>
                 </div>
               </div>
-              <p className="text-xl text-center pb-4 mb-4 border-t-4 pt-4 mt-4">Suitability</p>
-              <div className="border-b-4 pb-4 mb-4 flex justify-evenly">
-                <p className="inline-flex gap-4 text-xl">Vegetarians {modalData.allergensList.Meat ? <AiOutlineMinusCircle className="fill-red-400 text-3xl" /> : <BsCheck2Circle className="fill-green-400 text-3xl" />}</p>
-                <p className="inline-flex gap-4 text-xl">Vegans {modalData.allergensList.Meat || modalData.allergensList.Milk || modalData.allergensList.Egg || modalData.allergensList.Fish || modalData.allergensList.Crustaceans ? <AiOutlineMinusCircle className="fill-red-400 text-3xl" /> : <BsCheck2Circle className="fill-green-400 text-3xl" />}</p>
+
+              <div className="p-4 border-y-2 border-y-black/30 shadow-lg rounded-xl relative flex col-span-3 justify-center gap-12">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Suitability</span>
+                <p className="inline-flex font-bold gap-4 text-xl">Vegetarians {modalData.allergensList.Meat ? <AiOutlineMinusCircle className="fill-red-400 text-3xl" /> : <BsCheck2Circle className="fill-green-400 text-3xl" />}</p>
+                <p className="inline-flex font-bold gap-4 text-xl">Vegans {modalData.allergensList.Meat || modalData.allergensList.Milk || modalData.allergensList.Egg || modalData.allergensList.Fish || modalData.allergensList.Crustaceans ? <AiOutlineMinusCircle className="fill-red-400 text-3xl" /> : <BsCheck2Circle className="fill-green-400 text-3xl" />}</p>
               </div>
 
-              <p className="text-xl text-center pb-4 mb-4 border-t-4 pt-4 mt-4">Statistics</p>
+              <p className="text-xl text-center pb-4 mb-4 pt-4 mt-4 col-span-3">Statistics</p>
 
-              <div className="border-b-4 pb-4 mb-4 flex justify-evenly">
+              <div className="pb-4 mb-4 flex justify-evenly col-span-3">
                 <p>Menu Item Profitability = (Number of Items Sold x Menu Price) – (Number of Items Sold x Item Portion Cost)</p>
                 <p>item sold along the year chart</p>
               </div>
@@ -289,7 +450,7 @@ const AdminProducts = ({ menuitems }) => {
       )}
       <p className="text-xl font-bold p-2 underline">Products</p>
       <div className="relative flex  mr-4 items-center max-[350px]:flex-wrap  max-[350px]:justify-center">
-        <button onClick={handleAdd} className={`p-2 bg-green-400 rounded-xl shadow-xl border-b-2 border-b-black transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] active:shadow-[inset_0px_4px_2px_black]`}>
+        <button onClick={handleAdd} className={`p-2 bg-green-300 rounded-xl shadow-xl border-b-2 border-b-black transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] active:shadow-[inset_0px_4px_2px_black]`}>
           Add New
         </button>
         <div className="relative grow mx-4">
@@ -310,7 +471,7 @@ const AdminProducts = ({ menuitems }) => {
             setMenuType3("");
             setMenuType4("");
           }}
-          className={`p-2 ${menuType2 === "" && searchValue === "" && menuType3 === "" && menuType4 === "" ? "bg-[--c3]" : "bg-[--c1]"} rounded-xl shadow-xl border-b-2 border-b-black transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] active:shadow-[inset_0px_4px_2px_black]`}>
+          className={`p-2 ${menuType2 === "" && searchValue === "" && menuType3 === "" && menuType4 === "" ? "bg-gray-200 text-gray-400" : "bg-[--c1]"} rounded-xl shadow-xl border-b-2 border-b-black transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] active:shadow-[inset_0px_4px_2px_black]`}>
           Clear Filters
         </button>
       </div>
@@ -318,13 +479,14 @@ const AdminProducts = ({ menuitems }) => {
       <div className="flex flex-col overflow-y-auto w-[100%]">
         <>
           {/* categories */}
-          <div className={`${searchValue !== "" ? "hidden" : "grid"} `} style={{ gridTemplateColumns: `repeat(${[...new Set(menuitems.map((item) => item.category))].length}, 1fr)` }}>
+          <div className={`${searchValue !== "" ? "hidden" : "grid"} `} style={{ gridTemplateColumns: `repeat(${[...new Set(menuitems.map((item) => item.category).filter((category) => category !== undefined))].length}, 1fr)` }}>
             {[...new Set(menuitems.map((item) => item.category))].map((item) => {
-              return (
-                <div key={crypto.randomUUID()} onClick={changeMenuType} className={`${menuType === item ? "shadow-[inset_0px_4px_2px_black] bg-[--c12]" : "bg-[--c1]"} border-b-2 border-b-black m-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold `}>
-                  {item}
-                </div>
-              );
+              if (item)
+                return (
+                  <div key={crypto.randomUUID()} onClick={changeMenuType} className={`${menuType === item ? "shadow-[inset_0px_4px_2px_black] bg-[--c12]" : "bg-[--c1]"} border-b-2 border-b-black m-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold `}>
+                    {item}
+                  </div>
+                );
             })}
           </div>
 

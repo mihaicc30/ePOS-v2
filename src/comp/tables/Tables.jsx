@@ -164,7 +164,7 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
       </div>
       <div className={` flex w-[100%] flex-col transition-all z-10 mx-auto text-xl whitespace-nowrap select-none relative`}>
         <p className="text-center">{venueNtable.table ? `Current Selected Table: ${venueNtable.table}` : `Select a Table.`}</p>
-        {localStorage.getItem("isAdmin") == true && (
+        {localStorage.getItem("isAdmin") === "true" && (
           <button onClick={saveLayout} className="absolute right-0 top-0 bg-[--c1] active:shadow-[inset_2px_2px_2px_black] p-2 text-center border-b-2 border-b-black rounded-xl mx-1">
             Save Layout
           </button>
@@ -179,7 +179,7 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
             </button>
           ))}
         </div>
-        {localStorage.getItem("isAdmin") == true && (
+        {localStorage.getItem("isAdmin") === "true" && (
           <div className={`grid grid-cols-7 h-12 text-xl relative`}>
             <input ref={areaRef} list="areaslist" type="text" placeholder="Area name.." className="p-2 col-span-2 border-b-2 border-b-black rounded-xl mx-1 my-1" />
             <datalist id="areaslist">

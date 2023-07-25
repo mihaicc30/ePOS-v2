@@ -114,6 +114,61 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
     setComputedBasket(basketItems);
   }, [basketItems]);
 
+  
+  useEffect(() => {
+    const waitingTime = setTimeout(async () => {
+      // do query
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API}updateTableBasket`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credentials": true,
+          },
+          body: JSON.stringify({
+            tableNumber: localStorage.getItem("tableID"),
+            user: { displayName: localStorage.getItem("displayName"), email: localStorage.getItem("email") },
+            venue: localStorage.getItem("venueID"),
+            basket: basketItems,
+            tableDiscount: basketDiscount,
+          }),
+        });
+
+        const data = await response.json();
+        if (response.status == 200) {
+          console.log(`Updating basket for table ${localStorage.getItem("tableID")}.`);
+        } else {
+          toast.error(`${data.message}`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching:", error);
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    }, 1500);
+
+    return () => clearTimeout(waitingTime);
+  }, [basketItems, basketDiscount]);
+
+
+  
   const generateReceipt = async () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API}addreceipt`, {

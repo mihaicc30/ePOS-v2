@@ -12,7 +12,7 @@ const Allergens = ({ data, modal, setModal }) => {
     <>
       {createPortal(
         <div className="fixed inset-0 z-20 bg-[--c60] flex flex-col overflow-auto">
-          <img src={"../." + data.img} className="h-[100px] w-[100%]" style={{ objectFit: "cover", overflow: "hidden" }} />
+          <img src={"../." + data.img} className="h-[100px] w-fit mx-auto" style={{ objectFit: "cover", overflow: "hidden" }} />
           <span className="py-2 ml-2" onClick={() => setModal(!modal)}>
             <AiOutlineLeft className="mr-auto text-3xl cursor-pointer" />
           </span>
