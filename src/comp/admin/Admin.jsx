@@ -1,11 +1,12 @@
 import AdminDashboard from "./AdminDashboard";
-import AdminForecasts from "./AdminForecasts";
+import AdminReports from "./AdminReports";
 import AdminTablePlan from "./AdminTablePlan";
 import AdminProducts from "./AdminProducts";
 import AdminReceipts from "./AdminReceipts";
 import AdminROTA from "./AdminROTA";
 import AdminStaff from "./AdminStaff";
 import AdminPayroll from "./AdminPayroll";
+import AdminCourses from "./AdminCourses";
 import AdminSignout from "./AdminSignout";
 
 import React, { useState, useEffect } from "react";
@@ -20,13 +21,14 @@ const Admin = ({ setMenuitems, weeklyholiday, setWeeklyHoliday, weeklyWeather, s
     <Routes>
       <Route path="/" element={<AdminLayout />}>
         <Route path="/" element={<AdminDashboard weeklyholiday={weeklyholiday} setWeeklyHoliday={setWeeklyHoliday} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} />} />
-        <Route path="/Forecasts" element={<AdminForecasts weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} weeklyholiday={weeklyholiday} setWeeklyHoliday={setWeeklyHoliday} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} />} />
+        <Route path="/Reports" element={<AdminReports weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} weeklyholiday={weeklyholiday} setWeeklyHoliday={setWeeklyHoliday} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} />} />
         <Route path="/TablesPlan" element={<AdminTablePlan tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
         <Route path="/Products" element={<AdminProducts menuitems={menuitems} setMenuitems={setMenuitems}/>} />
         <Route path="/Receipts" element={<AdminReceipts />} />
         <Route path="/ROTA" element={<AdminROTA />} />
         <Route path="/Staff" element={<AdminStaff />} />
         <Route path="/Payroll" element={<AdminPayroll />} />
+        <Route path="/Courses" element={<AdminCourses />} />
         <Route path="/Signout" element={<AdminSignout />} />
 
         <Route path="*" element={<Page404 />} />

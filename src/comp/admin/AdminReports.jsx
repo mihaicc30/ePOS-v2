@@ -4,7 +4,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import { getTargets, setTargets } from "../../utils/DataTools";
 
-const AdminForecasts = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWeeklyHoliday, weeklyWeather, setWeeklyWeather }) => {
+const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWeeklyHoliday, weeklyWeather, setWeeklyWeather }) => {
   const forecastRef = useRef(null);
 
   const [weekNumber, setWeekNumber] = useState(null);
@@ -132,7 +132,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setW
               daytype: dayt,
               isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
               venueID: localStorage.getItem("venueID"),
-              forceRefresh: localStorage.getItem('refreshForecast')
+              forceRefresh: localStorage.getItem("refreshForecast"),
             }),
           });
           const data = await response.json();
@@ -152,7 +152,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setW
 
   return (
     <div className="flex flex-col">
-      <p className="text-xl font-bold p-2">-Forecasts-</p>
+      <p className="text-xl font-bold p-2 underline">Forecasts</p>
 
       <div className="flex justify-between px-4">
         <p className="text-xl font-bold p-2">7 Day Forecast</p>
@@ -168,7 +168,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setW
         <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center">
           <div className="flex flex-wrap justify-center items-center gap-4">
             <div className="shadow-xl p-3 max-w-[120px]">
-              <p className="text-center">{new Date(weeklyForecast["0"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
+              {weeklyForecast["0"]?.date && <p className="text-center">{new Date(weeklyForecast["0"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>}
               <p className="text-center"> {weeklyForecast["0"]?.date}</p>
               <p className="text-center">Forecast</p>
               <div className="text-center">
@@ -179,7 +179,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setW
             </div>
 
             <div className="shadow-xl p-3 max-w-[120px]">
-              <p className="text-center">{new Date(weeklyForecast["1"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
+              {weeklyForecast["1"]?.date && <p className="text-center">{new Date(weeklyForecast["1"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>}
               <p className="text-center"> {weeklyForecast["1"]?.date}</p>
               <p className="text-center">Forecast</p>
               <div className="text-center">
@@ -189,7 +189,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setW
               {getVenueStatus(weeklyForecast["1"]?.average)}
             </div>
             <div className="shadow-xl p-3 max-w-[120px]">
-              <p className="text-center">{new Date(weeklyForecast["2"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
+              {weeklyForecast["2"]?.date && <p className="text-center">{new Date(weeklyForecast["2"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>}
               <p className="text-center"> {weeklyForecast["2"]?.date}</p>
               <p className="text-center">Forecast</p>
               <div className="text-center">
@@ -200,7 +200,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setW
             </div>
 
             <div className="shadow-xl p-3 max-w-[120px]">
-              <p className="text-center">{new Date(weeklyForecast["3"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
+              {weeklyForecast["3"]?.date && <p className="text-center">{new Date(weeklyForecast["3"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>}
               <p className="text-center"> {weeklyForecast["3"]?.date}</p>
               <p className="text-center">Forecast</p>
               <div className="text-center">
@@ -210,7 +210,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setW
               {getVenueStatus(weeklyForecast["3"]?.average)}
             </div>
             <div className="shadow-xl p-3 max-w-[120px]">
-              <p className="text-center">{new Date(weeklyForecast["4"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
+              {weeklyForecast["4"]?.date && <p className="text-center">{new Date(weeklyForecast["4"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>}
               <p className="text-center"> {weeklyForecast["4"]?.date}</p>
               <p className="text-center">Forecast</p>
               <div className="text-center">
@@ -221,7 +221,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setW
             </div>
 
             <div className="shadow-xl p-3 max-w-[120px]">
-              <p className="text-center">{new Date(weeklyForecast["5"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
+              {weeklyForecast["5"]?.date && <p className="text-center">{new Date(weeklyForecast["5"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>}
               <p className="text-center"> {weeklyForecast["5"]?.date}</p>
               <p className="text-center">Forecast</p>
               <div className="text-center">
@@ -232,7 +232,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setW
             </div>
 
             <div className="shadow-xl p-3 max-w-[120px]">
-              <p className="text-center">{new Date(weeklyForecast["6"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
+              {weeklyForecast["6"]?.date && <p className="text-center">{new Date(weeklyForecast["6"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>}
               <p className="text-center"> {weeklyForecast["6"]?.date}</p>
               <p className="text-center">Forecast</p>
               <div className="text-center">
@@ -334,4 +334,4 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setW
   );
 };
 
-export default AdminForecasts;
+export default AdminReports;

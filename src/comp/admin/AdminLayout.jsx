@@ -44,8 +44,8 @@ const AdminNav = ({ nav, setNav }) => {
       <NavLink to="/Admin/" className={({ isActive, isPending }) => `${isPending ? "pending " : ""} ${isActive ? "bg-orange-300 " : ""} ${window.location.pathname === "/Admin" ? "bg-orange-300" : ""} py-2 my-2 ${nav ? "pr-4" : ""} text-xl border-b-2 whitespace-nowrap`}>
         {nav ? "Dashboard" : <AiOutlineDashboard className="text-3xl mx-auto" />}
       </NavLink>
-      <NavLink to="/Admin/Forecasts" className={({ isActive, isPending }) => `${isPending ? "pending " : ""} ${isActive ? "bg-orange-300 " : ""} py-2 my-2 ${nav ? "" : ""} text-xl border-b-2 whitespace-nowrap`}>
-        {nav ? "Forecasts" : <AiOutlineStock className="text-3xl mx-auto" />}
+      <NavLink to="/Admin/Reports" className={({ isActive, isPending }) => `${isPending ? "pending " : ""} ${isActive ? "bg-orange-300 " : ""} py-2 my-2 ${nav ? "" : ""} text-xl border-b-2 whitespace-nowrap`}>
+        {nav ? "Reports" : <AiOutlineStock className="text-3xl mx-auto" />}
       </NavLink>
       <NavLink to="/Admin/TablesPlan" className={({ isActive, isPending }) => `${isPending ? "pending " : ""} ${isActive ? "bg-orange-300 " : ""} py-2 my-2 ${nav ? "" : ""} text-xl border-b-2 whitespace-nowrap`}>
         {nav ? "Tables Plan" : <MdTableBar className="text-3xl mx-auto" />}
@@ -64,6 +64,9 @@ const AdminNav = ({ nav, setNav }) => {
       </NavLink>
       <NavLink to="/Admin/Payroll" className={({ isActive, isPending }) => `${isPending ? "pending " : ""} ${isActive ? "bg-orange-300 " : ""} py-2 my-2 ${nav ? "" : ""} text-xl border-b-2 whitespace-nowrap`}>
         {nav ? "Payroll" : <TbPigMoney className="text-3xl mx-auto" />}
+      </NavLink>
+      <NavLink to="/Admin/Courses" className={({ isActive, isPending }) => `${isPending ? "pending " : ""} ${isActive ? "bg-orange-300 " : ""} py-2 my-2 ${nav ? "" : ""} text-xl border-b-2 whitespace-nowrap`}>
+        {nav ? "Courses" : <TbPigMoney className="text-3xl mx-auto" />}
       </NavLink>
       <NavLink to="/Admin/Signout" className={({ isActive, isPending }) => `${isPending ? "pending " : ""} ${isActive ? "bg-orange-300 " : ""} py-2 my-2 ${nav ? "" : ""} text-xl border-b-2 whitespace-nowrap`}>
         {nav ? "Signout" : <GoSignOut className="text-3xl mx-auto" />}

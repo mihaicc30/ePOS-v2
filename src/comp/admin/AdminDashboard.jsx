@@ -157,7 +157,7 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
 
   return (
     <div className="flex flex-col gap-4 overflow-y-auto relative">
-      <p className="text-xl font-bold p-2 ">-Dashboard-</p>
+      <p className="text-xl font-bold p-2 underline">Dashboard</p>
 
       <div className="flex flex-col gap-4 overflow-y-auto relative">
         <p className="text-xl font-bold p-2">General Info</p>
