@@ -99,14 +99,21 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
 
   const handleSave = async () => {
     // Find the index of the item in menuitems with matching _id
-    const index = menuitems.find((item) => item?._id === tempProduct._id);
+    const itemToUpdate  = menuitems.find((item) => item?._id === tempProduct._id);
     // If the item is found, update it in menuitems
-    if (index) {
+    if (itemToUpdate ) {
       console.log("Updating item.");
       const query = await updateProduct(tempProduct);
       if (query.matchedCount === 1) {
+        const updatedMenuitems = menuitems.map((item) => {
+          if (item._id === tempProduct._id) {
+            return tempProduct;
+          } else {
+            return item;
+          }
+        });
+        setMenuitems(updatedMenuitems);
         setModal(!modal);
-        menuitems[index] = tempProduct;
         toast.success(`Item has been saved.`, {
           position: "top-right",
           autoClose: 3000,
