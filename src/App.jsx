@@ -74,11 +74,11 @@ const App = () => {
     getAsyncData();
   }, []);
 
-  // useEffect(() => {
-  // setTimeout(async() => {
-  //   await fetchForecastWeek();
-  // }, 1444);
-  // }, [weeklyWeather]);
+  useEffect(() => {
+    setTimeout(async () => {
+      await fetchForecastWeek();
+    }, 1444);
+  }, [weeklyWeather]);
 
   useEffect(() => {
     if (!tables || tables.length < 1) return;
@@ -96,8 +96,6 @@ const App = () => {
 
   const fetchForecastWeek = async () => {
     if (!weeklyWeather) return;
-    if (localStorage.getItem("forecast7") === "true" || !localStorage.getItem("forecast7")) return;
-    localStorage.setItem("forecast7", true);
 
     for (let n = 0; n < 7; n++) {
       let dayt = (new Date().getDay() + n) % 7;
@@ -111,8 +109,14 @@ const App = () => {
           daytype: dayt,
           isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
         };
-        console.log(`calling forecast api with this data:`, tempz);
+        // console.log(`calling forecast api with this data:`, tempz);
         try {
+          const currentDate = new Date();
+          currentDate.setDate(currentDate.getDate() + n);
+          const year = currentDate.getFullYear();
+          const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+          const day = String(currentDate.getDate()).padStart(2, "0");
+
           const response = await fetch(`${import.meta.env.VITE_API}forecast-quick`, {
             method: "POST",
             headers: {
@@ -120,27 +124,26 @@ const App = () => {
               "Access-Control-Allow-Credentials": true,
             },
             body: JSON.stringify({
+              date: currentDate.toLocaleDateString(),
               cloudy: weeklyWeather.forecast.forecastday[n].hour[12].cloud,
               humidity: weeklyWeather.forecast.forecastday[n].hour[12].humidity,
               windspeed: weeklyWeather.forecast.forecastday[n].hour[12].wind_mph,
               temp: weeklyWeather.forecast.forecastday[n].hour[12].temp_c,
               daytype: dayt,
               isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
+              venueID: localStorage.getItem("venueID"),
+              forceRefresh: localStorage.getItem("refreshForecast"),
             }),
           });
           const data = await response.json();
-
-          const currentDate = new Date();
-          currentDate.setDate(currentDate.getDate() + n);
-          const year = currentDate.getFullYear();
-          const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-          const day = String(currentDate.getDate()).padStart(2, "0");
 
           setWeeklyForecast((prevState) => ({
             ...prevState,
             [n]: { date: `${year}-${month}-${day}`, average: data.average },
           }));
+          localStorage.removeItem("refreshForecast");
         } catch (error) {
+          localStorage.removeItem("refreshForecast");
           console.error("Error fetching weather:", error);
         }
       }, 500);
@@ -166,7 +169,10 @@ const App = () => {
       <Route path="/" element={<Layout weeklyholiday={weeklyholiday} weeklyForecast={weeklyForecast} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} setWeeklyForecast={setWeeklyForecast} lefty={lefty} setLefty={setLefty} />}>
         <Route path="/" element={<Auth />} />
 
-        <Route path="/admin/*" element={<Admin weeklyholiday={weeklyholiday} setWeeklyHoliday={setWeeklyHoliday} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} menuitems={menuitems} setMenuitems={setMenuitems} tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
+        <Route
+          path="/admin/*"
+          element={<Admin weeklyholiday={weeklyholiday} setWeeklyHoliday={setWeeklyHoliday} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} menuitems={menuitems} setMenuitems={setMenuitems} tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />}
+        />
         <Route path="/tables" element={<Tables setBasketDiscount={setBasketDiscount} basketItems={basketItems} setBasketItems={setBasketItems} tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
 
         <Route path="/menu" element={<Menu lefty={lefty} basketDiscount={basketDiscount} setBasketDiscount={setBasketDiscount} basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} searchValue={searchValue} setSearchValue={setSearchValue} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}></Route>

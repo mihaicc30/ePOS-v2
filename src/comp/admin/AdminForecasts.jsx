@@ -4,7 +4,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import { getTargets, setTargets } from "../../utils/DataTools";
 
-const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
+const AdminForecasts = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWeeklyHoliday, weeklyWeather, setWeeklyWeather }) => {
   const forecastRef = useRef(null);
 
   const [weekNumber, setWeekNumber] = useState(null);
@@ -25,7 +25,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
   }, [weekNumber]);
 
   useEffect(() => {
-    if(!startWeek) return
+    if (!startWeek) return;
     (async () => {
       let tempData = await getTargets(startWeek);
       setCurrentTargets((prev) => ({ ...prev, Monday: parseFloat(tempData.Monday), Tuesday: parseFloat(tempData.Tuesday), Wednesday: parseFloat(tempData.Wednesday), Thursday: parseFloat(tempData.Thursday), Friday: parseFloat(tempData.Friday), Saturday: parseFloat(tempData.Saturday), Sunday: parseFloat(tempData.Sunday) }));
@@ -80,15 +80,94 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
     }
   };
 
+  const reloadWeeklyForecast = () => {
+    localStorage.setItem("refreshForecast", true);
+    setWeeklyForecast({
+      0: { date: null, average: null },
+      1: { date: null, average: null },
+      2: { date: null, average: null },
+      3: { date: null, average: null },
+      4: { date: null, average: null },
+      5: { date: null, average: null },
+      6: { date: null, average: null },
+    });
+    fetchForecastWeek();
+  };
+
+  const fetchForecastWeek = async () => {
+    if (!weeklyWeather) return;
+
+    for (let n = 0; n < 7; n++) {
+      let dayt = (new Date().getDay() + n) % 7;
+
+      setTimeout(async () => {
+        let tempz = {
+          cloudy: weeklyWeather.forecast.forecastday[`${n}`].hour[12].cloud,
+          humidity: weeklyWeather.forecast.forecastday[`${n}`].hour[12].humidity,
+          windspeed: weeklyWeather.forecast.forecastday[`${n}`].hour[12].wind_mph,
+          temp: weeklyWeather.forecast.forecastday[`${n}`].hour[12].temp_c,
+          daytype: dayt,
+          isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
+        };
+        // // console.log(`calling forecast api with this data:`, tempz);
+        try {
+          const currentDate = new Date();
+          currentDate.setDate(currentDate.getDate() + n);
+          const year = currentDate.getFullYear();
+          const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+          const day = String(currentDate.getDate()).padStart(2, "0");
+
+          const response = await fetch(`${import.meta.env.VITE_API}forecast-quick`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Credentials": true,
+            },
+            body: JSON.stringify({
+              date: currentDate.toLocaleDateString(),
+              cloudy: weeklyWeather.forecast.forecastday[n].hour[12].cloud,
+              humidity: weeklyWeather.forecast.forecastday[n].hour[12].humidity,
+              windspeed: weeklyWeather.forecast.forecastday[n].hour[12].wind_mph,
+              temp: weeklyWeather.forecast.forecastday[n].hour[12].temp_c,
+              daytype: dayt,
+              isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
+              venueID: localStorage.getItem("venueID"),
+              forceRefresh: localStorage.getItem('refreshForecast')
+            }),
+          });
+          const data = await response.json();
+
+          setWeeklyForecast((prevState) => ({
+            ...prevState,
+            [n]: { date: `${year}-${month}-${day}`, average: data.average },
+          }));
+          localStorage.removeItem("refreshForecast");
+        } catch (error) {
+          localStorage.removeItem("refreshForecast");
+          console.error("Error fetching weather:", error);
+        }
+      }, 500);
+    }
+  };
+
   return (
     <div className="flex flex-col">
       <p className="text-xl font-bold p-2">-Forecasts-</p>
 
-      <p className="text-xl font-bold p-2">Weekly Forecast</p>
+      <div className="flex justify-between px-4">
+        <p className="text-xl font-bold p-2">7 Day Forecast</p>
+        <button
+          onClick={() => {
+            reloadWeeklyForecast();
+          }}>
+          <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-xl rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition" />
+        </button>
+      </div>
+
       <div className="flex-1 flex flex-wrap flex-col">
         <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center">
           <div className="flex flex-wrap justify-center items-center gap-4">
-            <div className="shadow-xl p-3">
+            <div className="shadow-xl p-3 max-w-[120px]">
               <p className="text-center">{new Date(weeklyForecast["0"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["0"]?.date}</p>
               <p className="text-center">Forecast</p>
@@ -99,7 +178,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
               {getVenueStatus(weeklyForecast["0"]?.average)}
             </div>
 
-            <div className="shadow-xl p-3">
+            <div className="shadow-xl p-3 max-w-[120px]">
               <p className="text-center">{new Date(weeklyForecast["1"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["1"]?.date}</p>
               <p className="text-center">Forecast</p>
@@ -109,7 +188,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
               </div>
               {getVenueStatus(weeklyForecast["1"]?.average)}
             </div>
-            <div className="shadow-xl p-3">
+            <div className="shadow-xl p-3 max-w-[120px]">
               <p className="text-center">{new Date(weeklyForecast["2"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["2"]?.date}</p>
               <p className="text-center">Forecast</p>
@@ -120,7 +199,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
               {getVenueStatus(weeklyForecast["2"]?.average)}
             </div>
 
-            <div className="shadow-xl p-3">
+            <div className="shadow-xl p-3 max-w-[120px]">
               <p className="text-center">{new Date(weeklyForecast["3"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["3"]?.date}</p>
               <p className="text-center">Forecast</p>
@@ -130,7 +209,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
               </div>
               {getVenueStatus(weeklyForecast["3"]?.average)}
             </div>
-            <div className="shadow-xl p-3">
+            <div className="shadow-xl p-3 max-w-[120px]">
               <p className="text-center">{new Date(weeklyForecast["4"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["4"]?.date}</p>
               <p className="text-center">Forecast</p>
@@ -141,7 +220,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
               {getVenueStatus(weeklyForecast["4"]?.average)}
             </div>
 
-            <div className="shadow-xl p-3">
+            <div className="shadow-xl p-3 max-w-[120px]">
               <p className="text-center">{new Date(weeklyForecast["5"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["5"]?.date}</p>
               <p className="text-center">Forecast</p>
@@ -152,7 +231,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
               {getVenueStatus(weeklyForecast["5"]?.average)}
             </div>
 
-            <div className="shadow-xl p-3">
+            <div className="shadow-xl p-3 max-w-[120px]">
               <p className="text-center">{new Date(weeklyForecast["6"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
               <p className="text-center"> {weeklyForecast["6"]?.date}</p>
               <p className="text-center">Forecast</p>
@@ -168,7 +247,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
 
       <div className="flex justify-between mx-4">
         <div>
-          <p className="text-xl font-bold p-2">Weekly Sales Target</p>
+          <p className="text-xl font-bold p-2">Week's Target Sales </p>
           <p className="text-xs">*To be set by general manager/ head office</p>
         </div>
         <button onClick={handleTargetUpdate} className="bg-[--c1] p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
@@ -194,7 +273,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
                   <p className="text-xl text-center">Sunday</p>
                   <p className="text-xs text-center">{new Date(startWeek).toLocaleDateString()}</p>
                   <div className="flex p-2">
-                     <span className="p-1">£</span>
+                    <span className="p-1">£</span>
                     <input onChange={(e) => setCurrentTargets((prev) => ({ ...prev, Sunday: parseFloat(e.target.value) }))} type="text" className="bg-gray-50 text-start w-[100%] shadow-md p-1" value={currentTargets.Sunday || 0} />
                   </div>
                 </div>
@@ -210,7 +289,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
                   <p className="text-xl text-center">Tuesday</p>
                   <p className="text-xs text-center">{new Date(startWeek.getTime() + 2 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
                   <div className="flex p-2">
-                     <span className="p-1">£</span>
+                    <span className="p-1">£</span>
                     <input onChange={(e) => setCurrentTargets((prev) => ({ ...prev, Tuesday: parseFloat(e.target.value) }))} type="text" className="bg-gray-50 text-start w-[100%] shadow-md p-1" value={currentTargets.Tuesday || 0} />
                   </div>
                 </div>
@@ -218,7 +297,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
                   <p className="text-xl text-center">Wednesday</p>
                   <p className="text-xs text-center">{new Date(startWeek.getTime() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
                   <div className="flex p-2">
-                     <span className="p-1">£</span>
+                    <span className="p-1">£</span>
                     <input onChange={(e) => setCurrentTargets((prev) => ({ ...prev, Wednesday: parseFloat(e.target.value) }))} type="text" className="bg-gray-50 text-start w-[100%] shadow-md p-1" value={currentTargets.Wednesday || 0} />
                   </div>
                 </div>
@@ -226,7 +305,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
                   <p className="text-xl text-center">Thursday</p>
                   <p className="text-xs text-center">{new Date(startWeek.getTime() + 4 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
                   <div className="flex p-2">
-                     <span className="p-1">£</span>
+                    <span className="p-1">£</span>
                     <input onChange={(e) => setCurrentTargets((prev) => ({ ...prev, Thursday: parseFloat(e.target.value) }))} type="text" className="bg-gray-50 text-start w-[100%] shadow-md p-1" value={currentTargets.Thursday || 0} />
                   </div>
                 </div>
@@ -234,7 +313,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
                   <p className="text-xl text-center">Friday</p>
                   <p className="text-xs text-center">{new Date(startWeek.getTime() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
                   <div className="flex p-2">
-                     <span className="p-1">£</span>
+                    <span className="p-1">£</span>
                     <input onChange={(e) => setCurrentTargets((prev) => ({ ...prev, Friday: parseFloat(e.target.value) }))} type="text" className="bg-gray-50 text-start w-[100%] shadow-md p-1" value={currentTargets.Friday || 0} />
                   </div>
                 </div>
@@ -242,7 +321,7 @@ const AdminForecasts = ({ weeklyForecast, setWeeklyForecast }) => {
                   <p className="text-xl text-center">Saturday</p>
                   <p className="text-xs text-center">{new Date(startWeek.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
                   <div className="flex p-2">
-                     <span className="p-1">£</span>
+                    <span className="p-1">£</span>
                     <input onChange={(e) => setCurrentTargets((prev) => ({ ...prev, Saturday: parseFloat(e.target.value) }))} type="text" className="bg-gray-50 text-start w-[100%] shadow-md p-1" value={currentTargets.Saturday || 0} />
                   </div>
                 </div>

@@ -13,11 +13,13 @@ const AdminLayout = () => {
 
   useEffect(() => {}, [nav]);
   return (
-    <div className={`grid ${nav ? "grid-cols-[150px,1fr]" : "grid-cols-[50px,1fr]" }  fixed inset-0 bg-gray-50 `}>
+    <div className={`grid ${nav ? "grid-cols-[150px,1fr]" : "grid-cols-[50px,1fr]"}  fixed inset-0 bg-gray-50`}>
       <AdminNav nav={nav} setNav={setNav} />
       <div className="flex-grow flex flex-col overflow-y-auto">
-        <div className="border-y-2 text-xl flex flex-row items-baseline p-2 gap-4">
-          Admin
+        <div className="border-y-2 text-xl flex flex-row items-center p-2 gap-4">
+          <p className={`font-black tracking-widest`}>CCW POS</p>
+          <img className={`w-[50px] rounded-xl p-1`} src="../assets/ic.jpg" />
+          <span>Admin</span>
           <RiAdminLine className="text-xl" />
           {localStorage.getItem("displayName")}
           <span>|</span>
@@ -34,9 +36,7 @@ export default AdminLayout;
 
 const AdminNav = ({ nav, setNav }) => {
   return (
-    <div className={`flex flex-col transition flex-nowrap relative overflow-y-auto ${nav ? "w-[150px]" : "w-[54px]"}`}>
-      <img className={`${nav ? "w-[54px] rounded-xl" : "w-[50px] rounded-xl p-1"}`} src="../assets/ic.jpg" />
-      <p className={` ${nav ? "w-[54px]" : "w-[50px]"} font-black tracking-widest text-center `}>CCW POS</p>
+    <div className={`flex flex-col transition flex-nowrap relative overflow-y-auto ${nav ? "w-[150px]" : "w-[54px]"}  border-r-2`}>
       <button className={`py-6 border-y-2 `} onClick={() => setNav(!nav)}>
         <AiOutlineMenuFold className={` ${nav ? "" : "rotate-180 "} transition text-3xl mx-auto`} />
       </button>

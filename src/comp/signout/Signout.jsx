@@ -30,9 +30,6 @@ const Signout = ({ setUser, setVenueNtable }) => {
           navigate("/");
           localStorage.clear();
 
-          // -----temp enabled
-          localStorage.setItem("forecast7", "true");
-
           console.log(data.message);
         } else {
           toast.error(`${data.message}`, {
@@ -49,9 +46,6 @@ const Signout = ({ setUser, setVenueNtable }) => {
           setVenueNtable({ venue: null, table: null });
           navigate("/");
           localStorage.clear();
-
-          // -----temp enabled
-          localStorage.setItem("forecast7", "true");
 
           console.log(data.message);
           // TEMPORARY

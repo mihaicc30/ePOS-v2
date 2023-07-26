@@ -20,7 +20,7 @@ const Admin = ({ setMenuitems, weeklyholiday, setWeeklyHoliday, weeklyWeather, s
     <Routes>
       <Route path="/" element={<AdminLayout />}>
         <Route path="/" element={<AdminDashboard weeklyholiday={weeklyholiday} setWeeklyHoliday={setWeeklyHoliday} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} />} />
-        <Route path="/Forecasts" element={<AdminForecasts weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} />} />
+        <Route path="/Forecasts" element={<AdminForecasts weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} weeklyholiday={weeklyholiday} setWeeklyHoliday={setWeeklyHoliday} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} />} />
         <Route path="/TablesPlan" element={<AdminTablePlan tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
         <Route path="/Products" element={<AdminProducts menuitems={menuitems} setMenuitems={setMenuitems}/>} />
         <Route path="/Receipts" element={<AdminReceipts />} />

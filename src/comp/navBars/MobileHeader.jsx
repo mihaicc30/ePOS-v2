@@ -24,7 +24,7 @@ const MobileHeader = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, weekly
   const [time, setTime] = useState(false);
 
   const reloadWeeklyForecast = () => {
-    localStorage.setItem("forecast7", "false");
+    localStorage.setItem("refreshForecast", true);
     setWeeklyForecast({
       0: { date: null, average: null },
       1: { date: null, average: null },
@@ -39,8 +39,6 @@ const MobileHeader = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, weekly
 
   const fetchForecastWeek = async () => {
     if (!weeklyWeather) return;
-    if (localStorage.getItem("forecast7") === "true" || !localStorage.getItem("forecast7")) return;
-    localStorage.setItem("forecast7", true);
 
     for (let n = 0; n < 7; n++) {
       let dayt = (new Date().getDay() + n) % 7;
@@ -54,8 +52,13 @@ const MobileHeader = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, weekly
           daytype: dayt,
           isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
         };
-        console.log(`calling forecast api with this data:`, tempz);
+        // console.log(`calling forecast api with this data:`, tempz);
         try {
+          const currentDate = new Date();
+          currentDate.setDate(currentDate.getDate() + n);
+          const year = currentDate.getFullYear();
+          const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+          const day = String(currentDate.getDate()).padStart(2, "0");
           const response = await fetch(`${import.meta.env.VITE_API}forecast-quick`, {
             method: "POST",
             headers: {
@@ -63,27 +66,26 @@ const MobileHeader = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, weekly
               "Access-Control-Allow-Credentials": true,
             },
             body: JSON.stringify({
+              date: currentDate.toLocaleDateString(),
               cloudy: weeklyWeather.forecast.forecastday[n].hour[12].cloud,
               humidity: weeklyWeather.forecast.forecastday[n].hour[12].humidity,
               windspeed: weeklyWeather.forecast.forecastday[n].hour[12].wind_mph,
               temp: weeklyWeather.forecast.forecastday[n].hour[12].temp_c,
               daytype: dayt,
               isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
+              venueID: localStorage.getItem("venueID"),
+              forceRefresh: localStorage.getItem('refreshForecast')
             }),
           });
           const data = await response.json();
-
-          const currentDate = new Date();
-          currentDate.setDate(currentDate.getDate() + n);
-          const year = currentDate.getFullYear();
-          const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-          const day = String(currentDate.getDate()).padStart(2, "0");
 
           setWeeklyForecast((prevState) => ({
             ...prevState,
             [n]: { date: `${year}-${month}-${day}`, average: data.average },
           }));
+          localStorage.removeItem("refreshForecast");
         } catch (error) {
+          localStorage.removeItem("refreshForecast");
           console.error("Error fetching weather:", error);
         }
       }, 500);
@@ -115,9 +117,9 @@ const MobileHeader = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, weekly
   }, []);
 
   const getVenueStatus = (AVG) => {
-    if (AVG > 5000) {
+    if (AVG > 3000) {
       return <p className="text-center">Busy</p>;
-    } else if (AVG < 1500) {
+    } else if (AVG < 2000) {
       return <p className="text-center">Quiet</p>;
     } else {
       return <p className="text-center">Average</p>;
@@ -133,7 +135,7 @@ const MobileHeader = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, weekly
           </div>
           <div className="border-r-2 pr-2 mr-2">
             <div className="flex flex-col justify-evenly h-[100%]">
-            {weeklyholiday && <p className="text-xl">{weeklyholiday[0][0] || "0"}</p> }
+              {weeklyholiday && <p className="text-xl">{weeklyholiday[0][0] || "0"}</p>}
               {weeklyholiday && weeklyholiday[0][1]?.title ? <p className="text-xl">{weeklyholiday[0][1].title}</p> : "No events today."}
             </div>
           </div>
@@ -166,7 +168,7 @@ const MobileHeader = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, weekly
           <div className="flex flex-nowrap justify-center items-center border-r-2 pr-2 mr-2 border-l-2 pl-2 ml-2 ">
             <div>
               <p className="text-center">Forecast</p>
-              <div className="text-center"> {weeklyholiday && weeklyForecast["0"]?.date && <p className={`text-center font-[600] text-xl ${weeklyForecast["0"]?.average > 5000 ? "text-green-400" : weeklyForecast["0"]?.average < 1500 ? "text-red-400" : "text-yellow-500"} `}>£{weeklyForecast["0"]?.average}</p>}</div>
+              <div className="text-center"> {weeklyholiday && weeklyForecast["0"]?.date && <p className={`text-center font-[600] text-xl ${weeklyForecast["0"]?.average > 3000 ? "text-green-400" : weeklyForecast["0"]?.average < 2000 ? "text-red-400" : "text-yellow-500"} `}>£{weeklyForecast["0"]?.average}</p>}</div>
               {getVenueStatus(weeklyForecast["0"]?.average)}
             </div>
             <button onClick={() => reloadWeeklyForecast()}>
