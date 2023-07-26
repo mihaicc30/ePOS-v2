@@ -76,9 +76,13 @@ const AdminROTA = () => {
                 <p>07123 123 123</p>
               </div>
 
-              <div className="col-span-2 flex justify-between gap-4">
-                {/* <button className="bg-green-200 p-4 rounded-lg shadow-md border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Update</button> */}
-                <button className="ml-auto bg-red-400 p-4 rounded-lg shadow-md border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">Remove</button>
+              <div className="col-span-2 gap-4 grid grid-cols-[1fr_10px_.4fr] p-2 border-2 shadow-lg">
+                <p className="text-end">This Week's Scheduled hours</p>
+                <span>|</span>
+                <p className="text-start">30h</p>
+                <p className="text-end">Paid Holiday Remaining</p>
+                <span>|</span>
+                <p className="text-start">2.4h</p>
               </div>
             </div>
           </div>
@@ -111,40 +115,42 @@ const AdminROTA = () => {
 
       <div className="flex flex-col gap-2 mt-4 w-[100%]">
         <div className="tableHeaders grid grid-cols-8 w-[100%] gap-2 text-center">
-          {startWeek && <>
-          <div className="shadow-md p-2 flex flex-col">
-            <p className="text-xl text-center">Teams</p>
-            <p className="text-xs text-center">Week {weekNumber}</p>
-          </div>
-          <div className="shadow-md p-2 flex flex-col">
-            <p className="text-xl text-center">Sunday</p>
-            <p className="text-xs text-center">{new Date(startWeek).toLocaleDateString()}</p>
-          </div>
-          <div className="shadow-md p-2 flex flex-col">
-            <p className="text-xl text-center">Monday</p>
-            <p className="text-xs text-center">{new Date(startWeek.getTime() + 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
-          </div>
-          <div className="shadow-md p-2 flex flex-col">
-            <p className="text-xl text-center">Tuesday</p>
-            <p className="text-xs text-center">{new Date(startWeek.getTime() + 2 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
-          </div>
-          <div className="shadow-md p-2 flex flex-col">
-            <p className="text-xl text-center">Wednesday</p>
-            <p className="text-xs text-center">{new Date(startWeek.getTime() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
-          </div>
-          <div className="shadow-md p-2 flex flex-col">
-            <p className="text-xl text-center">Thursday</p>
-            <p className="text-xs text-center">{new Date(startWeek.getTime() + 4 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
-          </div>
-          <div className="shadow-md p-2 flex flex-col">
-            <p className="text-xl text-center">Friday</p>
-            <p className="text-xs text-center">{new Date(startWeek.getTime() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
-          </div>
-          <div className="shadow-md p-2 flex flex-col">
-            <p className="text-xl text-center">Saturday</p>
-            <p className="text-xs text-center">{new Date(startWeek.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
-          </div>
-        </>}
+          {startWeek && (
+            <>
+              <div className="shadow-md p-2 flex flex-col">
+                <p className="text-xl text-center">Teams</p>
+                <p className="text-xs text-center">Week {weekNumber}</p>
+              </div>
+              <div className="shadow-md p-2 flex flex-col">
+                <p className="text-xl text-center">Sunday</p>
+                <p className="text-xs text-center">{new Date(startWeek).toLocaleDateString()}</p>
+              </div>
+              <div className="shadow-md p-2 flex flex-col">
+                <p className="text-xl text-center">Monday</p>
+                <p className="text-xs text-center">{new Date(startWeek.getTime() + 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+              </div>
+              <div className="shadow-md p-2 flex flex-col">
+                <p className="text-xl text-center">Tuesday</p>
+                <p className="text-xs text-center">{new Date(startWeek.getTime() + 2 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+              </div>
+              <div className="shadow-md p-2 flex flex-col">
+                <p className="text-xl text-center">Wednesday</p>
+                <p className="text-xs text-center">{new Date(startWeek.getTime() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+              </div>
+              <div className="shadow-md p-2 flex flex-col">
+                <p className="text-xl text-center">Thursday</p>
+                <p className="text-xs text-center">{new Date(startWeek.getTime() + 4 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+              </div>
+              <div className="shadow-md p-2 flex flex-col">
+                <p className="text-xl text-center">Friday</p>
+                <p className="text-xs text-center">{new Date(startWeek.getTime() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+              </div>
+              <div className="shadow-md p-2 flex flex-col">
+                <p className="text-xl text-center">Saturday</p>
+                <p className="text-xs text-center">{new Date(startWeek.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+              </div>
+            </>
+          )}
         </div>
         <span className="border-b-2 border-b-gray-400"></span>
       </div>
@@ -160,13 +166,17 @@ const AdminROTA = () => {
             Mihai Culea
           </p>
           <div className="dayLogSunday flex flex-col gap-2">
-            <p className="bg-yellow-300 p-2 rounded-xl text-center text-xs">Req. Off</p>
-            <p className="bg-green-300 p-2 rounded-xl text-center text-xs">Req. ✅</p>
+            <div>
+              <p className="bg-yellow-300 p-2 rounded-t-xl text-center text-xs">Req. Off</p>
+              <p className="bg-green-300 p-2 rounded-b-xl text-center text-xs">Req. ✅</p>
+            </div>
             <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
           </div>
           <div className="dayLogMonday flex flex-col gap-2">
-            <p className="bg-yellow-300 p-2 rounded-xl text-center text-xs">Req. Off</p>
-            <p className="bg-red-400 p-2 rounded-xl text-center text-xs">Req. ❌</p>
+            <div>
+              <p className="bg-yellow-300 p-2 rounded-t-xl text-center text-xs">Req. Off</p>
+              <p className="bg-red-400 p-2 rounded-b-xl text-center text-xs">Req. ❌</p>
+            </div>
             <p className="py-1 bg-orange-300 rounded-lg text-center shadow-md" title="Set ROTA">
               12:00 - 22:00
             </p>
@@ -239,28 +249,40 @@ const AdminROTA = () => {
             <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
           </div>
           <div className="dayLogWednesday flex flex-col gap-2">
-            <p className="bg-yellow-300 py-1 text-center rounded-lg">Req. Hol</p>
+            <div>
+              <p className="bg-yellow-300 py-1 text-center rounded-t-lg">Req. Hol</p>
+              <p className="bg-green-300 p-2 rounded-b-xl text-center text-xs">Req. ✅</p>
+            </div>
             <p className="py-1 bg-violet-300 rounded-lg text-center shadow-md" title="Set ROTA">
               HOLIDAY
             </p>
             <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
           </div>
           <div className="dayLogThursday flex flex-col gap-2">
-            <p className="bg-yellow-300 py-1 text-center rounded-lg">Req. Hol</p>
+            <div>
+              <p className="bg-yellow-300 py-1 text-center rounded-t-lg">Req. Hol</p>
+              <p className="bg-green-300 p-2 rounded-b-xl text-center text-xs">Req. ✅</p>
+            </div>
             <p className="py-1 bg-violet-300 rounded-lg text-center shadow-md" title="Set ROTA">
               HOLIDAY
             </p>
             <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
           </div>
           <div className="dayLogFriday flex flex-col gap-2">
-            <p className="bg-yellow-300 py-1 text-center rounded-lg">Req. Hol</p>
+            <div>
+              <p className="bg-yellow-300 py-1 text-center rounded-t-lg">Req. Hol</p>
+              <p className="bg-green-300 p-2 rounded-b-xl text-center text-xs">Req. ✅</p>
+            </div>
             <p className="py-1 bg-violet-300 rounded-lg text-center shadow-md" title="Set ROTA">
               HOLIDAY
             </p>
             <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
           </div>
           <div className="dayLogSaturday flex flex-col gap-2">
-            <p className="bg-yellow-300 py-1 text-center rounded-lg">Req. Hol</p>
+            <div>
+              <p className="bg-yellow-300 py-1 text-center rounded-t-lg">Req. Hol</p>
+              <p className="bg-green-300 p-2 rounded-b-xl text-center text-xs">Req. ✅</p>
+            </div>
             <p className="py-1 bg-violet-300 rounded-lg text-center shadow-md" title="Set ROTA">
               HOLIDAY
             </p>
@@ -274,8 +296,10 @@ const AdminROTA = () => {
             Petrisor Predescu
           </p>
           <div className="dayLogSunday flex flex-col gap-2">
-            <p className="bg-pink-300 p-2 rounded-xl text-center text-xs">Can i please have morning off? can work from 3.</p>
-            <p className="bg-green-400 p-2 rounded-xl text-center text-xs">Req. ✅</p>
+            <div>
+              <p className="bg-pink-300 p-2 rounded-t-xl text-center text-xs">Can i please have morning off? can work from 3.</p>
+              <p className="bg-green-400 p-2 rounded-b-xl text-center text-xs">Req. ✅</p>
+            </div>
             <p className="py-1 bg-orange-300 rounded-lg text-center shadow-md" title="Set ROTA">
               16:00 - 22:00
             </p>
@@ -300,10 +324,15 @@ const AdminROTA = () => {
             <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
           </div>
           <div className="dayLogThursday flex flex-col gap-2">
-            <p className="bg-pink-300 p-2 rounded-xl text-center text-xs">Have a party. Can i have off ?</p>
-            <p className="bg-red-300 p-2 rounded-xl text-center text-xs">Req. ❌</p>
-            <p className="bg-pink-300 p-2 rounded-xl text-center text-xs">How about off tomorrow ?</p>
-            <p className="bg-red-300 p-2 rounded-xl text-center text-xs">Req. ❌</p>
+            <div>
+              <p className="bg-pink-300 p-2 rounded-t-xl text-center text-xs">Have a party. Can i have off ?</p>
+              <p className="bg-red-300 p-2 rounded-b-xl text-center text-xs">Req. ❌</p>
+            </div>
+
+            <div>
+              <p className="bg-pink-300 p-2 rounded-t-xl text-center text-xs">How about off tomorrow ?</p>
+              <p className="bg-red-300 p-2 rounded-b-xl text-center text-xs">Req. ❌</p>
+            </div>
             <p className="py-1 bg-orange-300 rounded-lg text-center shadow-md" title="Set ROTA">
               12:00 - 22:00
             </p>
@@ -338,18 +367,24 @@ const AdminROTA = () => {
             <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
           </div>
           <div className="dayLogMonday flex flex-col gap-2">
-            <p className="bg-pink-300 p-2 rounded-xl text-center text-xs">Got uni exam. Cant work.</p>
-            <p className="bg-green-400 p-2 rounded-xl text-center text-xs">Req. ✅</p>
+            <div>
+              <p className="bg-pink-300 p-2 rounded-t-xl text-center text-xs">Got uni exam. Cant work.</p>
+              <p className="bg-green-400 p-2 rounded-b-xl text-center text-xs">Req. ✅</p>
+            </div>
             <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
           </div>
           <div className="dayLogTuesday flex flex-col gap-2">
-            <p className="bg-pink-300 p-2 rounded-xl text-center text-xs">Got uni exam. Cant work.</p>
-            <p className="bg-green-400 p-2 rounded-xl text-center text-xs">Req. ✅</p>
+            <div>
+              <p className="bg-pink-300 p-2 rounded-t-xl text-center text-xs">Got uni exam. Cant work.</p>
+              <p className="bg-green-400 p-2 rounded-b-xl text-center text-xs">Req. ✅</p>
+            </div>
             <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
           </div>
           <div className="dayLogWednesday flex flex-col gap-2">
-            <p className="bg-pink-300 p-2 rounded-xl text-center text-xs">Got uni exam. Cant work.</p>
-            <p className="bg-green-400 p-2 rounded-xl text-center text-xs">Req. ✅</p>
+            <div>
+              <p className="bg-pink-300 p-2 rounded-t-xl text-center text-xs">Got uni exam. Cant work.</p>
+              <p className="bg-green-400 p-2 rounded-b-xl text-center text-xs">Req. ✅</p>
+            </div>
             <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
           </div>
           <div className="dayLogThursday flex flex-col gap-2">
