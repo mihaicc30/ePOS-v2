@@ -30,12 +30,46 @@ const AdminStaff = () => {
     phone: "",
   });
 
+  const [staffCount, setStaffCount] = useState({ new: 0, total: 0 });
+  const [staffTraining, setStaffTraining] = useState({ completed: 0, total: 0 });
   const openPopup = (user) => {
     setModalData(user);
     setModal(!modal);
   };
 
   useEffect(() => {}, [searchStaff]);
+
+  useEffect(() => {
+    // new members widget
+    const now = new Date();
+    const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000); // 30 days in milliseconds
+
+    const staffWithinOneMonth = staff.filter((staff) => {
+      const staffDate = new Date(staff.date);
+      return staffDate >= oneMonthAgo && staffDate <= now;
+    });
+    setStaffCount((prev) => {
+      return {
+        ...prev,
+        total: staff.length,
+        new: staffWithinOneMonth.length,
+      };
+    });
+    const staffTraining = staff.reduce(
+      (acc, staff) => {
+        staff.courses.forEach((course) => {
+          acc.total++;
+          if (course.status === "Passed!") {
+            acc.completed++;
+          }
+        });
+        return acc;
+      },
+      { completed: 0, total: 0 }
+    );
+
+    setStaffTraining(staffTraining);
+  }, [staff]);
 
   useEffect(() => {
     (async () => {
@@ -45,10 +79,8 @@ const AdminStaff = () => {
 
   const handleStaffRemoval = async (data) => {
     const query = await handleRemove(data);
-    console.log("🚀 ~ file: AdminStaff.jsx:48 ~ handleStaffRemoval ~ query:", query);
 
     if (query.message === "POS User deleted.") {
-      console.log(data);
       setModal(!modal);
       const updatedStaff = staff.filter((user) => user._id !== data);
       setStaff(updatedStaff);
@@ -127,11 +159,10 @@ const AdminStaff = () => {
       errors.map((err, i) => setErrors((prevErrors) => [...prevErrors, err]));
     } else {
       const query = await savePosUser(tempUser);
-      console.log("🚀 ~ file: AdminStaff.jsx:92 ~ handleAddNewStaff ~ query:", query);
       if (query.message === "POS User saved.") {
         setErrors([]);
         setModalAddStaff(!modalAddStaff);
-        setStaff((prev) => [...prev, query.user])
+        setStaff((prev) => [...prev, query.user]);
         toast.success(`User has been saved.`, {
           position: "top-right",
           autoClose: 1000,
@@ -343,7 +374,7 @@ const AdminStaff = () => {
                 </div>
 
                 {modalData.courses.map((course, index) => {
-                  console.log(course.courseName ,course.progress, course.progress < 1)
+                  console.log(course.courseName, course.progress, course.progress < 1);
                   return (
                     <div className={`trainingCard ${course.examStarted < 1 && "bg-yellow-100"} ${course.progress === 100 && course.status !== "Passed!" && "bg-red-100"} ${course.status === "Passed!" && "bg-green-100"} shadow-md p-2`} key={crypto.randomUUID()}>
                       <p className="font-bold border-b-[1px] border-b-gray-500">{course.courseName}</p>
@@ -472,7 +503,7 @@ const AdminStaff = () => {
               </svg>
             </span>
             <p>
-              <span className="text-xl font-bold">2</span>/<span className="text-xl">4</span> New Members in the last month
+              <span className="text-xl font-bold">{staffCount.new}</span>/<span className="text-xl">{staffCount.total}</span> New Members in the last month
             </p>
           </div>
 
@@ -591,7 +622,7 @@ const AdminStaff = () => {
               </svg>
             </span>
             <p>
-              <span className="text-xl font-bold">13</span>/<span className="text-xl">20</span> Overall Staff Training Completed
+              <span className="text-xl font-bold">{staffTraining.completed}</span>/<span className="text-xl">{staffTraining.total}</span> Overall Staff Training Completed
             </p>
           </div>
         </div>

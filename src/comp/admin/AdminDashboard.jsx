@@ -4,7 +4,7 @@ import { IoMdRefreshCircle } from "react-icons/io";
 import { TiWeatherCloudy } from "react-icons/ti";
 import { WiHumidity } from "react-icons/wi";
 import { FaRegUserCircle, FaWind } from "react-icons/fa";
-import { fetchWeeklyWeather, fetchHoliday } from "../../utils/DataTools";
+import { fetchWeeklyWeather, fetchHoliday, getStaffMembers } from "../../utils/DataTools";
 import ChartSales from "./AdminComp/ChartSales";
 import NetProfit from "./AdminComp/NetProfit";
 
@@ -92,6 +92,47 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
       }, 500);
     }
   };
+
+  const [staff, setStaff] = useState([]);
+  const [staffCount, setStaffCount] = useState({ new: 0, total: 0 });
+  const [staffTraining, setStaffTraining] = useState({ completed: 0, total: 0 });
+
+  useEffect(() => {
+    (async () => {
+      setStaff(await getStaffMembers());
+    })();
+  }, []);
+
+  useEffect(() => {
+    // new members widget
+    const now = new Date();
+    const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000); // 30 days in milliseconds
+
+    const staffWithinOneMonth = staff.filter((staff) => {
+      const staffDate = new Date(staff.date);
+      return staffDate >= oneMonthAgo && staffDate <= now;
+    });
+
+    setStaffCount((prev) => {
+      return {
+        ...prev,
+        total: staff.length,
+        new: staffWithinOneMonth.length,
+      };
+    });
+
+    const staffTraining = staff.reduce((acc, staff) => {
+      staff.courses.forEach((course) => {
+        acc.total++;
+        if (course.status === "Passed!") {
+          acc.completed++;
+        }
+      });
+      return acc;
+    }, { completed: 0, total: 0 });
+    
+    setStaffTraining(staffTraining);
+  }, [staff]);
 
   const getDaysTillPayday = () => {
     const payDay = 15;
@@ -324,7 +365,7 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
               </svg>
             </span>
             <p className="text-center">
-              <span className="text-xl font-bold">5</span>/<span className="text-xl">10</span> New Members in the last month
+              <span className="text-xl font-bold">{staffCount.new}</span>/<span className="text-xl">{staffCount.total}</span> New Members in the last month
             </p>
           </div>
           <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center flex-col items-center min-w-[200px] min-h-[120px]">
@@ -453,7 +494,7 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
               </svg>
             </span>
             <p className="text-center">
-              <span className="text-xl font-bold">13</span>/<span className="text-xl">20</span> Overall Staff Training Completed
+              <span className="text-xl font-bold">{staffTraining.completed}</span>/<span className="text-xl">{staffTraining.total}</span> Overall Staff Training Completed
             </p>
           </div>
 
@@ -771,19 +812,20 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
             </span>
             <p className="text-xl font-bold">Weekly Holidays</p>
             <div className="grid grid-cols-1 shadow-xlp-4">
-              {weeklyholiday.map((item, index) => {
-                if (item[1]) {
-                  return (
-                    <div key={index + "a"} className="flex flex-col justify-evenly my-2">
-                      <p>{new Date(item[0]).toLocaleDateString("en-GB", { weekday: "long" })}</p>
-                      <p>{item[1].date}</p>
-                      <span className="border-b-2 border-b-orange-400 flex-1"></span>
-                      <p className="text-xl">{item[1].title}</p>
-                    </div>
-                  );
-                }
-              })}
-              {!weeklyholiday.every((item) => item[1]) ? <p className="text-center">No official holiday in the next 7 days.</p> : null}
+              {weeklyholiday &&
+                weeklyholiday.map((item, index) => {
+                  if (item[1]) {
+                    return (
+                      <div key={index + "a"} className="flex flex-col justify-evenly my-2">
+                        <p>{new Date(item[0]).toLocaleDateString("en-GB", { weekday: "long" })}</p>
+                        <p>{item[1].date}</p>
+                        <span className="border-b-2 border-b-orange-400 flex-1"></span>
+                        <p className="text-xl">{item[1].title}</p>
+                      </div>
+                    );
+                  }
+                })}
+              {weeklyholiday && !weeklyholiday.every((item) => item[1]) ? <p className="text-center">No official holiday in the next 7 days.</p> : null}
             </div>
           </div>
         </div>
