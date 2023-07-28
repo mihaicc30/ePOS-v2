@@ -45,10 +45,10 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
 
       setTimeout(async () => {
         let tempz = {
-          cloudy: weeklyWeather.forecast.forecastday[`${n}`].hour[12].cloud,
-          humidity: weeklyWeather.forecast.forecastday[`${n}`].hour[12].humidity,
-          windspeed: weeklyWeather.forecast.forecastday[`${n}`].hour[12].wind_mph,
-          temp: weeklyWeather.forecast.forecastday[`${n}`].hour[12].temp_c,
+          cloudy: weeklyWeather.forecast.forecastday[n]?.hour[12].cloud || parseInt(Math.random() * (99 - 1) + 1),
+          humidity: weeklyWeather.forecast.forecastday[n]?.hour[12].humidity || parseInt(Math.random() * (99 - 1) + 1),
+          windspeed: weeklyWeather.forecast.forecastday[n]?.hour[12].wind_mph || parseInt(Math.random() * (99 - 1) + 1),
+          temp: weeklyWeather.forecast.forecastday[n]?.hour[12].temp_c || parseInt(Math.random() * (44 - 1) + 1),
           daytype: dayt,
           isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
         };
@@ -68,10 +68,10 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
             },
             body: JSON.stringify({
               date: currentDate.toLocaleDateString(),
-              cloudy: weeklyWeather.forecast.forecastday[n].hour[12].cloud,
-              humidity: weeklyWeather.forecast.forecastday[n].hour[12].humidity,
-              windspeed: weeklyWeather.forecast.forecastday[n].hour[12].wind_mph,
-              temp: weeklyWeather.forecast.forecastday[n].hour[12].temp_c,
+              cloudy: weeklyWeather.forecast.forecastday[n]?.hour[12].cloud || parseInt(Math.random() * (99 - 1) + 1),
+              humidity: weeklyWeather.forecast.forecastday[n]?.hour[12].humidity || parseInt(Math.random() * (99 - 1) + 1),
+              windspeed: weeklyWeather.forecast.forecastday[n]?.hour[12].wind_mph || parseInt(Math.random() * (99 - 1) + 1),
+              temp: weeklyWeather.forecast.forecastday[n]?.hour[12].temp_c || parseInt(Math.random() * (44 - 1) + 1),
               daytype: dayt,
               isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
               venueID: localStorage.getItem("venueID"),
@@ -121,16 +121,19 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
       };
     });
 
-    const staffTraining = staff.reduce((acc, staff) => {
-      staff.courses.forEach((course) => {
-        acc.total++;
-        if (course.status === "Passed!") {
-          acc.completed++;
-        }
-      });
-      return acc;
-    }, { completed: 0, total: 0 });
-    
+    const staffTraining = staff.reduce(
+      (acc, staff) => {
+        staff.courses.forEach((course) => {
+          acc.total++;
+          if (course.status === "Passed!") {
+            acc.completed++;
+          }
+        });
+        return acc;
+      },
+      { completed: 0, total: 0 }
+    );
+
     setStaffTraining(staffTraining);
   }, [staff]);
 
@@ -165,13 +168,13 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
           {/* ------------------------------ */}
           <div className="widget flex-[1_1_50%] shadow-xl flex justify-center flex-col items-center min-w-[400px] min-h-[300px]">
             <p className="text-xl font-bold px-2 text-center whitespace-nowrap">Today's Sales</p>
-            <p className="text-xs font-bold px-2 text-center whitespace-nowrap">12:00-22:00</p>
+            <p className="text-xs font-bold px-2 text-center whitespace-nowrap">07:00-23:59</p>
             <ChartSales />
           </div>
           {/* ------------------------------ */}
           <div className="widget flex-[1_1_50%] shadow-xl flex justify-center flex-col items-center min-w-[400px] min-h-[300px]">
             <p className="text-xl font-bold px-2 text-center whitespace-nowrap">Net Profit/ Hour</p>
-            <p className="text-xs font-bold px-2 text-center whitespace-nowrap">12:00-22:00</p>
+            <p className="text-xs font-bold px-2 text-center whitespace-nowrap">07:00-23:59</p>
             <NetProfit />
           </div>
           {/* ------------------------------ */}

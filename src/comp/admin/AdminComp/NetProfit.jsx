@@ -2,6 +2,36 @@ import React, { PureComponent } from "react";
 import { Brush, LineChart, Scatter, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, Legend, ResponsiveContainer, Bar, BarChart, Area, ComposedChart } from "recharts";
 let data = [
   {
+    Time: "07:00",
+    OperatingExpenses: 350,
+    GrossSales: 0,
+    NetProfit: 0,
+  },
+  {
+    Time: "08:00",
+    OperatingExpenses: 350,
+    GrossSales: 0,
+    NetProfit: 0,
+  },
+  {
+    Time: "09:00",
+    OperatingExpenses: 350,
+    GrossSales: 0,
+    NetProfit: 0,
+  },
+  {
+    Time: "10:00",
+    OperatingExpenses: 350,
+    GrossSales: 0,
+    NetProfit: 0,
+  },
+  {
+    Time: "11:00",
+    OperatingExpenses: 350,
+    GrossSales: 0,
+    NetProfit: 0,
+  },
+  {
     Time: "12:00",
     OperatingExpenses: 350,
     GrossSales: 0,
@@ -131,6 +161,18 @@ let data = [
     Time: "22:00",
     OperatingExpenses: 550,
     GrossSales: 150,
+    NetProfit: 0,
+  },
+  {
+    Time: "23:00",
+    OperatingExpenses: 550,
+    GrossSales: 150,
+    NetProfit: 0,
+  },
+  {
+    Time: "23:59",
+    OperatingExpenses: 550,
+    GrossSales: 0,
     NetProfit: 0,
   },
 ];

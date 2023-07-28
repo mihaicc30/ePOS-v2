@@ -102,14 +102,14 @@ const App = () => {
 
       setTimeout(async () => {
         let tempz = {
-          cloudy: weeklyWeather.forecast.forecastday[`${n}`].hour[12].cloud,
-          humidity: weeklyWeather.forecast.forecastday[`${n}`].hour[12].humidity,
-          windspeed: weeklyWeather.forecast.forecastday[`${n}`].hour[12].wind_mph,
-          temp: weeklyWeather.forecast.forecastday[`${n}`].hour[12].temp_c,
+          cloudy: weeklyWeather.forecast.forecastday[n]?.hour[12].cloud || parseInt(Math.random() * (99 - 1) + 1),
+          humidity: weeklyWeather.forecast.forecastday[n]?.hour[12].humidity || parseInt(Math.random() * (99 - 1) + 1),
+          windspeed: weeklyWeather.forecast.forecastday[n]?.hour[12].wind_mph || parseInt(Math.random() * (99 - 1) + 1),
+          temp: weeklyWeather.forecast.forecastday[n]?.hour[12].temp_c || parseInt(Math.random() * (44 - 1) + 1),
           daytype: dayt,
           isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
         };
-        // console.log(`calling forecast api with this data:`, tempz);
+        console.log(`calling forecast api with this data:`, tempz);
         try {
           const currentDate = new Date();
           currentDate.setDate(currentDate.getDate() + n);
@@ -125,10 +125,10 @@ const App = () => {
             },
             body: JSON.stringify({
               date: currentDate.toLocaleDateString(),
-              cloudy: weeklyWeather.forecast.forecastday[n].hour[12].cloud,
-              humidity: weeklyWeather.forecast.forecastday[n].hour[12].humidity,
-              windspeed: weeklyWeather.forecast.forecastday[n].hour[12].wind_mph,
-              temp: weeklyWeather.forecast.forecastday[n].hour[12].temp_c,
+              cloudy: weeklyWeather.forecast.forecastday[n]?.hour[12].cloud || parseInt(Math.random() * (99 - 1) + 1),
+              humidity: weeklyWeather.forecast.forecastday[n]?.hour[12].humidity || parseInt(Math.random() * (99 - 1) + 1),
+              windspeed: weeklyWeather.forecast.forecastday[n]?.hour[12].wind_mph || parseInt(Math.random() * (99 - 1) + 1),
+              temp: weeklyWeather.forecast.forecastday[n]?.hour[12].temp_c || parseInt(Math.random() * (44 - 1) + 1),
               daytype: dayt,
               isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
               venueID: localStorage.getItem("venueID"),
