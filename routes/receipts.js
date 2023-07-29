@@ -1,16 +1,30 @@
 require("dotenv").config();
 const router = require("express").Router();
-const receiptModel = require("../models/receipts");
-const counterModel = require("../models/counter");
+const Receipts = require("../models/receipts");
+const Counter = require("../models/counter");
+const Tables = require("../models/tables");
+const Venues = require("../models/venues");
 
 router.post("/areceipts", (req, res) => {
   res.status(200).send("ok");
 });
 
-// get receipts
+// get receipts for customer app
 router.post("/receipts", (req, res) => {
   try {
-    receiptModel.find({ email: req.body.email }).then((results) => {
+    Receipts.find({ email: req.body.email }).then((results) => {
+      res.status(200).json(results);
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// get receipts for POS app
+router.post("/receipts-pos", (req, res) => {
+  try {
+    Receipts.find().then((results) => {
       res.status(200).json(results);
     });
   } catch (error) {
@@ -20,29 +34,38 @@ router.post("/receipts", (req, res) => {
 });
 
 // add receipt
-router.post("/addreceipt",  async (req, res) => {
-  if (req.body?.v !== process.env.v) {
-    res.status(403).json({ err: "key not valid" });
-    return;
-  }
+router.post("/addreceipt", async (req, res) => {
+  const { tableNumber, user, venue, basketTotal, basketDiscount } = req.body;
   try {
-    counterModel
-      .updateOne({}, { $inc: { counter: 1 } })
-      .then((updateResult) => {
-        return counterModel.findOne();
-      })
-      .then((updatedCounter) => {
-        if (updatedCounter) {
-          req.body.receipt.receiptNumber = updatedCounter.counter
+    const queue = await Counter.findOne({ counterType: "receipt" });
+    const increment = await Counter.updateOne({ counterType: "receipt" }, { $inc: { counter: 1 } });
+    const table = await Tables.findOne({ tableNumber: tableNumber, tableVenue: venue });
+    const venueDetails = await Venues.findOne({ id: venue });
+    const checkoutTable = await Tables.deleteOne({ tableNumber: tableNumber, tableVenue: venue });
 
-          new receiptModel(req.body.receipt)
-            .save({ email: req.body.email })
-            .then((results) => {
-              res.status(200).json(results);
-            });
-        } else {
-          console.log("Counter document not found");
-        }
+    new Receipts({
+      items: table.basket,
+      email: user.email,
+      table: tableNumber,
+      pubId: venue,
+      pubName: venueDetails.name,
+      address: venueDetails.address,
+      phone: venueDetails.phone,
+      website: venueDetails.website,
+      receiptNumber: parseInt(String(new Date().getFullYear() + new Date().getMonth() + 1 + new Date().getDate()) + String(queue.counter)),
+      vat: parseFloat(((parseFloat(basketTotal) * 20.0) / 100.0).toFixed(2)),
+      subtotal: table.basket.reduce((acc, item) => {
+        return acc + item.price * item.qty;
+      }, 0),
+      totalAmount: parseFloat(basketTotal),
+      discount: basketDiscount,
+      tableOpenAt: table.date,
+      tableClosedAt: new Date().toISOString(),
+      paymentMethod: table.paidin,
+    })
+      .save()
+      .then((results) => {
+        res.status(200).json(results);
       });
   } catch (error) {
     console.log(error.message);
