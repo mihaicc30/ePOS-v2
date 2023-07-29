@@ -14,6 +14,11 @@ const notificationsSchema = new Schema({
     type: Number,
     required: true,
   },
+  
+  dateString: {
+    type: String,
+    default: new Date().toLocaleDateString(),
+  },
   course: {
     type: Number,
     required: true,

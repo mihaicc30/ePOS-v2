@@ -5,15 +5,26 @@ const productsSchema = new Schema({
   category: {
     type: String,
     required: true,
-  }
+  },
+  subcategory: {
+    type: String,
+    required: true,
+  },
+  subcategory_course: {
+    type: Number,
+    required: true,
+  },
+  imgCategory: {
+    type: String,
+  },
   name: {
     type: String,
     required: true,
   },
-  cal: {
+  calories: {
     type: Number,
     required: true,
-    default:0,
+    default: 0,
   },
   tag: {
     type: [String],
@@ -22,22 +33,23 @@ const productsSchema = new Schema({
   stock: {
     type: Number,
     required: true,
-    default:0,
+    default: 0,
   },
   ingredients: {
     type: [String],
     required: true,
-    default:[],
+    default: [],
   },
   price: {
     type: Number,
     required: true,
-    default:0,
+    default: 0,
   },
-  allergens: {
-    type: [String],
-    required: true,
-    default:[],
+  portionCost: {
+    type: Number,
+    default: function() {
+      return this.price / 4;
+    }
   },
   priceOffer: {
     type: Number,
@@ -108,7 +120,16 @@ const productsSchema = new Schema({
   img: {
     type: String,
     required: true,
-    default:"defaultDish.jpg"
+    default: "defaultDish.jpg",
+  },
+  
+  dateString: {
+    type: String,
+    default: new Date().toLocaleDateString(),
+  },
+  date: {
+    type: Date,
+    default: new Date().toISOString(),
   },
 });
 

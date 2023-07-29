@@ -7,6 +7,18 @@ const venuesSchema = new Schema({
     required: [true, "Email required."],
     unique: [true, "Email already registered."],
   },
+  id: {
+    type: Number,
+    required: true,
+  },
+  fromvenueid: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
   address: {
     type: String,
     required: true,
@@ -31,9 +43,14 @@ const venuesSchema = new Schema({
     type: String,
     required: [true, "Location required."],
   },
+  
+  dateString: {
+    type: String,
+    default: new Date().toLocaleDateString(),
+  },
   date: {
     type: Date,
-    default: new Date(),
+    default: new Date().toISOString(),
   },
 });
 

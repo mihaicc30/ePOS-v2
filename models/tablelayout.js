@@ -1,16 +1,12 @@
 let mongoose = require("mongoose");
 let Schema = mongoose.Schema;
 
-const categoriesSchema = new Schema({
-  name: {
-    type: String,
+const tablelayoutSchema = new Schema({
+  fromvenueid: {
+    type: Number,
     required: true,
   },
-  img: {
-    type: String,
-    required: true,
-  },
-  items: {
+  layout: {
     type: Array,
     default: [],
   },
@@ -25,6 +21,6 @@ const categoriesSchema = new Schema({
   },
 });
 
-var categoriesModel = mongoose.model("categories", categoriesSchema, "categories");
+var tablelayoutModel = mongoose.model("tablelayout", tablelayoutSchema, "tablelayout");
 
-module.exports = categoriesModel;
+module.exports = tablelayoutModel;

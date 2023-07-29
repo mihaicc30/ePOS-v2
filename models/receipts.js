@@ -2,28 +2,20 @@ let mongoose = require("mongoose");
 let Schema = mongoose.Schema;
 
 const receiptSchema = new Schema({
-  items: [
-    {
-      name: {
-        type: String,
-        required: true,
-      },
-      qty: {
-        type: Number,
-        required: true,
-      },
-      price: {
-        type: Number,
-        required: true,
-      },
-    },
-  ],
+  items: {
+    type: Array,
+    default: [],
+  },
   email: {
-    // user who bought it
+    // user who bought it - can be POS user, can be customer user
     type: String,
   },
-  table:{
+  table: {
     type: Number,
+    required: true,
+  },
+  pubId: {
+    type: String,
     required: true,
   },
   pubName: {
@@ -44,17 +36,21 @@ const receiptSchema = new Schema({
   },
   receiptNumber: {
     type: Number,
-    default: new Date().getTime()
+    default: new Date().getTime(),
   },
   year: {
-    type: String,
-    default: new Date().getFullYear()
+    type: Number,
+    default: new Date().getFullYear(),
   },
   month: {
-    type: String,
-    default: new Date().getMonth() + 1
+    type: Number,
+    default: new Date().getMonth() + 1,
   },
   vat: {
+    type: Number,
+    required: true,
+  },
+  subtotal: {
     type: Number,
     required: true,
   },
@@ -62,20 +58,24 @@ const receiptSchema = new Schema({
     type: Number,
     required: true,
   },
+  discount: {
+    type: Number,
+    required: true,
+  },
   paymentMethod: {
-    type: String,
-    required: true,
-    default: "card",
+    type: Array,
   },
-  cardNumber: {
+  dateString: {
     type: String,
-    required: true,
-    default: "1234",
+    default: new Date().toLocaleDateString(),
   },
-
-  date: {
+  tableOpenAt: {
     type: Date,
-    default: new Date(),
+    default: new Date().toISOString(),
+  },
+  tableClosedAt: {
+    type: Date,
+    default: new Date().toISOString(),
   },
 });
 

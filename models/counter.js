@@ -4,6 +4,9 @@ let Schema = mongoose.Schema;
 const counterSchema = new Schema({
   counter: {
     type: Number,
+  },
+  countertype: {
+    type: String,
   }
 });
 

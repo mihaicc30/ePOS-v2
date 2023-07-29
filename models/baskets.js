@@ -18,6 +18,14 @@ const basketsSchema = new Schema({
     type: Number,
     required: true,
   },
+  dateString: {
+    type: String,
+    default: new Date().toLocaleDateString(),
+  },
+  date: {
+    type: Date,
+    default: new Date().toISOString(),
+  },
 });
 
 var basketsModel = mongoose.model("baskets", basketsSchema, "baskets");

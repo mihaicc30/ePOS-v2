@@ -23,9 +23,14 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  
+  dateString: {
+    type: String,
+    default: new Date().toLocaleDateString(),
+  },
   date: {
     type: Date,
-    default: new Date(),
+    default: new Date().toISOString(),
   },
 });
 
