@@ -67,7 +67,6 @@ const tablesSchema = new Schema({
       default: 0,
     },
   },
-  
   dateString: {
     type: String,
     default: new Date().toLocaleDateString(),

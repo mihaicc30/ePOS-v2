@@ -47,9 +47,7 @@ const productsSchema = new Schema({
   },
   portionCost: {
     type: Number,
-    default: function() {
-      return this.price / 4;
-    }
+    default: 0,
   },
   priceOffer: {
     type: Number,
@@ -122,7 +120,6 @@ const productsSchema = new Schema({
     required: true,
     default: "defaultDish.jpg",
   },
-  
   dateString: {
     type: String,
     default: new Date().toLocaleDateString(),

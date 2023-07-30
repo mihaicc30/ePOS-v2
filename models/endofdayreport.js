@@ -10,6 +10,10 @@ const endofdayreportsSchema = new Schema({
     type: Number,
     default: 0,
   },
+  totalAmountSoldNoDiscount: {
+    type: Number,
+    default: 0,
+  },
   totalSoldCategory: {
     type: Object,
     default: {},
@@ -26,11 +30,11 @@ const endofdayreportsSchema = new Schema({
     type: Object,
     default: {},
   },
-  cogs:{
+  cogs: {
     type: Object,
     default: {},
   },
-  cogsTotal:{
+  cogsTotal: {
     type: Number,
     default: 0,
   },
@@ -44,7 +48,7 @@ const endofdayreportsSchema = new Schema({
   },
   venueID: {
     type: Number,
-    required: true
+    required: true,
   },
   dateString: {
     type: String,
