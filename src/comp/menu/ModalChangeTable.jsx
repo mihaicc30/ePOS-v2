@@ -31,55 +31,6 @@ const ModalChangeTable = ({ setModalChangeTable, setBasketDiscount, basketItems,
     })();
   }, []);
 
-  //   const setTable = async (tableNumber) => {
-  //     try {
-  //       const response = await fetch(`${import.meta.env.VITE_API}getTable`, {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           "Access-Control-Allow-Credentials": true,
-  //         },
-  //         body: JSON.stringify({
-  //           tableNumber,
-  //           venue: localStorage.getItem("venueID"),
-  //           user: { displayName: localStorage.getItem("displayName"), email: localStorage.getItem("email") },
-  //         }),
-  //       });
-  //       const data = await response.json();
-  //       if (response.status == 200) {
-  //         setBasketItems(data.basket);
-  //         setBasketDiscount(data.tableDiscount);
-  //         setVenueNtable((prevValues) => ({ ...prevValues, table: tableNumber }));
-  //         localStorage.setItem("tableID", tableNumber);
-  //         nav("/Menu");
-  //         console.log(`Received table data. Table locked. `);
-  //       } else {
-  //         toast.error(`${data.message}`, {
-  //           position: "top-right",
-  //           autoClose: 3000,
-  //           hideProgressBar: false,
-  //           closeOnClick: true,
-  //           pauseOnHover: true,
-  //           draggable: false,
-  //           progress: undefined,
-  //           theme: "light",
-  //         });
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching:", error);
-  //       toast.error(error.message, {
-  //         position: "top-right",
-  //         autoClose: 3000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: false,
-  //         progress: undefined,
-  //         theme: "light",
-  //       });
-  //     }
-  //   };
-
   const handleTransfer = async (tn) => {
     const query = await handleTransferSetTable(tn);
     if (query.status === "ok") {

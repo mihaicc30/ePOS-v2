@@ -99,9 +99,9 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
 
   const handleSave = async () => {
     // Find the index of the item in menuitems with matching _id
-    const itemToUpdate  = menuitems.find((item) => item?._id === tempProduct._id);
+    const itemToUpdate = menuitems.find((item) => item?._id === tempProduct._id);
     // If the item is found, update it in menuitems
-    if (itemToUpdate ) {
+    if (itemToUpdate) {
       console.log("Updating item.");
       const query = await updateProduct(tempProduct);
       if (query.matchedCount === 1) {
@@ -241,10 +241,10 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
               <span className="text-green-400">◀</span> Save
             </button>
 
-            <div className="overflow-auto px-2 w-[80%] ml-auto pr-4 relative grid grid-cols-3">
-              <img src={"../." + modalData.img} className="h-[100px] w-[fit] mx-auto col-span-3" style={{ objectFit: "cover", overflow: "hidden" }} onClick={() => console.log("dev**to create..")} />
+            <div className="overflow-auto px-2 w-[80%] ml-auto pr-4 relative grid grid-cols-6 gap-2">
+              <img src={"../." + modalData.img} className="h-[100px] w-[fit] mx-auto col-span-6" style={{ objectFit: "cover", overflow: "hidden" }} onClick={() => console.log("dev**to create..")} />
 
-              <div className="flex my-3 relative flex-col col-span-3">
+              <div className="flex my-3 relative flex-col col-span-4">
                 <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Name</span>
                 <input
                   onChange={(e) =>
@@ -260,7 +260,7 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                 />
               </div>
 
-              <div className="flex my-3 relative flex-col mr-4">
+              <div className="flex my-3 relative flex-col col-span-2">
                 <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Price</span>
                 <input
                   onChange={(e) =>
@@ -275,7 +275,22 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                 />
               </div>
 
-              <div className="flex my-3 relative flex-col">
+              <div className="flex my-3 relative flex-col col-span-2">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Base Cost</span>
+                <input
+                  onChange={(e) =>
+                    setTempProduct((prev) => ({
+                      ...prev,
+                      portionCost: parseFloat(e.target.value),
+                    }))
+                  }
+                  type="text"
+                  className="p-4 text-2xl border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl"
+                  defaultValue={modalData.portionCost.toFixed(2)}
+                />
+              </div>
+
+              <div className="flex my-3 relative flex-col col-span-2">
                 <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">KCal</span>
                 <input
                   onChange={(e) =>
@@ -290,7 +305,7 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                 />
               </div>
 
-              <div className="flex my-3 relative flex-col ml-4">
+              <div className="flex my-3 relative flex-col col-span-2">
                 <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Stock</span>
                 <input
                   onChange={(e) =>
@@ -305,7 +320,7 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4 my-4 col-span-3 ">
+              <div className="grid grid-cols-2 gap-4 my-4 col-span-6 ">
                 <div className="relative ">
                   <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Category</span>
                   <input
@@ -354,7 +369,7 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 my-4 col-span-3 relative">
+              <div className="grid grid-cols-2 gap-4 my-4 col-span-6 relative">
                 <div className="flex flex-wrap justify-center gap-2 shadow-lg">
                   <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Ingredients</span>
                   <textarea
@@ -390,7 +405,7 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 justify-items-center mx-auto my-4 col-span-3 gap-20 relative p-4 border-y-2 border-y-black/40 rounded-xl shadow-lg">
+              <div className="grid grid-cols-2 justify-items-center mx-auto my-4 col-span-6 gap-20 relative p-4 border-y-2 border-y-black/40 rounded-xl shadow-lg">
                 <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Allergens</span>
                 <div className="grid grid-cols-1 justify-items-start max-w-[200px] mx-auto whitespace-nowrap ">
                   <p onClick={(e) => toggleAllergy("Nuts")} className="capitalize inline-flex">
@@ -440,7 +455,7 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                 </div>
               </div>
 
-              <div className="p-4 border-y-2 border-y-black/30 shadow-lg rounded-xl relative flex col-span-3 justify-center gap-12">
+              <div className="p-4 border-y-2 border-y-black/30 shadow-lg rounded-xl relative flex col-span-6 justify-center gap-12">
                 <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Suitability</span>
                 <p className="inline-flex font-bold gap-4 text-xl">Vegetarians {modalData.allergensList.Meat ? <AiOutlineMinusCircle className="fill-red-400 text-3xl" /> : <BsCheck2Circle className="fill-green-400 text-3xl" />}</p>
                 <p className="inline-flex font-bold gap-4 text-xl">Vegans {modalData.allergensList.Meat || modalData.allergensList.Milk || modalData.allergensList.Egg || modalData.allergensList.Fish || modalData.allergensList.Crustaceans ? <AiOutlineMinusCircle className="fill-red-400 text-3xl" /> : <BsCheck2Circle className="fill-green-400 text-3xl" />}</p>
@@ -448,7 +463,7 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
 
               <p className="text-xl text-center pb-4 mb-4 pt-4 mt-4 col-span-3">Statistics</p>
 
-              <div className="pb-4 mb-4 flex justify-evenly col-span-3">
+              <div className="pb-4 mb-4 flex justify-evenly col-span-6">
                 <p>Menu Item Profitability = (Number of Items Sold x Menu Price) – (Number of Items Sold x Item Portion Cost)</p>
                 <p>item sold along the year chart</p>
               </div>
