@@ -57,11 +57,9 @@ const MenuRightSide = ({ lefty, menuitems, basketItems, setBasketItems }) => {
     const message = "";
 
     const dbitem = menuitems.find((dbitem) => dbitem.name === item.name);
-    console.log("🚀 ~ file: MenuRightSide.jsx:60 ~ handleAddToMenu ~ dbitem:", dbitem)
     if (dbitem.stock >= 1) {
       // if over 100 will mean infinite stock
       if (dbitem.stock < 100) dbitem.stock -= 1;
-
       // to set DATABASE ID too! dont forget*
       let newBasketItem = {
         ...item,

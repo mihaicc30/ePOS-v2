@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./Menu.css";
 import { getUser, getVenue } from "../../utils/authUser";
 import { calculateTotal, calculateBasketQTY } from "../../utils/BasketUtils";
+import { deleteEmptyTable } from "../../utils/DataTools";
 import VenueNTable from "./VenueNTable";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import BillTimeline from "../modals/BillTimeline";
@@ -16,7 +17,9 @@ import { CiGrid2H, CiGrid41 } from "react-icons/ci";
 import MenuLeftSide from "./MenuLeftSide";
 import MenuRightSide from "./MenuRightSide";
 
-const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems, setBasketItems, searchValue, setSearchValue, venues, venueNtable, setVenueNtable }) => {
+import ModalChangeTable from "./ModalChangeTable";
+
+const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, showArea, setshowArea, tables, setTables, lefty, basketDiscount, setBasketDiscount, basketItems, menuitems, setBasketItems, searchValue, setSearchValue, venues, venueNtable, setVenueNtable }) => {
   const nav = useNavigate();
   const [user, setUser] = useState(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -43,6 +46,7 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
       const data = await response.json();
 
       setVenueNtable((prevValues) => ({ ...prevValues, table: null }));
+      deleteEmptyTable();
       console.log(data.message);
     } catch (error) {
       console.error("Error fetching:", error);
@@ -246,8 +250,22 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
     return () => clearTimeout(waitingTime);
   }, [basketItems, basketDiscount]);
 
+  const [modalChangeTable, setModalChangeTable] = useState(false);
+
+  const handleChangeTable = () => {
+    console.log("handleChangeTable");
+    setModalChangeTable(!modalChangeTable);
+  };
+
   return (
     <>
+      {modalChangeTable && (
+        <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModalChangeTable(!modalChangeTable) : null)}>
+          <div className="fixed right-0 left-[5%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
+            <ModalChangeTable setModalChangeTable={setModalChangeTable} setBasketDiscount={setBasketDiscount} basketItems={basketItems} setBasketItems={setBasketItems} tables={tables} setTables={setTables} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />
+          </div>
+        </div>
+      )}
       <div className="absolute">
         {billTimeline && <BillTimeline setBillTimeline={setBillTimeline} basketItems={basketItems} venueNtable={venueNtable} venues={venues} />}
         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme="light" />
@@ -282,12 +300,7 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
                 <p>Table</p>
                 <p className="text-3xl">{venueNtable.table}</p>
               </div>
-              <button
-                onClick={() => {
-                  setVenueNtable((prevValues) => ({ ...prevValues, table: null }));
-                  console.log("dev**to check -> confirm merge if any items -> merge -> change table in db");
-                }}
-                className="text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
+              <button onClick={handleChangeTable} className="text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
                 <span>Transfer</span>
                 <span>Table</span>
               </button>

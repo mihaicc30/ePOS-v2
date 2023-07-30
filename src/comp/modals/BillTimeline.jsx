@@ -3,7 +3,7 @@ import { getVenueById } from "../../utils/BasketUtils";
 
 const BillTimeline = ({ setBillTimeline, basketItems, billTimelineAdminData, venueNtable, venues }) => {
   return (
-    <div className="fixed inset-0 bg-black/60 z-50">
+    <div className="modalBG fixed inset-0 bg-black/60 z-50" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setBillTimeline(false) : null)}>
       <div className="fixed top-0 bottom-0 right-0 left-[39%] bg-gray-100 z-60 overflow-auto">
         <button className="absolute top-0 left-0 p-4 text-3xl animate-fadeUP1" onClick={() => setBillTimeline(false)}>
           ◀ Close

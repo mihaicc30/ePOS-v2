@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FiLoader } from "react-icons/fi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { deleteEmptyTable } from "../../utils/DataTools";
 import { auth, logout } from "../../firebase/config.jsx";
 
 const Signout = ({ setUser, setVenueNtable }) => {
@@ -26,10 +26,10 @@ const Signout = ({ setUser, setVenueNtable }) => {
         });
         const data = await response.json();
         if (response.status == 200) {
+          deleteEmptyTable()
           setVenueNtable({ venue: null, table: null });
           navigate("/");
           localStorage.clear();
-
           console.log(data.message);
         } else {
           toast.error(`${data.message}`, {
@@ -42,13 +42,12 @@ const Signout = ({ setUser, setVenueNtable }) => {
             progress: undefined,
             theme: "light",
           });
-          // TEMPORARY
+          // yes, the same thing, just want to see the error if there is any error 😊
+          deleteEmptyTable()
           setVenueNtable({ venue: null, table: null });
           navigate("/");
           localStorage.clear();
-
           console.log(data.message);
-          // TEMPORARY
         }
       } catch (error) {
         console.error("Error fetching:", error);

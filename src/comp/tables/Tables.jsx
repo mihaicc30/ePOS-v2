@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Draggable, { DraggableCore } from "react-draggable";
 import VenueNTable from "../menu/VenueNTable";
-import { getVenueById } from "../../utils/BasketUtils";
+import { getVenueById, getTableTime } from "../../utils/BasketUtils";
 import { AiFillCaretRight, AiOutlineArrowDown, AiOutlineArrowLeft, AiOutlineArrowUp, AiOutlineArrowRight } from "react-icons/ai";
 import { BsArrowsMove } from "react-icons/bs";
 import { IoIosResize } from "react-icons/io";
@@ -20,6 +20,14 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
   const [seeControlls2, setseeControlls2] = useState(false);
   const [seeControlls3, setseeControlls3] = useState(false);
   const areaRef = useRef(null);
+  const [tableClock, setTableClock] = useState({});
+
+  useEffect(() => {
+    (async () => {
+      const tableData = await getTableTime(localStorage.getItem("venueID"));
+      setTableClock(tableData);
+    })();
+  }, []);
 
   const saveLayout = () => {
     toast.success(`Layout has been saved!`, {
@@ -50,18 +58,18 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
         },
         body: JSON.stringify({
           tableNumber,
-          venue: localStorage.getItem('venueID'),
+          venue: localStorage.getItem("venueID"),
           user: { displayName: localStorage.getItem("displayName"), email: localStorage.getItem("email") },
         }),
       });
       const data = await response.json();
       if (response.status == 200) {
-        setBasketItems(data.basket)
-        setBasketDiscount(data.tableDiscount)
+        setBasketItems(data.basket);
+        setBasketDiscount(data.tableDiscount);
         setVenueNtable((prevValues) => ({ ...prevValues, table: tableNumber }));
         localStorage.setItem("tableID", tableNumber);
         nav("/Menu");
-        console.log(`Received table data. Table locked. `)
+        console.log(`Received table data. Table locked. `);
       } else {
         toast.error(`${data.message}`, {
           position: "top-right",
@@ -306,15 +314,12 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
                       </div>
                       <RiDeleteBin2Fill onClick={() => setTableDelete(table.id)} onTouchStart={() => setTableDelete(table.id)} className={`fill-[#ce1111] ${seeControlls2 ? "block" : "hidden"} rounded border-2 border-red-500 absolute bottom-0 -left-10 text-xl`} />
                       <BiCopy onClick={() => setTableCopy(table.id)} onTouchStart={() => setTableCopy(table.id)} className={`fill-[#11ce3a] ${seeControlls2 ? "block" : "hidden"} rounded border-2 border-green-500 absolute bottom-0 -right-10 text-xl`} />
-
-                      <p className="z-20 inline-flex items-center text-black text-2xl border-b-2 mb-2 pb-2">
-                        <GiRoundTable className="text-2xl" />
+                      <p className="z-20 flex items-center text-black text-2xl my-2">
+                        T-
                         {table.tn}
                       </p>
-                      <p className="z-20 inline-flex items-center text-black text-2xl">
-                        <LuPersonStanding className="text-3xl" />
-                        {table.seats}
-                      </p>
+
+                      {tableClock["t" + table.tn] && <p className="z-20 inline-flex items-center text-black text-2xl">{Math.floor((new Date() - new Date().setHours(...tableClock["t" + table.tn].split(":"))) / (1000 * 60))}min</p>}
                     </div>
                   </div>
                 </Draggable>

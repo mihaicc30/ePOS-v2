@@ -1,4 +1,24 @@
 
+export const deleteEmptyTable = async () => {
+  try {
+    const query = await fetch(`${import.meta.env.VITE_API}deleteEmptyTable`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        v: import.meta.env.VITE_G,
+        venue: localStorage.getItem('venueID'),
+        tableOpenBy: localStorage.getItem('displayName'),
+      }),
+    });
+    const response = await query.json();
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 export const grabNetProfit = async (day, month, venue) => {
   try {
@@ -22,8 +42,6 @@ export const grabNetProfit = async (day, month, venue) => {
   }
 };
 
-
-
 export const grabSales = async (day, month, venue) => {
   try {
     const query = await fetch(`${import.meta.env.VITE_API}grabSales`, {
@@ -45,7 +63,6 @@ export const grabSales = async (day, month, venue) => {
     console.log(error.message);
   }
 };
-
 
 export const generateEndOfDayReport = async (day, venue) => {
   try {
