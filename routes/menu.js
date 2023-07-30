@@ -23,6 +23,8 @@ router.post("/grabProducts", (req, res) => {
 router.post("/updateProduct", async (req, res) => {
   if (!req.body.v || req.body.v !== process.env.v || !req.body.product) return res.status(400).json({ error: "Missing values." });
   let { product } = req.body;
+
+  // failsafe
   if(product.portionCost === 0) {
     product.portionCost = parseFloat((product.price / 4).toFixed(2))
   }
