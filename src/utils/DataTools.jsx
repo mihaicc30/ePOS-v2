@@ -1,3 +1,94 @@
+
+
+export const grabNetProfit = async (day, month, venue) => {
+  try {
+    const query = await fetch(`${import.meta.env.VITE_API}grabNetProfit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        v: import.meta.env.VITE_G,
+        day,
+        month,
+        venue,
+      }),
+    });
+    const response = await query.json();
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+
+
+export const grabSales = async (day, month, venue) => {
+  try {
+    const query = await fetch(`${import.meta.env.VITE_API}grabSales`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        v: import.meta.env.VITE_G,
+        day,
+        month,
+        venue,
+      }),
+    });
+    const response = await query.json();
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+
+export const generateEndOfDayReport = async (day, venue) => {
+  try {
+    const query = await fetch(`${import.meta.env.VITE_API}generateEndOfDayReport`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        v: import.meta.env.VITE_G,
+        day,
+        venue,
+      }),
+    });
+    const response = await query.json();
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const grabEndOfDayReport = async (day, venue) => {
+  try {
+    const query = await fetch(`${import.meta.env.VITE_API}grabEndOfDayReport`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        v: import.meta.env.VITE_G,
+        day,
+        venue,
+      }),
+    });
+    const response = await query.json();
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 export const handleRemove = async (data) => {
   try {
     const query = await fetch(`${import.meta.env.VITE_API}handleRemove`, {
@@ -164,9 +255,9 @@ export const addNewProduct = async (product) => {
 
 export const fetchWeeklyWeather = async () => {
   try {
-    const response = await fetch("http://api.weatherapi.com/v1/forecast.json?key=df0973195a8141f99d8195727231207&q=worcester%20uk&days=7&aqi=no&alerts=no");
+    const response = await fetch("http://api.weatherapi.com/v1/forecast.json?key=0e4f502bab164b37bd285450232907&q=worcester%20uk&days=7&aqi=no&alerts=no");
     const data = await response.json();
-    console.log("🚀 ~ file: DataTools.jsx:169 ~ fetchWeeklyWeather ~ data:", data)
+    console.log("🚀 ~ file: DataTools.jsx:169 ~ fetchWeeklyWeather ~ data:", data);
     return data;
   } catch (error) {
     console.error("Error fetching weather:", error);

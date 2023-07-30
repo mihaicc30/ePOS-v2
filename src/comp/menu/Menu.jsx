@@ -142,7 +142,7 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
   };
 
   const handlePrinting = () => {
-    if(basketItems.length < 1) {
+    if (basketItems.length < 1) {
       toast.warn(`There are no items to print.`, {
         position: "top-right",
         autoClose: 3000,
@@ -153,7 +153,7 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
         progress: undefined,
         theme: "light",
       });
-      return
+      return;
     }
     let areAllPrinted = basketItems.some((item) => item.printed == false);
     const updatedBasketItems = basketItems.map((item) => {
@@ -194,7 +194,6 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
     }
   };
 
-  
   useEffect(() => {
     const waitingTime = setTimeout(async () => {
       // do query
@@ -242,7 +241,7 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
           theme: "light",
         });
       }
-    }, 1500);
+    }, 1000);
 
     return () => clearTimeout(waitingTime);
   }, [basketItems, basketDiscount]);
@@ -250,7 +249,7 @@ const Menu = ({ lefty, basketDiscount, setBasketDiscount, basketItems, menuitems
   return (
     <>
       <div className="absolute">
-        {billTimeline && <BillTimeline setBillTimeline={setBillTimeline} basketItems={basketItems} venueNtable={venueNtable} venues={venues}/>}
+        {billTimeline && <BillTimeline setBillTimeline={setBillTimeline} basketItems={basketItems} venueNtable={venueNtable} venues={venues} />}
         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme="light" />
       </div>
       <div className={`modal ${modal ? "fixed inset-0 bg-black/70 flex flex-col justify-center items-center z-20 p-4" : "hidden"}`}>

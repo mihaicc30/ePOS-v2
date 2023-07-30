@@ -166,13 +166,13 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
         <p className="text-xl font-bold p-2">General Info</p>
         <div className="flex flex-wrap">
           {/* ------------------------------ */}
-          <div className="widget flex-[1_1_50%] shadow-xl flex justify-center flex-col items-center min-w-[400px] min-h-[300px]">
+          <div className="widget flex-[1_1_50%] shadow-xl flex justify-center flex-col items-center min-w-[400px] min-h-[400px]">
             <p className="text-xl font-bold px-2 text-center whitespace-nowrap">Today's Sales</p>
             <p className="text-xs font-bold px-2 text-center whitespace-nowrap">07:00-23:59</p>
             <ChartSales />
           </div>
           {/* ------------------------------ */}
-          <div className="widget flex-[1_1_50%] shadow-xl flex justify-center flex-col items-center min-w-[400px] min-h-[300px]">
+          <div className="widget flex-[1_1_50%] shadow-xl flex justify-center flex-col items-center min-w-[400px] min-h-[400px]">
             <p className="text-xl font-bold px-2 text-center whitespace-nowrap">Net Profit/ Hour</p>
             <p className="text-xs font-bold px-2 text-center whitespace-nowrap">07:00-23:59</p>
             <NetProfit />

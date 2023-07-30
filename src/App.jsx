@@ -77,7 +77,7 @@ const App = () => {
   useEffect(() => {
     setTimeout(async () => {
       await fetchForecastWeek();
-    }, 1444);
+    }, 1000);
   }, [weeklyWeather]);
 
   useEffect(() => {
@@ -109,7 +109,7 @@ const App = () => {
           daytype: dayt,
           isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
         };
-        console.log(`calling forecast api with this data:`, tempz);
+        // console.log(`calling forecast api with this data:`, tempz);
         try {
           const currentDate = new Date();
           currentDate.setDate(currentDate.getDate() + n);
