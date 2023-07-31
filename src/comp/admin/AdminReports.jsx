@@ -290,7 +290,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                     <p className="p-4 text-2xl border-y-2 border-y-black/30 font-bold shadow-md rounded-xl">
                       <span>£{(modalViewReportData.totalAmountSoldNoDiscount - modalViewReportData.totalAmountSold).toFixed(2)} </span>
                       <span className="text-sm font-normal"> / </span>
-                      <span className="text-sm font-normal">£{modalViewReportData.totalAmountSoldNoDiscount}</span>
+                      <span className="text-sm font-normal">£{(modalViewReportData.totalAmountSoldNoDiscount).toFixed(2)}</span>
                     </p>
                   </div>
 
@@ -392,7 +392,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                           {index === 0 ? <span className="absolute -top-2 left-5 bg-white rounded-lg px-4 text-sm">🥇</span>: ""} 
                           
                           <p className="p-2 border-y-2 border-y-black/30 shadow-md rounded-xl">
-                            {cat[1].qty} x {cat[0]} - £{cat[1].totalPrice}
+                            {cat[1].qty} x {cat[0]} - £{(cat[1].totalPrice).toFixed(2)}
                           </p>
                         </div>
                       );
@@ -552,8 +552,8 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
 
         <div className="flex-1 flex flex-wrap flex-col">
           <div className="widget flex-1 p-2 m-1 shadow-lg flex justify-center">
-            <div className="flex flex-wrap justify-center items-center gap-4">
-              <div className="shadow-lg p-3 max-w-[120px]">
+            <div className="grid grid-cols-7 gap-4 w-[100%]">
+              <div className="shadow-lg p-3">
                 <p className="text-center">{new Date(weeklyForecast["0"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
                 <p className="text-center"> {weeklyForecast["0"]?.date}</p>
                 <p className="text-center">Forecast</p>
@@ -564,7 +564,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                 {getVenueStatus(weeklyForecast["0"]?.average)}
               </div>
 
-              <div className="shadow-lg p-3 max-w-[120px]">
+              <div className="shadow-lg p-3">
                 {weeklyForecast["1"]?.date && <p className="text-center">{new Date(weeklyForecast["1"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>}
                 <p className="text-center"> {weeklyForecast["1"]?.date}</p>
                 <p className="text-center">Forecast</p>
@@ -574,7 +574,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                 </div>
                 {getVenueStatus(weeklyForecast["1"]?.average)}
               </div>
-              <div className="shadow-lg p-3 max-w-[120px]">
+              <div className="shadow-lg p-3">
                 {weeklyForecast["2"]?.date && <p className="text-center">{new Date(weeklyForecast["2"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>}
                 <p className="text-center"> {weeklyForecast["2"]?.date}</p>
                 <p className="text-center">Forecast</p>
@@ -585,7 +585,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                 {getVenueStatus(weeklyForecast["2"]?.average)}
               </div>
 
-              <div className="shadow-lg p-3 max-w-[120px]">
+              <div className="shadow-lg p-3">
                 {weeklyForecast["3"]?.date && <p className="text-center">{new Date(weeklyForecast["3"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>}
                 <p className="text-center"> {weeklyForecast["3"]?.date}</p>
                 <p className="text-center">Forecast</p>
@@ -595,7 +595,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                 </div>
                 {getVenueStatus(weeklyForecast["3"]?.average)}
               </div>
-              <div className="shadow-lg p-3 max-w-[120px]">
+              <div className="shadow-lg p-3">
                 {weeklyForecast["4"]?.date && <p className="text-center">{new Date(weeklyForecast["4"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>}
                 <p className="text-center"> {weeklyForecast["4"]?.date}</p>
                 <p className="text-center">Forecast</p>
@@ -606,7 +606,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                 {getVenueStatus(weeklyForecast["4"]?.average)}
               </div>
 
-              <div className="shadow-lg p-3 max-w-[120px]">
+              <div className="shadow-lg p-3">
                 {weeklyForecast["5"]?.date && <p className="text-center">{new Date(weeklyForecast["5"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>}
                 <p className="text-center"> {weeklyForecast["5"]?.date}</p>
                 <p className="text-center">Forecast</p>
@@ -617,7 +617,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                 {getVenueStatus(weeklyForecast["5"]?.average)}
               </div>
 
-              <div className="shadow-lg p-3 max-w-[120px]">
+              <div className="shadow-lg p-3">
                 {weeklyForecast["6"]?.date && <p className="text-center">{new Date(weeklyForecast["6"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>}
                 <p className="text-center"> {weeklyForecast["6"]?.date}</p>
                 <p className="text-center">Forecast</p>

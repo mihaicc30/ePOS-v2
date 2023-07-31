@@ -55,7 +55,7 @@ const ChartSales = () => {
           </ResponsiveContainer>
 
           <div className="flex justify-between gap-6">
-            <p>Total Sales: £{totalSales}</p>
+            <p>Total Sales: £{totalSales.toFixed(2)}</p>
           </div>
         </>
       )}
