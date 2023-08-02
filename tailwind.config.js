@@ -5,6 +5,7 @@ export default {
     extend: {
       animation: {
         fadeUP1: "fadeUP .5s forwards",
+        fadeFromLeft: "fadeFromLeft .5s forwards",
         fadeUPnDOWN: "fadeUPnDOWN 1.8s forwards",
         fadeDOWN1: "fadeDOWN .5s forwards",
         shrinkFromLeft: "shrinkFromLeft 4s forwards",
@@ -16,6 +17,10 @@ export default {
           "20%": { transform: "translateY(0rem)", opacity: "1" },
           "70%": { transform: "translateY(0rem)", opacity: "1" },
           "100%": { transform: "translateY(2rem)", opacity: "0" },
+        },
+        fadeFromLeft: {
+          "0%": { transform: "translateX(-2rem)", opacity: "0" },
+          "100%": { transform: "translateX(0rem)", opacity: "1" },
         },
         fadeUP: {
           "0%": { transform: "translateY(2rem)", opacity: "0" },
