@@ -1,7 +1,10 @@
 export const authUser = (foundPin) => {
+    //to grab from POS settings
+    localStorage.setItem("venueID", "101010");
+
+    //to grab from user data
     localStorage.setItem("displayName", foundPin.displayName);
     localStorage.setItem("email", foundPin.email);
-    localStorage.setItem("venueID", foundPin.venueID);
     localStorage.setItem("lefty", foundPin.lefty);
     localStorage.setItem("darkMode", foundPin.darkMode);
     localStorage.setItem("autoStore", foundPin.autoStore);
