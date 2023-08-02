@@ -17,7 +17,6 @@ import OrderComplete from "./comp/basket/OrderComplete";
 import Page404 from "./comp/Page404";
 import Settings from "./comp/Settings/Settings";
 import Contact from "./comp/Settings/Contact";
-import FAQ from "./comp/Settings/Faq";
 import Notifications from "./comp/Settings/Notifications";
 import News from "./comp/Settings/News";
 import Privacy from "./comp/Settings/Privacy";
@@ -182,7 +181,6 @@ const App = () => {
         <Route path="/settings" element={<Settings venues={venues} />} />
 
         <Route path="/contact" element={<Contact />} />
-        <Route path="/faq" element={<FAQ />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/news" element={<News />} />
         <Route path="/privacy" element={<Privacy />} />
