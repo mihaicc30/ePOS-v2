@@ -66,7 +66,7 @@ const ChartSalesMonth = () => {
 
           <div className="flex justify-between gap-6">
             <p>
-              {currentLookedUpDatesMonth.toLocaleString("default", { month: "long" })} {currentLookedUpDatesMonth.getFullYear()} Total Gross Sales: £{totalSales}
+              {currentLookedUpDatesMonth.toLocaleString("default", { month: "long" })} {currentLookedUpDatesMonth.getFullYear()} Total Gross Sales: £{totalSales.toFixed(2)}
             </p>
           </div>
         </>

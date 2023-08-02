@@ -85,9 +85,9 @@ const NetProfitMonth = () => {
             </BarChart>
           </ResponsiveContainer>
           <div className="flex flex-wrap text-center items-center justify-center">
-            <p className="mx-4">OperatingExpenses: £{totalOperatingExpenses}</p>
-            <p className="mx-4">GrossSales: £{totalGrossSales}</p>
-            <p className="mx-4">NetProfit: £{totalNetProfit}</p>
+            <p className="mx-4">OperatingExpenses: £{totalOperatingExpenses.toFixed(2)}</p>
+            <p className="mx-4">GrossSales: £{totalGrossSales.toFixed(2)}</p>
+            <p className="mx-4">NetProfit: £{totalNetProfit.toFixed(2)}</p>
           </div>
         </>
       )}
