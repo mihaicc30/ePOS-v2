@@ -15,6 +15,8 @@ const Auth = () => {
   const fp = useRef(null);
   const pinInput = useRef(null);
   const [userTable, setUserTable] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [modalData, setModalData] = useState(false);
 
   useEffect(() => {
     pinInput.current.focus();
@@ -93,14 +95,19 @@ const Auth = () => {
 
   useEffect(() => {
     const foundPin = userTable.find((userpin) => userpin.pin === pin.pin2);
-    if (foundPin && pin.pin2.length == 3) {
-      authUser(foundPin);
-      setVenue(setVenue, foundPin);
-      setPin({ pin: "", pin2: "" });
-      if (foundPin.isAdmin == 1) {
-        navigate("/Admin");
-      } else if (foundPin.isAdmin == 0) {
-        navigate("/Tables");
+    if (foundPin && pin.pin2.length >= 3) {
+      // 1 clockin // 2 kitchen // 3 pos
+      if (showPage == 3) {
+        authUser(foundPin);
+        setVenue(setVenue, foundPin);
+        setPin({ pin: "", pin2: "" });
+        if (foundPin.isAdmin == 1) {
+          navigate("/Admin");
+        } else if (foundPin.isAdmin == 0) {
+          navigate("/Tables");
+        }
+      } else if (showPage == 2) {
+      } else if (showPage == 1) {
       }
     } else if (!foundPin && pin.pin2.length >= 3) {
       setPin({ pin: "", pin2: "" });
@@ -152,30 +159,77 @@ const Auth = () => {
 
   return (
     <div className="flex flex-col bg-[--clsec] w-[100%] h-[100%] relative">
-      <div className="flex gap-2 w-[100%] justify-end flex-nowrap p-2 absolute top-0 right-0 z-50">
-        <div className="flex flex-col text-end justify-center">
-          <span>POS</span>
-          <span>Settings</span>
+      {modal && (
+        <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModal(!modal) : null)}>
+          <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
+            <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1 z-[60]" onClick={() => setModal(!modal)}>
+              ◀ Back
+            </button>
+
+            <div className="overflow-auto px-2 w-[90%] ml-auto pr-8 relative grid grid-cols-6 gap-2 mt-20">
+              <div className="flex my-3 relative flex-col col-span-4">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Venue</span>
+                <p className="p-4 text-lg border-y-2 border-y-black/30 font-[600] tracking-wide shadow-lg rounded-xl">The Test Venue</p>
+              </div>
+              <div className="flex my-3 relative flex-col col-span-2">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">ID</span>
+                <p className="p-4 text-lg border-y-2 border-y-black/30 font-[600] tracking-wide shadow-lg rounded-xl">101010</p>
+              </div>
+
+              <div className="flex my-3 relative flex-col col-span-6">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Email</span>
+                <p className="p-4 text-lg border-y-2 border-y-black/30 font-[600] tracking-wide shadow-lg rounded-xl">testvenue@testvenue.test</p>
+              </div>
+              <div className="flex my-3 relative flex-col col-span-6">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Address</span>
+                <p className="p-4 text-lg border-y-2 border-y-black/30 font-[600] tracking-wide shadow-lg rounded-xl">Test Street, TestCity AA1 1AA</p>
+              </div>
+              <div className="flex my-3 relative flex-col col-span-3">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Website</span>
+                <p className="p-4 text-lg border-y-2 border-y-black/30 font-[600] tracking-wide shadow-lg rounded-xl">thetestvenue.test.test</p>
+              </div>
+              <div className="flex my-3 relative flex-col col-span-3">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Phone</span>
+                <p className="p-4 text-lg border-y-2 border-y-black/30 font-[600] tracking-wide shadow-lg rounded-xl">12345 1234 123</p>
+              </div>
+
+              <p className="col-span-6 p-4">
+                Details are set by developers and all data related to this app is using these details. If you require an update or change please contact your representative or email Mihai <a className="transition border-b-2 border-b-orange-400 py-1 bg-orange-400 px-4 rounded-lg" href={`mailto:alemihai25@gmail.com?subject=101010 POS - Query - ${new Date().toLocaleDateString()}&amp;body=Your message...`}>here</a>.
+              </p>
+
+              
+              <div className="flex my-3 relative flex-col col-span-6">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Enabled Features</span>
+                <div className="p-4 text-lg border-y-2 border-y-black/30 font-[600] tracking-wide shadow-lg rounded-xl flex flex-wrap justify-center">
+                  <p className="py-1 px-3 border-2 rounded-lg m-1">Stock Management</p>
+                  <p className="py-1 px-3 border-2 rounded-lg m-1">Clock In/Out</p>
+                  <p className="py-1 px-3 border-2 rounded-lg m-1">Sales Forecast</p>
+                  <p className="py-1 px-3 border-2 rounded-lg m-1">Weather Forecast</p>
+                  <p className="py-1 px-3 border-2 rounded-lg m-1 text-gray-300">Misc Product</p>
+                  <p className="py-1 px-3 border-2 rounded-lg m-1">Discounts</p>
+                  <p className="py-1 px-3 border-2 rounded-lg m-1 text-gray-300">Bill Splitting</p>
+                  <p className="py-1 px-3 border-2 rounded-lg m-1">Left Hand Mode</p>
+                  <p className="py-1 px-3 border-2 rounded-lg m-1">Charts</p>
+                  <p className="py-1 px-3 border-2 rounded-lg m-1">Visual Table Plan</p>
+                  <p className="py-1 px-3 border-2 rounded-lg m-1 text-gray-300">List Table Plan</p>
+                  <p className="py-1 px-3 border-2 rounded-lg m-1 text-gray-300">ROTA Management</p>
+                  <p className="py-1 px-3 border-2 rounded-lg m-1 text-gray-300">Payroll</p>
+                  <p className="py-1 px-3 border-2 rounded-lg m-1 text-gray-300">Courses</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
-        <span className="text-5xl p-1 mr-3 text-black/70">
+      )}
+      <div className="flex gap-2 justify-end flex-nowrap p-2 absolute top-0 right-0 z-50">
+        <span onClick={() => setModal(!modal)} className="text-5xl p-1 mr-3 text-black/90 hover:scale-[1.1] transition cursor-pointer">
           <FaCogs />
         </span>
       </div>
       <div className="flex w-[100%] h-[100%]">
-        <div className={`transition animate-fadeFromLeft basis-[60%] max-md:basis-[100%] ${showPage == 1 ? "flex" : "hidden"} flex-col gap-[3vh] h-[98%] my-auto justify-center items-center`}>
-          <div className={`h-[100%] bg-[--c30] ml-auto border-r-4 border-r-violet-400 rounded shadow-lg shadow-[#535353] flex flex-col w-[80%] p-4 min-h-[80svh] relative justify-start border-2 border-[--c12] max-w-[650px]`}>
-            <p className="font-black text-3xl tracking-widest text-center">CCW Clock In/Out</p>
-          </div>
-        </div>
-
-        <div className={`transition animate-fadeFromLeft basis-[60%] max-md:basis-[100%] ${showPage == 2 ? "flex" : "hidden"} flex-col gap-[3vh] h-[98%] my-auto justify-center items-center`}>
-          <div className={`h-[100%] bg-[--c30] ml-auto border-r-4 border-r-blue-400 rounded shadow-lg shadow-[#535353] flex flex-col w-[80%] p-4 min-h-[80svh] relative justify-start border-2 border-[--c12] max-w-[650px]`}>
-            <p className="font-black text-3xl tracking-widest text-center">CCW Kitchen</p>
-          </div>
-        </div>
-
-        <div className={`transition animate-fadeFromLeft basis-[60%] max-md:basis-[100%] ${showPage == 3 ? "flex" : "hidden"} flex-col gap-[3vh] h-[98%] my-auto justify-center items-center`}>
-          <div className={`h-[100%] bg-[--c30] ml-auto border-r-4 border-r-green-400 rounded shadow-lg shadow-[#535353] flex flex-col w-[80%] p-4 min-h-[80svh] relative justify-start border-2 border-[--c12] max-w-[650px]`}>
+        <div className={`transition animate-fadeFromLeft basis-[80%] max-md:basis-[100%] flex flex-col gap-[3vh] h-[98%] my-auto justify-center items-center`}>
+          <div className={`h-[100%] bg-[--c30] ml-auto border-r-4 rounded shadow-xl shadow-[#0a0a0a] flex flex-col w-[80%] p-4 min-h-[80svh] relative justify-start border-2 border-[--c12] max-w-[650px]`}>
             <p className="font-black text-3xl tracking-widest text-center">CCW POS</p>
             <img className="max-w-[15svh] max-h-[15svh] mx-auto" src="./assets/d956248b8cfe7fe8fa39033b50728bcb.jpg" />
             <div className="text-center">
@@ -247,17 +301,17 @@ const Auth = () => {
           </div>
         </div>
 
-        <div className="basis-[40%] ml-auto block max-md:hidden overflow-hidden">
-          <div className="overflow-hidden h-[100svh] flex flex-col gap-12 justify-center items-center relative pr-2">
-            <div onClick={() => setShowPage(3)} className={`flex justify-between px-4 w-[100%] z-10 bg-[--c1] rounded py-[2vh] font-bold text-3xl text-white text-[--c2] relative shadow-xl active:shadow-black ${showPage == 3 ? "border-y-4 border-y-green-400" : "border-b-2 border-b-[--c2]"} active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none`}>
+        <div className="basis-[20%] ml-auto block max-md:hidden overflow-hidden">
+          <div className="overflow-hidden h-[100svh] flex flex-col gap-12 justify-center items-center relative pr-2 text-lg font-[600]">
+            <div onClick={() => setShowPage(3)} className={`${showPage === 3 ? "shadow-[inset_-3px_4px_2px_black] bg-[--c12]" : "bg-[--c1]"} transition border-b-2 border-b-black rounded-r-lg w-[100%] py-4 flex justify-between px-6`}>
               <span>◀</span>
               <span>POS</span>
             </div>
-            <div onClick={() => setShowPage(1)} className={`flex justify-between px-4 w-[100%] z-10 bg-[--c1] rounded py-[2vh] font-bold text-3xl text-white text-[--c2] relative shadow-xl active:shadow-black ${showPage == 1 ? "border-y-4 border-y-violet-400" : "border-b-2 border-b-[--c2]"} active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none`}>
+            <div onClick={() => setShowPage(1)} className={`${showPage === 1 ? "shadow-[inset_-3px_4px_2px_black] bg-[--c12]" : "bg-[--c1]"} transition border-b-2 border-b-black rounded-r-lg w-[100%] py-4 flex justify-between px-6`}>
               <span>◀</span>
               <span>Clock In/Out</span>
             </div>
-            <div onClick={() => setShowPage(2)} className={`flex justify-between px-4 w-[100%] z-10 bg-[--c1] rounded py-[2vh] font-bold text-3xl text-white text-[--c2] relative shadow-xl active:shadow-black ${showPage == 2 ? "border-y-4 border-y-blue-400" : "border-b-2 border-b-[--c2]"} active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none`}>
+            <div onClick={() => setShowPage(2)} className={`${showPage === 2 ? "shadow-[inset_-3px_4px_2px_black] bg-[--c12]" : "bg-[--c1]"} transition border-b-2 border-b-black rounded-r-lg w-[100%] py-4 flex justify-between px-6`}>
               <span>◀</span>
               <span>Kitchen</span>
             </div>

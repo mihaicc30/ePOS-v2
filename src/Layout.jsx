@@ -24,9 +24,9 @@ const Layout = ({ lefty, setLefty, weeklyForecast, setWeeklyForecast, weeklyholi
   return (
     <div className="flex flex-col h-[100svh] w-[100svw] relative overflow-hidden">
       {showNav && <MobileHeader weeklyWeather={weeklyWeather} weeklyholiday={weeklyholiday} weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} />}
-      <div className={`basis-[${ showNav ? "95" : "100"}%] flex bg-gray-50 z-10 relative overflow-y-auto`}>
+      <div className={`basis-[${ showNav ? "95" : "100"}%] flex bg-gray-50 z-10 relative overflow-y-auto w-[100%] h-[100%]`}>
         {showNav && <MobileLeftNav lefty={lefty} setLefty={setLefty} />}
-        <div className={`basis-[${ showNav ? "95" : "100"}%] overflow-hidden flex flex-col h-[100%] relative`}>
+        <div className={`basis-[${ showNav ? "95" : "100"}%] overflow-hidden flex flex-col relative w-[100%] h-[100%]`}>
           <div className="flex flex-col gap-4 h-[100%] w-[100%] bg-[--c60]">
             <Outlet />
           </div>

@@ -1,3 +1,22 @@
+export const getRotaOfTheWeek = async (weekNumber) => {
+  try {
+    const query = await fetch(`${import.meta.env.VITE_API}getRotaOfTheWeek`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        v: import.meta.env.VITE_G,
+        week: weekNumber
+      }),
+    });
+    const response = await query.json();
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 export const deleteEmptyTable = async () => {
   try {
@@ -9,8 +28,8 @@ export const deleteEmptyTable = async () => {
       },
       body: JSON.stringify({
         v: import.meta.env.VITE_G,
-        venue: localStorage.getItem('venueID'),
-        tableOpenBy: localStorage.getItem('displayName'),
+        venue: localStorage.getItem("venueID"),
+        tableOpenBy: localStorage.getItem("displayName"),
       }),
     });
     const response = await query.json();
