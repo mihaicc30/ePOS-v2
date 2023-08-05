@@ -1,4 +1,4 @@
-export const getRotaOfTheWeek = async (weekNumber) => {
+export const getRotaOfTheWeek = async (week, weekRange) => {
   try {
     const query = await fetch(`${import.meta.env.VITE_API}getRotaOfTheWeek`, {
       method: "POST",
@@ -8,7 +8,8 @@ export const getRotaOfTheWeek = async (weekNumber) => {
       },
       body: JSON.stringify({
         v: import.meta.env.VITE_G,
-        week: weekNumber
+        week, weekRange,
+        venueID: localStorage.getItem('venueID')
       }),
     });
     const response = await query.json();

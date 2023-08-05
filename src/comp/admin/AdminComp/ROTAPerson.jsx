@@ -5,13 +5,14 @@ const ROTAPerson = ({ person, index, weekNumber, rota, setRota }) => {
   const [timesModal, setTimesModal] = useState(false);
   const [modalData, setModalData] = useState(false);
   const [timesmodalData, setTimesModalData] = useState([]);
-
+  const [typeOfData, setTypeOfData] = useState("");
   const [tempDay, setTempDay] = useState("");
+  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   const handleSave = () => {
     if (timesmodalData === "HOLIDAY") {
       let updatedOne = rota[person.email];
-      updatedOne[tempDay]["roted"] = [timesmodalData];
+      updatedOne[tempDay][typeOfData] = [timesmodalData];
 
       setRota((prev) => {
         const updatedRota = { ...prev };
@@ -20,10 +21,10 @@ const ROTAPerson = ({ person, index, weekNumber, rota, setRota }) => {
       });
     } else {
       let updatedOne = rota[person.email];
-      updatedOne[tempDay]["roted"] = [];
+      updatedOne[tempDay][typeOfData] = [];
 
       timesmodalData.forEach((date) => {
-        updatedOne[tempDay]["roted"].push([`${date.start} - ${date.end}`]);
+        updatedOne[tempDay][typeOfData].push([`${date.start} - ${date.end}`]);
       });
 
       setRota((prev) => {
@@ -40,7 +41,8 @@ const ROTAPerson = ({ person, index, weekNumber, rota, setRota }) => {
     setModal(!modal);
   };
 
-  const editTimes = (data, day) => {
+  const editTimes = (data, day, type) => {
+    setTypeOfData(type);
     if (data[0] === "HOLIDAY") {
       setTempDay(day);
       setTimesModalData(data[0]);
@@ -179,179 +181,39 @@ const ROTAPerson = ({ person, index, weekNumber, rota, setRota }) => {
           </div>
         </div>
       )}
+
       {/* name */}
       <p onClick={() => openPopup(person)} className="font-bold py-4 bg-gray-300 rounded-lg shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition cursor-pointer">
         {person.displayName}
       </p>
 
-      <div className="dayLogSunday flex flex-col gap-2">
-        {/* roted time */}
-        {console.log(person.Sunday)}
-        <div onClick={() => editTimes(person.Sunday.roted, "Sunday")} className={`py-1 ${person.Sunday ? "" : "hidden"} ${person.Sunday?.roted.length > 0 ? "" : "hidden"} ${person.Sunday?.roted[0] === "HOLIDAY" ? "bg-indigo-300" : "bg-orange-300"} rounded-lg text-center shadow-md`} title="Set ROTA">
-          {person.Sunday.roted.map((time, indexNumber) => (
-            <p key={crypto.randomUUID()}>{time}</p>
-          ))}
-        </div>
+      {daysOfWeek.map((day, index) => {
+        const { roted, clocked } = person[day] || {};
 
-        {/* clocked time */}
-        <div className={`${person.Sunday ? "grid" : "hidden"} ${person.Sunday?.clocked.length > 0 ? "grid" : "hidden"} grid-cols-1 py-1 bg-blue-300 rounded-lg text-center shadow-md `}>
-          {person.Sunday?.clocked.map((clock, indexNumber) => {
-            if (indexNumber % 2 == 0)
-              return (
-                <p title="Actual Clock In/Out ROTA" key={crypto.randomUUID()}>
-                  <span>{clock}</span>
-                  <span> - </span>
-                  <span>{person.Sunday.clocked[indexNumber + 1] || "?"}</span>
-                </p>
-              );
-          })}
-        </div>
-        <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
-      </div>
+        return (
+          <div className={`dayLog${day} flex flex-col gap-2`} key={day}>
+            {/* roted time */}
+            {roted && roted.length > 0 && (
+              <div onClick={() => editTimes(roted, day, "roted")} className={`py-1 ${roted[0] === "HOLIDAY" ? "bg-indigo-300" : "bg-orange-300"} rounded-lg text-center shadow-md`} title="Set ROTA">
+                {roted.map((time) => (
+                  <p key={crypto.randomUUID()}>{time}</p>
+                ))}
+              </div>
+            )}
 
-      <div className="dayLogMonday flex flex-col gap-2">
-        {/* roted time */}
-        <div onClick={() => editTimes(person.Monday.roted, "Monday")} className={`${person.Monday ? "" : "hidden"} ${person.Monday?.roted.length > 0 ? "" : "hidden"} py-1 ${person.Monday?.roted[0] === "HOLIDAY" ? "bg-indigo-300" : "bg-orange-300"}  rounded-lg text-center shadow-md`} title="Set ROTA">
-          {person.Monday?.roted.map((time, indexNumber) => (
-            <p key={crypto.randomUUID()}>{time}</p>
-          ))}
-        </div>
+            {/* clocked time */}
+            {clocked && clocked.length > 0 && (
+              <div onClick={() => editTimes(clocked, day, "clocked")} className="grid grid-cols-1 py-1 bg-blue-300 rounded-lg text-center shadow-md">
+                {clocked.map((clock) => (
+                  <span key={crypto.randomUUID()}>{clock}</span>
+                ))}
+              </div>
+            )}
 
-        {/* clocked time */}
-        <div className={`${person.Monday ? "grid" : "hidden"} ${person.Monday?.clocked.length > 0 ? "grid" : "hidden"} grid-cols-1 py-1 bg-blue-300 rounded-lg text-center shadow-md `}>
-          {person.Monday?.clocked.map((clock, indexNumber) => {
-            if (indexNumber % 2 == 0)
-              return (
-                <p title="Actual Clock In/Out ROTA" key={crypto.randomUUID()}>
-                  <span>{clock}</span>
-                  <span> - </span>
-                  <span>{person.Monday?.clocked[indexNumber + 1] || "?"}</span>
-                </p>
-              );
-          })}
-        </div>
-        <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
-      </div>
-
-      <div className="dayLogTuesday flex flex-col gap-2">
-        {/* roted time */}
-        <div onClick={() => editTimes(person.Tuesday.roted, "Tuesday")} className={`${person.Tuesday ? "" : "hidden"}  ${person.Tuesday?.roted.length > 0 ? "" : "hidden"} py-1 ${person.Tuesday?.roted[0] === "HOLIDAY" ? "bg-indigo-300" : "bg-orange-300"}  rounded-lg text-center shadow-md`} title="Set ROTA">
-          {person.Tuesday?.roted.map((time, indexNumber) => (
-            <p key={crypto.randomUUID()}>{time}</p>
-          ))}
-        </div>
-
-        {/* clocked time */}
-        <div className={`${person.Tuesday ? "grid" : "hidden"} ${person.Tuesday?.clocked.length > 0 ? "grid" : "hidden"} grid-cols-1 py-1 bg-blue-300 rounded-lg text-center shadow-md `}>
-          {person.Tuesday?.clocked.map((clock, indexNumber) => {
-            if (indexNumber % 2 == 0)
-              return (
-                <p title="Actual Clock In/Out ROTA" key={crypto.randomUUID()}>
-                  <span>{clock}</span>
-                  <span> - </span>
-                  <span>{person.Tuesday?.clocked[indexNumber + 1] || "?"}</span>
-                </p>
-              );
-          })}
-        </div>
-        <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
-      </div>
-
-      <div className="dayLogWednesday flex flex-col gap-2">
-        {/* roted time */}
-        <div onClick={() => editTimes(person.Wednesday.roted, "Wednesday")} className={`${person.Wednesday ? "" : "hidden"} ${person.Wednesday?.roted.length > 0 ? "" : "hidden"} py-1 ${person.Wednesday?.roted[0] === "HOLIDAY" ? "bg-indigo-300" : "bg-orange-300"} rounded-lg text-center shadow-md`} title="Set ROTA">
-          {person.Wednesday?.roted.map((time, indexNumber) => (
-            <p key={crypto.randomUUID()}>{time}</p>
-          ))}
-        </div>
-
-        {/* clocked time */}
-        <div className={`${person.Wednesday ? "grid" : "hidden"} ${person.Wednesday?.clocked.length > 0 ? "grid" : "hidden"} grid-cols-1 py-1 bg-blue-300 rounded-lg text-center shadow-md `}>
-          {person.Wednesday?.clocked.map((clock, indexNumber) => {
-            if (indexNumber % 2 == 0)
-              return (
-                <p title="Actual Clock In/Out ROTA" key={crypto.randomUUID()}>
-                  <span>{clock}</span>
-                  <span> - </span>
-                  <span>{person.Wednesday?.clocked[indexNumber + 1] || "?"}</span>
-                </p>
-              );
-          })}
-        </div>
-        <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
-      </div>
-
-      <div className="dayLogThursday flex flex-col gap-2">
-        {/* roted time */}
-        <div onClick={() => editTimes(person.Thursday.roted, "Thursday")} className={`${person.Thursday ? "" : "hidden"} ${person.Thursday?.roted.length > 0 ? "" : "hidden"} py-1 ${person.Thursday?.roted[0] === "HOLIDAY" ? "bg-indigo-300" : "bg-orange-300"} rounded-lg text-center shadow-md`} title="Set ROTA">
-          {person.Thursday?.roted.map((time, indexNumber) => (
-            <p key={crypto.randomUUID()}>{time}</p>
-          ))}
-        </div>
-
-        {/* clocked time */}
-        <div className={`${person.Thursday ? "grid" : "hidden"} ${person.Thursday?.clocked.length > 0 ? "grid" : "hidden"} grid-cols-1 py-1 bg-blue-300 rounded-lg text-center shadow-md `}>
-          {person.Thursday?.clocked.map((clock, indexNumber) => {
-            if (indexNumber % 2 == 0)
-              return (
-                <p title="Actual Clock In/Out ROTA" key={crypto.randomUUID()}>
-                  <span>{clock}</span>
-                  <span> - </span>
-                  <span>{person.Thursday?.clocked[indexNumber + 1] || "?"}</span>
-                </p>
-              );
-          })}
-        </div>
-        <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
-      </div>
-
-      <div className="dayLogFriday flex flex-col gap-2">
-        {/* roted time */}
-        <div onClick={() => editTimes(person.Friday.roted, "Friday")} className={`${person.Friday ? "" : "hidden"} ${person.Friday?.roted.length > 0 ? "" : "hidden"} py-1 ${person.Friday?.roted[0] === "HOLIDAY" ? "bg-indigo-300" : "bg-orange-300"} rounded-lg text-center shadow-md`} title="Set ROTA">
-          {person.Friday?.roted.map((time, indexNumber) => (
-            <p key={crypto.randomUUID()}>{time}</p>
-          ))}
-        </div>
-
-        {/* clocked time */}
-        <div className={`${person.Friday ? "grid" : "hidden"} ${person.Friday?.clocked.length > 0 ? "grid" : "hidden"} grid-cols-1 py-1 bg-blue-300 rounded-lg text-center shadow-md `}>
-          {person.Friday?.clocked.map((clock, indexNumber) => {
-            if (indexNumber % 2 == 0)
-              return (
-                <p title="Actual Clock In/Out ROTA" key={crypto.randomUUID()}>
-                  <span>{clock}</span>
-                  <span> - </span>
-                  <span>{person.Friday?.clocked[indexNumber + 1] || "?"}</span>
-                </p>
-              );
-          })}
-        </div>
-        <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
-      </div>
-
-      <div className="dayLogSaturday flex flex-col gap-2">
-        {/* roted time */}
-        <div onClick={() => editTimes(person.Saturday.roted, "Saturday")} className={`${person.Saturday ? "" : "hidden"} ${person.Saturday?.roted.length > 0 ? "" : "hidden"} py-1 ${person.Saturday?.roted[0] === "HOLIDAY" ? "bg-indigo-300" : "bg-orange-300"}  rounded-lg text-center shadow-md`} title="Set ROTA">
-          {person.Saturday?.roted.map((time, indexNumber) => (
-            <p key={crypto.randomUUID()}>{time}</p>
-          ))}
-        </div>
-
-        {/* clocked time */}
-        <div className={`${person.Saturday ? "grid" : "hidden"} ${person.Saturday?.clocked.length > 0 ? "grid" : "hidden"} grid-cols-1 py-1 bg-blue-300 rounded-lg text-center shadow-md `}>
-          {person.Saturday?.clocked.map((clock, indexNumber) => {
-            if (indexNumber % 2 == 0)
-              return (
-                <p title="Actual Clock In/Out ROTA" key={crypto.randomUUID()}>
-                  <span>{clock}</span>
-                  <span> - </span>
-                  <span>{person.Saturday?.clocked[indexNumber + 1] || "?"}</span>
-                </p>
-              );
-          })}
-        </div>
-        <p className=" py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
-      </div>
+            <p className="py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
+          </div>
+        );
+      })}
     </div>
   );
 };

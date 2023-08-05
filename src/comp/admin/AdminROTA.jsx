@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./AdminROTA.css";
 import { getRotaOfTheWeek } from "../../utils/DataTools";
-import ROTAPerson from "./AdminComp/ROTAPerson"
+import ROTAPerson from "./AdminComp/ROTAPerson";
 
 const AdminROTA = () => {
- 
-
   const [weekNumber, setWeekNumber] = useState(null);
   const [currentYear, setcurrentYear] = useState(new Date().getFullYear());
   const [currentLookedUpDates, setCurrentLookedUpDates] = useState("");
@@ -26,7 +24,8 @@ const AdminROTA = () => {
     (async () => {
       if (!weekNumber) return;
       // console.log("double checking the week number", weekNumber);
-      setRota(await getRotaOfTheWeek(weekNumber));
+      setRota(await getRotaOfTheWeek(weekNumber, currentLookedUpDates));
+      // ?? something fishy
     })();
   }, [startWeek]);
 
@@ -89,7 +88,6 @@ const AdminROTA = () => {
 
   return (
     <div className="rotaTableData flex flex-col overflow-y-auto relative h-[100%]">
-      
       <p className="text-xl font-bold p-2 underline relative">ROTA</p>
 
       <div className="grid grid-cols-8 w-[100%] gap-2">
@@ -123,34 +121,18 @@ const AdminROTA = () => {
                 <p className="text-xl text-center">Teams</p>
                 <p className="text-xs text-center">Week {weekNumber}</p>
               </div>
-              <div className="shadow-md p-2 flex flex-col">
-                <p className="text-xl text-center">Sunday</p>
-                <p className="text-xs text-center">{new Date(startWeek).toLocaleDateString()}</p>
-              </div>
-              <div className="shadow-md p-2 flex flex-col">
-                <p className="text-xl text-center">Monday</p>
-                <p className="text-xs text-center">{new Date(startWeek.getTime() + 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
-              </div>
-              <div className="shadow-md p-2 flex flex-col">
-                <p className="text-xl text-center">Tuesday</p>
-                <p className="text-xs text-center">{new Date(startWeek.getTime() + 2 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
-              </div>
-              <div className="shadow-md p-2 flex flex-col">
-                <p className="text-xl text-center">Wednesday</p>
-                <p className="text-xs text-center">{new Date(startWeek.getTime() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
-              </div>
-              <div className="shadow-md p-2 flex flex-col">
-                <p className="text-xl text-center">Thursday</p>
-                <p className="text-xs text-center">{new Date(startWeek.getTime() + 4 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
-              </div>
-              <div className="shadow-md p-2 flex flex-col">
-                <p className="text-xl text-center">Friday</p>
-                <p className="text-xs text-center">{new Date(startWeek.getTime() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
-              </div>
-              <div className="shadow-md p-2 flex flex-col">
-                <p className="text-xl text-center">Saturday</p>
-                <p className="text-xs text-center">{new Date(startWeek.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
-              </div>
+              {[0, 1, 2, 3, 4, 5, 6].map((day) => {
+                const date = new Date(startWeek.getTime() + day * 24 * 60 * 60 * 1000);
+                const dayName = date.toLocaleDateString("gb-UK", { weekday: "long" });
+                const formattedDate = date.toLocaleDateString();
+
+                return (
+                  <div key={day} className="shadow-md p-2 flex flex-col">
+                    <p className="text-xl text-center">{dayName}</p>
+                    <p className="text-xs text-center">{formattedDate}</p>
+                  </div>
+                );
+              })}
             </>
           )}
         </div>
@@ -158,7 +140,8 @@ const AdminROTA = () => {
       </div>
 
       <div className="flex flex-col w-[100%] gap-2 mt-4 overflow-y-scroll h-[100%]">
-        {rota && Object.values(rota).length > 0 &&
+        {rota &&
+          Object.values(rota).length > 0 &&
           Object.values(rota)
             .sort((a, b) => {
               const teamOrder = {
@@ -170,11 +153,9 @@ const AdminROTA = () => {
               return teamOrder[a.team] - teamOrder[b.team];
             })
             .map((person, index) => {
-              if(!person)return
-              let tempTeamp = `rotaTeam${person.team}`
-              return (
-                  <ROTAPerson key={index + "asd"} index={index} person={person} weekNumber={weekNumber} rota={rota} setRota={setRota}/>
-              );
+              if (!person) return;
+              let tempTeamp = `rotaTeam${person.team}`;
+              return <ROTAPerson key={index + "asd"} index={index} person={person} weekNumber={weekNumber} rota={rota} setRota={setRota} />;
             })}
       </div>
 
