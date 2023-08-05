@@ -7,6 +7,7 @@ import AdminROTA from "./AdminROTA";
 import AdminStaff from "./AdminStaff";
 import AdminPayroll from "./AdminPayroll";
 import AdminCourses from "./AdminCourses";
+import AdminBookings from "./AdminBookings";
 import AdminSignout from "./AdminSignout";
 
 import React, { useState, useEffect } from "react";
@@ -29,6 +30,7 @@ const Admin = ({ setMenuitems, weeklyholiday, setWeeklyHoliday, weeklyWeather, s
         <Route path="/Staff" element={<AdminStaff />} />
         <Route path="/Payroll" element={<AdminPayroll />} />
         <Route path="/Courses" element={<AdminCourses />} />
+        <Route path="/Bookings" element={<AdminBookings />} />
         <Route path="/Signout" element={<AdminSignout />} />
 
         <Route path="*" element={<Page404 />} />

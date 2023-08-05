@@ -68,6 +68,9 @@ const AdminNav = ({ nav, setNav }) => {
       <NavLink to="/Admin/Courses" className={({ isActive, isPending }) => `${isPending ? "pending " : ""} ${isActive ? "bg-orange-300 " : ""} py-2 my-2 ${nav ? "" : ""} text-xl border-b-2 whitespace-nowrap`}>
         {nav ? "Courses" : <TbPigMoney className="text-3xl mx-auto" />}
       </NavLink>
+      <NavLink to="/Admin/Bookings" className={({ isActive, isPending }) => `${isPending ? "pending " : ""} ${isActive ? "bg-orange-300 " : ""} py-2 my-2 ${nav ? "" : ""} text-xl border-b-2 whitespace-nowrap`}>
+        {nav ? "Bookings" : <TbPigMoney className="text-3xl mx-auto" />}
+      </NavLink>
       <NavLink to="/Admin/Signout" className={({ isActive, isPending }) => `${isPending ? "pending " : ""} ${isActive ? "bg-orange-300 " : ""} py-2 my-2 ${nav ? "" : ""} text-xl border-b-2 whitespace-nowrap`}>
         {nav ? "Signout" : <GoSignOut className="text-3xl mx-auto" />}
       </NavLink>
