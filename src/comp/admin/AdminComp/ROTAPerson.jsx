@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { updateRota } from "../../../utils/DataTools";
 
-const ROTAPerson = ({ person, index, weekNumber, rota, setRota }) => {
+const ROTAPerson = ({ person, currentLookedUpDates, index, weekNumber, rota, setRota }) => {
   const [modal, setModal] = useState(false);
   const [timesModal, setTimesModal] = useState(false);
   const [modalData, setModalData] = useState(false);
@@ -17,6 +18,7 @@ const ROTAPerson = ({ person, index, weekNumber, rota, setRota }) => {
       setRota((prev) => {
         const updatedRota = { ...prev };
         updatedRota[person.email] = updatedOne;
+        updateRota(weekNumber, currentLookedUpDates, updatedRota);
         return updatedRota;
       });
     } else {
@@ -24,12 +26,13 @@ const ROTAPerson = ({ person, index, weekNumber, rota, setRota }) => {
       updatedOne[tempDay][typeOfData] = [];
 
       timesmodalData.forEach((date) => {
-        updatedOne[tempDay][typeOfData].push([`${date.start} - ${date.end}`]);
+        updatedOne[tempDay][typeOfData].push(`${date.start} - ${date.end}`);
       });
 
       setRota((prev) => {
         const updatedRota = { ...prev };
         updatedRota[person.email] = updatedOne;
+        updateRota(weekNumber, currentLookedUpDates, updatedRota);
         return updatedRota;
       });
     }
@@ -43,7 +46,12 @@ const ROTAPerson = ({ person, index, weekNumber, rota, setRota }) => {
 
   const editTimes = (data, day, type) => {
     setTypeOfData(type);
-    if (data[0] === "HOLIDAY") {
+    if (!data) {
+      console.log("hey no data!");
+      setTimesModalData({ start: "07:00", end: "23:00" });
+      setTempDay(day);
+      setTimesModal(!timesModal);
+    } else if (data[0] === "HOLIDAY") {
       setTempDay(day);
       setTimesModalData(data[0]);
       setTimesModal(!timesModal);
@@ -63,7 +71,6 @@ const ROTAPerson = ({ person, index, weekNumber, rota, setRota }) => {
   };
 
   const handleTimeChange = (index, field, value) => {
-    console.log("🚀 ~ file: ROTAPerson.jsx:40 ~ handleTimeChange ~ index:", index);
     const updatedTimes = [...timesmodalData];
     updatedTimes[index][field] = value;
     setTimesModalData(updatedTimes);
@@ -103,7 +110,9 @@ const ROTAPerson = ({ person, index, weekNumber, rota, setRota }) => {
             </button>
 
             <div className="flex flex-col gap-4 justify-center">
-              <p>{tempDay} Rota Data</p>
+              <p className="text-lg border-b-2">
+                {tempDay} <span className="capitalize">{typeOfData}</span> Data
+              </p>
               {timesmodalData === "HOLIDAY" && (
                 <div className={`py-1 rounded-lg text-center shadow-md flex flex-nowrap gap-4 justify-between`} key={"HOLIDAYdqwdqw"} title="Set ROTA">
                   <span className="my-auto px-4">HOLIDAY</span>
@@ -189,12 +198,12 @@ const ROTAPerson = ({ person, index, weekNumber, rota, setRota }) => {
 
       {daysOfWeek.map((day, index) => {
         const { roted, clocked } = person[day] || {};
-
         return (
           <div className={`dayLog${day} flex flex-col gap-2`} key={day}>
+            
             {/* roted time */}
             {roted && roted.length > 0 && (
-              <div onClick={() => editTimes(roted, day, "roted")} className={`py-1 ${roted[0] === "HOLIDAY" ? "bg-indigo-300" : "bg-orange-300"} rounded-lg text-center shadow-md`} title="Set ROTA">
+              <div onClick={() => editTimes(roted, day, "roted")} className={`cursor-pointer py-1 ${roted[0] === "HOLIDAY" ? "bg-indigo-300" : "bg-orange-300"} rounded-lg text-center shadow-md`} title="Set ROTA">
                 {roted.map((time) => (
                   <p key={crypto.randomUUID()}>{time}</p>
                 ))}
@@ -203,14 +212,25 @@ const ROTAPerson = ({ person, index, weekNumber, rota, setRota }) => {
 
             {/* clocked time */}
             {clocked && clocked.length > 0 && (
-              <div onClick={() => editTimes(clocked, day, "clocked")} className="grid grid-cols-1 py-1 bg-blue-300 rounded-lg text-center shadow-md">
+              <div onClick={() => editTimes(clocked, day, "clocked")} className="cursor-pointer grid grid-cols-1 py-1 bg-blue-300 rounded-lg text-center shadow-md">
                 {clocked.map((clock) => (
                   <span key={crypto.randomUUID()}>{clock}</span>
                 ))}
               </div>
             )}
 
-            <p className="py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
+            <div className="relative group">
+              <p className="cursor-pointer py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">+</p>
+
+              <div className="group-hover:flex hidden z-10 flex-col gap-4 my-4 absolute w-[100%] bg-white/90 rounded-lg border-2 border-black/30 shadow-lg shadow-black/60 p-2 top-1/2">
+                <button onClick={() => editTimes(roted, day, "roted")} className="py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">
+                  +Rota
+                </button>
+                <button onClick={() => editTimes(clocked, day, "clocked")} className="py-1 bg-gray-300 rounded-lg text-center shadow-md active:shadow-inner border-b-2 border-b-gray-400 active:border-b-0 active:border-t-2 active:border-t-gray-400 transition">
+                  +Clocked
+                </button>
+              </div>
+            </div>
           </div>
         );
       })}
