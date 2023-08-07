@@ -86,6 +86,10 @@ const AdminROTA = () => {
     popup.print();
   };
 
+  const handleReset = () => {
+
+  }
+
   return (
     <div className="rotaTableData flex flex-col overflow-y-auto relative h-[100%]">
       <p className="text-xl font-bold p-2 underline relative">ROTA</p>
@@ -102,14 +106,9 @@ const AdminROTA = () => {
         <button onClick={handlePrint} className="bg-gray-200 p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
           Print
         </button>
-        <button onClick={() => console.log("dev**to implement")} className="bg-gray-200 p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
+        <span></span><span></span>
+        <button onClick={handleReset} className="bg-gray-200 p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
           Reset
-        </button>
-        <button onClick={() => console.log("dev**to implement")} className="bg-gray-200 p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
-          Copy
-        </button>
-        <button onClick={() => console.log("dev**to implement")} className="bg-gray-200 p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
-          Save
         </button>
       </div>
 
@@ -155,7 +154,7 @@ const AdminROTA = () => {
             .map((person, index) => {
               if (!person) return;
               let tempTeamp = `rotaTeam${person.team}`;
-              return <ROTAPerson key={index + "asd"} index={index} person={person} weekNumber={weekNumber} rota={rota} setRota={setRota} />;
+              return <ROTAPerson key={index + "asd"} index={index} person={person} weekNumber={weekNumber} currentLookedUpDates={currentLookedUpDates} rota={rota} setRota={setRota} />;
             })}
       </div>
 

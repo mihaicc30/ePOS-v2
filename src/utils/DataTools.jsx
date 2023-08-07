@@ -1,3 +1,23 @@
+export const updateRota = async (week, weekRange, data) => {
+  try {
+    const query = await fetch(`${import.meta.env.VITE_API}updateRota`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        v: import.meta.env.VITE_G,
+        week, weekRange, data,
+        venueID: localStorage.getItem('venueID')
+      }),
+    });
+    const response = await query.json();
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 export const getRotaOfTheWeek = async (week, weekRange) => {
   try {
     const query = await fetch(`${import.meta.env.VITE_API}getRotaOfTheWeek`, {

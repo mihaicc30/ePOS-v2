@@ -206,6 +206,13 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
         setSelectedCustomDateData(report.data);
       }
     } catch (error) {
+      if (when === "today") {
+        setTodaysReportData("loading");
+      } else if (when === "yesterday") {
+        setYesterdaysReportData("loading");
+      } else if (when === "custom") {
+        setSelectedCustomDateData("loading");
+      }
       console.log(error.message);
     }
   };
@@ -228,6 +235,13 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
         setSelectedCustomDateData(report.data);
       }
     } catch (error) {
+      if (when === "today") {
+        setTodaysReportData("loading");
+      } else if (when === "yesterday") {
+        setYesterdaysReportData("loading");
+      } else if (when === "custom") {
+        setSelectedCustomDateData("loading");
+      }
       console.log(error.message);
     }
   };
@@ -269,7 +283,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
             <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1" onClick={() => setModalViewReport(!modalViewReport)}>
               ◀ Cancel
             </button>
-            <div className="flex flex-col  ml-auto w-[86%] gap-4 p-2 overflow-y-auto">
+            <div className="flex flex-col  ml-auto w-[86%] gap-4 p-2 overflow-y-auto font-[600]">
               <p className="p-4 text-2xl border-y-2 mb-4 border-y-black/30 font-bold shadow-md rounded-xl"> {modalViewReportData.dateString} </p>
 
               <div className="flex justify-center flex-col gap-2 py-6 px-2 border-y-2 border-y-black/30 shadow-md rounded-xl relative">
@@ -284,13 +298,13 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                     <p className="p-4 text-2xl border-y-2 border-y-black/30 font-bold shadow-md rounded-xl"> £{modalViewReportData.totalAmountSold.toFixed(2)} </p>
                   </div>
                 </div>
-                <div className="flex justify-center gap-4 flex-wrap">
+                <div className="flex justify-center gap-2 flex-wrap">
                   <div className="flex my-3 relative flex-col min-w-[180px]">
                     <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">Discounted</span>
-                    <p className="p-4 text-2xl border-y-2 border-y-black/30 font-bold shadow-md rounded-xl">
+                    <p className="p-4 border-y-2 border-y-black/30 font-bold shadow-md rounded-xl">
                       <span>£{(modalViewReportData.totalAmountSoldNoDiscount - modalViewReportData.totalAmountSold).toFixed(2)} </span>
                       <span className="text-sm font-normal"> / </span>
-                      <span className="text-sm font-normal">£{(modalViewReportData.totalAmountSoldNoDiscount).toFixed(2)}</span>
+                      <span className="text-sm font-normal">£{modalViewReportData.totalAmountSoldNoDiscount.toFixed(2)}</span>
                     </p>
                   </div>
 
@@ -300,7 +314,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                       {/*  1000 == rent + utilities */}
                       <span>£{(modalViewReportData.totalAmountSold - modalViewReportData.cogsTotal - modalViewReportData.totalWages - 1000).toFixed(2)}</span>
                       <span> / </span>
-                      <span>{(((modalViewReportData.totalAmountSold - modalViewReportData.cogsTotal - modalViewReportData.totalWages - 1000) / modalViewReportData.totalAmountSold) * 100).toFixed()}%</span>
+                      <span>{(((modalViewReportData.totalAmountSold - modalViewReportData.cogsTotal - modalViewReportData.totalWages - 1000) / modalViewReportData.totalAmountSold) * 100).toFixed(2)}%</span>
                     </p>
                   </div>
 
@@ -309,47 +323,86 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                     <p className={`p-4 border-y-2 border-y-black/30 shadow-md rounded-xl`}>
                       <span>£{(modalViewReportData.totalAmountSold - modalViewReportData.cogsTotal).toFixed(2)}</span>
                       <span> / </span>
-                      <span>{(((modalViewReportData.totalAmountSold - modalViewReportData.cogsTotal) / modalViewReportData.totalAmountSold) * 100).toFixed()}%</span>
+                      <span>{(((modalViewReportData.totalAmountSold - modalViewReportData.cogsTotal) / modalViewReportData.totalAmountSold) * 100).toFixed(2)}%</span>
                     </p>
                   </div>
 
                   <div className="flex my-3 relative flex-col min-w-[180px]">
                     <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">CoGS</span>
                     <p className={`p-4 border-y-2 border-y-black/30 shadow-md rounded-xl`}>
-                      <span>£{(modalViewReportData.cogsTotal).toFixed(2)}</span>
+                      <span>£{modalViewReportData.cogsTotal.toFixed(2)}</span>
                       <span> / </span>
-                      <span>{(100 + ((modalViewReportData.cogsTotal - modalViewReportData.totalAmountSold) / modalViewReportData.totalAmountSold) * 100).toFixed()}%</span>
+                      <span>{(100 + ((modalViewReportData.cogsTotal - modalViewReportData.totalAmountSold) / modalViewReportData.totalAmountSold) * 100).toFixed(2)}%</span>
                     </p>
                   </div>
 
                   <div className="flex my-3 relative flex-col min-w-[180px]">
                     <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">Labor Cost</span>
-                    <p className={`p-4 border-y-2 border-y-black/30 shadow-md rounded-xl ${(modalViewReportData.totalWages / modalViewReportData.totalAmountSold) * 100 > 30 ? "text-red-400" : "text-green-400"}`}>
-                      <span>£{(modalViewReportData.totalAmountSold - modalViewReportData.totalWages).toFixed()}</span>
+                    <p className={`p-4 border-y-2 border-y-black/30 shadow-md rounded-xl ${(modalViewReportData.totalWages / modalViewReportData.totalAmountSold) * 100 > 20 ? "text-red-400" : "text-green-400"}`}>
+                      <span>£{(modalViewReportData.totalAmountSold - modalViewReportData.totalWages).toFixed(2)}</span>
                       <span> / </span>
-                      {((modalViewReportData.totalWages / modalViewReportData.totalAmountSold) * 100).toFixed()}%
+                      {((modalViewReportData.totalWages / modalViewReportData.totalAmountSold) * 100).toFixed(2)}%
                     </p>
                   </div>
                 </div>
 
-                <div className="flex justify-center gap-4">
-                  <div className="flex my-3 relative flex-col min-w-[180px]">
-                    <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">Staff</span>
-                    <p className="p-4 border-y-2 border-y-black/30 shadow-md rounded-xl">7</p>
+                <div className="flex flex-wrap justify-center">
+                  <div className="flex my-3 relative flex-nowrap w-[100%] justify-evenly py-3 border-y-2 border-y-black/30 shadow-md rounded-xl">
+                    <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">Forecasted</span>
+                    <div className="flex my-3 relative flex-col min-w-[140px]">
+                      <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">Staff</span>
+                      <p className="p-4 border-y-2 border-y-black/30 shadow-md rounded-xl">{modalViewReportData.staffMembersF}</p>
+                    </div>
+                    <div className="flex my-3 relative flex-col min-w-[200px]">
+                      <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">Staff Total Hours</span>
+                      <p className="p-4 border-y-2 border-y-black/30 shadow-md rounded-xl">{modalViewReportData.forcastedHours}h</p>
+                    </div>
+                    <div className="flex my-3 relative flex-col min-w-[200px]">
+                      <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">Labor Cost</span>
+                      <p className="p-4 border-y-2 border-y-black/30 shadow-md rounded-xl">£{modalViewReportData.totalWagesF.toFixed(2)}</p>
+                    </div>
                   </div>
-                  <div className="flex my-3 relative flex-col min-w-[180px]">
-                    <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">Staff Hours</span>
-                    <p className="p-4 border-y-2 border-y-black/30 shadow-md rounded-xl">66.3h</p>
-                  </div>
-                  <div className="flex my-3 relative flex-col min-w-[180px]">
-                    <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">Labor Cost</span>
-                    <p className="p-4 border-y-2 border-y-black/30 shadow-md rounded-xl">£{modalViewReportData.totalWages.toFixed(2)}</p>
+
+                  <div className="flex my-3 relative flex-nowrap w-[100%] justify-evenly py-3 border-y-2 border-y-black/30 shadow-md rounded-xl">
+                    <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">Actual</span>
+                    <div className="flex my-3 relative flex-col min-w-[140px]">
+                      <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">Staff</span>
+                      <p className="p-4 border-y-2 border-y-black/30 shadow-md rounded-xl">
+                        {modalViewReportData.staffMembers}{" "}
+                        <span className={`${modalViewReportData.staffMembers - modalViewReportData.staffMembersF <= 0 ? "text-green-400" : "text-orange-400"}`}>
+                          {modalViewReportData.staffMembers - modalViewReportData.staffMembersF > 0 ? "+" : ""}
+                          {(((modalViewReportData.staffMembers - modalViewReportData.staffMembersF) / modalViewReportData.staffMembersF) * 100).toFixed(2)}%
+                        </span>
+                      </p>
+                    </div>
+                    <div className="flex my-3 relative flex-col min-w-[200px]">
+                      <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">Staff Total Hours</span>
+                      <p className="p-4 border-y-2 border-y-black/30 shadow-md rounded-xl">
+                        {modalViewReportData.actualHours}h{" "}
+                        <span className={`${modalViewReportData.actualHours - modalViewReportData.forcastedHours <= 0 ? "text-green-400" : "text-orange-400"}`}>
+                          {modalViewReportData.actualHours - modalViewReportData.forcastedHours > 0 ? "+" : ""}
+                          {(((modalViewReportData.actualHours - modalViewReportData.forcastedHours) / modalViewReportData.forcastedHours) * 100).toFixed(2)}%
+                        </span>
+                      </p>
+                    </div>
+                    <div className="flex my-3 relative flex-col min-w-[200px]">
+                      <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">Labor Cost</span>
+                      <p className="p-4 border-y-2 border-y-black/30 shadow-md rounded-xl">
+                        £{modalViewReportData.totalWages.toFixed(2)}{" "}
+                        <span className={`${modalViewReportData.totalWages - modalViewReportData.totalWagesF <= 0 ? "text-green-400" : "text-orange-400"}`}>
+                          {modalViewReportData.totalWages - modalViewReportData.totalWagesF > 0 ? "+" : ""}
+                          {(((modalViewReportData.totalWages - modalViewReportData.totalWagesF) / modalViewReportData.totalWagesF) * 100).toFixed(2)}%
+                        </span>
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <div className="flex justify-center gap-2 py-6 px-2 border-y-2 border-y-black/30 shadow-md rounded-xl relative">
-                <span className="absolute -top-2 left-5 bg-white rounded-lg px-4 text-sm">Breakdown by payment type - Total Handled : £{ChangeGiven} - Sales: £{modalViewReportData.totalAmountSold.toFixed(2)} - Change: £{(parseFloat(ChangeGiven) - parseFloat(modalViewReportData.totalAmountSold)).toFixed(2)}</span>
+                <span className="absolute -top-2 left-5 bg-white rounded-lg px-4 text-sm">
+                  Breakdown by payment type - Total Handled : £{ChangeGiven} - Sales: £{modalViewReportData.totalAmountSold.toFixed(2)} - Change: £{(parseFloat(ChangeGiven) - parseFloat(modalViewReportData.totalAmountSold)).toFixed(2)}
+                </span>
                 <div className="flex justify-center gap-4 pt-2 flex-wrap">
                   {Object.entries(modalViewReportData.paymentMethod).map((cat, index) => {
                     return (
@@ -372,7 +425,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                         <div className="flex relative flex-col min-w-[220px]" key={crypto.randomUUID()}>
                           <span className="absolute -top-2 left-5 bg-white rounded-lg px-4 text-sm">{index === 0 ? "🥇" : ""} </span>
                           <p className="p-2 border-y-2 border-y-black/30 shadow-md rounded-xl">
-                            {cat[1].qty} x {cat[0]} - £{(cat[1].totalPrice).toFixed(2)}
+                            {cat[1].qty} x {cat[0]} - £{cat[1].totalPrice.toFixed(2)}
                           </p>
                         </div>
                       );
@@ -388,11 +441,10 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                     .map((cat, index) => {
                       return (
                         <div className="flex my-1 relative flex-col min-w-[220px]" key={crypto.randomUUID()}>
-                           
-                          {index === 0 ? <span className="absolute -top-2 left-5 bg-white rounded-lg px-4 text-sm">🥇</span>: ""} 
-                          
+                          {index === 0 ? <span className="absolute -top-2 left-5 bg-white rounded-lg px-4 text-sm">🥇</span> : ""}
+
                           <p className="p-2 border-y-2 border-y-black/30 shadow-md rounded-xl">
-                            {cat[1].qty} x {cat[0]} - £{(cat[1].totalPrice).toFixed(2)}
+                            {cat[1].qty} x {cat[0]} - £{cat[1].totalPrice.toFixed(2)}
                           </p>
                         </div>
                       );
@@ -409,7 +461,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                       return (
                         <div className="flex my-1 relative flex-col min-w-[220px]" key={crypto.randomUUID()}>
                           <span className="absolute -top-2 left-5 bg-white rounded-lg px-4 text-sm">
-                          {index === 0 ? "🥇" : ""} {cat[1].qty} x £{(cat[1].totalPrice / cat[1].qty).toFixed(2)} = £{cat[1].totalPrice.toFixed(2)}
+                            {index === 0 ? "🥇" : ""} {cat[1].qty} x £{(cat[1].totalPrice / cat[1].qty).toFixed(2)} = £{cat[1].totalPrice.toFixed(2)}
                           </span>
                           <p className="p-2 border-y-2 border-y-black/30 shadow-md rounded-xl text-ellipsis overflow-hidden">{cat[0]}</p>
                         </div>
@@ -425,17 +477,15 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                     .map((cat, index) => {
                       return (
                         <div className="flex my-1 relative flex-col min-w-[220px]" key={crypto.randomUUID()}>
-                          <span className="absolute -top-2 left-5 bg-white rounded-lg px-4 text-sm">
-                         {index === 0 ? "🥇" : ""}
-                          </span>
-                          <p className="p-2 border-y-2 border-y-black/30 shadow-md rounded-xl text-ellipsis overflow-hidden">£{cat[1].toFixed(2)} {cat[0]}</p>
+                          <span className="absolute -top-2 left-5 bg-white rounded-lg px-4 text-sm">{index === 0 ? "🥇" : ""}</span>
+                          <p className="p-2 border-y-2 border-y-black/30 shadow-md rounded-xl text-ellipsis overflow-hidden">
+                            £{cat[1].toFixed(2)} {cat[0]}
+                          </p>
                         </div>
                       );
                     })}
                 </div>
               </div>
-
-
             </div>
           </div>
         </div>
