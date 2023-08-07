@@ -850,11 +850,11 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
           </span>
         </div>
         <div className="widget flex-1 px-2 py-4 my-2 shadow-xl flex justify-center">
-          <div className="flex flex-wrap p-4 justify-center">
+          <div className="w-[100%] grid grid-cols-7 gap-2 px-4 justify-center">
             {weeklyWeather &&
               weeklyWeather.forecast.forecastday.map((day, index) => {
                 return (
-                  <div key={index + "b"} className="grid grid-cols-1 m-2 w-[130px] shadow-xl p-1">
+                  <div key={index + "b"} className="grid grid-cols-1 m-2 w-[100%] shadow-xl p-1">
                     <p className="text-center">{new Date(day.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
                     <p className="cols col-span-1 text-center  m-0 h-[24px]">{day.date}</p>
                     <span className="border-b-2 border-b-orange-400 flex-1"></span>
