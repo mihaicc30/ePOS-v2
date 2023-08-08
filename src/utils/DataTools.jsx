@@ -1,3 +1,24 @@
+export const fetchUserDetails = async (email, week) => {
+  try {
+    const query = await fetch(`${import.meta.env.VITE_API}fetchUserDetails`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        v: import.meta.env.VITE_G,
+        email,
+        week,
+        venueID: localStorage.getItem("venueID"),
+      }),
+    });
+    const response = await query.json();
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 export const updateRota = async (week, weekRange, data) => {
   try {
     const query = await fetch(`${import.meta.env.VITE_API}updateRota`, {
@@ -8,8 +29,10 @@ export const updateRota = async (week, weekRange, data) => {
       },
       body: JSON.stringify({
         v: import.meta.env.VITE_G,
-        week, weekRange, data,
-        venueID: localStorage.getItem('venueID')
+        week,
+        weekRange,
+        data,
+        venueID: localStorage.getItem("venueID"),
       }),
     });
     const response = await query.json();
@@ -28,8 +51,9 @@ export const getRotaOfTheWeek = async (week, weekRange) => {
       },
       body: JSON.stringify({
         v: import.meta.env.VITE_G,
-        week, weekRange,
-        venueID: localStorage.getItem('venueID')
+        week,
+        weekRange,
+        venueID: localStorage.getItem("venueID"),
       }),
     });
     const response = await query.json();

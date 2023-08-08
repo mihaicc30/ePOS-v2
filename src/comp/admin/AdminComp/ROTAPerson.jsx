@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { updateRota } from "../../../utils/DataTools";
+import { updateRota, fetchUserDetails } from "../../../utils/DataTools";
 
 const ROTAPerson = ({ person, currentLookedUpDates, index, weekNumber, rota, setRota }) => {
   const [modal, setModal] = useState(false);
@@ -9,6 +9,7 @@ const ROTAPerson = ({ person, currentLookedUpDates, index, weekNumber, rota, set
   const [typeOfData, setTypeOfData] = useState("");
   const [tempDay, setTempDay] = useState("");
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const [hoursRoted, setHoursRoted] = useState(0)
 
   const handleSave = () => {
     if (timesmodalData === "HOLIDAY") {
@@ -39,8 +40,8 @@ const ROTAPerson = ({ person, currentLookedUpDates, index, weekNumber, rota, set
     setTimesModal(!timesModal);
   };
 
-  const openPopup = (user) => {
-    setModalData(user);
+  const openPopup = async(user) => {
+    setModalData(await fetchUserDetails(user.email, weekNumber));
     setModal(!modal);
   };
 
@@ -165,21 +166,21 @@ const ROTAPerson = ({ person, currentLookedUpDates, index, weekNumber, rota, set
             <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1" onClick={() => setModal(!modal)}>
               ◀ Cancel
             </button>
-
             <div className="overflow-auto px-2 grid grid-cols-2 gap-4 p-4 m-2">
               <img src={"../assets/drinks.jpg"} className="h-[160px] w-[auto] rounded-full aspect-square" />
               <div className="flex flex-col text-xl text-start">
-                <p className="font-bold border-b-2">{modalData.displayName}</p>
-                <p>Manager--tochange</p>
-                <p>{modalData.team}</p>
-                <p>Full-Time--tochange</p>
-                <p>07123 123 123--tochange</p>
+                <p className="font-bold border-b-2">{modalData[0].displayName}</p>
+                <p>{modalData[0].position}</p>
+                <p>{modalData[0].team}</p>
+                <p>{modalData[0].worktype}</p>
+                <p>{modalData[0].phone}</p>
+                <p>{modalData[0].email}</p>
               </div>
 
               <div className="col-span-2 gap-4 grid grid-cols-[1fr_10px_.4fr] p-2 border-2 shadow-lg">
                 <p className="text-end">This Week's Scheduled hours</p>
                 <span>|</span>
-                <p className="text-start">30h</p>
+                <p className="text-start">{modalData[0].rotedHours}h</p>
 
                 <p className="text-end">Paid Holiday Remaining</p>
                 <span>|</span>
