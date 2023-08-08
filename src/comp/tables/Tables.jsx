@@ -220,7 +220,7 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
             if (table.type === "wall") {
               return (
                 <Draggable bounds={"#root"} position={draggingIndex === index ? { x: position.x, y: position.y, id: table.id } : { x: table.x, y: table.y, id: table.id }} onDrag={(event, data) => handleDrag(event, data, table.id)} handle=".draggAnchor" key={table.id}>
-                  <div style={{ height: `${table.height + 20}px`, width: `${table.width + 20}px` }} className="fixed bg-gray-200 rounded-lg flex justify-center items-center m-auto"></div>
+                  <div style={{ height: `${table.height + 20}px`, width: `${table.width + 20}px` }} className="fixed bg-blue-900 rounded-lg flex justify-center items-center m-auto"></div>
                 </Draggable>
               );
             } else {
