@@ -6,13 +6,9 @@ most sold products
     box-shadow: 2px 2px 3px #726d6d, -27px -27px 55px #ffffff;
 
 
-tables > change color when occupied
 menu > remove timeline
     > implement misc food
 
-
-    menu> remove courses / add line
-        > remove message > add button + select menu
 
 
         users> level of access/permisions

@@ -5,6 +5,7 @@ import { getVenueById } from "../../utils/BasketUtils";
 import { AiFillCaretRight, AiOutlineArrowDown, AiOutlineArrowLeft, AiOutlineArrowUp, AiOutlineArrowRight } from "react-icons/ai";
 import { BsArrowsMove } from "react-icons/bs";
 import { IoIosResize } from "react-icons/io";
+import { MdTableBar } from "react-icons/md";
 import { GiRoundTable } from "react-icons/gi";
 import { LuPersonStanding } from "react-icons/lu";
 import { RiDeleteBin2Fill } from "react-icons/ri";
@@ -234,14 +235,14 @@ const AdminTablePlan = ({ tables, setTables, draggingIndex, setDraggingIndex, sh
                                 ➖
                               </button>
                               <button className="" onClick={() => console.log("clicked me🙀")} onTouchStart={() => console.log("clicked me🙀")}>
-                                <GiRoundTable className="text-black text-3xl" />
+                              {table.tn}<MdTableBar className="text-black text-3xl" />
                               </button>
                               <button className="p-2" onClick={() => setTableNumber(table.id, "+1")} onTouchStart={() => setTableNumber(table.id, "+1")}>
                                 ➕
                               </button>
                             </div>
 
-                            <div className="flex items-center justify-center">
+                            {/* <div className="flex items-center justify-center">
                               <button className="p-2" onClick={() => setTableSeats(table.id, "-1")} onTouchStart={() => setTableSeats(table.id, "-1")}>
                                 ➖
                               </button>
@@ -251,7 +252,7 @@ const AdminTablePlan = ({ tables, setTables, draggingIndex, setDraggingIndex, sh
                               <button className="p-2" onClick={() => setTableSeats(table.id, "+1")} onTouchStart={() => setTableSeats(table.id, "+1")}>
                                 ➕
                               </button>
-                            </div>
+                            </div> */}
 
                             <div className="flex items-center justify-center">
                               <button className="p-2" onClick={() => setTableWidth(table.id, "-10")} onTouchStart={() => setTableWidth(table.id, "-10")}>
@@ -276,14 +277,14 @@ const AdminTablePlan = ({ tables, setTables, draggingIndex, setDraggingIndex, sh
                             </div>
                           </div>
 
-                          <p className="z-20 inline-flex items-center text-black text-2xl border-b-2 mb-2 pb-2">
-                            <GiRoundTable className="text-2xl" />
+                          <p className="z-20 inline-flex items-center text-black text-2xl ">
+                            <MdTableBar className="text-2xl" />
                             {table.tn}
                           </p>
-                          <p className="z-20 inline-flex items-center text-black text-2xl">
+                          {/* <p className="z-20 inline-flex items-center text-black text-2xl">
                             <LuPersonStanding className="text-3xl" />
                             {table.seats}
-                          </p>
+                          </p> */}
                           <div className="flex absolute -bottom-4 gap-8">
                             <RiDeleteBin2Fill onClick={() => setTableDelete(table.id)} onTouchStart={() => setTableDelete(table.id)} className={`fill-[#ce1111] ${seeControlls2 ? "block" : "hidden"} rounded border-2 border-red-500 text-3xl`} />
                             <BiCopy onClick={() => setTableCopy(table.id)} onTouchStart={() => setTableCopy(table.id)} className={`fill-[#11ce3a] ${seeControlls2 ? "block" : "hidden"} rounded border-2 border-green-500 text-3xl`} />
