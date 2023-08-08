@@ -42,7 +42,27 @@ const endofdayreportsSchema = new Schema({
     type: Object,
     default: {},
   },
+  staffMembers: {
+    type: Number,
+    default: 0,
+  },
+  staffMembersF: {
+    type: Number,
+    default: 0,
+  },
+  forcastedHours: {
+    type: Number,
+    default: 0,
+  },
+  actualHours: {
+    type: Number,
+    default: 0,
+  },
   totalWages: {
+    type: Number,
+    default: 0,
+  },
+  totalWagesF: {
     type: Number,
     default: 0,
   },
