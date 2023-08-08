@@ -32,6 +32,7 @@ app.use("/", require("./routes/settings"));
 app.use("/", require("./routes/venues"));
 app.use("/", require("./routes/posusers"));
 app.use("/", require("./routes/reports"));
+app.use("/", require("./routes/rota"));
 
 app.get("/", (req, res) => {
   console.log("Saying hello!");
