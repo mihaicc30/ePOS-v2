@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route, Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,6 +24,11 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
   const [user, setUser] = useState(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [billTimeline, setBillTimeline] = useState(false);
+
+  const modalMessageRef = useRef(null);
+  const [messageModal, openMessageModal] = useState(false);
+  const [messageModalData, setMessageModalData] = useState(false);
+  const [selectedItem, setSelectedItem] = useState({});
 
   useEffect(() => {
     if (venueNtable.table === "" || !venueNtable.table) return nav("/Tables");
@@ -257,8 +262,113 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
     setModalChangeTable(!modalChangeTable);
   };
 
+  const handleAddLine = () => {
+    let line = {
+      name: "Line",
+      refID: crypto.randomUUID(),
+      dateString: new Date().toLocaleString(),
+      date: new Date().toISOString(),
+      price: 0,
+      qty: 1,
+    };
+    setBasketItems([...basketItems, { ...line }]);
+  };
+
+  const handleAddMessage = (msg) => {
+    const message = modalMessageRef.current.value;
+    if (selectedItem.message !== "") {
+      const updatedBasket = basketItems.map((item) => {
+        if (item.refID === selectedItem.refID) {
+          return { ...item, message: message, messageBy: localStorage.getItem("email") };
+        }
+        return item;
+      });
+      setBasketItems(updatedBasket);
+    }
+    openMessageModal(false);
+  };
+
+  const handleMessage = () => {
+    if (Object.keys(selectedItem).length < 1) {
+      toast.error(`Need to select an item first.`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+    if (selectedItem.printed) {
+      toast.error(`Denied. Item has already been printed.`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+
+    const itemFromBasket = basketItems.find((item) => item.refID === selectedItem.refID);
+
+    if (itemFromBasket.message) {
+      const updatedBasket = basketItems.map((item) => {
+        if (item.refID === itemFromBasket.refID) {
+          return { ...item, message: false };
+        }
+        return item;
+      });
+      setBasketItems(updatedBasket);
+      openMessageModal(false);
+    } else {
+      if (!messageModal) openMessageModal(!messageModal);
+      setMessageModalData(itemFromBasket.refID, itemFromBasket.name);
+      setTimeout(() => {
+        modalMessageRef.current.focus();
+      }, 111);
+    }
+  };
+
+  const handleEnterKey = (event) => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      handleAddMessage();
+    }
+  };
+
+  const addMessageStatus = () => {
+    if(Object.keys(selectedItem).length < 1 ) return true
+    return false
+  }
+
+  const messageStatusAction = () => {
+    if(Object.keys(selectedItem).length > 1 && selectedItem.message ) return true
+    return false
+  }
   return (
     <>
+      {messageModal && (
+        <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
+          <button className="absolute top-0 left-0 p-4 text-3xl animate-fadeUP1" onClick={() => openMessageModal(!messageModal)}>
+            ◀ Cancel
+          </button>
+
+          <p className="text-center text-xl mt-20 border-b-2 border-b-[--c1]">Add Message Form</p>
+          <p className="text-center mt-10">Add Message to {messageModalData.name}</p>
+
+          <input ref={modalMessageRef} onKeyDown={handleEnterKey} type="text" defaultValue={``} className="border-b-2 border-b-black border-t-2 border-t-gray-200 rounded-xl p-4 mx-auto mb-12 text-center w-[80%]" placeholder="Type your message here.." />
+          <button onClick={handleAddMessage} className="tableNumber mx-auto w-1/2 p-6 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black ">
+            Add ▶
+          </button>
+        </div>
+      )}
       {modalChangeTable && (
         <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModalChangeTable(!modalChangeTable) : null)}>
           <div className="fixed right-0 left-[5%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
@@ -295,24 +405,33 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
       <div className="flex flex-col h-[100%]">
         <div className={`flex ${lefty ? "flex-row-reverse" : ""} gap-1 rounded basis-[90%] overflow-y-scroll`}>
           <div className="basis-[40%] h-[100%] w-[100%] rounded shadow-xl flex flex-col p-1 overflow-hidden">
-            <div className="grid grid-cols-3 gap-2 h-[82px]">
-              <div className="tableNumber m-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black ">
-                <p>Table</p>
-                <p className="text-3xl">{venueNtable.table}</p>
-              </div>
+            <div className="grid grid-cols-5 gap-2 h-[82px] font-bold">
               <button onClick={handleChangeTable} className="text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
                 <span>Transfer</span>
                 <span>Table</span>
               </button>
+              <div className="tableNumber m-1 p-2 rounded-xl flex flex-col text-center text-sm justify-center font-semibold border-b-2 bg-gray-300 border-b-black ">
+                <p>Table</p>
+                <p className="text-3xl">{venueNtable.table}</p>
+              </div>
               <button onClick={handleMenuOpenTable} className="text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
                 <span>Open</span>
                 <span>Table</span>
+              </button>
+              <button disabled={addMessageStatus()} onClick={handleMessage} className="text-sm bg-gray-300 disabled:bg-gray-300/50 disabled:text-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
+                <span>{messageStatusAction() ? "Remove": "Add"}</span>
+                <span>Message</span>
+              </button>
+              <button onClick={handleAddLine} className="relative text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
+                <span>Line</span>
+                <span className="absolute bottom-[8px] text-xl">↕</span>
+                <span className="border-b-2 w-[100%] h-4 border-b-black"></span>
               </button>
             </div>
 
             <div className="MenuLeftSide flex flex-col overflow-hidden grow">
               <div className="MenuLeftSide flex flex-col overflow-y-scroll">
-                <MenuLeftSide lefty={lefty} menuitems={menuitems} basketItems={basketItems} setBasketItems={setBasketItems} />
+                <MenuLeftSide lefty={lefty} menuitems={menuitems} basketItems={basketItems} setBasketItems={setBasketItems} selectedItem={selectedItem} setSelectedItem={setSelectedItem} />
               </div>
               <div className={`text-3xl text-end mt-auto flex justify-between ${lefty ? "flex-row-reverse" : ""}`}>
                 <div>
@@ -347,7 +466,10 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
             {basketDiscount > 0 ? "Remove Discount" : "Apply Discount"}
           </div>
           <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**do not print-> store table into the db")}>
-            Store
+            Print Bill
+          </div>
+          <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**do not print-> store table into the db")}>
+            Print Bar
           </div>
           <div
             onClick={() => {
@@ -356,7 +478,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
             disabled={isButtonDisabled}
             className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${isButtonDisabled ? "bg-gray-200 " : "bg-[--c1]"}`}>
             {isButtonDisabled && <AiOutlineLoading3Quarters className="animate-spin mx-auto text-5xl" />}
-            {!isButtonDisabled && "Print"}
+            {!isButtonDisabled && "Print Kitchen"}
           </div>
         </div>
       </div>

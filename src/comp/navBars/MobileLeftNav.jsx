@@ -52,15 +52,7 @@ const MobileLeftNav = ({ lefty, setLefty }) => {
         </label>
       </div>
 
-      <div className={`mt-auto transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-3xl flex flex-col text-center text-sm justify-center font-semibold `} onClick={() => console.log("To implement auto store mode")}>
-        <p>Auto Store</p>
-        <label className="switch">
-          <input type="checkbox" />
-          <span className="slider"></span>
-        </label>
-      </div>
-
-      <span className="my-2 border-b-2"></span>
+      <span className="mt-auto my-2 border-b-2"></span>
       <div className={`transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-3xl flex flex-col text-center text-sm justify-center font-semibold `} onClick={() => console.log("To implement dark mode")}>
         <p>Dark Mode</p>
         <label className="switch">
@@ -95,7 +87,7 @@ const MobileLeftNav = ({ lefty, setLefty }) => {
       </div>
 
       <span className="my-2 border-b-2"></span>
-      <div className={` transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-3xl flex flex-col text-center text-sm justify-center font-semibold`}>
+      <div className={`cursor-none rounded-3xl flex flex-col text-center text-sm justify-center font-semibold`}>
         <span className="mx-auto text-md">
           <FaRegUserCircle className="text-2xl" />
         </span>

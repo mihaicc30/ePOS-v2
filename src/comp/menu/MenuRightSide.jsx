@@ -154,7 +154,6 @@ const MenuRightSide = ({ lefty, menuitems, basketItems, setBasketItems }) => {
                   <span className={`ml-auto px-2 rounded-bl-lg rounded-tr-lg text-end ${getStockColour(item.stock)}`}>{item.stock}</span>
                 </div>
                 <span className="line-clamp-2 h-[48px] font-bold">{item.name}</span>
-                <span className="mt-auto h-[24px]">{processAllergenList(item.allergensList)}</span>
               </div>
             );
           }
