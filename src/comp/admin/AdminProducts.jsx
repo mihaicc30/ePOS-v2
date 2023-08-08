@@ -369,8 +369,8 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 my-4 col-span-6 relative">
-                <div className="flex flex-wrap justify-center gap-2 shadow-lg">
+              <div className="grid grid-cols-2 gap-4 my-4 col-span-6 relative ">
+                <div className="flex flex-wrap justify-center gap-2">
                   <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Ingredients</span>
                   <textarea
                     onChange={(e) =>
@@ -387,7 +387,7 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                     defaultValue={modalData.ingredients.join(", ")}></textarea>
                 </div>
 
-                <div className="flex flex-wrap justify-center gap-2 relative shadow-lg">
+                <div className="flex flex-wrap justify-center gap-2 relative">
                   <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Tags</span>
                   <textarea
                     onChange={(e) =>
