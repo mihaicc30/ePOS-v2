@@ -9,13 +9,14 @@ const Counter = require("../models/counter");
 const Tables = require("../models/tables");
 const EODR = require("../models/endofdayreport");
 const Products = require("../models/products");
+const ROTA = require("../models/rota");
 
 router.post("/grabNetProfit", async (req, res) => {
   const { day, month, venue } = req.body;
   // console.log("🚀 ~ file: reports.js:15 ~ router.post ~  req.body:",  req.body)
   // {
   //   Time: "07:00",✅
-  //   OperatingExpenses: (700 staff wages + 1000£ rent+utilities ) / 10mins  = £17/ph  ✅
+  //   OperatingExpenses: (700 staff wages + 1000£ rent+utilities ) / 10mins  = £17/p10m  ✅
   //   OperatingExpenses: (700 staff wages + 1000£ rent+utilities ) / 1day  = £1700/pd  ✅
   //   GrossSales: 0,
   //   NetProfit: 0,
@@ -78,7 +79,7 @@ router.post("/grabNetProfit", async (req, res) => {
         if (FI.getMonth() !== theMonth) break;
         manipulatedResults.push({
           Date: new Date(FI).toLocaleDateString().substring(0, 5),
-          OperatingExpenses: 1700,
+          OperatingExpenses: 1700, // per day
           GrossSales: 0,
           NetProfit: 0,
         });
@@ -198,10 +199,63 @@ router.post("/grabEndOfDayReport", async (req, res) => {
 router.post("/generateEndOfDayReport", async (req, res) => {
   const { day, venue } = req.body;
   console.log(`Generating ${day} report.`);
+
+  const dayOfWeek = new Date(parseInt(day.split("/")[2]), parseInt(day.split("/")[1]) - 1, parseInt(day.split("/")[0])).toLocaleDateString("en-US", { weekday: "long" });
+  // console.log("dayOfWeek", dayOfWeek);
+
+  let now1 = new Date(parseInt(day.split("/")[2]), parseInt(day.split("/")[1]) - 1, parseInt(day.split("/")[0]));
+  let startOfYear1 = new Date(now1.getFullYear(), 0, 1);
+  let weekNumber1 = Math.ceil(((now1 - startOfYear1) / 86400000 + startOfYear1.getDay() + 1) / 7);
+  // console.log("weekNumber1", weekNumber1);
+
   try {
     const receiptsOfTheDay = await Receipts.find({
       dateString: day,
       pubId: venue,
+    });
+
+    let workersOnDay = await ROTA.findOne(
+      {
+        week: weekNumber1,
+      },
+      { _id: 0, roted: 1, week: 1, weekRange: 1 }
+    );
+
+    let tempRoted = [];
+    let calculateStaffMembers = 0;
+    let calculateStaffMembersF = 0;
+    let calculateForcastedHours = 0;
+    let calculateActualHours = 0;
+    let tempTotalWages = 0;
+    let tempTotalWagesF = 0;
+
+    let wages = [
+      { "alemihai25@gmail.com": 20 },
+       { "ioanaculea1992@gmail.com": 15 }, 
+       { "PetrisorPredescu2@gmail.com": 13 }, 
+       { "CristianConstantinFlorea@gmail.com": 12 }
+      ];
+
+    Object.values(workersOnDay.roted).forEach((staff) => {
+      tempRoted.push([staff.displayName, staff.email, staff[dayOfWeek].roted, staff[dayOfWeek].clocked]);
+      if (staff[dayOfWeek].roted.length > 0) {
+        calculateStaffMembersF++;
+        staff[dayOfWeek].roted.forEach((timeframe) => {
+          const [startHour, startMinute] = String(timeframe.split(" - ")[0]).split(":").map(Number);
+          const [endHour, endMinute] = String(timeframe).split(" - ")[1].split(":").map(Number);
+          tempTotalWagesF += parseFloat((wages.find((obj) => staff.email in obj)?.[staff.email] * parseFloat(((endHour * 60 + endMinute - (startHour * 60 + startMinute)) / 60).toFixed(2))).toFixed(2)) || 10.4;
+          calculateForcastedHours += parseFloat(((endHour * 60 + endMinute - (startHour * 60 + startMinute)) / 60).toFixed(2));
+        });
+      }
+      if (staff[dayOfWeek].clocked.length > 0) {
+        calculateStaffMembers++;
+        staff[dayOfWeek].clocked.forEach((timeframe2) => {
+          const [startHour2, startMinute2] = String(timeframe2.split(" - ")[0]).split(":").map(Number);
+          const [endHour2, endMinute2] = String(timeframe2).split(" - ")[1].split(":").map(Number);
+          tempTotalWages += parseFloat((wages.find((obj) => staff.email in obj)?.[staff.email] * parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2))).toFixed(2)) || 10.4;
+          calculateActualHours += parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2));
+        });
+      }
     });
 
     if (receiptsOfTheDay.length < 1) return res.status(200).json({ message: `No sales have been recorded on ${day}.` });
@@ -307,23 +361,30 @@ router.post("/generateEndOfDayReport", async (req, res) => {
         },
       }
     );
+    // console.log(calculateStaffMembers, calculateForcastedHours, calculateActualHours);
+    // console.log(tempTotalWages, tempTotalWagesF);
     if (updateForecast.modifiedCount > 0) console.log(`Updated forecast for ${day} to £${temptotalAmountSold.toFixed(2)}.`);
 
     if (reportOfTheDay.length > 0) {
       let data = {
         totalQtySold: temptotalQtySold,
-        totalAmountSold: temptotalAmountSold,
-        totalAmountSoldNoDiscount: temptotalAmountSoldNoDiscount,
+        totalAmountSold: parseFloat(temptotalAmountSold.toFixed(2)),
+        totalAmountSoldNoDiscount: parseFloat(temptotalAmountSoldNoDiscount.toFixed(2)),
         totalSoldCategory: categoriesWithInfo,
         totalSoldSubcategory: subcategoriesWithInfo,
-        cogsTotal: productsWithPortionCostTotal,
+        cogsTotal: parseFloat(productsWithPortionCostTotal.toFixed(2)),
         totalSoldProducts: productsWithInfo,
         totalSoldUsers: usersWithTotalPrice,
         paymentMethod: paymentMethodsWithTotalAmount,
-        totalWages: 700, // an temp average value simulating 6 workers/day
+        totalWages: tempTotalWages,
+        totalWagesF: tempTotalWagesF,
         dateString: day,
         cogs: productsWithPortionCost,
         venueID: venue,
+        staffMembers: parseInt(calculateStaffMembers),
+        staffMembersF: parseInt(calculateStaffMembersF),
+        forcastedHours: parseFloat(calculateForcastedHours.toFixed(2)),
+        actualHours: parseFloat(calculateActualHours.toFixed(2)),
         dateString: day,
         date: new Date().toISOString(),
       };
@@ -332,16 +393,21 @@ router.post("/generateEndOfDayReport", async (req, res) => {
         {
           $set: {
             totalQtySold: temptotalQtySold,
-            totalAmountSold: temptotalAmountSold,
-            totalAmountSoldNoDiscount: temptotalAmountSoldNoDiscount,
+            totalAmountSold: parseFloat(temptotalAmountSold.toFixed(2)),
+            totalAmountSoldNoDiscount: parseFloat(temptotalAmountSoldNoDiscount.toFixed(2)),
             totalSoldCategory: categoriesWithInfo,
             totalSoldSubcategory: subcategoriesWithInfo,
             totalSoldProducts: productsWithInfo,
             totalSoldUsers: usersWithTotalPrice,
-            cogsTotal: productsWithPortionCostTotal,
+            cogsTotal: parseFloat(productsWithPortionCostTotal.toFixed(2)),
             cogs: productsWithPortionCost,
+            staffMembers: parseInt(calculateStaffMembers),
+            staffMembersF: parseInt(calculateStaffMembersF),
+            forcastedHours: parseFloat(calculateForcastedHours.toFixed(2)),
+            actualHours: parseFloat(calculateActualHours.toFixed(2)),
             paymentMethod: paymentMethodsWithTotalAmount,
-            totalWages: 700, // an temp average value simulating 6 workers/day
+            totalWages: tempTotalWages,
+            totalWagesF: tempTotalWagesF,
             dateString: day,
             venueID: venue,
             dateString: day,
@@ -354,16 +420,21 @@ router.post("/generateEndOfDayReport", async (req, res) => {
     } else {
       new EODR({
         totalQtySold: temptotalQtySold,
-        totalAmountSold: temptotalAmountSold,
-        totalAmountSoldNoDiscount: temptotalAmountSoldNoDiscount,
+        totalAmountSold: parseFloat(temptotalAmountSold.toFixed(2)),
+        totalAmountSoldNoDiscount: parseFloat(temptotalAmountSoldNoDiscount.toFixed(2)),
         totalSoldCategory: categoriesWithInfo,
         totalSoldSubcategory: subcategoriesWithInfo,
         totalSoldProducts: productsWithInfo,
         cogs: productsWithPortionCost,
-        cogsTotal: productsWithPortionCostTotal,
+        cogsTotal: parseFloat(productsWithPortionCostTotal.toFixed(2)),
         totalSoldUsers: usersWithTotalPrice,
+        staffMembers: parseInt(calculateStaffMembers),
+        staffMembersF: parseInt(calculateStaffMembersF),
+        forcastedHours: parseFloat(calculateForcastedHours.toFixed(2)),
+        actualHours: parseFloat(calculateActualHours.toFixed(2)),
         paymentMethod: paymentMethodsWithTotalAmount,
-        totalWages: 700, // an temp average value simulating 6 workers/day
+        totalWages: tempTotalWages,
+        totalWagesF: tempTotalWagesF,
         dateString: day,
         venueID: venue,
       })
