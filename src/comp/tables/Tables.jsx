@@ -220,37 +220,7 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
             if (table.type === "wall") {
               return (
                 <Draggable bounds={"#root"} position={draggingIndex === index ? { x: position.x, y: position.y, id: table.id } : { x: table.x, y: table.y, id: table.id }} onDrag={(event, data) => handleDrag(event, data, table.id)} handle=".draggAnchor" key={table.id}>
-                  <div style={{ height: `${table.height + 20}px`, width: `${table.width + 20}px` }} className="fixed bg-gray-200 rounded-lg flex justify-center items-center m-auto">
-                    <div className={`text-white shadow-[0px_2px_6px_2px_gray] bg-blue-950 text-xl draggAnchor z-[15] relative w-[100%] h-[100%] rounded-lg flex flex-col justify-center items-center m-auto`}>
-                      <div className={`absolute gap-2 ${seeControlls ? "grid" : "hidden"} grid-cols-2 top-[-100px] left-1/2 bg-gray-300/75 text-black -translate-x-1/2 w-[250px] z-50 m-auto`}>
-                        <p className="flex col-span-2 text-xs">*This hidden when not in edit mode</p>
-
-                        <div className="flex items-center justify-center">
-                          <button className="p-2" onClick={() => setTableWidth(table.id, "-10")} onTouchStart={() => setTableWidth(table.id, "-10")}>
-                            ➖
-                          </button>
-                          <IoIosResize className="rotate-[45deg]" />
-
-                          <button className="p-2" onClick={() => setTableWidth(table.id, "+10")} onTouchStart={() => setTableWidth(table.id, "+10")}>
-                            ➕
-                          </button>
-                        </div>
-
-                        <div className="flex items-center justify-center">
-                          <button className="p-2" onClick={() => setTableHeight(table.id, "-10")} onTouchStart={() => setTableHeight(table.id, "-10")}>
-                            ➖
-                          </button>
-                          <IoIosResize className="rotate-[-45deg]" />
-
-                          <button className="p-2" onClick={() => setTableHeight(table.id, "+10")} onTouchStart={() => setTableHeight(table.id, "+10")}>
-                            ➕
-                          </button>
-                        </div>
-                      </div>
-                      <RiDeleteBin2Fill onClick={() => setTableDelete(table.id)} onTouchStart={() => setTableDelete(table.id)} className={`fill-[#ce1111] ${seeControlls2 ? "block" : "hidden"} rounded border-2 border-red-500 absolute bottom-0 -left-10 text-xl`} />
-                      <BiCopy onClick={() => setTableCopy(table.id)} onTouchStart={() => setTableCopy(table.id)} className={`fill-[#11ce3a] ${seeControlls2 ? "block" : "hidden"} rounded border-2 border-green-500 absolute bottom-0 -right-10 text-xl`} />
-                    </div>
-                  </div>
+                  <div style={{ height: `${table.height + 20}px`, width: `${table.width + 20}px` }} className="fixed bg-gray-200 rounded-lg flex justify-center items-center m-auto"></div>
                 </Draggable>
               );
             } else {
@@ -258,67 +228,11 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
               return (
                 <Draggable bounds={"#root"} position={draggingIndex === index ? { x: position.x, y: position.y, id: table.id } : { x: table.x, y: table.y, id: table.id }} onDrag={(event, data) => handleDrag(event, data, table.id)} handle=".draggAnchor" key={table.id}>
                   <div style={{ height: `${table.height + 20}px`, width: `${table.width + 20}px` }} onClick={() => setTable(table.tn)} onTouchStart={() => setTable(table.tn)} className="fixed bg-transparent rounded-full flex justify-center items-center m-auto">
-                    <div className={`text-white bg-blue-400 text-xl draggAnchor relative w-[100%] h-[100%] rounded-[40px] flex flex-col flex-wrap justify-center items-center m-auto`}>
-                      {/* saved for later development */}
-                      {/* {seats.map((seat, index) => (
-                          <span key={crypto.randomUUID()} style={{ "--seats": `${(360.0 / parseFloat(table.seats)) * index}deg`, "--seat-width": `${table.width / 1.7}px`, "--seat-height": `${(table.height + table.width + table.seats) / 2}px` }} className="seat absolute"></span>
-                        ))} */}
-
-                      <div className={`absolute gap-2 ${seeControlls ? "grid" : "hidden"} grid grid-cols-2 top-[-130px] left-0 bg-gray-300/75 text-black -translate-x-1/2 w-[250px] z-50 m-auto`}>
-                        <p className="flex col-span-2 text-xs">*This hidden when not in edit mode</p>
-                        <div className="flex items-center justify-center">
-                          <button className="p-2" onClick={() => setTableNumber(table.id, "-1")} onTouchStart={() => setTableNumber(table.id, "-1")}>
-                            ➖
-                          </button>
-                          <button className="" onClick={() => console.log("clicked mex")} onTouchStart={() => console.log("clicked me")}>
-                            <GiRoundTable className="text-black text-3xl" />
-                          </button>
-                          <button className="p-2" onClick={() => setTableNumber(table.id, "+1")} onTouchStart={() => setTableNumber(table.id, "+1")}>
-                            ➕
-                          </button>
-                        </div>
-
-                        <div className="flex items-center justify-center">
-                          <button className="p-2" onClick={() => setTableSeats(table.id, "-1")} onTouchStart={() => setTableSeats(table.id, "-1")}>
-                            ➖
-                          </button>
-                          <button className="" onClick={() => console.log("clicked mex")} onTouchStart={() => console.log("clicked me")}>
-                            <LuPersonStanding className="text-black text-3xl" />
-                          </button>
-                          <button className="p-2" onClick={() => setTableSeats(table.id, "+1")} onTouchStart={() => setTableSeats(table.id, "+1")}>
-                            ➕
-                          </button>
-                        </div>
-
-                        <div className="flex items-center justify-center">
-                          <button className="p-2" onClick={() => setTableWidth(table.id, "-10")} onTouchStart={() => setTableWidth(table.id, "-10")}>
-                            ➖
-                          </button>
-                          <IoIosResize className="rotate-[45deg]" />
-
-                          <button className="p-2" onClick={() => setTableWidth(table.id, "+10")} onTouchStart={() => setTableWidth(table.id, "+10")}>
-                            ➕
-                          </button>
-                        </div>
-
-                        <div className="flex items-center justify-center">
-                          <button className="p-2" onClick={() => setTableHeight(table.id, "-10")} onTouchStart={() => setTableHeight(table.id, "-10")}>
-                            ➖
-                          </button>
-                          <IoIosResize className="rotate-[-45deg]" />
-
-                          <button className="p-2" onClick={() => setTableHeight(table.id, "+10")} onTouchStart={() => setTableHeight(table.id, "+10")}>
-                            ➕
-                          </button>
-                        </div>
-                      </div>
-                      <RiDeleteBin2Fill onClick={() => setTableDelete(table.id)} onTouchStart={() => setTableDelete(table.id)} className={`fill-[#ce1111] ${seeControlls2 ? "block" : "hidden"} rounded border-2 border-red-500 absolute bottom-0 -left-10 text-xl`} />
-                      <BiCopy onClick={() => setTableCopy(table.id)} onTouchStart={() => setTableCopy(table.id)} className={`fill-[#11ce3a] ${seeControlls2 ? "block" : "hidden"} rounded border-2 border-green-500 absolute bottom-0 -right-10 text-xl`} />
+                    <div className={`text-white ${tableClock["t" + table.tn] ? "bg-orange-400" : "bg-blue-400"} text-xl draggAnchor relative w-[100%] h-[100%] rounded-[40px] flex flex-col flex-wrap justify-center items-center m-auto`}>
                       <p className="z-20 flex items-center text-black text-2xl my-2">
                         T-
                         {table.tn}
                       </p>
-
                       {tableClock["t" + table.tn] && <p className="z-20 inline-flex items-center text-black text-2xl">{Math.floor((new Date() - new Date().setHours(...tableClock["t" + table.tn].split(":"))) / (1000 * 60))}min</p>}
                     </div>
                   </div>
