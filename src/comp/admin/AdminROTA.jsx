@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./AdminROTA.css";
-import { getRotaOfTheWeek } from "../../utils/DataTools";
+import { getRotaOfTheWeek, resetRota } from "../../utils/DataTools";
 import ROTAPerson from "./AdminComp/ROTAPerson";
 
 const AdminROTA = () => {
@@ -86,9 +86,9 @@ const AdminROTA = () => {
     popup.print();
   };
 
-  const handleReset = () => {
-
-  }
+  const handleReset = async() => {
+    setRota(await resetRota(weekNumber, currentLookedUpDates));
+  };
 
   return (
     <div className="rotaTableData flex flex-col overflow-y-auto relative h-[100%]">
@@ -106,7 +106,8 @@ const AdminROTA = () => {
         <button onClick={handlePrint} className="bg-gray-200 p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
           Print
         </button>
-        <span></span><span></span>
+        <span></span>
+        <span></span>
         <button onClick={handleReset} className="bg-gray-200 p-2 rounded-lg shadow-xl border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
           Reset
         </button>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { IoMdRefreshCircle } from "react-icons/io";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { AiOutlineLoading3Quarters, AiFillPrinter } from "react-icons/ai";
+import { LuEye } from "react-icons/lu";
+import { BiSolidFilePdf } from "react-icons/bi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -197,6 +199,18 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
       setSelectedCustomDateData("loading");
     }
     let report = await generateEndOfDayReport(day, localStorage.getItem("venueID"));
+    if(report.message.startsWith("No sales")){
+      toast.error(`${report.message}`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+    }
     try {
       if (when === "today") {
         setTodaysReportData(report.data);
@@ -214,6 +228,16 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
         setSelectedCustomDateData("loading");
       }
       console.log(error.message);
+      toast.error(`${error.message}`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 
@@ -281,7 +305,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
         <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModalViewReport(!modalViewReport) : null)}>
           <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
             <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1" onClick={() => setModalViewReport(!modalViewReport)}>
-              ◀ Cancel
+              ◀ Back
             </button>
             <div className="flex flex-col  ml-auto w-[86%] gap-4 p-2 overflow-y-auto font-[600]">
               <p className="p-4 text-2xl border-y-2 mb-4 border-y-black/30 font-bold shadow-md rounded-xl"> {modalViewReportData.dateString} </p>
@@ -368,7 +392,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                     <div className="flex my-3 relative flex-col min-w-[140px]">
                       <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">Staff</span>
                       <p className="p-4 border-y-2 border-y-black/30 shadow-md rounded-xl">
-                        {modalViewReportData.staffMembers}{" "}
+                        {modalViewReportData.staffMembers}
                         <span className={`${modalViewReportData.staffMembers - modalViewReportData.staffMembersF <= 0 ? "text-green-400" : "text-orange-400"}`}>
                           {modalViewReportData.staffMembers - modalViewReportData.staffMembersF > 0 ? "+" : ""}
                           {(((modalViewReportData.staffMembers - modalViewReportData.staffMembersF) / modalViewReportData.staffMembersF) * 100).toFixed(2)}%
@@ -378,7 +402,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                     <div className="flex my-3 relative flex-col min-w-[200px]">
                       <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">Staff Total Hours</span>
                       <p className="p-4 border-y-2 border-y-black/30 shadow-md rounded-xl">
-                        {modalViewReportData.actualHours}h{" "}
+                        {modalViewReportData.actualHours}h
                         <span className={`${modalViewReportData.actualHours - modalViewReportData.forcastedHours <= 0 ? "text-green-400" : "text-orange-400"}`}>
                           {modalViewReportData.actualHours - modalViewReportData.forcastedHours > 0 ? "+" : ""}
                           {(((modalViewReportData.actualHours - modalViewReportData.forcastedHours) / modalViewReportData.forcastedHours) * 100).toFixed(2)}%
@@ -388,7 +412,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                     <div className="flex my-3 relative flex-col min-w-[200px]">
                       <span className="absolute -top-2 left-5 bg-white rounded-lg px-4">Labor Cost</span>
                       <p className="p-4 border-y-2 border-y-black/30 shadow-md rounded-xl">
-                        £{modalViewReportData.totalWages.toFixed(2)}{" "}
+                        £{modalViewReportData.totalWages.toFixed(2)}
                         <span className={`${modalViewReportData.totalWages - modalViewReportData.totalWagesF <= 0 ? "text-green-400" : "text-orange-400"}`}>
                           {modalViewReportData.totalWages - modalViewReportData.totalWagesF > 0 ? "+" : ""}
                           {(((modalViewReportData.totalWages - modalViewReportData.totalWagesF) / modalViewReportData.totalWagesF) * 100).toFixed(2)}%
@@ -496,23 +520,29 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
         <div className="flex flex-col px-4 py-4 shadow-md">
           <p className="text-xl font-bold p-2">End of day</p>
           <div className="grid grid-cols-[1fr_1fr_1fr] gap-4">
-            <div className="flex my-3 relative flex-col min-h-[270px]">
+            <div className="flex my-3 relative flex-col min-h-[236px]">
               <span className="absolute -top-3 left-5 bg-gray-50 px-4">Today</span>
               <div className="px-4 pb-4 pt-7 text-lg border-y-2 border-y-black/30 shadow-md rounded-xl flex flex-col  h-[100%]">
                 <p className="text-center">{new Date(todaysReport).toLocaleDateString("en-GB", { weekday: "long" })}</p>
                 <span className="bg-gray-50 my-1 p-2 text-center border-y-2 border-y-transparent rounded-xl">{new Date(todaysReport).toLocaleDateString()}</span>
                 {todaysReportData && todaysReportData !== "loading" && (
-                  <div className="flex flex-col">
+                  <div className="flex flex-col h-[100%]">
                     <button onClick={() => handleGenerateReport("today", new Date(Date.now()).toLocaleDateString())} className="absolute top-0 right-0 mt-2 p-2 rounded-lg mx-auto active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0 flex flex-nowrap justify-center items-center gap-4">
                       <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-lg rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition" />
                     </button>
                     <span className="text-center text-lg font-bold animate-fadeUP1">Gross Sales: £{parseFloat(todaysReportData.totalAmountSold).toFixed(2)}</span>
-                    <button onClick={() => handleViewReport("today")} className="bg-[--c1] mt-2 p-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
-                      View
-                    </button>
-                    <button onClick={() => handleDownloadReport("today")} className="bg-green-400 p-2 mt-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
-                      Download
-                    </button>
+                    <div className="grid grid-cols-3 gap-4 mt-auto">
+                      <button onClick={() => handleViewReport("today")} className="bg-gray-200 mt-2 p-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
+                        <LuEye className="text-3xl mx-auto border-y-2 rounded-lg border-y-black text-orange-400" />
+                      </button>
+                      <button onClick={() => handleDownloadReport("today")} className="bg-gray-200 p-2 mt-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
+                        <BiSolidFilePdf className="text-3xl mx-auto rounded-lg text-red-500" />
+                      </button>
+
+                      <button onClick={() => handlePrintReport("today")} className="bg-gray-200 p-2 mt-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
+                        <AiFillPrinter className="text-3xl mx-auto rounded-lg text-gray-900" />
+                      </button>
+                    </div>
                   </div>
                 )}
                 {!todaysReportData && todaysReportData !== "loading" && (
@@ -526,23 +556,29 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
               </div>
             </div>
 
-            <div className="flex my-3 relative flex-col min-h-[270px]">
+            <div className="flex my-3 relative flex-col min-h-[236px]">
               <span className="absolute -top-3 left-5 bg-gray-50 px-4">Yesterday</span>
               <div className="px-4 pb-4 pt-7 text-lg border-y-2 border-y-black/30 shadow-md rounded-xl flex flex-col  h-[100%] ">
                 <p className="text-center">{new Date(yesterdaysReport).toLocaleDateString("en-GB", { weekday: "long" })}</p>
                 <span className="bg-gray-50 my-1 p-2 text-center border-y-2 border-y-transparent rounded-xl">{new Date(yesterdaysReport).toLocaleDateString()}</span>
                 {yesterdaysReportData && yesterdaysReportData !== "loading" && (
-                  <div className="flex flex-col  transition">
+                  <div className="flex flex-col h-[100%] transition">
                     <button onClick={() => handleGenerateReport("yesterday", new Date(yesterdaysReport).toLocaleDateString())} className="absolute top-0 right-0 mt-2 p-2 rounded-lg mx-auto active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0 flex flex-nowrap justify-center items-center gap-4">
                       <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-lg rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition" />
                     </button>
                     <span className="text-center text-lg font-bold animate-fadeUP1">Gross Sales: £{parseFloat(yesterdaysReportData.totalAmountSold).toFixed(2)}</span>
-                    <button onClick={() => handleViewReport("yesterday")} className="bg-[--c1] mt-2 p-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
-                      View
-                    </button>
-                    <button onClick={() => handleDownloadReport("today")} className="bg-green-400 p-2 mt-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
-                      Download
-                    </button>
+                    <div className="grid grid-cols-3 gap-4 mt-auto">
+                      <button onClick={() => handleViewReport("yesterday")} className="bg-gray-200 mt-2 p-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
+                        <LuEye className="text-3xl mx-auto border-y-2 rounded-lg border-y-black text-orange-400" />
+                      </button>
+                      <button onClick={() => handleDownloadReport("yesterday")} className="bg-gray-200 p-2 mt-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
+                        <BiSolidFilePdf className="text-3xl mx-auto rounded-lg text-red-500" />
+                      </button>
+
+                      <button onClick={() => handlePrintReport("yesterday")} className="bg-gray-200 p-2 mt-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
+                        <AiFillPrinter className="text-3xl mx-auto rounded-lg text-gray-900" />
+                      </button>
+                    </div>
                   </div>
                 )}
                 {!yesterdaysReportData && yesterdaysReportData !== "loading" && (
@@ -556,31 +592,38 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
               </div>
             </div>
 
-            <div className="flex my-3 relative flex-col min-h-[270px]">
+            <div className="flex my-3 relative flex-col min-h-[236px]">
               <span className="absolute -top-3 left-5 bg-gray-50 px-4">Custom</span>
               <div className="px-4 pb-4 pt-7 text-lg border-y-2 border-y-black/30 shadow-md rounded-xl flex flex-col  h-[100%]">
                 <p className="text-center">{new Date(selectedCustomDate).toLocaleDateString("en-GB", { weekday: "long" })}</p>
 
-                <input type="date" className="select-none bg-gray-50 my-1 p-2 text-center border-y-2 rounded-xl shadow-md" value={selectedCustomDate} onChange={handleCustomDateChange} />
+                <input type="date" className="select-none bg-gray-50 my-1 p-2 text-center border-y-2 rounded-xl shadow-md h-[60px]" value={selectedCustomDate} onChange={handleCustomDateChange} />
 
                 {selectedCustomDateData && selectedCustomDateData !== "loading" && (
-                  <div className="flex flex-col">
+                  <div className="flex flex-col h-[100%]">
                     <button onClick={() => handleGenerateReport("custom", new Date(selectedCustomDate).toLocaleDateString())} className="absolute top-0 right-0 mt-2 p-2 rounded-lg mx-auto active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0 flex flex-nowrap justify-center items-center gap-4">
                       <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-lg rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition" />
                     </button>
                     <span className="text-center text-lg font-bold transition animate-fadeUP1">Gross Sales: £{parseFloat(selectedCustomDateData.totalAmountSold).toFixed(2)}</span>
-                    <button onClick={() => handleViewReport("custom")} className="bg-[--c1] mt-2 p-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
-                      View
-                    </button>
-                    <button onClick={() => handleDownloadReport("today")} className="bg-green-400 p-2 mt-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
-                      Download
-                    </button>
+
+                    <div className="grid grid-cols-3 gap-4 mt-auto">
+                      <button onClick={() => handleViewReport("custom")} className="bg-gray-200 mt-2 p-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
+                        <LuEye className="text-3xl mx-auto border-y-2 rounded-lg border-y-black text-orange-400" />
+                      </button>
+                      <button onClick={() => handleDownloadReport("custom")} className="bg-gray-200 p-2 mt-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
+                        <BiSolidFilePdf className="text-3xl mx-auto rounded-lg text-red-500" />
+                      </button>
+
+                      <button onClick={() => handlePrintReport("custom")} className="bg-gray-200 p-2 mt-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0">
+                        <AiFillPrinter className="text-3xl mx-auto rounded-lg text-gray-900" />
+                      </button>
+                    </div>
                   </div>
                 )}
                 {!selectedCustomDateData && selectedCustomDateData !== "loading" && (
                   <>
                     <p className="text-center my-2 transition animate-fadeUP1">Can not generate a report.</p>
-                    <button className="bg-[--c1] mt-auto p-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0" onClick={() => handleGenerateReport("custom", new Date(selectedCustomDate).toLocaleDateString())}>
+                    <button className="bg-gray-200 mt-auto p-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0" onClick={() => handleGenerateReport("custom", new Date(selectedCustomDate).toLocaleDateString())}>
                       Generate {new Date(selectedCustomDate).toLocaleDateString()} Report
                     </button>
                   </>

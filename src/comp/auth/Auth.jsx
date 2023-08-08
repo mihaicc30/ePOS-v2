@@ -129,9 +129,9 @@ const Auth = () => {
       } else {
         // mimic fingerprint error
         const fpRef = fp.current;
-        fpRef.classList.add("animate-shake");
+        fpRef?.classList.add("animate-shake");
         setTimeout(() => {
-          fpRef.classList.remove("animate-shake");
+          fpRef?.classList.remove("animate-shake");
         }, 1500);
       }
       setIsScanning(false);

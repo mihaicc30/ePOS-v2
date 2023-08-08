@@ -283,6 +283,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
         }
         return item;
       });
+      setSelectedItem({})
       setBasketItems(updatedBasket);
     }
     openMessageModal(false);
@@ -325,6 +326,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
         }
         return item;
       });
+      setSelectedItem({})
       setBasketItems(updatedBasket);
       openMessageModal(false);
     } else {
@@ -344,29 +346,31 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
   };
 
   const addMessageStatus = () => {
-    if(Object.keys(selectedItem).length < 1 ) return true
-    return false
-  }
+    if (Object.keys(selectedItem).length < 1) return true;
+    return false;
+  };
 
   const messageStatusAction = () => {
-    if(Object.keys(selectedItem).length > 1 && selectedItem.message ) return true
-    return false
-  }
+    if (Object.keys(selectedItem).length > 1 && selectedItem.message) return true;
+    return false;
+  };
   return (
     <>
       {messageModal && (
-        <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
-          <button className="absolute top-0 left-0 p-4 text-3xl animate-fadeUP1" onClick={() => openMessageModal(!messageModal)}>
-            ◀ Cancel
-          </button>
+        <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? openMessageModal(!messageModal) : null)}>
+          <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
+            <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1" onClick={() => openMessageModal(!messageModal)}>
+              ◀ Cancel
+            </button>
 
-          <p className="text-center text-xl mt-20 border-b-2 border-b-[--c1]">Add Message Form</p>
-          <p className="text-center mt-10">Add Message to {messageModalData.name}</p>
+            <p className="text-center text-xl mt-20 border-b-2 border-b-[--c1]">Add Message Form</p>
+            <p className="text-center mt-10">Add Message to {messageModalData.name}</p>
 
-          <input ref={modalMessageRef} onKeyDown={handleEnterKey} type="text" defaultValue={``} className="border-b-2 border-b-black border-t-2 border-t-gray-200 rounded-xl p-4 mx-auto mb-12 text-center w-[80%]" placeholder="Type your message here.." />
-          <button onClick={handleAddMessage} className="tableNumber mx-auto w-1/2 p-6 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black ">
-            Add ▶
-          </button>
+            <input ref={modalMessageRef} onKeyDown={handleEnterKey} type="text" defaultValue={``} className="border-b-2 border-b-black border-t-2 border-t-gray-200 rounded-xl p-4 mx-auto mb-12 text-center w-[80%]" placeholder="Type your message here.." />
+            <button onClick={handleAddMessage} className="tableNumber mx-auto w-1/2 p-6 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black ">
+              Add ▶
+            </button>
+          </div>
         </div>
       )}
       {modalChangeTable && (
@@ -380,24 +384,25 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
         {billTimeline && <BillTimeline setBillTimeline={setBillTimeline} basketItems={basketItems} venueNtable={venueNtable} venues={venues} />}
         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme="light" />
       </div>
-      <div className={`modal ${modal ? "fixed inset-0 bg-black/70 flex flex-col justify-center items-center z-20 p-4" : "hidden"}`}>
-        <div className={`relative flex-flex-col bg-white/90 p-4 min-w-[300px] w-[600px]`}>
+      <div className={`modalBG ${modal ? "fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" : "hidden"}`} onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModal(!modal) : null)}>
+        <div className={`fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center`}>
           <button className="block mr-auto p-2 mb-8 text-3xl animate-fadeUP1" onClick={() => setModal(!modal)}>
             ◀ Cancel
           </button>
-          <p className="text-center text-3xl my-20">Apply Discount</p>
-          <div className="flex flex-nowrap mb-20 text-center gap-4">
-            <button onClick={() => setDiscount(5)} className="flex-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black">
-              5%
+          <p className="text-center text-3xl mt-20 mb-4">Apply Discount</p>
+          <span className="border-b-2 w-[300px] mb-4"></span>
+          <div className="flex flex-col mb-20 text-center gap-4">
+            <button onClick={() => setDiscount(5)} className="flex-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center bg-[--c1] border-b-2 border-b-black w-[200px] mx-auto font-bold">
+              <span className="mx-auto text-xl">5%</span>
             </button>
-            <button onClick={() => setDiscount(10)} className="flex-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black">
-              10%
+            <button onClick={() => setDiscount(10)} className="flex-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center bg-[--c1] border-b-2 border-b-black w-[200px] mx-auto font-bold">
+              <span className="mx-auto text-xl">10%</span>
             </button>
-            <button onClick={() => setDiscount(25)} className="flex-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black">
-              25%
+            <button onClick={() => setDiscount(25)} className="flex-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center bg-[--c1] border-b-2 border-b-black w-[200px] mx-auto font-bold">
+              <span className="mx-auto text-xl"> 25%</span>
             </button>
-            <button onClick={() => setDiscount(50)} className="flex-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] border-b-2 border-b-black">
-              50%
+            <button onClick={() => setDiscount(50)} className="flex-1 p-2 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center bg-[--c1] border-b-2 border-b-black w-[200px] mx-auto font-bold">
+              <span className="mx-auto text-xl"> 50%</span>
             </button>
           </div>
         </div>
@@ -419,7 +424,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
                 <span>Table</span>
               </button>
               <button disabled={addMessageStatus()} onClick={handleMessage} className="text-sm bg-gray-300 disabled:bg-gray-300/50 disabled:text-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">
-                <span>{messageStatusAction() ? "Remove": "Add"}</span>
+                <span>{messageStatusAction() ? "Remove" : "Add"}</span>
                 <span>Message</span>
               </button>
               <button onClick={handleAddLine} className="relative text-sm bg-gray-300 m-1 p-2 rounded-xl transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90]  flex flex-col justify-center items-center border-b-2 border-b-black ">

@@ -9,7 +9,7 @@ const ROTAPerson = ({ person, currentLookedUpDates, index, weekNumber, rota, set
   const [typeOfData, setTypeOfData] = useState("");
   const [tempDay, setTempDay] = useState("");
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const [hoursRoted, setHoursRoted] = useState(0)
+  const [hoursRoted, setHoursRoted] = useState(0);
 
   const handleSave = () => {
     if (timesmodalData === "HOLIDAY") {
@@ -40,7 +40,7 @@ const ROTAPerson = ({ person, currentLookedUpDates, index, weekNumber, rota, set
     setTimesModal(!timesModal);
   };
 
-  const openPopup = async(user) => {
+  const openPopup = async (user) => {
     setModalData(await fetchUserDetails(user.email, weekNumber));
     setModal(!modal);
   };
@@ -106,10 +106,6 @@ const ROTAPerson = ({ person, currentLookedUpDates, index, weekNumber, rota, set
               ◀ Cancel
             </button>
 
-            <button className="absolute top-20 left-0 p-4 text-xl animate-fadeUP1 border-b-2 border-b-green-300" onClick={handleSave}>
-              <span className="text-green-300">◀ </span>Save
-            </button>
-
             <div className="flex flex-col gap-4 justify-center">
               <p className="text-lg border-b-2">
                 {tempDay} <span className="capitalize">{typeOfData}</span> Data
@@ -136,10 +132,10 @@ const ROTAPerson = ({ person, currentLookedUpDates, index, weekNumber, rota, set
                     );
                   } else {
                     return (
-                      <div className={`py-1 rounded-lg text-center shadow-md flex flex-nowrap gap-4`} key={indexNumber + "dqwdqw"} title="Set ROTA">
-                        <input className="px-4" type="time" value={time.start} onChange={(e) => handleTimeChange(indexNumber, "start", e.target.value)} name={`start-${indexNumber}`} />
-                        <span className="my-auto">-</span>
-                        <input className="px-4" type="time" value={time.end} onChange={(e) => handleTimeChange(indexNumber, "end", e.target.value)} name={`end-${indexNumber}`} />
+                      <div className={`py-1 px-2 my-2 rounded-md text-center shadow-md flex flex-nowrap gap-4`} key={indexNumber + "dqwdqw"} title="Set ROTA">
+                        <input className="m-1 px-2 timeStyle " type="time" value={time.start} onChange={(e) => handleTimeChange(indexNumber, "start", e.target.value)} name={`start-${indexNumber}`} />
+                        <span className="my-auto">↔</span>
+                        <input className="m-1 px-4 timeStyle" type="time" value={time.end} onChange={(e) => handleTimeChange(indexNumber, "end", e.target.value)} name={`end-${indexNumber}`} />
                         <span onClick={() => handleDelete(indexNumber)} className="p-2">
                           ❌
                         </span>
@@ -155,6 +151,11 @@ const ROTAPerson = ({ person, currentLookedUpDates, index, weekNumber, rota, set
                   +Holiday
                 </button>
               </div>
+
+              <button className="timeStyle shadow-md p-4 my-4 text-xl animate-fadeUP1 border-b-2 border-b-green-300 flex justify-between" onClick={handleSave}>
+                <span className="text-green-300">◀ </span>
+                <span className="m-auto">Save</span>
+              </button>
             </div>
           </div>
         </div>
@@ -201,7 +202,6 @@ const ROTAPerson = ({ person, currentLookedUpDates, index, weekNumber, rota, set
         const { roted, clocked } = person[day] || {};
         return (
           <div className={`dayLog${day} flex flex-col gap-2`} key={day}>
-            
             {/* roted time */}
             {roted && roted.length > 0 && (
               <div onClick={() => editTimes(roted, day, "roted")} className={`cursor-pointer py-1 ${roted[0] === "HOLIDAY" ? "bg-indigo-300" : "bg-orange-300"} rounded-lg text-center shadow-md`} title="Set ROTA">

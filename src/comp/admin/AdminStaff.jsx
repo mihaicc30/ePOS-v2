@@ -374,7 +374,6 @@ const AdminStaff = () => {
                 </div>
 
                 {modalData.courses.map((course, index) => {
-                  console.log(course.courseName, course.progress, course.progress < 1);
                   return (
                     <div className={`trainingCard ${course.examStarted < 1 && "bg-yellow-100"} ${course.progress === 100 && course.status !== "Passed!" && "bg-red-100"} ${course.status === "Passed!" && "bg-green-100"} shadow-md p-2`} key={crypto.randomUUID()}>
                       <p className="font-bold border-b-[1px] border-b-gray-500">{course.courseName}</p>
