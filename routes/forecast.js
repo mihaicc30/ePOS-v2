@@ -1094,6 +1094,7 @@ router.post("/forecast-quick", async (req, res) => {
       dateRange: req.body.date,
       venueID: req.body.venueID,
     });
+
     // if user does not want to refresh prediction
     if (req.body.forceRefresh !== "true") {
       // and forecast does exist
