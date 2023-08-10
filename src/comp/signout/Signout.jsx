@@ -30,6 +30,7 @@ const Signout = ({ setUser, setVenueNtable }) => {
           setVenueNtable({ venue: null, table: null });
           navigate("/");
           localStorage.clear();
+          localStorage.setItem("venueID",101010)
           console.log(data.message);
         } else {
           toast.error(`${data.message}`, {
@@ -47,6 +48,7 @@ const Signout = ({ setUser, setVenueNtable }) => {
           setVenueNtable({ venue: null, table: null });
           navigate("/");
           localStorage.clear();
+          localStorage.setItem("venueID",101010)
           console.log(data.message);
         }
       } catch (error) {

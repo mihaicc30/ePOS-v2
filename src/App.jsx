@@ -62,13 +62,15 @@ const App = () => {
   });
 
   useEffect(() => {
+    localStorage.setItem("venueID",101010)
     async function getAsyncData() {
+      const w = await fetchWeeklyWeather();
       setWeeklyHoliday(await fetchHoliday());
       setMenuitems(await getMenu());
       setVenues(await getVenues());
-      setWeeklyWeather(await fetchWeeklyWeather());
+      setWeeklyWeather(w);
       setTables(await getTableLayout()); // table layout
-      fetchForecastWeek();
+      await fetchForecastWeek();
     }
     getAsyncData();
   }, []);
@@ -95,7 +97,7 @@ const App = () => {
 
   const fetchForecastWeek = async () => {
     if (!weeklyWeather) return;
-
+    console.log("Received weather data. Fetching sales forecast.", new Date().toLocaleTimeString());
     for (let n = 0; n < 7; n++) {
       let dayt = (new Date().getDay() + n) % 7;
 

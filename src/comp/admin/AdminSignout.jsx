@@ -12,6 +12,7 @@ const Signout = ({ user, setUser, setVenueNtable}) => {
     const timeout = setTimeout(() => {
       navigate("/");
       localStorage.clear();
+      localStorage.setItem("venueID",101010)
     }, 400);
 
     return () => clearTimeout(timeout);

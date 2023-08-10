@@ -394,7 +394,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                       <p className="p-4 border-y-2 border-y-black/30 shadow-md rounded-xl">
                         {modalViewReportData.staffMembers}
                         <span className={`${modalViewReportData.staffMembers - modalViewReportData.staffMembersF <= 0 ? "text-green-400" : "text-orange-400"}`}>
-                          {modalViewReportData.staffMembers - modalViewReportData.staffMembersF > 0 ? "+" : ""}
+                          {modalViewReportData.staffMembers - modalViewReportData.staffMembersF > 0 ? " +" : " "} 
                           {(((modalViewReportData.staffMembers - modalViewReportData.staffMembersF) / modalViewReportData.staffMembersF) * 100).toFixed(2)}%
                         </span>
                       </p>
@@ -404,7 +404,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                       <p className="p-4 border-y-2 border-y-black/30 shadow-md rounded-xl">
                         {modalViewReportData.actualHours}h
                         <span className={`${modalViewReportData.actualHours - modalViewReportData.forcastedHours <= 0 ? "text-green-400" : "text-orange-400"}`}>
-                          {modalViewReportData.actualHours - modalViewReportData.forcastedHours > 0 ? "+" : ""}
+                          {modalViewReportData.actualHours - modalViewReportData.forcastedHours > 0 ? " +" : " "}
                           {(((modalViewReportData.actualHours - modalViewReportData.forcastedHours) / modalViewReportData.forcastedHours) * 100).toFixed(2)}%
                         </span>
                       </p>
@@ -414,7 +414,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                       <p className="p-4 border-y-2 border-y-black/30 shadow-md rounded-xl">
                         £{modalViewReportData.totalWages.toFixed(2)}
                         <span className={`${modalViewReportData.totalWages - modalViewReportData.totalWagesF <= 0 ? "text-green-400" : "text-orange-400"}`}>
-                          {modalViewReportData.totalWages - modalViewReportData.totalWagesF > 0 ? "+" : ""}
+                          {modalViewReportData.totalWages - modalViewReportData.totalWagesF > 0 ? " +" : " "}
                           {(((modalViewReportData.totalWages - modalViewReportData.totalWagesF) / modalViewReportData.totalWagesF) * 100).toFixed(2)}%
                         </span>
                       </p>

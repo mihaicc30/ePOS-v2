@@ -1,3 +1,24 @@
+export const handleClocked = async (week, typeOfDay, email) => {
+  try {
+    const query = await fetch(`${import.meta.env.VITE_API}handleClocked`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        v: import.meta.env.VITE_G,
+        week, typeOfDay, email,
+        venueID: localStorage.getItem("venueID"),
+      }),
+    });
+    const response = await query.json();
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 export const resetRota = async (week, weekRange) => {
   try {
     const query = await fetch(`${import.meta.env.VITE_API}resetRota`, {
@@ -358,7 +379,6 @@ export const fetchWeeklyWeather = async () => {
   try {
     const response = await fetch("http://api.weatherapi.com/v1/forecast.json?key=0e4f502bab164b37bd285450232907&q=worcester%20uk&days=7&aqi=no&alerts=no");
     const data = await response.json();
-    console.log("🚀 ~ file: DataTools.jsx:169 ~ fetchWeeklyWeather ~ data:", data);
     return data;
   } catch (error) {
     console.error("Error fetching weather:", error);

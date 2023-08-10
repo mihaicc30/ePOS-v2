@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Auth.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { db, auth, logInWithEmailAndPassword, signInWithGoogle, signInWithPopup, signInWithFacebook } from "../../firebase/config.jsx";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import { FcGoogle } from "react-icons/fc";
@@ -7,6 +9,7 @@ import { BsFacebook } from "react-icons/bs";
 import { FaCogs } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { authUser, setVenue } from "../../utils/authUser";
+import { handleClocked } from "../../utils/DataTools";
 
 const Auth = () => {
   const [user, setUser] = useState(null);
@@ -17,9 +20,9 @@ const Auth = () => {
   const [userTable, setUserTable] = useState([]);
   const [modal, setModal] = useState(false);
   const [modalData, setModalData] = useState(false);
+  const [clockedLoading, setClockedLoading] = useState(false);
 
   useEffect(() => {
-    pinInput.current.focus();
     async function getUserTable() {
       try {
         const query = await fetch(`http://localhost:3000/posusers`, {
@@ -48,19 +51,17 @@ const Auth = () => {
 
   const [pin, setPin] = useState({
     pin: "",
-    pin2: "",
   });
 
   const handleBackspace = () => {
     setPin((prevPin) => ({
       ...prevPin,
       pin: prevPin.pin.slice(0, -1),
-      pin2: prevPin.pin2.slice(0, -1),
     }));
   };
 
   const handleClear = () => {
-    setPin({ pin: "", pin2: "" });
+    setPin({ pin: "" });
   };
 
   const handleNumber = (name) => {
@@ -68,8 +69,7 @@ const Auth = () => {
 
     setPin((prevPin) => ({
       ...prevPin,
-      pin: "*".repeat(prevPin.pin2.length + 1),
-      pin2: prevPin.pin2 + name,
+      pin: prevPin.pin + name,
     }));
   };
 
@@ -93,26 +93,19 @@ const Auth = () => {
     }
   };
 
-  useEffect(() => {
-    const foundPin = userTable.find((userpin) => userpin.pin === pin.pin2);
-    if (foundPin && pin.pin2.length >= 3) {
-      // 1 clockin // 2 kitchen // 3 pos
-      if (showPage == 3) {
-        authUser(foundPin);
-        setVenue(setVenue, foundPin);
-        setPin({ pin: "", pin2: "" });
-        if (foundPin.isAdmin == 1) {
-          navigate("/Admin");
-        } else if (foundPin.isAdmin == 0) {
-          navigate("/Tables");
-        }
-      } else if (showPage == 2) {
-      } else if (showPage == 1) {
+  const checkPin = () => {
+    const foundPin = userTable.find((userpin) => userpin.pin === pin.pin);
+    if (foundPin && pin.pin.length >= 3) {
+      authUser(foundPin);
+      if (foundPin.isAdmin == 1) {
+        navigate("/Admin");
+      } else if (foundPin.isAdmin == 0) {
+        navigate("/Tables");
       }
-    } else if (!foundPin && pin.pin2.length >= 3) {
-      setPin({ pin: "", pin2: "" });
+    } else if (!foundPin) {
     }
-  }, [pin.pin2]);
+    setPin({ pin: "" });
+  };
 
   const [isScanning, setIsScanning] = useState(false);
 
@@ -155,10 +148,76 @@ const Auth = () => {
     setIsScanning(false);
   };
 
-  const [showPage, setShowPage] = useState(3);
+  const handleClock = async () => {
+    setClockedLoading(true);
+    const foundPin = userTable.find((userpin) => userpin.pin === pin.pin && !userpin.isAdmin);
+    const now = new Date();
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
+    const weekNumber = Math.ceil(((now - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
+    let typeOfDay = new Date(now).toLocaleDateString("en-GB", { weekday: "long" });
+    try {
+      if (foundPin && pin.pin.length >= 3) {
+        const query = await handleClocked(weekNumber, typeOfDay, foundPin.email);
+
+        setClockedLoading(false);
+        if (query.message.endsWith("out.")) {
+          toast.info(query.message, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            theme: "light",
+          });
+          return;
+        }
+        toast.success(query.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      } else if (!foundPin) {
+        setClockedLoading(false);
+        toast.error(`User is not found.`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    } catch (error) {
+      toast.error(query.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+      setClockedLoading(false);
+    }
+
+    setPin({ pin: "" });
+  };
 
   return (
     <div className="flex flex-col bg-[--clsec] w-[100%] h-[100%] relative">
+      <div className="absolute">
+        <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme="light" />
+      </div>
       {modal && (
         <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModal(!modal) : null)}>
           <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
@@ -194,10 +253,13 @@ const Auth = () => {
               </div>
 
               <p className="col-span-6 p-4">
-                Details are set by developers and all data related to this app is using these details. If you require an update or change please contact your representative or email Mihai <a className="transition border-b-2 border-b-orange-400 py-1 bg-orange-400 px-4 rounded-lg" href={`mailto:alemihai25@gmail.com?subject=101010 POS - Query - ${new Date().toLocaleDateString()}&amp;body=Your message...`}>here</a>.
+                Details are set by developers and all data related to this app is using these details. If you require an update or change please contact your representative or email Mihai
+                <a className="transition border-b-2 border-b-orange-400 py-1 bg-orange-400 px-4 rounded-lg" href={`mailto:alemihai25@gmail.com?subject=101010 POS - Query - ${new Date().toLocaleDateString()}&amp;body=Your message...`}>
+                  here
+                </a>
+                .
               </p>
 
-              
               <div className="flex my-3 relative flex-col col-span-6">
                 <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Enabled Features</span>
                 <div className="p-4 text-lg border-y-2 border-y-black/30 font-[600] tracking-wide shadow-lg rounded-xl flex flex-wrap justify-center">
@@ -217,7 +279,6 @@ const Auth = () => {
                   <p className="py-1 px-3 border-2 rounded-lg m-1 text-gray-300">Courses</p>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -231,49 +292,62 @@ const Auth = () => {
         <div className={`transition animate-fadeFromLeft basis-[80%] max-md:basis-[100%] flex flex-col gap-[3vh] h-[98%] my-auto justify-center items-center`}>
           <div className={`h-[100%] bg-[--c30] ml-auto border-r-4 rounded shadow-xl shadow-[#0a0a0a] flex flex-col w-[80%] p-4 min-h-[80svh] relative justify-start border-2 border-[--c12] max-w-[650px]`}>
             <p className="font-black text-3xl tracking-widest text-center">CCW POS</p>
-            <img className="max-w-[15svh] max-h-[15svh] mx-auto" src="./assets/d956248b8cfe7fe8fa39033b50728bcb.jpg" />
+            <img className="max-w-[10svh] max-h-[10svh] mx-auto" src="./assets/d956248b8cfe7fe8fa39033b50728bcb.jpg" />
             <div className="text-center">
               <p className="font-bold text-lg">Welcome!</p>
               <p>Sign in to start to order.</p>
             </div>
 
-            <div className="grow flex flex-col">
-              <input type="text" className="text-center" value={pin.pin} ref={pinInput} onChange={handlePinInput} autoComplete="" />
-              <div className="keypad grid grid-cols-3 gap-4 my-4">
-                <button name="1" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+            <div className={`flex grow flex-col`}>
+              <p className="text-center h-[24px]">
+                {pin.pin.split("").map((symbol, index) => {
+                  return "*";
+                })}
+              </p>
+              <div className="keypad grid grid-cols-4 gap-4 my-4">
+                <button name="1" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   1
                 </button>
-                <button name="2" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="2" onClick={handlePinInput} className=" bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   2
                 </button>
-                <button name="3" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+
+                <button name="3" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   3
                 </button>
-                <button name="4" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+
+                <button name="si" onClick={checkPin} className="row-span-2 bg-[--c12] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                  SignIn
+                </button>
+
+                <button name="4" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   4
                 </button>
-                <button name="5" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="5" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   5
                 </button>
-                <button name="6" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="6" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   6
                 </button>
-                <button name="7" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="7" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   7
                 </button>
-                <button name="8" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="8" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   8
                 </button>
-                <button name="9" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="9" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   9
                 </button>
-                <button name="c" onClick={handlePinInput} className="bg-[--c3] rounded px-[1vw] py-[2vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="cio" onClick={handleClock} className="row-span-2 bg-[--c12] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                  Clock In/Out
+                </button>
+                <button name="c" onClick={handlePinInput} className="bg-[--c12] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   C
                 </button>
-                <button name="0" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[2vh] font-bold text-3xl text-white border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="0" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   0
                 </button>
-                <button name="b" onClick={handlePinInput} className="bg-[--c3] rounded px-[1vw] py-[2vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="b" onClick={handlePinInput} className="bg-[--c12] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   <svg className="w-8 h-8 mx-auto" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                     <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
@@ -297,23 +371,6 @@ const Auth = () => {
                 <h6 className="absolute opacity-0 -top-1/2">Scanning...</h6>
                 <div className="fingerprint"></div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="basis-[20%] ml-auto block max-md:hidden overflow-hidden">
-          <div className="overflow-hidden h-[100svh] flex flex-col gap-12 justify-center items-center relative pr-2 text-lg font-[600]">
-            <div onClick={() => setShowPage(3)} className={`${showPage === 3 ? "shadow-[inset_-3px_4px_2px_black] bg-[--c12]" : "bg-[--c1]"} transition border-b-2 border-b-black rounded-r-lg w-[100%] py-4 flex justify-between px-6`}>
-              <span>◀</span>
-              <span>POS</span>
-            </div>
-            <div onClick={() => setShowPage(1)} className={`${showPage === 1 ? "shadow-[inset_-3px_4px_2px_black] bg-[--c12]" : "bg-[--c1]"} transition border-b-2 border-b-black rounded-r-lg w-[100%] py-4 flex justify-between px-6`}>
-              <span>◀</span>
-              <span>Clock In/Out</span>
-            </div>
-            <div onClick={() => setShowPage(2)} className={`${showPage === 2 ? "shadow-[inset_-3px_4px_2px_black] bg-[--c12]" : "bg-[--c1]"} transition border-b-2 border-b-black rounded-r-lg w-[100%] py-4 flex justify-between px-6`}>
-              <span>◀</span>
-              <span>Kitchen</span>
             </div>
           </div>
         </div>
