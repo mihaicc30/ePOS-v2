@@ -1,7 +1,7 @@
 require("dotenv").config();
 const router = require("express").Router();
 const Venues = require("../models/venues");
-const TableLayout = require("../models/tableLayout");
+const TableLayout = require("../models/tablelayout");
 const Targets = require("../models/targets");
 const SF = require("../models/salesforecast");
 const Receipts = require("../models/receipts");
@@ -78,7 +78,7 @@ router.post("/grabNetProfit", async (req, res) => {
         FI.setDate(day);
         if (FI.getMonth() !== theMonth) break;
         manipulatedResults.push({
-          Date: new Date(FI).toLocaleDateString().substring(0, 5),
+          Date: new Date(FI).toLocaleDateString('en-GB').substring(0, 5),
           OperatingExpenses: 1700, // per day
           GrossSales: 0,
           NetProfit: 0,
@@ -157,7 +157,7 @@ router.post("/grabSales", async (req, res) => {
         FI.setDate(day);
         if (FI.getMonth() !== theMonth) break;
         manipulatedResults.push({
-          Date: new Date(FI).toLocaleDateString().substring(0, 5),
+          Date: new Date(FI).toLocaleDateString('en-GB').substring(0, 5),
           Sales: 0,
         });
       }

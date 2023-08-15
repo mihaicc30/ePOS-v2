@@ -1,7 +1,7 @@
 require("dotenv").config();
 const router = require("express").Router();
 const Venues = require("../models/venues");
-const TableLayout = require("../models/tableLayout");
+const TableLayout = require("../models/tablelayout");
 
 router.post("/avenues", (req, res) => {
   res.status(200).send("ok");
