@@ -60,7 +60,7 @@ router.post("/addreceipt", async (req, res) => {
       totalAmount: parseFloat(basketTotal),
       discount: basketDiscount,
       tableOpenAt: table.date,
-      tableClosedAt: new Date().toISOString(),
+      tableClosedAt: new Date().toISOString('en-GB'),
       paymentMethod: table.paidin,
     })
       .save()

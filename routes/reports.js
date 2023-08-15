@@ -38,7 +38,7 @@ router.post("/grabNetProfit", async (req, res) => {
         for (let min = 0; min < 60; min += 10) {
           FI.setMinutes(min);
           manipulatedResults.push({
-            Time: new Date(FI).toLocaleTimeString().substring(0, 5),
+            Time: new Date(FI).toLocaleTimeString('en-GB').substring(0, 5),
             OperatingExpenses: 17, // per 10mins
             GrossSales: 0,
             NetProfit: 0,
@@ -48,7 +48,7 @@ router.post("/grabNetProfit", async (req, res) => {
 
       manipulatedResults = queryReceiptsDay.reduce((acc, receipt) => {
         const tableOpenAt = new Date(receipt.tableOpenAt);
-        const tableOpenTime = tableOpenAt.toLocaleTimeString().substring(0, 5);
+        const tableOpenTime = tableOpenAt.toLocaleTimeString('en-GB').substring(0, 5);
         const interval = Math.floor(tableOpenAt.getMinutes() / 10) * 10;
         const timeInterval = `${tableOpenTime.substring(0, 3)}${interval.toString().padStart(2, "0")}`;
 
@@ -119,7 +119,7 @@ router.post("/grabSales", async (req, res) => {
         for (let min = 0; min < 60; min += 10) {
           FI.setMinutes(min);
           manipulatedResults.push({
-            Time: new Date(FI).toLocaleTimeString().substring(0, 5),
+            Time: new Date(FI).toLocaleTimeString('en-GB').substring(0, 5),
             Sales: 0,
           });
         }
@@ -127,7 +127,7 @@ router.post("/grabSales", async (req, res) => {
 
       manipulatedResults = queryReceiptsDay.reduce((acc, receipt) => {
         const tableOpenAt = new Date(receipt.tableOpenAt);
-        const tableOpenTime = tableOpenAt.toLocaleTimeString().substring(0, 5);
+        const tableOpenTime = tableOpenAt.toLocaleTimeString('en-GB').substring(0, 5);
         const interval = Math.floor(tableOpenAt.getMinutes() / 10) * 10;
         const timeInterval = `${tableOpenTime.substring(0, 3)}${interval.toString().padStart(2, "0")}`;
 
@@ -386,7 +386,7 @@ router.post("/generateEndOfDayReport", async (req, res) => {
         forcastedHours: parseFloat(calculateForcastedHours.toFixed(2)),
         actualHours: parseFloat(calculateActualHours.toFixed(2)),
         dateString: day,
-        date: new Date().toISOString(),
+        date: new Date().toISOString('en-GB'),
       };
       await EODR.updateOne(
         { dateString: day, venueID: venue },
@@ -411,7 +411,7 @@ router.post("/generateEndOfDayReport", async (req, res) => {
             dateString: day,
             venueID: venue,
             dateString: day,
-            date: new Date().toISOString(),
+            date: new Date().toISOString('en-GB'),
           },
         }
       ).then((r) => {

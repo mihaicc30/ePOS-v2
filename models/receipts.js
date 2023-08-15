@@ -67,15 +67,15 @@ const receiptSchema = new Schema({
   },
   dateString: {
     type: String,
-    default: new Date().toLocaleDateString(),
+    default: new Date().toLocaleDateString('en-GB'),
   },
   tableOpenAt: {
     type: Date,
-    default: new Date().toISOString(),
+    default: new Date().toISOString('en-GB'),
   },
   tableClosedAt: {
     type: Date,
-    default: new Date().toISOString(),
+    default: new Date().toISOString('en-GB'),
   },
 });
 

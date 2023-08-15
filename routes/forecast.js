@@ -1023,7 +1023,7 @@ const targetData = [
 ];
 
 router.post("/forecast", async (req, res) => {
-  console.log("Getting forecast", new Date().toISOString());
+  console.log("Getting forecast", new Date().toISOString('en-GB'));
   console.log(req.body);
   const { cloudy, humidity, windspeed, temp, daytype, isholiday } = req.body;
 
@@ -1078,14 +1078,14 @@ router.post("/forecast", async (req, res) => {
   Promise.all([await generatePredicton(), await generatePredicton(), await generatePredicton()]).then(() => {
     const sum = predictions.reduce((acc, prediction) => acc + parseInt(prediction), 0);
     const average = (sum / predictions.length).toFixed(2);
-    console.log("Sending forecast.", new Date().toISOString());
+    console.log("Sending forecast.", new Date().toISOString('en-GB'));
     //push and set forecast in db for present date and venue
     res.json({ average, predictions });
   });
 });
 
 router.post("/forecast-quick", async (req, res) => {
-  console.log(`Getting ${req.body.date} forecast -- `, new Date().toISOString());
+  console.log(`Getting ${req.body.date} forecast -- `, new Date().toISOString('en-GB'));
 
   try {
     if (!req.body.venueID) return res.status(400).json({ message: "Venue id not provided." });
@@ -1178,7 +1178,7 @@ router.post("/forecast-quick", async (req, res) => {
     Promise.all([await generatePredicton(), await generatePredicton(), await generatePredicton()]).then(async () => {
       const sum = predictions.reduce((acc, prediction) => acc + parseInt(prediction), 0);
       const average = (sum / predictions.length).toFixed(2);
-      // console.log("Sending quick forecast.", new Date().toISOString());
+      // console.log("Sending quick forecast.", new Date().toISOString('en-GB'));
 
       if (req.body.forceRefresh === "true") {
         if (query !== null) {
@@ -1275,7 +1275,7 @@ router.post("/getTargets", async (req, res) => {
       Friday: 0,
       Saturday: 0,
       Sunday: 0,
-      date: new Date().toISOString(),
+      date: new Date().toISOString('en-GB'),
     })
       .save()
       .then((results) => {

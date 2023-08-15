@@ -17,7 +17,7 @@ const notificationsSchema = new Schema({
   
   dateString: {
     type: String,
-    default: new Date().toLocaleDateString(),
+    default: new Date().toLocaleDateString('en-GB'),
   },
   course: {
     type: Number,

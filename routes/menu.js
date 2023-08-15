@@ -30,6 +30,16 @@ router.post("/zapOrder", async (req, res) => {
   }
 });
 
+router.post("/fetchAllOrders", async (req, res) => {
+  try {
+    const results = await Orders.find({ venueID: req.body.data.venueID, orderType: req.body.data.orderType}).sort({ date: 1 });
+    console.log("Sending orders.", new Date().toUTCString());
+    res.status(200).json(results);
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).json({ message: error.message });
+  }
+});
 router.post("/fetchZapped", async (req, res) => {
   try {
     const results = await Orders.find({ venueID: req.body.data.venueID, orderType: req.body.data.orderType, orderStatus:"zapped", dateString:req.body.data.dateString }).sort({ date: 1 });

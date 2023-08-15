@@ -12,7 +12,7 @@ router.post("/handleClocked", async (req, res) => {
       let rotedData = query.roted;
       let tempData = query.roted[`${req.body.email}`][`${req.body.typeOfDay}`][`clocked`];
       if (tempData.length < 1) {
-        rotedData[`${req.body.email}`][`${req.body.typeOfDay}`][`clocked`].push(`${new Date().toLocaleTimeString().substring(0, 5)} - ?`);
+        rotedData[`${req.body.email}`][`${req.body.typeOfDay}`][`clocked`].push(`${new Date().toLocaleTimeString('en-GB').substring(0, 5)} - ?`);
         let query2 = await ROTA.updateOne({ week: req.body.week, venueID: req.body.venueID }, { $set: { roted: rotedData } });
         return res.status(200).json({ message: `${rotedData[`${req.body.email}`].displayName} has been clocked in.` });
       } else if (tempData.length >= 1) {
@@ -20,13 +20,13 @@ router.post("/handleClocked", async (req, res) => {
         let startTime = lastEntry.split(" - ")[0];
         let endTime = lastEntry.split(" - ")[1];
         if (endTime === "?") {
-          endTime = new Date().toLocaleTimeString().substring(0, 5);
+          endTime = new Date().toLocaleTimeString('en-GB').substring(0, 5);
           tempData[tempData.length - 1] = `${startTime} - ${endTime}`;
           rotedData[`${req.body.email}`][`${req.body.typeOfDay}`][`clocked`] = tempData;
           let query3 = await ROTA.updateOne({ week: req.body.week, venueID: req.body.venueID }, { $set: { roted: rotedData } });
           return res.status(200).json({ message: `${rotedData[`${req.body.email}`].displayName} has been clocked out.` });
         } else if (/^([01]\d|2[0-3]):([0-5]\d)$/.test(endTime)) {
-          rotedData[`${req.body.email}`][`${req.body.typeOfDay}`][`clocked`].push(`${new Date().toLocaleTimeString().substring(0, 5)} - ?`);
+          rotedData[`${req.body.email}`][`${req.body.typeOfDay}`][`clocked`].push(`${new Date().toLocaleTimeString('en-GB').substring(0, 5)} - ?`);
           let query4 = await ROTA.updateOne({ week: req.body.week, venueID: req.body.venueID }, { $set: { roted: rotedData } });
           return res.status(200).json({ message: `${rotedData[`${req.body.email}`].displayName} has been clocked in.` });
         } else {

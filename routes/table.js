@@ -55,7 +55,7 @@ router.post("/getTableTime", async (req, res) => {
     const tables = await Tables.find({ tableVenue: venueNumber });
     let tableTimes = {};
     tables.map(async (table, index) => {
-      tableTimes["t" + table.tableNumber] = new Date(table.date).toLocaleTimeString();
+      tableTimes["t" + table.tableNumber] = new Date(table.date).toLocaleTimeString('en-GB');
     });
 
     res.status(200).json(tableTimes);
@@ -74,7 +74,7 @@ router.post("/getTable", async (req, res) => {
         res.status(403).json({ message: `Table is already open by ${table.tableOpenBy}.` });
       } else {
         const tableUpdate = await Tables.updateOne({ tableNumber: tableNumber, tableVenue: venue }, { $set: { tableOpen: true, tableOpenBy: user.displayName } });
-        console.log(`Table ${tableNumber} exists. Sending data.`, new Date().toISOString());
+        console.log(`Table ${tableNumber} exists. Sending data.`, new Date().toISOString('en-GB'));
         res.status(200).json(table);
       }
     } else {
@@ -93,10 +93,10 @@ router.post("/getTable", async (req, res) => {
         closedBy: false,
         closedByEmail: false,
         basket: [],
-        date: new Date().toISOString(),
+        date: new Date().toISOString('en-GB'),
       });
       await newTable.save();
-      console.log(`Table ${tableNumber} is created. Sending data.`, new Date().toISOString());
+      console.log(`Table ${tableNumber} is created. Sending data.`, new Date().toISOString('en-GB'));
       res.status(200).json(newTable);
     }
   } catch (error) {
