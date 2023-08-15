@@ -45,7 +45,7 @@ const AdminROTA = () => {
     const startDate = new Date(year, 0, 1 + (weekNumber - 1) * 7);
     const endDate = new Date(startDate.getTime() + 6 * 24 * 60 * 60 * 1000);
     setStartWeek(startDate);
-    return startDate.toLocaleDateString() + " - " + endDate.toLocaleDateString();
+    return startDate.toLocaleDateString('en-GB') + " - " + endDate.toLocaleDateString('en-GB');
   };
   const handlePrevious = () => {
     setWeekNumber(weekNumber - 1);
@@ -124,7 +124,7 @@ const AdminROTA = () => {
               {[0, 1, 2, 3, 4, 5, 6].map((day) => {
                 const date = new Date(startWeek.getTime() + day * 24 * 60 * 60 * 1000);
                 const dayName = date.toLocaleDateString("gb-UK", { weekday: "long" });
-                const formattedDate = date.toLocaleDateString();
+                const formattedDate = date.toLocaleDateString('en-GB');
 
                 return (
                   <div key={day} className="shadow-md p-2 flex flex-col">

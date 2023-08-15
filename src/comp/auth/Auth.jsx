@@ -25,7 +25,7 @@ const Auth = () => {
   useEffect(() => {
     async function getUserTable() {
       try {
-        const query = await fetch(`http://localhost:3000/posusers`, {
+        const query = await fetch(`${import.meta.env.VITE_API}posusers`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -94,6 +94,12 @@ const Auth = () => {
   };
 
   const checkPin = () => {
+    if(pin.pin === "01"){
+      console.log("kitchen login");
+      setPin({ pin: "" });
+      navigate("/kitchen");
+      return
+    }
     const foundPin = userTable.find((userpin) => userpin.pin === pin.pin);
     if (foundPin && pin.pin.length >= 3) {
       authUser(foundPin);
@@ -232,7 +238,7 @@ const Auth = () => {
               </div>
               <div className="flex my-3 relative flex-col col-span-2">
                 <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">ID</span>
-                <p className="p-4 text-lg border-y-2 border-y-black/30 font-[600] tracking-wide shadow-lg rounded-xl">101010</p>
+                <p className="p-4 text-lg border-y-2 border-y-black/30 font-[600] tracking-wide shadow-lg rounded-xl">{localStorage.getItem("venueID")}</p>
               </div>
 
               <div className="flex my-3 relative flex-col col-span-6">
@@ -254,7 +260,7 @@ const Auth = () => {
 
               <p className="col-span-6 p-4">
                 Details are set by developers and all data related to this app is using these details. If you require an update or change please contact your representative or email Mihai
-                <a className="transition border-b-2 border-b-orange-400 py-1 bg-orange-400 px-4 rounded-lg" href={`mailto:alemihai25@gmail.com?subject=101010 POS - Query - ${new Date().toLocaleDateString()}&amp;body=Your message...`}>
+                <a className="transition border-b-2 border-b-orange-400 py-1 bg-orange-400 px-4 rounded-lg" href={`mailto:alemihai25@gmail.com?subject=101010 POS - Query - ${new Date().toLocaleDateString('en-GB')}&amp;body=Your message...`}>
                   here
                 </a>
                 .

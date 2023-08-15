@@ -7,7 +7,7 @@ const NetProfit = () => {
   const [data, setData] = useState("loading");
 
   useEffect(() => {
-    let tempDay = String(new Date().toLocaleDateString());
+    let tempDay = String(new Date().toLocaleDateString('en-GB'));
     (async () => {
       let salesData = await grabNetProfit(tempDay, false, localStorage.getItem("venueID"));
       setData(salesData.data.length < 1 ? [] : salesData.data);

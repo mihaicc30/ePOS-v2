@@ -19,21 +19,21 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
   const [currentLookedUpDates, setCurrentLookedUpDates] = useState("");
   const [startWeek, setStartWeek] = useState(null);
 
-  const [todaysReport, setTodaysReport] = useState(new Date(Date.now()).toISOString().substr(0, 10));
+  const [todaysReport, setTodaysReport] = useState(new Date(Date.now()).toISOString('en-GB').substr(0, 10));
   const [todaysReportData, setTodaysReportData] = useState("loading");
 
-  const [yesterdaysReport, setYesterdaysReport] = useState(new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString().substr(0, 10));
+  const [yesterdaysReport, setYesterdaysReport] = useState(new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString('en-GB').substr(0, 10));
   const [yesterdaysReportData, setYesterdaysReportData] = useState("loading");
 
-  const [selectedCustomDate, setSelectedCustomDate] = useState(new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().substr(0, 10));
+  const [selectedCustomDate, setSelectedCustomDate] = useState(new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString('en-GB').substr(0, 10));
   const [selectedCustomDateData, setSelectedCustomDateData] = useState("loading");
 
   useEffect(() => {
     getWeekNumber();
     (async () => {
-      let rotd = await grabEndOfDayReport(new Date(Date.now()).toLocaleDateString(), localStorage.getItem("venueID"));
-      let royd = await grabEndOfDayReport(new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toLocaleDateString(), localStorage.getItem("venueID"));
-      let rocd = await grabEndOfDayReport(new Date(selectedCustomDate).toLocaleDateString(), localStorage.getItem("venueID"));
+      let rotd = await grabEndOfDayReport(new Date(Date.now()).toLocaleDateString('en-GB'), localStorage.getItem("venueID"));
+      let royd = await grabEndOfDayReport(new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toLocaleDateString('en-GB'), localStorage.getItem("venueID"));
+      let rocd = await grabEndOfDayReport(new Date(selectedCustomDate).toLocaleDateString('en-GB'), localStorage.getItem("venueID"));
       // report of todays date/ report of yesterdays date/ report of custom date
       if (rotd.message) {
         setTodaysReportData(rotd.data);
@@ -83,7 +83,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
     const startDate = new Date(year, 0, 1 + (weekNumber - 1) * 7);
     const endDate = new Date(startDate.getTime() + 6 * 24 * 60 * 60 * 1000);
     setStartWeek(startDate);
-    return startDate.toLocaleDateString() + " - " + endDate.toLocaleDateString();
+    return startDate.toLocaleDateString('en-GB') + " - " + endDate.toLocaleDateString('en-GB');
   };
 
   const getVenueStatus = (day) => {
@@ -159,7 +159,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
               "Access-Control-Allow-Credentials": true,
             },
             body: JSON.stringify({
-              date: currentDate.toLocaleDateString(),
+              date: currentDate.toLocaleDateString('en-GB'),
               cloudy: weeklyWeather.forecast.forecastday[n]?.hour[12].cloud || parseInt(Math.random() * (99 - 1) + 1),
               humidity: weeklyWeather.forecast.forecastday[n]?.hour[12].humidity || parseInt(Math.random() * (99 - 1) + 1),
               windspeed: weeklyWeather.forecast.forecastday[n]?.hour[12].wind_mph || parseInt(Math.random() * (99 - 1) + 1),
@@ -187,7 +187,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
 
   const handleCustomDateChange = (event) => {
     setSelectedCustomDate(event.target.value);
-    handleGrabReport("custom", new Date(event.target.value).toLocaleDateString());
+    handleGrabReport("custom", new Date(event.target.value).toLocaleDateString('en-GB'));
   };
 
   const handleGenerateReport = async (when, day) => {
@@ -524,10 +524,10 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
               <span className="absolute -top-3 left-5 bg-gray-50 px-4">Today</span>
               <div className="px-4 pb-4 pt-7 text-lg border-y-2 border-y-black/30 shadow-md rounded-xl flex flex-col  h-[100%]">
                 <p className="text-center">{new Date(todaysReport).toLocaleDateString("en-GB", { weekday: "long" })}</p>
-                <span className="bg-gray-50 my-1 p-2 text-center border-y-2 border-y-transparent rounded-xl">{new Date(todaysReport).toLocaleDateString()}</span>
+                <span className="bg-gray-50 my-1 p-2 text-center border-y-2 border-y-transparent rounded-xl">{new Date(todaysReport).toLocaleDateString('en-GB')}</span>
                 {todaysReportData && todaysReportData !== "loading" && (
                   <div className="flex flex-col h-[100%]">
-                    <button onClick={() => handleGenerateReport("today", new Date(Date.now()).toLocaleDateString())} className="absolute top-0 right-0 mt-2 p-2 rounded-lg mx-auto active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0 flex flex-nowrap justify-center items-center gap-4">
+                    <button onClick={() => handleGenerateReport("today", new Date(Date.now()).toLocaleDateString('en-GB'))} className="absolute top-0 right-0 mt-2 p-2 rounded-lg mx-auto active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0 flex flex-nowrap justify-center items-center gap-4">
                       <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-lg rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition" />
                     </button>
                     <span className="text-center text-lg font-bold animate-fadeUP1">Gross Sales: £{parseFloat(todaysReportData.totalAmountSold).toFixed(2)}</span>
@@ -548,7 +548,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                 {!todaysReportData && todaysReportData !== "loading" && (
                   <>
                     <p className="text-center my-2 transition animate-fadeUP1">Can not generate a report.</p>
-                    <button className="bg-[--c1] mt-auto p-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0" onClick={() => handleGenerateReport("today", new Date(Date.now()).toLocaleDateString())}>
+                    <button className="bg-[--c1] mt-auto p-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0" onClick={() => handleGenerateReport("today", new Date(Date.now()).toLocaleDateString('en-GB'))}>
                       Generate Today's Report
                     </button>
                   </>
@@ -560,10 +560,10 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
               <span className="absolute -top-3 left-5 bg-gray-50 px-4">Yesterday</span>
               <div className="px-4 pb-4 pt-7 text-lg border-y-2 border-y-black/30 shadow-md rounded-xl flex flex-col  h-[100%] ">
                 <p className="text-center">{new Date(yesterdaysReport).toLocaleDateString("en-GB", { weekday: "long" })}</p>
-                <span className="bg-gray-50 my-1 p-2 text-center border-y-2 border-y-transparent rounded-xl">{new Date(yesterdaysReport).toLocaleDateString()}</span>
+                <span className="bg-gray-50 my-1 p-2 text-center border-y-2 border-y-transparent rounded-xl">{new Date(yesterdaysReport).toLocaleDateString('en-GB')}</span>
                 {yesterdaysReportData && yesterdaysReportData !== "loading" && (
                   <div className="flex flex-col h-[100%] transition">
-                    <button onClick={() => handleGenerateReport("yesterday", new Date(yesterdaysReport).toLocaleDateString())} className="absolute top-0 right-0 mt-2 p-2 rounded-lg mx-auto active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0 flex flex-nowrap justify-center items-center gap-4">
+                    <button onClick={() => handleGenerateReport("yesterday", new Date(yesterdaysReport).toLocaleDateString('en-GB'))} className="absolute top-0 right-0 mt-2 p-2 rounded-lg mx-auto active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0 flex flex-nowrap justify-center items-center gap-4">
                       <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-lg rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition" />
                     </button>
                     <span className="text-center text-lg font-bold animate-fadeUP1">Gross Sales: £{parseFloat(yesterdaysReportData.totalAmountSold).toFixed(2)}</span>
@@ -584,7 +584,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                 {!yesterdaysReportData && yesterdaysReportData !== "loading" && (
                   <>
                     <p className="text-center my-2  transition animate-fadeUP1">Can not generate a report.</p>
-                    <button className="bg-[--c1] mt-auto p-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0" onClick={() => handleGenerateReport("yesterday", new Date(yesterdaysReport).toLocaleDateString())}>
+                    <button className="bg-[--c1] mt-auto p-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0" onClick={() => handleGenerateReport("yesterday", new Date(yesterdaysReport).toLocaleDateString('en-GB'))}>
                       Generate Today's Report
                     </button>
                   </>
@@ -601,7 +601,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
 
                 {selectedCustomDateData && selectedCustomDateData !== "loading" && (
                   <div className="flex flex-col h-[100%]">
-                    <button onClick={() => handleGenerateReport("custom", new Date(selectedCustomDate).toLocaleDateString())} className="absolute top-0 right-0 mt-2 p-2 rounded-lg mx-auto active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0 flex flex-nowrap justify-center items-center gap-4">
+                    <button onClick={() => handleGenerateReport("custom", new Date(selectedCustomDate).toLocaleDateString('en-GB'))} className="absolute top-0 right-0 mt-2 p-2 rounded-lg mx-auto active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0 flex flex-nowrap justify-center items-center gap-4">
                       <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-lg rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition" />
                     </button>
                     <span className="text-center text-lg font-bold transition animate-fadeUP1">Gross Sales: £{parseFloat(selectedCustomDateData.totalAmountSold).toFixed(2)}</span>
@@ -623,8 +623,8 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                 {!selectedCustomDateData && selectedCustomDateData !== "loading" && (
                   <>
                     <p className="text-center my-2 transition animate-fadeUP1">Can not generate a report.</p>
-                    <button className="bg-gray-200 mt-auto p-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0" onClick={() => handleGenerateReport("custom", new Date(selectedCustomDate).toLocaleDateString())}>
-                      Generate {new Date(selectedCustomDate).toLocaleDateString()} Report
+                    <button className="bg-gray-200 mt-auto p-2 rounded-lg shadow-lg border-b-2 border-b-black active:shadow-inner active:border-t-2 active:border-t-black active:border-b-0" onClick={() => handleGenerateReport("custom", new Date(selectedCustomDate).toLocaleDateString('en-GB'))}>
+                      Generate {new Date(selectedCustomDate).toLocaleDateString('en-GB')} Report
                     </button>
                   </>
                 )}
@@ -750,7 +750,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                 <div className="widget grid grid-cols-7 p-2 m-1 shadow-lg">
                   <div className="shadow-md p-2 flex flex-col">
                     <p className="text-xl text-center">Sunday</p>
-                    <p className="text-xs text-center">{new Date(startWeek).toLocaleDateString()}</p>
+                    <p className="text-xs text-center">{new Date(startWeek).toLocaleDateString('en-GB')}</p>
                     <div className="flex p-2">
                       <span className="p-1">£</span>
                       <input onChange={(e) => setCurrentTargets((prev) => ({ ...prev, Sunday: parseFloat(e.target.value) }))} type="text" className="bg-gray-50 text-start w-[100%] shadow-md p-1" value={currentTargets.Sunday || 0} />
@@ -758,7 +758,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                   </div>
                   <div className="shadow-md p-2 flex flex-col">
                     <p className="text-xl text-center">Monday</p>
-                    <p className="text-xs text-center">{new Date(startWeek.getTime() + 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+                    <p className="text-xs text-center">{new Date(startWeek.getTime() + 24 * 60 * 60 * 1000).toLocaleDateString('en-GB')}</p>
                     <div className="flex p-2">
                       <span className="p-1">£</span>
                       <input onChange={(e) => setCurrentTargets((prev) => ({ ...prev, Monday: parseFloat(e.target.value) }))} type="text" className="bg-gray-50 text-start w-[100%] shadow-md p-1" value={currentTargets.Monday || 0} />
@@ -766,7 +766,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                   </div>
                   <div className="shadow-md p-2 flex flex-col">
                     <p className="text-xl text-center">Tuesday</p>
-                    <p className="text-xs text-center">{new Date(startWeek.getTime() + 2 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+                    <p className="text-xs text-center">{new Date(startWeek.getTime() + 2 * 24 * 60 * 60 * 1000).toLocaleDateString('en-GB')}</p>
                     <div className="flex p-2">
                       <span className="p-1">£</span>
                       <input onChange={(e) => setCurrentTargets((prev) => ({ ...prev, Tuesday: parseFloat(e.target.value) }))} type="text" className="bg-gray-50 text-start w-[100%] shadow-md p-1" value={currentTargets.Tuesday || 0} />
@@ -774,7 +774,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                   </div>
                   <div className="shadow-md p-2 flex flex-col">
                     <p className="text-xl text-center">Wednesday</p>
-                    <p className="text-xs text-center">{new Date(startWeek.getTime() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+                    <p className="text-xs text-center">{new Date(startWeek.getTime() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('en-GB')}</p>
                     <div className="flex p-2">
                       <span className="p-1">£</span>
                       <input onChange={(e) => setCurrentTargets((prev) => ({ ...prev, Wednesday: parseFloat(e.target.value) }))} type="text" className="bg-gray-50 text-start w-[100%] shadow-md p-1" value={currentTargets.Wednesday || 0} />
@@ -782,7 +782,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                   </div>
                   <div className="shadow-md p-2 flex flex-col">
                     <p className="text-xl text-center">Thursday</p>
-                    <p className="text-xs text-center">{new Date(startWeek.getTime() + 4 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+                    <p className="text-xs text-center">{new Date(startWeek.getTime() + 4 * 24 * 60 * 60 * 1000).toLocaleDateString('en-GB')}</p>
                     <div className="flex p-2">
                       <span className="p-1">£</span>
                       <input onChange={(e) => setCurrentTargets((prev) => ({ ...prev, Thursday: parseFloat(e.target.value) }))} type="text" className="bg-gray-50 text-start w-[100%] shadow-md p-1" value={currentTargets.Thursday || 0} />
@@ -790,7 +790,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                   </div>
                   <div className="shadow-md p-2 flex flex-col">
                     <p className="text-xl text-center">Friday</p>
-                    <p className="text-xs text-center">{new Date(startWeek.getTime() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+                    <p className="text-xs text-center">{new Date(startWeek.getTime() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString('en-GB')}</p>
                     <div className="flex p-2">
                       <span className="p-1">£</span>
                       <input onChange={(e) => setCurrentTargets((prev) => ({ ...prev, Friday: parseFloat(e.target.value) }))} type="text" className="bg-gray-50 text-start w-[100%] shadow-md p-1" value={currentTargets.Friday || 0} />
@@ -798,7 +798,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
                   </div>
                   <div className="shadow-md p-2 flex flex-col">
                     <p className="text-xl text-center">Saturday</p>
-                    <p className="text-xs text-center">{new Date(startWeek.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+                    <p className="text-xs text-center">{new Date(startWeek.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString('en-GB')}</p>
                     <div className="flex p-2">
                       <span className="p-1">£</span>
                       <input onChange={(e) => setCurrentTargets((prev) => ({ ...prev, Saturday: parseFloat(e.target.value) }))} type="text" className="bg-gray-50 text-start w-[100%] shadow-md p-1" value={currentTargets.Saturday || 0} />

@@ -226,7 +226,7 @@ const Settings = ({ venues }) => {
             <p>App Version: 1.0.0</p>
           </div>
           <div className="inline-flex items-center justify-between">
-            <p>Last Updated: {new Date().toLocaleDateString()}</p>
+            <p>Last Updated: {new Date().toLocaleDateString('en-GB')}</p>
           </div>
         </div>
       </div>

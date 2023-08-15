@@ -72,7 +72,7 @@ const BillTimeline = ({ setBillTimeline, basketItems, billTimelineAdminData, ven
                 <div key={crypto.randomUUID()} className={`item grid grid-cols-1 ${menuItem.printed ? "bg-blue-300/50" : "bg-gray-100"} rounded shadow-md w-[100%]`}>
                   <div className="grid grid-cols-[1fr_1fr_2fr_.7fr_1fr_1fr] gap-2 w-[100%]">
                     <span>{menuItem.addedBy}</span>
-                    <p>{new Date(menuItem.dateAdded).toLocaleTimeString()}</p>
+                    <p>{new Date(menuItem.dateAdded).toLocaleTimeString('en-GB')}</p>
                     <div>
                       <p title={menuItem.name} className="itemName line-clamp-2">
                         {menuItem.name}
@@ -81,7 +81,7 @@ const BillTimeline = ({ setBillTimeline, basketItems, billTimelineAdminData, ven
                     </div>
                     <p>£{(menuItem.price * menuItem.qty).toFixed(2)}</p>
 
-                    <p>{menuItem.datePrinted ? new Date(menuItem.datePrinted).toLocaleTimeString() : "Not printed."}</p>
+                    <p>{menuItem.datePrinted ? new Date(menuItem.datePrinted).toLocaleTimeString('en-GB') : "Not printed."}</p>
                     <span>{menuItem.printedBy ? menuItem.printedBy : "-"}</span>
                   </div>
                 </div>

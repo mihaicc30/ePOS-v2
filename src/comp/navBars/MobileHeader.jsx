@@ -66,7 +66,7 @@ const MobileHeader = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, weekly
               "Access-Control-Allow-Credentials": true,
             },
             body: JSON.stringify({
-              date: currentDate.toLocaleDateString(),
+              date: currentDate.toLocaleDateString('en-GB'),
               cloudy: weeklyWeather.forecast.forecastday[n].hour[12].cloud,
               humidity: weeklyWeather.forecast.forecastday[n].hour[12].humidity,
               windspeed: weeklyWeather.forecast.forecastday[n].hour[12].wind_mph,

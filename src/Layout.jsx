@@ -10,11 +10,13 @@ const Layout = ({ lefty, setLefty, weeklyForecast, setWeeklyForecast, weeklyholi
   const [showNav, setShowNav] = useState(false);
   let isNotHomePage;
   let isNotAdminPage;
+  let isNotKitchenPage;
 
   useEffect(() => {
     isNotHomePage = window.location.pathname !== "/";
+    isNotKitchenPage = window.location.pathname !== "/kitchen";
     isNotAdminPage = !window.location.pathname.startsWith("/Admin");
-    if (isNotHomePage && isNotAdminPage) {
+    if (isNotHomePage && isNotAdminPage && isNotKitchenPage) {
       setShowNav(true);
     } else {
       setShowNav(false);

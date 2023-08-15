@@ -73,7 +73,7 @@ const MenuRightSide = ({ lefty, menuitems, basketItems, setBasketItems }) => {
         messageBy: false,
         isDeleted: false,
         isDeletedBy: false,
-        dateAdded: new Date().toISOString(),
+        dateAdded: new Date().toISOString('en-GB'),
         addedBy: localStorage.getItem("displayName"),
         datePrinted: false,
       };

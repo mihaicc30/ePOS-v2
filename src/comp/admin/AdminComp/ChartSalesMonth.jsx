@@ -7,7 +7,7 @@ const ChartSalesMonth = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    let tempMonth = String(new Date(currentLookedUpDatesMonth).toLocaleDateString()).substring(2);
+    let tempMonth = String(new Date(currentLookedUpDatesMonth).toLocaleDateString('en-GB')).substring(2);
     (async () => {
       let salesData = await grabSales(false, tempMonth, localStorage.getItem("venueID"));
       setData(salesData.data.length < 1 ? [] : salesData.data);

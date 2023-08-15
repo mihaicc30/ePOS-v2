@@ -24,6 +24,7 @@ import Symbol from "./comp/Settings/Symbol";
 import TC from "./comp/Settings/T&C";
 import Payment from "./comp/payment/Payment";
 import Tables from "./comp/tables/Tables";
+import KitchenScreen from "./comp/kitchen/KitchenScreen";
 
 import { getVenueById } from "./utils/BasketUtils";
 
@@ -62,7 +63,7 @@ const App = () => {
   });
 
   useEffect(() => {
-    localStorage.setItem("venueID",101010)
+    localStorage.setItem("venueID", 101010);
     async function getAsyncData() {
       const w = await fetchWeeklyWeather();
       setWeeklyHoliday(await fetchHoliday());
@@ -97,7 +98,7 @@ const App = () => {
 
   const fetchForecastWeek = async () => {
     if (!weeklyWeather) return;
-    console.log("Received weather data. Fetching sales forecast.", new Date().toLocaleTimeString());
+    console.log("Received weather data. Fetching sales forecast.", new Date().toLocaleTimeString("en-GB"));
     for (let n = 0; n < 7; n++) {
       let dayt = (new Date().getDay() + n) % 7;
 
@@ -125,7 +126,7 @@ const App = () => {
               "Access-Control-Allow-Credentials": true,
             },
             body: JSON.stringify({
-              date: currentDate.toLocaleDateString(),
+              date: currentDate.toLocaleDateString("en-GB"),
               cloudy: weeklyWeather.forecast.forecastday[n]?.hour[12].cloud || parseInt(Math.random() * (99 - 1) + 1),
               humidity: weeklyWeather.forecast.forecastday[n]?.hour[12].humidity || parseInt(Math.random() * (99 - 1) + 1),
               windspeed: weeklyWeather.forecast.forecastday[n]?.hour[12].wind_mph || parseInt(Math.random() * (99 - 1) + 1),
@@ -174,6 +175,9 @@ const App = () => {
           path="/admin/*"
           element={<Admin weeklyholiday={weeklyholiday} setWeeklyHoliday={setWeeklyHoliday} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} weeklyForecast={weeklyForecast} setWeeklyForecast={setWeeklyForecast} menuitems={menuitems} setMenuitems={setMenuitems} tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />}
         />
+
+        <Route path="/kitchen" element={<KitchenScreen venueNtable={venueNtable} />}></Route>
+
         <Route path="/tables" element={<Tables setBasketDiscount={setBasketDiscount} basketItems={basketItems} setBasketItems={setBasketItems} tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
 
         <Route path="/menu" element={<Menu showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} setTables={setTables} tables={tables} lefty={lefty} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} basketDiscount={basketDiscount} setBasketDiscount={setBasketDiscount} basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} searchValue={searchValue} setSearchValue={setSearchValue} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}></Route>

@@ -8,7 +8,7 @@ const ChartSales = () => {
   const [data, setData] = useState("loading");
 
   useEffect(() => {
-    let tempDay = String(new Date().toLocaleDateString());
+    let tempDay = String(new Date().toLocaleDateString('en-GB'));
       (async () => {
         let salesData = await grabSales(tempDay, false, localStorage.getItem("venueID"));
         setData(salesData.data.length < 1 ? [] : salesData.data);

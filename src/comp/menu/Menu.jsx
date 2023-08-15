@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./Menu.css";
 import { getUser, getVenue } from "../../utils/authUser";
 import { calculateTotal, calculateBasketQTY } from "../../utils/BasketUtils";
-import { deleteEmptyTable } from "../../utils/DataTools";
+import { deleteEmptyTable, addOrder } from "../../utils/DataTools";
 import VenueNTable from "./VenueNTable";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import BillTimeline from "../modals/BillTimeline";
@@ -23,6 +23,8 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
   const nav = useNavigate();
   const [user, setUser] = useState(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isButtonDisabled2, setIsButtonDisabled2] = useState(false);
+  const [isButtonDisabled3, setIsButtonDisabled3] = useState(false);
   const [billTimeline, setBillTimeline] = useState(false);
 
   const modalMessageRef = useRef(null);
@@ -68,8 +70,51 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
     }
   };
 
-  const tempDisabled = () => {
+  const handleBillPrint = async () => {
+    if (isButtonDisabled3) return;
+    // console.log(venueNtable);
+
+    // const query = await addOrder(data)
+    // console.log("🚀", query)
+
+    setIsButtonDisabled3(true);
+    // handlePrinting();
+    setTimeout((async) => {
+      setIsButtonDisabled3(false);
+    }, 1000);
+  };
+
+  const handleBarPrint = async () => {
+    if (isButtonDisabled2) return;
+    setIsButtonDisabled2(true);
+    let data = {
+      orderType: "bar",
+      venueID: venueNtable.venue,
+      table: venueNtable.table,
+      displayName: localStorage.getItem("displayName"),
+      email: localStorage.getItem("email"),
+      items: basketItems,
+    };
+    const query = await addOrder(data);
+    console.log("🚀", query);
+    // handlePrinting();
+    setTimeout(() => {
+      setIsButtonDisabled2(false);
+    }, 1000);
+  };
+
+  const handleKitchenPrint = async () => {
     if (isButtonDisabled) return;
+    let data = {
+      orderType: "kitchen",
+      venueID: venueNtable.venue,
+      table: venueNtable.table,
+      displayName: localStorage.getItem("displayName"),
+      email: localStorage.getItem("email"),
+      items: basketItems,
+    };
+    const query = await addOrder(data);
+
     setIsButtonDisabled(true);
     handlePrinting();
     setTimeout(() => {
@@ -170,7 +215,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
         return {
           ...item,
           printed: true,
-          datePrinted: new Date().toISOString(),
+          datePrinted: new Date().toISOString('en-GB'),
           printedBy: localStorage.getItem("displayName"),
         };
       }
@@ -267,7 +312,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
       name: "Line",
       refID: crypto.randomUUID(),
       dateString: new Date().toLocaleString(),
-      date: new Date().toISOString(),
+      date: new Date().toISOString('en-GB'),
       price: 0,
       qty: 1,
     };
@@ -283,7 +328,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
         }
         return item;
       });
-      setSelectedItem({})
+      setSelectedItem({});
       setBasketItems(updatedBasket);
     }
     openMessageModal(false);
@@ -326,7 +371,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
         }
         return item;
       });
-      setSelectedItem({})
+      setSelectedItem({});
       setBasketItems(updatedBasket);
       openMessageModal(false);
     } else {
@@ -470,15 +515,27 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
           <div className={`${basketDiscount > 0 ? "bg-[--c12] shadow-[inset_0px_4px_2px_0px_black]" : "bg-[--c1] "} basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold `} onClick={handleDiscount}>
             {basketDiscount > 0 ? "Remove Discount" : "Apply Discount"}
           </div>
-          <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**do not print-> store table into the db")}>
-            Print Bill
-          </div>
-          <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**do not print-> store table into the db")}>
-            Print Bar
+          <div
+            onClick={() => {
+              handleBillPrint();
+            }}
+            disabled={isButtonDisabled3}
+            className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] ${isButtonDisabled3 ? "bg-gray-200 " : "bg-[--c1]"}`}>
+            {isButtonDisabled3 && <AiOutlineLoading3Quarters className="animate-spin mx-auto text-5xl" />}
+            {!isButtonDisabled3 && "Print Bill"}
           </div>
           <div
             onClick={() => {
-              tempDisabled();
+              handleBarPrint();
+            }}
+            disabled={isButtonDisabled2}
+            className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] ${isButtonDisabled2 ? "bg-gray-200 " : "bg-[--c1]"}`}>
+            {isButtonDisabled2 && <AiOutlineLoading3Quarters className="animate-spin mx-auto text-5xl" />}
+            {!isButtonDisabled2 && "Print Bar"}
+          </div>
+          <div
+            onClick={() => {
+              handleKitchenPrint();
             }}
             disabled={isButtonDisabled}
             className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${isButtonDisabled ? "bg-gray-200 " : "bg-[--c1]"}`}>
