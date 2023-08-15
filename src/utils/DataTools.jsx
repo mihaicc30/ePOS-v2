@@ -1,3 +1,119 @@
+export const fetchAllOrders = async (data) => {
+  try {
+    const query = await fetch(`${import.meta.env.VITE_API}fetchAllOrders`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        v: import.meta.env.VITE_G,
+        data,
+      }),
+    });
+    const response = await query.json();
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+export const recallOrder = async (data) => {
+  try {
+    const query = await fetch(`${import.meta.env.VITE_API}recallOrder`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        v: import.meta.env.VITE_G,
+        data,
+      }),
+    });
+    const response = await query.json();
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+export const zapOrder = async (data) => {
+  try {
+    const query = await fetch(`${import.meta.env.VITE_API}zapOrder`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        v: import.meta.env.VITE_G,
+        data,
+      }),
+    });
+    const response = await query.json();
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const fetchZapped = async (data) => {
+  try {
+    const query = await fetch(`${import.meta.env.VITE_API}fetchZapped`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        v: import.meta.env.VITE_G,
+        data,
+      }),
+    });
+    const response = await query.json();
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const fetchOrders = async (data) => {
+  try {
+    const query = await fetch(`${import.meta.env.VITE_API}fetchOrders`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        v: import.meta.env.VITE_G,
+        data,
+      }),
+    });
+    const response = await query.json();
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+export const addOrder = async (data) => {
+  try {
+    const query = await fetch(`${import.meta.env.VITE_API}addOrder`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        v: import.meta.env.VITE_G,
+        data,
+      }),
+    });
+    const response = await query.json();
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 export const handleClocked = async (week, typeOfDay, email) => {
   try {
     const query = await fetch(`${import.meta.env.VITE_API}handleClocked`, {
@@ -8,7 +124,9 @@ export const handleClocked = async (week, typeOfDay, email) => {
       },
       body: JSON.stringify({
         v: import.meta.env.VITE_G,
-        week, typeOfDay, email,
+        week,
+        typeOfDay,
+        email,
         venueID: localStorage.getItem("venueID"),
       }),
     });
@@ -29,7 +147,8 @@ export const resetRota = async (week, weekRange) => {
       },
       body: JSON.stringify({
         v: import.meta.env.VITE_G,
-        week, weekRange,
+        week,
+        weekRange,
         venueID: localStorage.getItem("venueID"),
       }),
     });
@@ -271,7 +390,7 @@ export const getStaffMembers = async () => {
 };
 
 export const setTargets = async (week, targetsData) => {
-  let queryWeek = week.toLocaleDateString() + " - " + new Date(week.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString();
+  let queryWeek = week.toLocaleDateString('en-GB') + " - " + new Date(week.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString('en-GB');
   try {
     const query = await fetch(`${import.meta.env.VITE_API}setTargets`, {
       method: "POST",
@@ -292,7 +411,7 @@ export const setTargets = async (week, targetsData) => {
   }
 };
 export const getTargets = async (week) => {
-  let queryWeek = week.toLocaleDateString() + " - " + new Date(week.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString();
+  let queryWeek = week.toLocaleDateString('en-GB') + " - " + new Date(week.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString('en-GB');
   try {
     const query = await fetch(`${import.meta.env.VITE_API}getTargets`, {
       method: "POST",
@@ -326,7 +445,7 @@ export const deleteProduct = async (product) => {
       }),
     });
     const response = await query.json();
-    console.log("Product deleted!", new Date().toISOString());
+    console.log("Product deleted!", new Date().toISOString('en-GB'));
     return response;
   } catch (error) {
     console.log(error.message);
@@ -347,7 +466,7 @@ export const updateProduct = async (product) => {
       }),
     });
     const response = await query.json();
-    console.log("Product updated!", new Date().toISOString());
+    console.log("Product updated!", new Date().toISOString('en-GB'));
     return response;
   } catch (error) {
     console.log(error.message);
@@ -368,7 +487,7 @@ export const addNewProduct = async (product) => {
       }),
     });
     const response = await query.json();
-    console.log("New product added!", new Date().toISOString());
+    console.log("New product added!", new Date().toISOString('en-GB'));
     return response;
   } catch (error) {
     console.log(error.message);
@@ -400,7 +519,7 @@ export const saveTableLayout = async (layout, venueID) => {
       }),
     });
     const response = await query.json();
-    console.log("Receied table layout.", new Date().toUTCString());
+    console.log("Received table layout.", new Date().toUTCString());
     return response;
   } catch (error) {
     console.log(error.message);
@@ -416,7 +535,7 @@ export const getTableLayout = async () => {
       },
       body: JSON.stringify({
         v: import.meta.env.VITE_G,
-        fromvenueid: 101010,
+        fromvenueid: localStorage.getItem("venueID"),
       }),
     });
     const response = await query.json();
@@ -472,13 +591,13 @@ export const fetchHoliday = async () => {
     const data = (await response.json())["england-and-wales"].events;
     let todaysDate = new Date();
 
-    let formattedDate = todaysDate.toISOString().split("T")[0];
+    let formattedDate = todaysDate.toISOString('en-GB').split("T")[0];
     const event = data.find((event) => event.date === formattedDate);
 
     let currentDate = new Date();
     let holidays = [];
     for (let i = 0; i < 7; i++) {
-      let formattedDate = currentDate.toISOString().split("T")[0];
+      let formattedDate = currentDate.toISOString('en-GB').split("T")[0];
       const event = data.find((event) => event.date === formattedDate);
       holidays.push([formattedDate, event]);
       currentDate.setDate(currentDate.getDate() + 1);
