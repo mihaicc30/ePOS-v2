@@ -4,10 +4,8 @@ const ROTA = require("../models/rota");
 const Posusers = require("../models/posusers");
 
 router.post("/handleClocked", async (req, res) => {
-  console.log(req.body);
   try {
     let query = await ROTA.findOne({ week: req.body.week, venueID: req.body.venueID });
-    console.log(`Looking for ${req.body.week} ${req.body.email}`);
     if (query) {
       let rotedData = query.roted;
       let tempData = query.roted[`${req.body.email}`][`${req.body.typeOfDay}`][`clocked`];
