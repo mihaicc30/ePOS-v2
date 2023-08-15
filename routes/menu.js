@@ -1,9 +1,72 @@
 require("dotenv").config();
 const router = require("express").Router();
 const Products = require("../models/products");
+const Orders = require("../models/orders");
+const Counter = require("../models/counter");
 
 router.post("/amenu", (req, res) => {
   res.status(200).send("ok");
+});
+
+router.post("/recallOrder", async (req, res) => {
+  try {
+    const results = await Orders.updateOne({ _id:req.body.data }, {$set:{orderStatus:"todo", date: new Date().toJSON() }})
+    console.log("Order recalled.", new Date().toUTCString());
+    res.status(200).json({message:"ok"});
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+router.post("/zapOrder", async (req, res) => {
+  try {
+    const results = await Orders.updateOne({ _id:req.body.data }, {$set:{orderStatus:"zapped", date: new Date().toJSON() }})
+    console.log("Order zapped!", new Date().toUTCString());
+    res.status(200).json({message:"ok"});
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+router.post("/fetchZapped", async (req, res) => {
+  try {
+    const results = await Orders.find({ venueID: req.body.data.venueID, orderType: req.body.data.orderType, orderStatus:"zapped", dateString:req.body.data.dateString }).sort({ date: 1 });
+    console.log("Sending orders.", new Date().toUTCString());
+    res.status(200).json(results);
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).json({ message: error.message });
+  }
+});
+router.post("/fetchOrders", async (req, res) => {
+  try {
+    const results = await Orders.find({ venueID: req.body.data.venueID, orderType: req.body.data.orderType, orderStatus:"todo", dateString: `${new Date().toLocaleDateString('en-GB')}` }).sort({ date: 1 });
+    console.log("Sending orders.", new Date().toUTCString());
+    res.status(200).json(results);
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+router.post("/addOrder", async (req, res) => {
+  if (!req.body.v || req.body.v !== process.env.v) return res.status(400).json({ error: "Missing values." });
+
+  try {
+    let data = req.body.data;
+    const queue = await Counter.findOne({ counterType: "print" });
+    const increment = await Counter.updateOne({ counterType: "print" }, { $inc: { counter: 1 } });
+    data["queueNumber"] = queue.counter;
+    new Orders(data).save().then(async (r) => {
+      console.log("Order has been added.", new Date().toUTCString());
+      res.status(200).json(r);
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).json({ message: error.message });
+  }
 });
 
 router.post("/grabProducts", (req, res) => {
@@ -25,8 +88,8 @@ router.post("/updateProduct", async (req, res) => {
   let { product } = req.body;
 
   // failsafe
-  if(product.portionCost === 0) {
-    product.portionCost = parseFloat((product.price / 4).toFixed(2))
+  if (product.portionCost === 0) {
+    product.portionCost = parseFloat((product.price / 4).toFixed(2));
   }
 
   try {
