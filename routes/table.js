@@ -55,7 +55,7 @@ router.post("/getTableTime", async (req, res) => {
     const tables = await Tables.find({ tableVenue: venueNumber });
     let tableTimes = {};
     tables.map(async (table, index) => {
-      tableTimes["t" + table.tableNumber] = new Date(table.date).toLocaleTimeString('en-GB');
+      tableTimes["t" + table.tableNumber] = (new Date(table.date).toLocaleTimeString('en-GB')).substring(0,5);
     });
 
     res.status(200).json(tableTimes);
