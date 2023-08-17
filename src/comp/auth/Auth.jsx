@@ -297,7 +297,7 @@ const Auth = () => {
       <div className="flex w-[100%] h-[100%]">
         <div className={`transition animate-fadeFromLeft basis-[80%] max-md:basis-[100%] flex flex-col gap-[3vh] h-[98%] my-auto justify-center items-center`}>
           <div className={`h-[100%] bg-[--c30] ml-auto border-r-4 rounded shadow-xl shadow-[#0a0a0a] flex flex-col w-[80%] p-4 min-h-[80svh] relative justify-start border-2 border-[--c12] max-w-[650px]`}>
-            <p className="font-black text-3xl tracking-widest text-center">CCW POS</p>
+            <p className="font-black text-lg tracking-widest text-center">CCW POS</p>
             <img className="max-w-[10svh] max-h-[10svh] mx-auto" src="./assets/d956248b8cfe7fe8fa39033b50728bcb.jpg" />
             <div className="text-center">
               <p className="font-bold text-lg">Welcome!</p>
@@ -311,49 +311,49 @@ const Auth = () => {
                 })}
               </p>
               <div className="keypad grid grid-cols-4 gap-4 my-4">
-                <button name="1" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="1" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   1
                 </button>
-                <button name="2" onClick={handlePinInput} className=" bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="2" onClick={handlePinInput} className=" bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   2
                 </button>
 
-                <button name="3" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="3" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   3
                 </button>
 
-                <button name="si" onClick={checkPin} className="row-span-2 bg-[--c12] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="si" onClick={checkPin} className="row-span-2 bg-[--c12] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   SignIn
                 </button>
 
-                <button name="4" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="4" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   4
                 </button>
-                <button name="5" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="5" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   5
                 </button>
-                <button name="6" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="6" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   6
                 </button>
-                <button name="7" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="7" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   7
                 </button>
-                <button name="8" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="8" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   8
                 </button>
-                <button name="9" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="9" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   9
                 </button>
-                <button name="cio" onClick={handleClock} className="row-span-2 bg-[--c12] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="cio" onClick={handleClock} className="row-span-2 bg-[--c12] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   Clock In/Out
                 </button>
-                <button name="c" onClick={handlePinInput} className="bg-[--c12] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="c" onClick={handlePinInput} className="bg-[--c12] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   C
                 </button>
-                <button name="0" onClick={handlePinInput} className="bg-[--c1] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="0" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   0
                 </button>
-                <button name="b" onClick={handlePinInput} className="bg-[--c12] rounded px-[1vw] py-[3vh] font-bold text-3xl text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="b" onClick={handlePinInput} className="bg-[--c12] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   <svg className="w-8 h-8 mx-auto" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                     <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>

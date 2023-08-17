@@ -66,7 +66,7 @@ const MobileHeader = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, weekly
               "Access-Control-Allow-Credentials": true,
             },
             body: JSON.stringify({
-              date: currentDate.toLocaleDateString('en-GB'),
+              date: currentDate.toLocaleDateString("en-GB"),
               cloudy: weeklyWeather.forecast.forecastday[n].hour[12].cloud,
               humidity: weeklyWeather.forecast.forecastday[n].hour[12].humidity,
               windspeed: weeklyWeather.forecast.forecastday[n].hour[12].wind_mph,
@@ -74,7 +74,7 @@ const MobileHeader = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, weekly
               daytype: dayt,
               isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
               venueID: localStorage.getItem("venueID"),
-              forceRefresh: localStorage.getItem('refreshForecast')
+              forceRefresh: localStorage.getItem("refreshForecast"),
             }),
           });
           const data = await response.json();
@@ -127,55 +127,22 @@ const MobileHeader = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, weekly
   };
 
   return (
-    <div className="MobileHeader basis-[10%] flex min-sm:gap-4 bg-[--c30] min-sm:py-4 relative max-sm:flex-col">
+    <div className="MobileHeader basis-[4%] flex min-sm:gap-4 bg-[--c30] relative items-center font-[600] whitespace-nowrap">
       {localStorage.getItem("isAdmin") !== true && (
-        <>
-          <div className="flex items-center text-5xl border-r-2 pr-2 mr-2 ">
-            <p>{time}</p>
-          </div>
-          <div className="border-r-2 pr-2 mr-2">
-            <div className="flex flex-col justify-evenly h-[100%]">
-              {weeklyholiday && <p className="text-xl">{weeklyholiday[0][0] || "0"}</p>}
-              {weeklyholiday && weeklyholiday[0][1]?.title ? <p className="text-xl">{weeklyholiday[0][1].title}</p> : "No events today."}
-            </div>
-          </div>
-          <div className="flex flex-col justify-center">
-            <div className="flex gap-4">
-              <div className="text-2xl p-1 flex flex-col justify-evenly border-r-2 pr-2 mr-2">
-                <p> {weeklyWeather && weeklyWeather.location.name}</p>
-                <p> {weeklyWeather && weeklyWeather.location.country}</p>
-              </div>
-              <div>
-                <p className="text-5xl font-bold"> {weeklyWeather && weeklyWeather.forecast.forecastday[0].hour[12].temp_c}&deg;</p>
-                <p> {weeklyWeather && weeklyWeather.forecast.forecastday[0].hour[12].condition.text}</p>
-              </div>
-              <div>
-                <p className="flex flex-col">
-                  <span className="grid grid-cols-[20px_1fr] gap-1">
-                    <TiWeatherCloudy className="text-2xl" /> {weeklyWeather && weeklyWeather.forecast.forecastday[0].hour[12].cloud}%
-                  </span>
-                  <span className="grid grid-cols-[20px_1fr] gap-1">
-                    <WiHumidity className="text-2xl" /> {weeklyWeather && weeklyWeather.forecast.forecastday[0].hour[12].humidity}%
-                  </span>
-                  <span className="grid grid-cols-[20px_1fr] gap-1">
-                    <FaWind className="text-xl" /> {weeklyWeather && weeklyWeather.forecast.forecastday[0].hour[12].wind_mph}mph
-                  </span>
-                </p>
-              </div>
-            </div>
-          </div>
+        <div className="flex flex-nowrap w-[100%] gap-2 justify-center">
+          <p className="text-md border-r-2 pr-2 mr-2">{time}</p>
+          {weeklyholiday && <p className="text-md border-r-2 pr-2 mr-2">{weeklyholiday[0][0] || "0"}</p>}
+          {weeklyholiday && weeklyholiday[0][1]?.title ? <p className="text-md border-r-2 pr-2 mr-2">{weeklyholiday[0][1].title}</p> : <p className="text-md border-r-2 pr-2 mr-2">No events today.</p>}
 
-          <div className="flex flex-nowrap justify-center items-center border-r-2 pr-2 mr-2 border-l-2 pl-2 ml-2 ">
-            <div>
-              <p className="text-center">Forecast</p>
-              <div className="text-center"> {weeklyholiday && weeklyForecast["0"]?.date && <p className={`text-center font-[600] text-xl ${weeklyForecast["0"]?.average > 3000 ? "text-green-400" : weeklyForecast["0"]?.average < 2000 ? "text-red-400" : "text-yellow-500"} `}>£{weeklyForecast["0"]?.average}</p>}</div>
-              {getVenueStatus(weeklyForecast["0"]?.average)}
-            </div>
-            <button onClick={() => reloadWeeklyForecast()}>
-              <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-xl rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition" />
-            </button>
+          <button className="flex justify-center items-center" onClick={() => reloadWeeklyForecast()}>
+            <IoMdRefreshCircle className="text-2xl ml-3 fill-[--c1] shadow-xl rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition" />
+          </button>
+          <div className="flex flex-nowrap gap-4 text-md">
+            <p className="text-center ">Forecast</p>
+            <div className="text-center"> {weeklyholiday && weeklyForecast["0"]?.date && <p className={`text-center font-[600] text-xl ${weeklyForecast["0"]?.average > 3000 ? "text-green-400" : weeklyForecast["0"]?.average < 2000 ? "text-red-400" : "text-yellow-500"} `}>£{weeklyForecast["0"]?.average}</p>}</div>
+            {getVenueStatus(weeklyForecast["0"]?.average)}
           </div>
-        </>
+        </div>
       )}
       {localStorage.getItem("isAdmin") === "true" && (
         <>

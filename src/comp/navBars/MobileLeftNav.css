@@ -54,8 +54,8 @@
 
 
 .switch {
-  --button-width: 3.5em;
-  --button-height: 2em;
+  --button-width: 2.6em;
+  --button-height: 1em;
   --toggle-diameter: 1.5em;
   --button-toggle-offset: calc((var(--button-height) - var(--toggle-diameter)) / 2);
   --toggle-shadow-offset: 10px;
@@ -83,6 +83,7 @@
   border-radius: calc(var(--toggle-diameter) / 2);
   position: absolute;
   left: 0;
+  border: 1px solid #d3cfcf;
   top: var(--button-toggle-offset);
   transform: translateX(var(--button-toggle-offset));
   box-shadow: var(--toggle-shadow-offset) 0 calc(var(--toggle-shadow-offset) * 4) rgba(0, 0, 0, 0.1);

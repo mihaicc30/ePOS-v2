@@ -131,14 +131,14 @@ const MenuRightSide = ({ lefty, menuitems, basketItems, setBasketItems }) => {
       </div>
 
       {/* subcategories items */}
-      <div className="flex flex-row flex-wrap overflow-y-scroll gap-2 pb-4">
+      <div className="flex flex-wrap overflow-y-scroll gap-2 pb-4">
         {menuitems.map((item, index) => {
           if (searchValue !== "") {
             if (item.name.toLowerCase().includes(searchValue.toLowerCase()))
               return (
-                <div key={`${item.name}-${index}`} onClick={() => handleAddToMenu(item)} className="rounded h-[128px] w-[170px] p-2 flex flex-col shadow-lg transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]">
+                <div key={`${item.name}-${index}`} onClick={() => handleAddToMenu(item)} className={`menuItemBox rounded p-2 flex flex-col shadow-lg transition duration-100 cursor-pointer hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]`}>
                   <span className={`ml-auto px-2 rounded-bl-lg rounded-tr-lg text-end ${getStockColour(item.stock)}`}>{item.stock}</span>
-                  <span className="line-clamp-2 h-[48px] font-bold">{item.name}</span>
+                  <span className="line-clamp-2 h-[48px] font-[600]">{item.name}</span>
                   <span>£{item.price}</span>
                   <span className="h-[24px]">{item.allergens}</span>
                 </div>
@@ -147,13 +147,13 @@ const MenuRightSide = ({ lefty, menuitems, basketItems, setBasketItems }) => {
             if (menuType !== item.category) return;
             if (menuType2 !== item.subcategory && menuType2 !== "") return;
             return (
-              <div key={`${item.name}-${item.name}-${index}`} onClick={() => handleAddToMenu(item)} className={`rounded h-[150px] p-2 w-[170px] flex flex-col shadow-lg transition duration-100 cursor-pointer ${item.stock >= 1 ? "hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]" : "text-gray-300"}`}>
+              <div key={`${item.name}-${item.name}-${index}`} onClick={() => handleAddToMenu(item)} className={`menuItemBox rounded p-2 flex flex-col shadow-lg transition duration-100 cursor-pointer ${item.stock >= 1 ? "hover:scale-[0.98] active:scale-[0.96] active:shadow-[inset_0px_2px_2px_black]" : "text-gray-300"}`}>
                 <div className="flex justify-between">
                   <span>£{item.price}</span>
 
                   <span className={`ml-auto px-2 rounded-bl-lg rounded-tr-lg text-end ${getStockColour(item.stock)}`}>{item.stock}</span>
                 </div>
-                <span className="line-clamp-2 h-[48px] font-bold">{item.name}</span>
+                <span className="line-clamp-2 h-[48px] font-[600]">{item.name}</span>
               </div>
             );
           }

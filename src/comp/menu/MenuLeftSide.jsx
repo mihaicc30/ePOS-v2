@@ -93,7 +93,7 @@ const MenuLeftSide = ({ lefty, basketItems, setBasketItems, menuitems, selectedI
           </div>
         ))}
 
-      {basketItems.length == 0 && <p className="text-center">Basket is empty.</p>}
+      {basketItems.length == 0 && <p className="text-center my-10">Basket is empty.</p>}
 
       <span className="grow"></span>
     </>

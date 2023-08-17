@@ -13,3 +13,28 @@
     -ms-border-radius: 20px;
     -o-border-radius: 20px;
 }
+
+@media screen and (min-width: 1142px) {
+  .menuItemBox{
+    flex: 24%;
+    max-width: 24%;
+    height: 130px;
+
+  }
+}
+
+@media screen and (max-width: 1141px) {
+  .menuItemBox{
+    flex: 32%;
+    max-width: 32%;
+    height: 130px;
+  }
+}
+
+@media screen and (max-width: 804px) {
+  .menuItemBox{
+    flex: 47%;
+    max-width: 47%;
+    height: 130px;
+  }
+}

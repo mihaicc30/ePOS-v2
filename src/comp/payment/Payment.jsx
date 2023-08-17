@@ -114,7 +114,6 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
     setComputedBasket(basketItems);
   }, [basketItems]);
 
-  
   useEffect(() => {
     const waitingTime = setTimeout(async () => {
       // do query
@@ -167,8 +166,6 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
     return () => clearTimeout(waitingTime);
   }, [basketItems, basketDiscount]);
 
-
-  
   const generateReceipt = async () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API}addreceipt`, {
@@ -524,7 +521,7 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme="light" />
       </div>
       {parseFloat(basketTotal) > parseFloat(paymentTaken) && (
-        <button className={`absolute ${lefty ? "right-0" : "left-0"} top-0  p-4 text-3xl animate-fadeUP1`} onClick={() => nav("/Menu")}>
+        <button className={`absolute ${lefty ? "right-0" : "left-0"} top-0  p-4 text-xl animate-fadeUP1`} onClick={() => nav("/Menu")}>
           ◀ Cancel
         </button>
       )}
@@ -764,13 +761,13 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
       <div className="basis-[32%] flex flex-col justify-evenly gap-12">
         <div className={`flex flex-col justify-center items-center ${parseFloat(basketTotal) > parseFloat(paymentTaken) ? "" : "row-span-2"} `}>
           {parseFloat(computedBasketTotal) > parseFloat(paymentTaken) && (
-            <p className="animate-fadeUP1 text-xs" title="Stripe's minimum payment is £0.31.">
+            <p className="animate-fadeUP1 text-xs text-center" title="Stripe's minimum payment is £0.31.">
               Minimum pay: £0.31!
             </p>
           )}
-          <p className="animate-fadeUP1 mb-2 border-b-2 pb-2  text-3xl">Payment</p>
+          <p className="animate-fadeUP1 mb-2 border-b-2 pb-2  ">Payment</p>
           {parseFloat(computedBasketTotal) > parseFloat(paymentTaken) && <p className="animate-fadeUP1 text-sm">Left to pay:</p>}
-          <p className="animate-fadeUP1 font-bold text-center text-3xl">{calculateAmountToPay()}</p>
+          <p className="animate-fadeUP1 font-[600] text-center ">{calculateAmountToPay()}</p>
           {parseFloat(computedBasketTotal) > parseFloat(paymentTaken) && (
             <p>
               £{paymentTaken} / £{computedBasketTotal}
@@ -785,7 +782,7 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
                   setVenueNtable((prevValues) => ({ ...prevValues, table: null }));
                   nav("/Tables");
                 }}
-                className="bg-[--c1] p-2 rounded-lg font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                className="bg-[--c1] p-2 rounded-lg font-[600] text-xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                 Print Receipt
               </button>
               <p>-or-</p>
@@ -795,7 +792,7 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
                   setVenueNtable((prevValues) => ({ ...prevValues, table: null }));
                   nav("/Tables");
                 }}
-                className="bg-[--c1] p-2 rounded-lg font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                className="bg-[--c1] p-2 rounded-lg font-[600] text-xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                 Done
               </button>
             </div>
@@ -806,69 +803,80 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
           {parseFloat(basketTotal) > parseFloat(paymentTaken) && <p className="text-center text-sm my-4">Awaiting Payment...</p>}
         </div>
       </div>
-      <div className="basis-[32%] flex flex-col">
+      <div className="mt-auto basis-[32%] flex flex-col">
         <div className="grid grid-cols-2">
-          <button disabled={DCOPB()} onClick={() => handlePaymentType("cash")} className={`text-xl m-2 px-6 py-4 border-b-2 border-b-black relative basis-[20%] transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center justify-center font-semibold ${DCOPB() ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>
-            Confirm {padInput.length !== 0 && parseFloat(basketTotal) > parseFloat(paymentTaken) ? "£" : ""}
-            {parseFloat(basketTotal) > parseFloat(paymentTaken) ? padInput : ""} Payment Taken with Cash <GiTakeMyMoney className="text-5xl mx-auto" />
+          <button disabled={DCOPB()} onClick={() => handlePaymentType("cash")} className={`m-2 py-2 border-b-2 border-b-black relative basis-[20%] transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center justify-center font-[600] ${DCOPB() ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>
+            <span className="mx-auto">Cash</span>
+            <GiTakeMyMoney className="text-2xl mx-auto" />
           </button>
 
-          <button disabled={DCOPB()} onClick={() => handlePaymentType("card")} className={`text-xl m-2 px-6 py-4 border-b-2 border-b-black relative basis-[20%] transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center justify-center font-semibold ${DCOPB() ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>
+          <button disabled={DCOPB()} onClick={() => handlePaymentType("card")} className={`m-2 py-2 border-b-2 border-b-black relative basis-[20%] transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center justify-center font-[600] ${DCOPB() ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>
             {!showCardSwipe ? (
-              <>
-                Take {padInput.length !== 0 && parseFloat(basketTotal) > parseFloat(paymentTaken) ? "£" : ""}
-                {parseFloat(basketTotal) > parseFloat(paymentTaken) ? padInput : ""} Card Payment
-              </>
+              <span className="mx-auto">Card</span>
             ) : (
               <>
                 <AiOutlineLoading3Quarters className="animate-spin mx-auto text-5xl" />
               </>
             )}
 
-            <SiContactlesspayment className="text-[4rem] stroke-[0.1px] mx-auto" />
+            <SiContactlesspayment className="text-[2rem] stroke-[0.1px] mx-auto" />
           </button>
         </div>
-        <div className="keypad grid grid-cols-3 grid-rows-5 gap-4 my-4 animate-fadeUP1 row-span-2">
-          <p className="col-span-2 bg-white px-2 py-6 text-center my-auto text-xl h-[76px]">
-            {parseFloat(basketTotal) > parseFloat(paymentTaken) && padInput.length !== 0 ? "£" : ""}
-            {parseFloat(computedBasketTotal) <= parseFloat(paymentTaken) ? "" : padInput}
-          </p>
-          <button name="b" onClick={handlePadInput} className="bg-[--c3] rounded font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
-            ◀
-          </button>
-          <button name="1" onClick={handlePadInput} className="bg-[--c1] rounded font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
-            1
-          </button>
-          <button name="2" onClick={handlePadInput} className="bg-[--c1] rounded font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
-            2
-          </button>
-          <button name="3" onClick={handlePadInput} className="bg-[--c1] rounded font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
-            3
-          </button>
-          <button name="4" onClick={handlePadInput} className="bg-[--c1] rounded font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
-            4
-          </button>
-          <button name="5" onClick={handlePadInput} className="bg-[--c1] rounded font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
-            5
-          </button>
-          <button name="6" onClick={handlePadInput} className="bg-[--c1] rounded font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
-            6
-          </button>
-          <button name="7" onClick={handlePadInput} className="bg-[--c1] rounded font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
-            7
-          </button>
-          <button name="8" onClick={handlePadInput} className="bg-[--c1] rounded font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
-            8
-          </button>
-          <button name="9" onClick={handlePadInput} className="bg-[--c1] rounded font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
-            9
-          </button>
-          <button name="0" onClick={handlePadInput} className="bg-[--c1] rounded font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
-            0
-          </button>
-          <button name="." onClick={handlePadInput} className="bg-[--c3] rounded font-bold text-3xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
-            .
-          </button>
+        <div className="keypad flex flex-wrap gap-2 my-4 animate-fadeUP1 row-span-2">
+          <div className="flex-[100%] flex flex-nowrap gap-2 h-12">
+            <p className="bg-white p-2 text-center text-xl flex-[70%] rounded-lg">
+              {parseFloat(basketTotal) > parseFloat(paymentTaken) && padInput.length !== 0 ? "£" : ""}
+              {parseFloat(computedBasketTotal) <= parseFloat(paymentTaken) ? "" : padInput}
+            </p>
+            <button name="b" onClick={handlePadInput} className="flex-[30%] bg-[--c3] rounded font-[600] text-xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+              ◀
+            </button>
+          </div>
+
+          <div className="flex-[100%] flex flex-nowrap gap-2 h-12">
+            <button name="7" onClick={handlePadInput} className="flex-[33%] bg-[--c1] rounded font-[600] text-xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+              7
+            </button>
+            <button name="8" onClick={handlePadInput} className="flex-[33%] bg-[--c1] rounded font-[600] text-xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+              8
+            </button>
+            <button name="9" onClick={handlePadInput} className="flex-[33%] bg-[--c1] rounded font-[600] text-xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+              9
+            </button>
+          </div>
+
+          <div className="flex-[100%] flex flex-nowrap gap-2 h-12">
+            <button name="4" onClick={handlePadInput} className="flex-[33%] bg-[--c1] rounded font-[600] text-xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+              4
+            </button>
+            <button name="5" onClick={handlePadInput} className="flex-[33%] bg-[--c1] rounded font-[600] text-xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+              5
+            </button>
+            <button name="6" onClick={handlePadInput} className="flex-[33%] bg-[--c1] rounded font-[600] text-xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+              6
+            </button>
+          </div>
+
+          <div className="flex-[100%] flex flex-nowrap gap-2 h-12">
+            <button name="1" onClick={handlePadInput} className="flex-[33%] bg-[--c1] rounded font-[600] text-xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+              1
+            </button>
+            <button name="2" onClick={handlePadInput} className="flex-[33%] bg-[--c1] rounded font-[600] text-xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+              2
+            </button>
+            <button name="3" onClick={handlePadInput} className="flex-[33%] bg-[--c1] rounded font-[600] text-xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+              3
+            </button>
+          </div>
+
+          <div className="flex-[100%] flex flex-nowrap gap-2 h-12">
+            <button name="0" onClick={handlePadInput} className="flex-[66%] bg-[--c1] rounded font-[600] text-xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+              0
+            </button>
+            <button name="." onClick={handlePadInput} className="flex-[33%] bg-[--c3] rounded font-[600] text-xl text-black border-b-2 border-b-[--c2] text-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+              .
+            </button>
+          </div>
         </div>
       </div>
     </div>
