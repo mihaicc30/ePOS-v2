@@ -233,7 +233,7 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
                         T-
                         {table.tn}
                       </p>
-                      {tableClock["t" + table.tn] && <p className="z-20 inline-flex items-center text-black text-2xl">{Math.floor((new Date() - new Date().setHours(...tableClock["t" + table.tn].split(":"))) / (1000 * 60))}min</p>}
+                      {tableClock["t" + table.tn] && <p className="z-20 inline-flex items-center text-black text-2xl">{Math.floor((new Date() - new Date().setHours(tableClock["t" + table.tn].split(":")[0], tableClock["t" + table.tn].split(":")[1],0)) / (1000 * 60))}min</p>}
                     </div>
                   </div>
                 </Draggable>
