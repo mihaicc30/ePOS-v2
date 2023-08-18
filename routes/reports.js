@@ -245,9 +245,14 @@ router.post("/generateEndOfDayReport", async (req, res) => {
       if (staff[dayOfWeek].clocked.length > 0) {
         calculateStaffMembers++;
         staff[dayOfWeek].clocked.forEach((timeframe2) => {
-          const [startHour2, startMinute2] = String(timeframe2.split(" - ")[0]).split(":").map(Number);
-          const [endHour2, endMinute2] = String(timeframe2).split(" - ")[1].split(":").map(Number);
+          let [startHour2, startMinute2] = String(timeframe2.split(" - ")[0]).split(":").map(Number);
+          let [endHour2, endMinute2] = String(timeframe2).split(" - ")[1].split(":").map(Number);
+
+          // in case ALL users are not logged out but still want to see the present report with the current time as a clock out time
+          if(!endHour2) [endHour2,endMinute2]=[new Date().getHours('en-GB'),new Date().getMinutes('en-GB')]
+
           tempTotalWages += parseFloat((wages.find((obj) => staff.email in obj)?.[staff.email] * parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2))).toFixed(2)) || 10.4;
+          console.log(endHour2, endMinute2);
           calculateActualHours += parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2));
         });
       }
