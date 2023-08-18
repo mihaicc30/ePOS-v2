@@ -38,7 +38,7 @@ router.post("/grabNetProfit", async (req, res) => {
         for (let min = 0; min < 60; min += 10) {
           FI.setMinutes(min);
           manipulatedResults.push({
-            Time: new Date(FI).toLocaleTimeString('en-GB').substring(0, 5),
+            Time: new Date(FI).toLocaleTimeString("en-GB").substring(0, 5),
             OperatingExpenses: 17, // per 10mins
             GrossSales: 0,
             NetProfit: 0,
@@ -48,7 +48,7 @@ router.post("/grabNetProfit", async (req, res) => {
 
       manipulatedResults = queryReceiptsDay.reduce((acc, receipt) => {
         const tableOpenAt = new Date(receipt.tableOpenAt);
-        const tableOpenTime = tableOpenAt.toLocaleTimeString('en-GB').substring(0, 5);
+        const tableOpenTime = tableOpenAt.toLocaleTimeString("en-GB").substring(0, 5);
         const interval = Math.floor(tableOpenAt.getMinutes() / 10) * 10;
         const timeInterval = `${tableOpenTime.substring(0, 3)}${interval.toString().padStart(2, "0")}`;
 
@@ -78,7 +78,7 @@ router.post("/grabNetProfit", async (req, res) => {
         FI.setDate(day);
         if (FI.getMonth() !== theMonth) break;
         manipulatedResults.push({
-          Date: new Date(FI).toLocaleDateString('en-GB').substring(0, 5),
+          Date: new Date(FI).toLocaleDateString("en-GB").substring(0, 5),
           OperatingExpenses: 1700, // per day
           GrossSales: 0,
           NetProfit: 0,
@@ -119,7 +119,7 @@ router.post("/grabSales", async (req, res) => {
         for (let min = 0; min < 60; min += 10) {
           FI.setMinutes(min);
           manipulatedResults.push({
-            Time: new Date(FI).toLocaleTimeString('en-GB').substring(0, 5),
+            Time: new Date(FI).toLocaleTimeString("en-GB").substring(0, 5),
             Sales: 0,
           });
         }
@@ -127,7 +127,7 @@ router.post("/grabSales", async (req, res) => {
 
       manipulatedResults = queryReceiptsDay.reduce((acc, receipt) => {
         const tableOpenAt = new Date(receipt.tableOpenAt);
-        const tableOpenTime = tableOpenAt.toLocaleTimeString('en-GB').substring(0, 5);
+        const tableOpenTime = tableOpenAt.toLocaleTimeString("en-GB").substring(0, 5);
         const interval = Math.floor(tableOpenAt.getMinutes() / 10) * 10;
         const timeInterval = `${tableOpenTime.substring(0, 3)}${interval.toString().padStart(2, "0")}`;
 
@@ -157,7 +157,7 @@ router.post("/grabSales", async (req, res) => {
         FI.setDate(day);
         if (FI.getMonth() !== theMonth) break;
         manipulatedResults.push({
-          Date: new Date(FI).toLocaleDateString('en-GB').substring(0, 5),
+          Date: new Date(FI).toLocaleDateString("en-GB").substring(0, 5),
           Sales: 0,
         });
       }
@@ -165,7 +165,7 @@ router.post("/grabSales", async (req, res) => {
       queryReceiptsMonth.map((receipt, index) => {
         const existingEntryIndex = manipulatedResults.findIndex((entry) => entry.Date === receipt.dateString.substring(0, 5));
         if (existingEntryIndex !== -1) {
-          manipulatedResults[existingEntryIndex].Sales += parseFloat(receipt.totalAmount);
+          manipulatedResults[existingEntryIndex].Sales = parseFloat((parseFloat(manipulatedResults[existingEntryIndex].Sales) + parseFloat(receipt.totalAmount)).toFixed(2));
         }
       });
 
@@ -229,12 +229,7 @@ router.post("/generateEndOfDayReport", async (req, res) => {
     let tempTotalWages = 0;
     let tempTotalWagesF = 0;
 
-    let wages = [
-      { "alemihai25@gmail.com": 20 },
-       { "ioanaculea1992@gmail.com": 15 }, 
-       { "PetrisorPredescu2@gmail.com": 13 }, 
-       { "CristianConstantinFlorea@gmail.com": 12 }
-      ];
+    let wages = [{ "alemihai25@gmail.com": 20 }, { "ioanaculea1992@gmail.com": 15 }, { "PetrisorPredescu2@gmail.com": 13 }, { "CristianConstantinFlorea@gmail.com": 12 }];
 
     Object.values(workersOnDay.roted).forEach((staff) => {
       tempRoted.push([staff.displayName, staff.email, staff[dayOfWeek].roted, staff[dayOfWeek].clocked]);
@@ -386,7 +381,7 @@ router.post("/generateEndOfDayReport", async (req, res) => {
         forcastedHours: parseFloat(calculateForcastedHours.toFixed(2)),
         actualHours: parseFloat(calculateActualHours.toFixed(2)),
         dateString: day,
-        date: new Date().toISOString('en-GB'),
+        date: new Date().toISOString("en-GB"),
       };
       await EODR.updateOne(
         { dateString: day, venueID: venue },
@@ -411,7 +406,7 @@ router.post("/generateEndOfDayReport", async (req, res) => {
             dateString: day,
             venueID: venue,
             dateString: day,
-            date: new Date().toISOString('en-GB'),
+            date: new Date().toISOString("en-GB"),
           },
         }
       ).then((r) => {

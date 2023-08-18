@@ -6,12 +6,7 @@ const app = express();
 // const http = require('http');
 // const server = http.createServer(app);
 
-app.use(
-  cors({
-    origin: ["https://localhost", "http://localhost:5173", "https://localhost:5173", "https://ccwpos.web.app/", "https://hippos.fly.dev/"],
-    methods: "GET,POST,PUT,DELETE",
-  })
-);
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -23,8 +18,8 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
-  console.log(__dirname);
-  console.log(__dirname+ "/routes");
+console.log(__dirname);
+console.log(__dirname + "/routes");
 
 app.use("/", require(__dirname + "/routes/table"));
 app.use("/stripe", require(__dirname + "/routes/stripe"));
