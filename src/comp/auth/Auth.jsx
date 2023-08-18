@@ -53,13 +53,6 @@ const Auth = () => {
     pin: "",
   });
 
-  const handleBackspace = () => {
-    setPin((prevPin) => ({
-      ...prevPin,
-      pin: prevPin.pin.slice(0, -1),
-    }));
-  };
-
   const handleClear = () => {
     setPin({ pin: "" });
   };
@@ -80,9 +73,6 @@ const Auth = () => {
       handleNumber(value);
     } else {
       switch (name) {
-        case "b":
-          handleBackspace();
-          break;
         case "c":
           handleClear();
           break;
@@ -94,11 +84,11 @@ const Auth = () => {
   };
 
   const checkPin = () => {
-    if(pin.pin === "01"){
+    if (pin.pin === "01") {
       console.log("kitchen login");
       setPin({ pin: "" });
       navigate("/kitchen");
-      return
+      return;
     }
     const foundPin = userTable.find((userpin) => userpin.pin === pin.pin);
     if (foundPin && pin.pin.length >= 3) {
@@ -260,7 +250,7 @@ const Auth = () => {
 
               <p className="col-span-6 p-4">
                 Details are set by developers and all data related to this app is using these details. If you require an update or change please contact your representative or email Mihai
-                <a className="transition border-b-2 border-b-orange-400 py-1 bg-orange-400 px-4 rounded-lg" href={`mailto:alemihai25@gmail.com?subject=101010 POS - Query - ${new Date().toLocaleDateString('en-GB')}&amp;body=Your message...`}>
+                <a className="transition border-b-2 border-b-orange-400 py-1 bg-orange-400 px-4 rounded-lg" href={`mailto:alemihai25@gmail.com?subject=101010 POS - Query - ${new Date().toLocaleDateString("en-GB")}&amp;body=Your message...`}>
                   here
                 </a>
                 .
@@ -350,19 +340,10 @@ const Auth = () => {
                 <button name="c" onClick={handlePinInput} className="bg-[--c12] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   C
                 </button>
-                <button name="0" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="0" onClick={handlePinInput} className="col-span-2 bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   0
                 </button>
-                <button name="b" onClick={handlePinInput} className="bg-[--c12] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
-                  <svg className="w-8 h-8 mx-auto" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                    <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                      <path opacity="0" d="M21 9.648C21 5.82037 20.1796 5 16.352 5H10.7515C10.267 5 9.79904 5.17584 9.43446 5.49485L3.72017 10.4948C2.80952 11.2917 2.80952 12.7083 3.72018 13.5052L9.43446 18.5052C9.79904 18.8242 10.267 19 10.7515 19H16.352C20.1796 19 21 18.1796 21 14.352V9.648Z" fill="#000"></path>
-                      <path d="M21 9.648C21 5.82037 20.1796 5 16.352 5H10.7515C10.267 5 9.79904 5.17584 9.43446 5.49485L3.72017 10.4948C2.80952 11.2917 2.80952 12.7083 3.72018 13.5052L9.43446 18.5052C9.79904 18.8242 10.267 19 10.7515 19H16.352C20.1796 19 21 18.1796 21 14.352V9.648Z" stroke="#000" strokeWidth="2" strokeLinejoin="round"></path> <path d="M12 10L16 14" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M16 10L12 14" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
-                    </g>
-                  </svg>
-                </button>
+              
               </div>
               <div
                 className="scan mt-auto relative cursor-pointer mx-auto"

@@ -67,7 +67,7 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
               "Access-Control-Allow-Credentials": true,
             },
             body: JSON.stringify({
-              date: currentDate.toLocaleDateString('en-GB'),
+              date: currentDate.toLocaleDateString("en-GB"),
               cloudy: weeklyWeather.forecast.forecastday[n]?.hour[12].cloud || parseInt(Math.random() * (99 - 1) + 1),
               humidity: weeklyWeather.forecast.forecastday[n]?.hour[12].humidity || parseInt(Math.random() * (99 - 1) + 1),
               windspeed: weeklyWeather.forecast.forecastday[n]?.hour[12].wind_mph || parseInt(Math.random() * (99 - 1) + 1),
@@ -179,9 +179,8 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
           </div>
           {/* ------------------------------ */}
 
-          <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center min-w-[200px]">
-            <div className="grid grid-cols-1 justify-items-center p-4 ">
-              <p className="text-xl font-bold p-2 text-center whitespace-nowrap">Today's Forecast</p>
+          <div className="widget flex-[1_1_20%] p-2 m-1 shadow-xl flex justify-center min-w-[200px]">
+            <div className="grid grid-cols-1 justify-items-center p-2 ">
               <button
                 onClick={() => {
                   reloadWeeklyForecast();
@@ -189,16 +188,17 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
                 <IoMdRefreshCircle className="text-5xl ml-3 fill-[--c1] shadow-xl rounded-full border-t-[#ccc] border-t-2 border-b-gray-300 border-b-4 active:shadow-inner transition" />
               </button>
 
-              <div className="shadow-xl p-3">
-                <p className="text-center">{new Date(weeklyForecast["0"]?.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
-                <p className="text-center"> {weeklyForecast["0"]?.date}</p>
-                <p className="text-center">Forecast</p>
+              <p className="text-xl font-bold p-2 text-center whitespace-nowrap">Today's Forecast</p>
+              <div>
+                <p className="text-center">
+                  {new Date(weeklyForecast["0"]?.date).toLocaleDateString("en-GB", { weekday: "long" })} {weeklyForecast["0"]?.date}
+                </p>
                 <div className="text-center">{weeklyForecast["0"]?.date && <p className={`text-center font-[600] text-xl ${weeklyForecast["0"]?.average > 3000 ? "text-green-400" : weeklyForecast["0"]?.average < 2000 ? "text-red-400" : "text-yellow-500"} `}>£{weeklyForecast["0"]?.average}</p>}</div>
                 {getVenueStatus(weeklyForecast["0"]?.average)}
               </div>
             </div>
           </div>
-          <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center flex-col items-center min-w-[200px] min-h-[120px]">
+          <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center flex-col items-center min-w-[200px] min-h-[160px]">
             <span>
               <svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" width={64} height={64} viewBox="0 0 508 508">
                 <path
@@ -286,7 +286,7 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
               <span className="text-xl font-bold">{getDaysTillPayday()}</span> Days until next payday
             </p>
           </div>
-          <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center flex-col items-center min-w-[200px] min-h-[120px]">
+          <div className="widget flex-[1_1_30%] p-2 m-1 shadow-xl flex justify-center flex-col items-center min-w-[200px] min-h-[160px]">
             <span>
               <svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" width={64} height={64} viewBox="0 0 512 512">
                 <circle
@@ -371,7 +371,7 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
               <span className="text-xl font-bold">{staffCount.new}</span>/<span className="text-xl">{staffCount.total}</span> New Members in the last month
             </p>
           </div>
-          <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center flex-col items-center min-w-[200px] min-h-[120px]">
+          <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center flex-col items-center min-w-[200px] min-h-[160px]">
             <span>
               <svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" id="Layer_1" width={64} height={64} fill="#000" viewBox="0 0 512 512">
                 <g id="SVGRepo_iconCarrier">
@@ -501,7 +501,7 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
             </p>
           </div>
 
-          <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center flex-col items-center min-w-[200px] min-h-[120px]">
+          <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center flex-col items-center min-w-[200px] min-h-[160px]">
             <span>
               <svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" width={64} height={64} viewBox="0 0 508 508">
                 <path
@@ -544,7 +544,7 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
             <p className="text-center">❗ Rota is Due To be completed for next week.</p>
           </div>
 
-          <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center flex-col items-center min-w-[200px] min-h-[120px]">
+          <div className="widget flex-1 p-2 m-1 shadow-xl flex justify-center flex-col items-center min-w-[200px] min-h-[160px]">
             <span>
               <svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" width={64} height={64} viewBox="0 0 512 512">
                 <path
