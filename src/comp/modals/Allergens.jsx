@@ -13,11 +13,11 @@ const Allergens = ({ data, modal, setModal }) => {
       {createPortal(
         <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModal(!modal) : null)}>
           <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center overflow-y-auto">
-            <img src={"../." + data.img} className="h-[100px] w-fit mx-auto" style={{ objectFit: "cover", overflow: "hidden" }} />
-            <span className="py-2 ml-2" onClick={() => setModal(!modal)}>
+            <span className="py-2 ml-2 mt-4 mr-auto" onClick={() => setModal(!modal)}>
               <AiOutlineLeft className="mr-auto text-3xl cursor-pointer" />
             </span>
             <div className="animate-fadeUP1">
+            <img src={"../." + data.img} className="h-[100px] w-fit mx-auto" style={{ objectFit: "cover", overflow: "hidden" }} />
               <p className="text-center">£{data.price.toFixed(2)}</p>
               <p className="text-center text-2xl font-bold">{data.name}</p>
               <p className="text-center text-xl border-b-4 pb-4 mb-4">{data.calories} kcal</p>

@@ -63,7 +63,7 @@ const MobileLeftNav = ({ lefty, setLefty }) => {
       </div>
 
       <span className="my-2 border-b-2"></span>
-      <div className={`rounded-3xl flex flex-col text-center text-sm justify-center font-semibold `} onClick={() => console.log("To implement left hand mode")}>
+      <div className={`rounded-3xl flex flex-col text-center text-sm justify-center font-semibold `} >
         <p>Lefty</p>
         <label className="switch cursor-pointer">
           <input type="checkbox" onChange={handleLeftyToggle} />

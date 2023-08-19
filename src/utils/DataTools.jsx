@@ -266,6 +266,27 @@ export const grabNetProfit = async (day, month, venue) => {
   }
 };
 
+
+export const grabLabor = async (data) => {
+  try {
+    const query = await fetch(`${import.meta.env.VITE_API}grabLabor`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        v: import.meta.env.VITE_G,
+        data
+      }),
+    });
+    const response = await query.json();
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 export const grabSales = async (day, month, venue) => {
   try {
     const query = await fetch(`${import.meta.env.VITE_API}grabSales`, {

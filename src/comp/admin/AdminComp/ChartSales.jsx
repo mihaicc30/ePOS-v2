@@ -1,5 +1,4 @@
 import React, { PureComponent, useState, useEffect } from "react";
-import { FiLoader } from "react-icons/fi";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Brush, Legend, ResponsiveContainer, Bar, BarChart, Area, ComposedChart } from "recharts";
 import { grabSales } from "../../../utils/DataTools";
 

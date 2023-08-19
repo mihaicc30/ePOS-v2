@@ -71,13 +71,8 @@ const KitchenScreen = () => {
   return (
     <>
       <div className="flex p-1 bg-blue-300 items-center">
-        <button className="text-3xl cursor-pointer">
-          <HiMenuAlt2 />
-        </button>
+        <button className="text-3xl cursor-pointer">{/* <HiMenuAlt2 /> */}</button>
         <div className="mx-auto">
-          <button className={`rounded shadow-md py-2 px-12 ${onNow == 3 ? "font-[600] bg-orange-300" : "bg-orange-200 text-gray-400"} `} onClick={() => setOnNow(3)}>
-            All
-          </button>
           <button className={`rounded shadow-md py-2 px-12 ${onNow == 2 ? "font-[600] bg-orange-300" : "bg-orange-200 text-gray-400"} `} onClick={() => setOnNow(2)}>
             Zapped
           </button>
@@ -85,15 +80,8 @@ const KitchenScreen = () => {
             On Now
           </button>
         </div>
-        {onNow == 1 ? (
-          <span className="mx-1 text-xl font-[600]">{new Date().toLocaleDateString("en-GB")}</span>
-        ) : (
-          <span>
-            <input type="date" className="p-1 rounded-xl mx-2 text-lg font-[600]" defaultValue={queryDate} onChange={(e) => setQueryDate(e.target.value)} max={`${new Date().toLocaleDateString("en-GB").split("/")[2]}-${new Date().toLocaleDateString("en-GB").split("/")[1]}-${new Date().toLocaleDateString("en-GB").split("/")[0]}`} />
-          </span>
-        )}
+        <span className="mx-1 text-xl font-[600]">{new Date().toLocaleDateString("en-GB")}</span>
 
-        <span className="mx-1 text-lg font-[600]">{new Date().toLocaleTimeString("en-GB").substring(0, 5)}</span>
         <button className="ml-4 text-3xl cursor-pointer" onClick={() => navigate("/SigOut")}>
           <HiOutlineLogout />
         </button>
@@ -102,7 +90,7 @@ const KitchenScreen = () => {
       <div className="ordersContainer h-[100svh] w-[100svw] bg-gray-100 content-start overflow-y-auto px-4 flex flex-col flex-wrap">
         {orders.length < 1 && (
           <div className="flex justify-center w-[100%]">
-            <p className="text-xl font-[600]">No orders on this date.</p>
+            <p className="text-xl font-[600]">No orders.</p>
           </div>
         )}
         {orders.map((order, index) => {

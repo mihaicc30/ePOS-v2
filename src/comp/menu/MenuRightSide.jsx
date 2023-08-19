@@ -84,7 +84,7 @@ const MenuRightSide = ({ lefty, menuitems, basketItems, setBasketItems }) => {
 
   return (
     <>
-      <div className="relative flex  mr-4 items-center max-[350px]:flex-wrap  max-[350px]:justify-center">
+      <div className="relative flex mr-4 items-center max-[350px]:flex-wrap  max-[350px]:justify-center">
         <div className="relative grow mx-4 overflow-hidden">
           <input type="text" placeholder="Search..." className="w-[100%] mx-auto pl-10 pr-10 py-2 my-2 rounded" value={searchValue} onChange={handleInputChange} />
           <span className="absolute top-[28px] left-2 -translate-y-3">🔍</span>
