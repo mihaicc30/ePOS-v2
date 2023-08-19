@@ -155,7 +155,7 @@ const ChartLaborWeek = () => {
   const getCurrentWeekNumber = () => {
     const now = new Date();
     const startOfYear = new Date(now.getFullYear(), 0, 1);
-    const weekNumber = Math.ceil(((now - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
+    const weekNumber = Math.ceil(((now - startOfYear) / 86400000 + startOfYear.getDay() ) / 7);
     return weekNumber;
   };
   const getDatesOfWeek = (weekNumber, year) => {
@@ -271,8 +271,8 @@ const ChartLaborWeek = () => {
                 <Tooltip />
                 <Legend />
                 <Area type="monotone" fill="#63b5ff" stroke="#8884d8" />
-                <Bar dataKey="Forecasted" barSize={40} fill="#93c5fd" />
-                <Bar dataKey="Actual" barSize={40} fill="#f88f2dde" />
+                <Bar dataKey="Forecasted" barSize={40} fill="#f88f2dde" />
+                <Bar dataKey="Actual" barSize={40} fill="#93c5fd" />
                 <Line type="monotone" dataKey="Actual" stroke="#ff7300" legendType="none" tooltipType="none" />
                 <Brush dataKey="Actual" height={30} stroke="#8884d8" travellerWidth={50} />
               </ComposedChart>
