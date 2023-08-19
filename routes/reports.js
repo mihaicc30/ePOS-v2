@@ -79,7 +79,7 @@ router.post("/grabNetProfit", async (req, res) => {
         if (FI.getMonth() !== theMonth) break;
         manipulatedResults.push({
           Date: new Date(FI).toLocaleDateString("en-GB").substring(0, 5),
-          OperatingExpenses: 1700, // per day
+          OperatingExpenses: 200, // per day
           GrossSales: 0,
           NetProfit: 0,
         });
@@ -93,6 +93,81 @@ router.post("/grabNetProfit", async (req, res) => {
       });
       return res.json({ data: manipulatedResults, message: `Recorded sales on ${month}.` });
     }
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+router.post("/grabLabor", async (req, res) => {
+  const { tempWeek, venueID } = req.body.data;
+  try {
+    let laborData = await ROTA.find(
+      {
+        week: tempWeek,
+        venueID: venueID,
+      },
+      { _id: 0, roted: 1 }
+    ).sort({ date: 1 });
+
+    if (!laborData[0]) {
+      console.log("Dont have a ROTA for week "+tempWeek+".");
+      res.status(400).json({ message: "Dont have a ROTA for week "+tempWeek+"." });
+      return;
+    }
+
+    let calculateActualHours = 0;
+    let tempTotalWages = 0;
+    let laborPerDay = {
+      Sunday: 0,
+      Monday: 0,
+      Tuesday: 0,
+      Wednesday: 0,
+      Thursday: 0,
+      Friday: 0,
+      Saturday: 0,
+    };
+
+    let laborPerDayRoted = {
+      Sunday: 0,
+      Monday: 0,
+      Tuesday: 0,
+      Wednesday: 0,
+      Thursday: 0,
+      Friday: 0,
+      Saturday: 0,
+    };
+    let wages = [{ "alemihai25@gmail.com": 20 }, { "ioanaculea1992@gmail.com": 15 }, { "PetrisorPredescu2@gmail.com": 13 }, { "CristianConstantinFlorea@gmail.com": 12 }];
+
+    Object.values(laborData[0].roted).forEach((staff) => {
+      ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].forEach((typeOfDay) => {
+        Object.values(staff[typeOfDay].roted).forEach((day) => {
+          let [startHour2, startMinute2] = String(day.split(" - ")[0]).split(":").map(Number);
+          let [endHour2, endMinute2] = String(day).split(" - ")[1].split(":").map(Number);
+
+          // in case ALL users are not logged out but still want to see the present report with the current time as a clock out time
+          if (!endHour2) [endHour2, endMinute2] = [new Date().getHours("en-GB"), new Date().getMinutes("en-GB")];
+          laborPerDayRoted[typeOfDay] += parseFloat((wages.find((obj) => staff.email in obj)?.[staff.email] * parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2))).toFixed(2)) || 10.4;
+        });
+
+        Object.values(staff[typeOfDay].clocked).forEach((day) => {
+          let [startHour2, startMinute2] = String(day.split(" - ")[0]).split(":").map(Number);
+          let [endHour2, endMinute2] = String(day).split(" - ")[1].split(":").map(Number);
+
+          // in case ALL users are not logged out but still want to see the present report with the current time as a clock out time
+          if (!endHour2) [endHour2, endMinute2] = [new Date().getHours("en-GB"), new Date().getMinutes("en-GB")];
+          laborPerDay[typeOfDay] += parseFloat((wages.find((obj) => staff.email in obj)?.[staff.email] * parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2))).toFixed(2)) || 10.4;
+          tempTotalWages += parseFloat((wages.find((obj) => staff.email in obj)?.[staff.email] * parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2))).toFixed(2)) || 10.4;
+          calculateActualHours += parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2));
+        });
+      });
+    });
+
+    let tempData = {
+      hours: calculateActualHours.toFixed(2),
+      wages: tempTotalWages.toFixed(2),
+    };
+    res.json({ message: "ok", laborPerDay, tempData, laborPerDayRoted });
   } catch (error) {
     console.log(error.message);
     res.status(400).json({ message: error.message });
@@ -249,7 +324,7 @@ router.post("/generateEndOfDayReport", async (req, res) => {
           let [endHour2, endMinute2] = String(timeframe2).split(" - ")[1].split(":").map(Number);
 
           // in case ALL users are not logged out but still want to see the present report with the current time as a clock out time
-          if(!endHour2) [endHour2,endMinute2]=[new Date().getHours('en-GB'),new Date().getMinutes('en-GB')]
+          if (!endHour2) [endHour2, endMinute2] = [new Date().getHours("en-GB"), new Date().getMinutes("en-GB")];
 
           tempTotalWages += parseFloat((wages.find((obj) => staff.email in obj)?.[staff.email] * parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2))).toFixed(2)) || 10.4;
           console.log(endHour2, endMinute2);
