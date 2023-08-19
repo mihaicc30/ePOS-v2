@@ -161,7 +161,7 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
           theme: "light",
         });
       }
-    }, 1500);
+    }, 500);
 
     return () => clearTimeout(waitingTime);
   }, [basketItems, basketDiscount]);

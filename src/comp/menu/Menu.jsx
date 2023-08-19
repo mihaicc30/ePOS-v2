@@ -286,7 +286,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
           theme: "light",
         });
       }
-    }, 1000);
+    }, 500);
 
     return () => clearTimeout(waitingTime);
   }, [basketItems, basketDiscount]);
