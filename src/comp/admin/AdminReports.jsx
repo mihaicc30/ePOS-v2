@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import ChartSalesMonth from "./AdminComp/ChartSalesMonth";
 import NetProfitMonth from "./AdminComp/NetProfitMonth";
-import ChartLaborMonth from "./AdminComp/ChartLaborMonth";
+import ChartLaborWeek from "./AdminComp/ChartLaborWeek";
 import { getTargets, setTargets, generateEndOfDayReport, grabEndOfDayReport } from "../../utils/DataTools";
 
 const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWeeklyHoliday, weeklyWeather, setWeeklyWeather }) => {
@@ -817,7 +817,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
           <NetProfitMonth />
         </div>
         <div className="widget flex-[1_1_50%] shadow-lg flex justify-center flex-col items-center min-w-[400px] min-h-[400px]">
-          <ChartLaborMonth />
+          <ChartLaborWeek />
         </div>
 
         <span className=""></span>
