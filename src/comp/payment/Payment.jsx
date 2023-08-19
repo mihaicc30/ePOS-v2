@@ -822,7 +822,7 @@ const Payment = ({ lefty, basketDiscount, user, basketItems, setBasketItems, ven
             <SiContactlesspayment className="text-[2rem] stroke-[0.1px] mx-auto" />
           </button>
         </div>
-        <div className="keypad flex flex-wrap gap-2 my-4 animate-fadeUP1 row-span-2">
+        <div className="keypad flex flex-wrap gap-2 my-4 row-span-2">
           <div className="flex-[100%] flex flex-nowrap gap-2 h-12">
             <p className="bg-white p-2 text-center text-xl flex-[70%] rounded-lg">
               {parseFloat(basketTotal) > parseFloat(paymentTaken) && padInput.length !== 0 ? "£" : ""}

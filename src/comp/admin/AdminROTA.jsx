@@ -37,7 +37,7 @@ const AdminROTA = () => {
   const getCurrentWeekNumber = () => {
     const now = new Date();
     const startOfYear = new Date(now.getFullYear(), 0, 1);
-    const weekNumber = Math.ceil(((now - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
+    const weekNumber = Math.ceil(((now - startOfYear) / 86400000 + startOfYear.getDay() ) / 7);
     return weekNumber;
   };
 

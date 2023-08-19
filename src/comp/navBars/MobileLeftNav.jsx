@@ -54,7 +54,7 @@ const MobileLeftNav = ({ lefty, setLefty }) => {
       </div>
 
       <span className="mt-auto my-2 border-b-2"></span>
-      <div className={`rounded-3xl flex flex-col text-center text-sm justify-center font-semibold `} onClick={() => console.log("To implement dark mode")}>
+      <div className={`rounded-3xl flex flex-col text-center text-sm justify-center font-semibold `} title="Dark Mode" onClick={() => console.log("To implement dark mode")}>
         <CgDarkMode className="mx-auto my-1 text-2xl"/>
         <label className="switch cursor-pointer">
           <input type="checkbox" />
@@ -63,7 +63,7 @@ const MobileLeftNav = ({ lefty, setLefty }) => {
       </div>
 
       <span className="my-2 border-b-2"></span>
-      <div className={`rounded-3xl flex flex-col text-center text-sm justify-center font-semibold `} >
+      <div className={`rounded-3xl flex flex-col text-center text-sm justify-center font-semibold `} title="Left Handed Mode" >
         <p>Lefty</p>
         <label className="switch cursor-pointer">
           <input type="checkbox" onChange={handleLeftyToggle} />

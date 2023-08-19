@@ -149,7 +149,7 @@ const Auth = () => {
     const foundPin = userTable.find((userpin) => userpin.pin === pin.pin && !userpin.isAdmin);
     const now = new Date();
     const startOfYear = new Date(now.getFullYear(), 0, 1);
-    const weekNumber = Math.ceil(((now - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
+    const weekNumber = Math.ceil(((now - startOfYear) / 86400000 + startOfYear.getDay()) / 7);
     let typeOfDay = new Date(now).toLocaleDateString("en-GB", { weekday: "long" });
     try {
       if (foundPin && pin.pin.length >= 3) {
@@ -157,6 +157,7 @@ const Auth = () => {
 
         setClockedLoading(false);
         if (query.message.endsWith("out.")) {
+          setPin({ pin: "" });
           toast.info(query.message, {
             position: "top-right",
             autoClose: 3000,
@@ -343,7 +344,6 @@ const Auth = () => {
                 <button name="0" onClick={handlePinInput} className="col-span-2 bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   0
                 </button>
-              
               </div>
               <div
                 className="scan mt-auto relative cursor-pointer mx-auto"
