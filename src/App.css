@@ -2,7 +2,7 @@
   /* 60/30/10 */
   --c60: #F6F6F6;
   --c30: #FFFFFF;
-  --c10: #FE7E23;
+  --c10: #f58535;
 
   /* 30 */
   --secondaryGrad: linear-gradient(36deg, var(--c30) 10%, var(--c60) 30%, var(--c60) 70%, var(--c30) 90%);
@@ -10,8 +10,8 @@
   /* 10 */
   --activeGrad: linear-gradient(36deg, var(--c30) 10%, var(--c10) 30%, var(--c10) 70%, var(--c30) 90%);
 
-  --c1: #ff8615de;
-  --c12: #f5b06f;
+  --c1: #f88f2dde;
+  --c12: #fa8d2883;
   --c2: #240200;
   --c3: #FEFAF9;
   --c4: #001F64;

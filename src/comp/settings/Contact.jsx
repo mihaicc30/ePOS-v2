@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../../firebase/config.jsx";
+
 
 
 const Contact = () => {
