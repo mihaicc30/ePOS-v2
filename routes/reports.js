@@ -327,7 +327,6 @@ router.post("/generateEndOfDayReport", async (req, res) => {
           if (!endHour2) [endHour2, endMinute2] = [new Date().getHours("en-GB"), new Date().getMinutes("en-GB")];
 
           tempTotalWages += parseFloat((wages.find((obj) => staff.email in obj)?.[staff.email] * parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2))).toFixed(2)) || 10.4;
-          console.log(endHour2, endMinute2);
           calculateActualHours += parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2));
         });
       }
@@ -361,7 +360,7 @@ router.post("/generateEndOfDayReport", async (req, res) => {
 
       for (const item of receipt.items) {
         const { category, subcategory, qty, price, name, addedBy, portionCost } = item;
-
+        if (name === "Line") continue; // very important
         temptotalAmountSoldNoDiscount += price;
         temptotalQtySold += qty;
         // Calculate and update product information
