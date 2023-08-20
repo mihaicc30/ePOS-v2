@@ -14,7 +14,7 @@ const Signout = ({ setVenueNtable}) => {
     const timeout = setTimeout(() => {
       
       setVenueNtable({ venue: null, table: null });
-      navigate("/Auth");
+      navigate("/");
       logout()
       localStorage.clear();
     }, 1100);
