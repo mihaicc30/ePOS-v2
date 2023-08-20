@@ -34,7 +34,7 @@ router.post("/handleClocked", async (req, res) => {
         }
       }
     }
-    console.log("User ROTA data has been updated.", new Date().toLocaleString());
+    console.log("User ROTA data has been updated.", new Date().toLocaleString('en-GB'));
   } catch (error) {
     console.log(error.message);
     res.status(400).json({ message: error.message });
@@ -113,7 +113,7 @@ router.post("/resetRota", async (req, res) => {
       }
     );
 
-    console.log("Sending empty roted data.", new Date().toLocaleString());
+    console.log("Sending empty roted data.", new Date().toLocaleString('en-GB'));
     res.status(200).json(entry.roted);
   } catch (error) {
     console.log(error.message);
@@ -125,7 +125,7 @@ router.post("/updateRota", async (req, res) => {
   try {
     let query = await ROTA.updateOne({ week: req.body.week, venueID: req.body.venueID, weekRange: req.body.weekRange }, { $set: { roted: req.body.data } });
     console.log(query);
-    console.log("ROTA has been updated.", new Date().toLocaleString());
+    console.log("ROTA has been updated.", new Date().toLocaleString('en-GB'));
     res.status(200).json({ message: "ok" });
   } catch (error) {
     console.log(error.message);
@@ -137,7 +137,7 @@ router.post("/getRotaOfTheWeek", async (req, res) => {
   try {
     let query = await ROTA.findOne({ week: req.body.week, venueID: req.body.venueID });
     if (query) {
-      console.log("Sending roted data.", new Date().toLocaleString());
+      console.log("Sending roted data.", new Date().toLocaleString('en-GB'));
       res.status(200).json(query.roted);
     } else {
       let tempMonth = parseInt(req.body.weekRange.split(" - ")[0].split("/")[1]);
@@ -198,7 +198,7 @@ router.post("/getRotaOfTheWeek", async (req, res) => {
       });
 
       await entry.save();
-      console.log("Sending empty roted data.", new Date().toLocaleString());
+      console.log("Sending empty roted data.", new Date().toLocaleString('en-GB'));
       res.status(200).json(entry.roted);
     }
   } catch (error) {

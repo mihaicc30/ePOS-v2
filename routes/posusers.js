@@ -30,7 +30,7 @@ router.post("/fetchUserDetails", async (req, res) => {
         }
       });
       tempUser["rotedHours"] = tempRotedHours;
-      console.log("Sending user details.", new Date().toLocaleString());
+      console.log("Sending user details.", new Date().toLocaleString('en-GB'));
       res.status(200).json( [tempUser] );
     });
   } catch (error) {
@@ -44,7 +44,7 @@ router.post("/fetchUserDetails", (req, res) => {
   try {
     Posusers.findOne({ email: req.body.email }, { pin: 0 }).then((results) => {
       console.log("🚀 ~ file: posusers.js:9 ~ Posusers.find ~ results:", results);
-      console.log("Sending user details.", new Date().toLocaleString());
+      console.log("Sending user details.", new Date().toLocaleString('en-GB'));
       res.status(200).json(results);
     });
   } catch (error) {
@@ -57,7 +57,7 @@ router.post("/posusers", (req, res) => {
   if (!req.body.v || req.body.v !== process.env.v) return res.status(400).json({ error: "Missing values." });
   try {
     Posusers.find({}).then((results) => {
-      console.log("Sending POS users.", new Date().toLocaleString());
+      console.log("Sending POS users.", new Date().toLocaleString('en-GB'));
       res.status(200).json(results);
     });
   } catch (error) {
@@ -69,13 +69,10 @@ router.post("/posusers", (req, res) => {
 router.post("/updateUserDetails", async (req, res) => {
   try {
     const { oldemail, email, displayName, olddisplayName } = req.body.user;
-    console.log(oldemail, email, displayName, olddisplayName);
     const query1 = await Posusers.findOne({ email: oldemail });
-    console.log("🚀 ~ file: posusers.js:27 ~ router.post ~ query1:", query1);
     const query = await Posusers.updateOne({ email: oldemail }, { $set: { email: email, displayName: displayName } });
     if (query) {
-      console.log("🚀 ~ file: posusers.js:29 ~ router.post ~ query:", query);
-      console.log("🚀 ~ User updated.", new Date().toLocaleString());
+      console.log("User updated.", new Date().toLocaleString('en-GB'));
       res.status(200).json({ query, message: "ok" });
     }
   } catch (error) {
@@ -88,7 +85,7 @@ router.post("/getStaffMembers", (req, res) => {
   if (!req.body.v || req.body.v !== process.env.v) return res.status(400).json({ error: "Missing values." });
   try {
     Posusers.find({ venueID: req.body.venueID }).then((results) => {
-      console.log("Sending POS users.", new Date().toLocaleString());
+      console.log("Sending POS users.", new Date().toLocaleString('en-GB'));
       res.status(200).json(results);
     });
   } catch (error) {
@@ -104,7 +101,7 @@ router.post("/savePosUser", async (req, res) => {
       return res.status(400).json({ error: "Missing values." });
     }
     const results = await new Posusers(req.body.data).save();
-    console.log("POS User saved.", new Date().toLocaleString());
+    console.log("POS User saved.", new Date().toLocaleString('en-GB'));
     res.status(200).json({ message: "POS User saved.", user: results });
   } catch (error) {
     console.log(error.message);
@@ -118,7 +115,7 @@ router.post("/handleRemove", async (req, res) => {
       return res.status(400).json({ error: "Missing values." });
     }
     const query = await Posusers.deleteOne({ _id: req.body.data });
-    console.log("POS User deleted.", new Date().toLocaleString());
+    console.log("POS User deleted.", new Date().toLocaleString('en-GB'));
     res.status(200).json({ message: "POS User deleted." });
   } catch (error) {
     console.log(error.message);

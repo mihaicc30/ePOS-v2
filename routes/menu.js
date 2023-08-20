@@ -10,9 +10,13 @@ router.post("/amenu", (req, res) => {
 
 router.post("/recallOrder", async (req, res) => {
   try {
-    const results = await Orders.updateOne({ _id:req.body.data }, {$set:{orderStatus:"todo", date: new Date().toJSON() }})
+    const date = new Date();
+    const offset = date.getTimezoneOffset() * 60000;
+    const gbDate = new Date(date.getTime() - offset).toISOString();
+
+    const results = await Orders.updateOne({ _id: req.body.data }, { $set: { orderStatus: "todo", date: gbDate, dateTime: new Date().toLocaleTimeString('en-GB') } });
     console.log("Order recalled.", new Date().toUTCString());
-    res.status(200).json({message:"ok"});
+    res.status(200).json({ message: "ok" });
   } catch (error) {
     console.log(error.message);
     res.status(400).json({ message: error.message });
@@ -21,9 +25,13 @@ router.post("/recallOrder", async (req, res) => {
 
 router.post("/zapOrder", async (req, res) => {
   try {
-    const results = await Orders.updateOne({ _id:req.body.data }, {$set:{orderStatus:"zapped", date: new Date().toJSON() }})
+    const date = new Date();
+    const offset = date.getTimezoneOffset() * 60000;
+    const gbDate = new Date(date.getTime() - offset).toISOString();
+
+    const results = await Orders.updateOne({ _id: req.body.data }, { $set: { orderStatus: "zapped", date: gbDate, dateTime: new Date().toLocaleTimeString('en-GB') } });
     console.log("Order zapped!", new Date().toUTCString());
-    res.status(200).json({message:"ok"});
+    res.status(200).json({ message: "ok" });
   } catch (error) {
     console.log(error.message);
     res.status(400).json({ message: error.message });
@@ -32,8 +40,7 @@ router.post("/zapOrder", async (req, res) => {
 
 router.post("/fetchAllOrders", async (req, res) => {
   try {
-    const results = await Orders.find({ venueID: req.body.data.venueID, orderType: req.body.data.orderType}).sort({ date: 1 });
-    console.log("Sending orders.", new Date().toUTCString());
+    const results = await Orders.find({ venueID: req.body.data.venueID, orderType: req.body.data.orderType }).sort({ dateTime: 1 });
     res.status(200).json(results);
   } catch (error) {
     console.log(error.message);
@@ -42,8 +49,7 @@ router.post("/fetchAllOrders", async (req, res) => {
 });
 router.post("/fetchZapped", async (req, res) => {
   try {
-    const results = await Orders.find({ venueID: req.body.data.venueID, orderType: req.body.data.orderType, orderStatus:"zapped", dateString:req.body.data.dateString }).sort({ date: 1 });
-    console.log("Sending orders.", new Date().toUTCString());
+    const results = await Orders.find({ venueID: req.body.data.venueID, orderType: req.body.data.orderType, orderStatus: "zapped", dateString: req.body.data.dateString }).sort({ dateTime: 1 });
     res.status(200).json(results);
   } catch (error) {
     console.log(error.message);
@@ -52,8 +58,7 @@ router.post("/fetchZapped", async (req, res) => {
 });
 router.post("/fetchOrders", async (req, res) => {
   try {
-    const results = await Orders.find({ venueID: req.body.data.venueID, orderType: req.body.data.orderType, orderStatus:"todo", dateString: `${new Date().toLocaleDateString('en-GB')}` }).sort({ date: 1 });
-    console.log("Sending orders.", new Date().toUTCString());
+    const results = await Orders.find({ venueID: req.body.data.venueID, orderType: req.body.data.orderType, orderStatus: "todo", dateString: `${new Date().toLocaleDateString("en-GB")}` }).sort({ dateTime: 1 });
     res.status(200).json(results);
   } catch (error) {
     console.log(error.message);
@@ -66,6 +71,9 @@ router.post("/addOrder", async (req, res) => {
 
   try {
     let data = req.body.data;
+    data.dateTime = new Date().toLocaleTimeString('en-GB')
+    data.dateString = new Date().toLocaleDateString('en-GB')
+    console.log("🚀 ~ file: menu.js:74 ~ router.post ~ data:", data)
     const queue = await Counter.findOne({ counterType: "print" });
     const increment = await Counter.updateOne({ counterType: "print" }, { $inc: { counter: 1 } });
     data["queueNumber"] = queue.counter;
