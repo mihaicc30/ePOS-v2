@@ -12,7 +12,6 @@ const Signout = ({ setVenueNtable}) => {
   useEffect(() => {
     if(loading) return
     const timeout = setTimeout(() => {
-      
       setVenueNtable({ venue: null, table: null });
       navigate("/");
       logout()

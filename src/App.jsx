@@ -33,8 +33,8 @@ import { grabProducts } from "./utils/grabProducts";
 import { loadStripe } from "@stripe/stripe-js";
 
 const App = () => {
-  const [loadingData, setLoadingData] = useState(true)
-  const [venues, setVenues] = useState([])
+  const [loadingData, setLoadingData] = useState(true);
+  const [venues, setVenues] = useState([]);
   const [user, loading, error] = useAuthState(auth);
   const [venueNtable, setVenueNtable] = useState({ venue: null, table: null });
   const [menuitems, setMenuitems] = useState([]);
@@ -53,31 +53,26 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (loading) return;
-    (async()=>{
-      setVenues(await getVenues())
-      setMenuitems(await getMenu())
-    })()
+    // if (loading) return;
+    (async () => {
+      setVenues(await getVenues());
+      setMenuitems(await grabProducts());
+    })();
   }, [user]);
+
+  useEffect(()=>{
+    console.log(menuitems);
+  },[menuitems])
 
   useEffect(() => {
     calculateTotalQuantity();
   }, [basketItems]);
 
-
   return (
     <Routes>
       <Route path="/" element={<Layout basketQty={basketQty} />}>
         <Route path="/" element={<Auth />} />
-        <Route path="/menu" element={<Menu basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} toggleGrid={toggleGrid} setToggleGrid={setToggleGrid} toggleFilters={toggleFilters} setToggleFilters={setToggleFilters} searchValue={searchValue} setSearchValue={setSearchValue} selectedKCal={selectedKCal} setSelectedKCal={setSelectedKCal} selectedDietary={selectedDietary} setSelectedDietary={setSelectedDietary} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />}>
-          {/* {menuitems.map((category, index) => (
-            <Route key={index} path={category.name} element={<MenuItem item={category} />}>
-              {category.items.map((item, itemIndex) => (
-                <Route key={itemIndex} path={item.name} element={<MenuItemDetails menuitems={menuitems} item={item} basketItems={basketItems} setBasketItems={setBasketItems} />} />
-              ))}
-            </Route>
-          ))} */}
-        </Route>
+        <Route path="/menu" element={<Menu basketItems={basketItems} setBasketItems={setBasketItems} menuitems={menuitems} toggleGrid={toggleGrid} setToggleGrid={setToggleGrid} toggleFilters={toggleFilters} setToggleFilters={setToggleFilters} searchValue={searchValue} setSearchValue={setSearchValue} selectedKCal={selectedKCal} setSelectedKCal={setSelectedKCal} selectedDietary={selectedDietary} setSelectedDietary={setSelectedDietary} venueNtable={venueNtable} setVenueNtable={setVenueNtable} venues={venues} />} />
         <Route path="/receipts" element={<Receipts />} />
         <Route
           path="/basket"
@@ -116,7 +111,6 @@ const App = () => {
 
 export default App;
 
-
 const getVenues = async () => {
   try {
     const query = await fetch(`${import.meta.env.VITE_API}grabVenues`, {
@@ -131,26 +125,6 @@ const getVenues = async () => {
     });
     const response = await query.json();
     console.log("Receied venue data.", new Date().toUTCString());
-    return response;
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const getMenu = async () => {
-  try {
-    const query = await fetch(`${import.meta.env.VITE_API}grabProducts`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({
-        v: import.meta.env.VITE_G,
-      }),
-    });
-    const response = await query.json();
-    console.log("Receied menu data.", new Date().toUTCString());
     return response;
   } catch (error) {
     console.log(error.message);

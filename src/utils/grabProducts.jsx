@@ -1,4 +1,4 @@
-export const grabProducts = async (total, user, venueNtable) => {
+export const grabProducts = async () => {
   try {
     await fetch(`${import.meta.env.VITE_API}grabProducts`, {
       method: "POST",
