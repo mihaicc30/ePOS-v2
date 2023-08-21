@@ -3,22 +3,47 @@ import { useNavigate } from "react-router-dom";
 import { fetchOrders, fetchZapped, zapOrder, recallOrder, fetchAllOrders } from "../../utils/DataTools";
 import { HiMenuAlt2, HiOutlineLogout } from "react-icons/hi";
 
-const KitchenScreen = () => {
+const BarScreen = () => {
   const navigate = useNavigate();
   const [onNow, setOnNow] = useState(1);
   const [orders, setOrders] = useState([]);
   const [queryDate, setQueryDate] = useState(`${new Date().toLocaleDateString("en-GB").split("/")[2]}-${new Date().toLocaleDateString("en-GB").split("/")[1]}-${new Date().toLocaleDateString("en-GB").split("/")[0]}`);
+  const waitingTimeRef = useRef(null);
+
+  const fetchData = async () => {
+    let data = {
+      venueID: localStorage.getItem("venueID"),
+      orderType: "bar",
+      dateString: queryDate.split("-")[2] + "/" + queryDate.split("-")[1] + "/" + queryDate.split("-")[0],
+    };
+    switch (onNow) {
+      case 1:
+        setOrders(await fetchOrders(data));
+        break;
+      case 2:
+        setOrders(await fetchZapped(data));
+        break;
+      case 3:
+        setOrders(await fetchAllOrders(data));
+        break;
+      default:
+        break;
+    }
+    // Trigger the timeout again after the logic is executed
+    waitingTimeRef.current = setTimeout(fetchData,3000);
+  };
 
   useEffect(() => {
-    console.log(queryDate);
-  }, []);
+    waitingTimeRef.current = setTimeout(fetchData,3000);
+
+    return () => clearTimeout(waitingTimeRef.current);
+  }, [onNow]);
 
   useEffect(() => {
     (async () => {
-      console.log("queryDate", queryDate);
       let data = {
         venueID: localStorage.getItem("venueID"),
-        orderType: "kitchen",
+        orderType: "bar",
         dateString: queryDate.split("-")[2] + "/" + queryDate.split("-")[1] + "/" + queryDate.split("-")[0],
       };
       switch (onNow) {
@@ -37,6 +62,8 @@ const KitchenScreen = () => {
       }
     })();
   }, [onNow, queryDate]);
+
+
 
   const zapThisOrder = (id) => {
     (async () => {
@@ -63,10 +90,6 @@ const KitchenScreen = () => {
       }
     })();
   };
-
-  useEffect(() => {
-    console.log(orders);
-  }, [orders]);
 
   return (
     <>
@@ -97,7 +120,7 @@ const KitchenScreen = () => {
           return (
             <Fragment key={index + "fragOrd"}>
               <div className="flex flex-col w-[250px] border-x-4 border-t-4 px-2 my-1 mx-4" key={index + "ord1"}>
-                <span className=" text-xs text-center">Order Start</span>
+                <span className="animate-colorFlash text-xs text-center">Order Start</span>
                 <div className="flex justify-between">
                   <span>{order.dateTime}</span>
                   <span>{order.dateString}</span>
@@ -143,7 +166,7 @@ const KitchenScreen = () => {
   );
 };
 
-export default KitchenScreen;
+export default BarScreen;
 
 // return (
 //     <div className="ordersContainer h-[100svh] w-[100svw] bg-gray-100 content-start gap-4 p-2 flex flex-col flex-wrap">

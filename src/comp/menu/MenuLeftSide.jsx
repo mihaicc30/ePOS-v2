@@ -71,7 +71,7 @@ const MenuLeftSide = ({ lefty, basketItems, setBasketItems, menuitems, selectedI
                         {menuItem.name}
                       </span>
                     </div>
-                    <div className={`flex justify-end flex-nowrap ${lefty ? "flex-row-reverse" : ""} flex-wrap gap-4 text-xs my-1`}>
+                    <div className={`flex justify-end flex-nowrap ${lefty ? "flex-row-reverse" : ""} gap-4 text-xs my-1`}>
                       <button
                         className="btnSPEC bg-orange-100 px-2 py-1 rounded transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] shadow-md"
                         onClick={() => {

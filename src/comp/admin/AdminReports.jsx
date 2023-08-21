@@ -137,10 +137,10 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
 
       setTimeout(async () => {
         let tempz = {
-          cloudy: weeklyWeather.forecast.forecastday[n]?.hour[12].cloud || parseInt(Math.random() * (99 - 1) + 1),
-          humidity: weeklyWeather.forecast.forecastday[n]?.hour[12].humidity || parseInt(Math.random() * (99 - 1) + 1),
-          windspeed: weeklyWeather.forecast.forecastday[n]?.hour[12].wind_mph || parseInt(Math.random() * (99 - 1) + 1),
-          temp: weeklyWeather.forecast.forecastday[n]?.hour[12].temp_c || parseInt(Math.random() * (44 - 1) + 1),
+          cloudy: weeklyWeather.days[n]?.cloudcover || parseInt(Math.random() * (99 - 1) + 1),
+          humidity: weeklyWeather.days[n]?.humidity || parseInt(Math.random() * (99 - 1) + 1),
+          windspeed: weeklyWeather.days[n]?.windspeed || parseInt(Math.random() * (99 - 1) + 1),
+          temp: weeklyWeather.days[n]?.temp || parseInt(Math.random() * (44 - 1) + 1),
           daytype: dayt,
           isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
         };
@@ -160,10 +160,10 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
             },
             body: JSON.stringify({
               date: currentDate.toLocaleDateString('en-GB'),
-              cloudy: weeklyWeather.forecast.forecastday[n]?.hour[12].cloud || parseInt(Math.random() * (99 - 1) + 1),
-              humidity: weeklyWeather.forecast.forecastday[n]?.hour[12].humidity || parseInt(Math.random() * (99 - 1) + 1),
-              windspeed: weeklyWeather.forecast.forecastday[n]?.hour[12].wind_mph || parseInt(Math.random() * (99 - 1) + 1),
-              temp: weeklyWeather.forecast.forecastday[n]?.hour[12].temp_c || parseInt(Math.random() * (44 - 1) + 1),
+              cloudy: weeklyWeather.days[n]?.cloudcover || parseInt(Math.random() * (99 - 1) + 1),
+              humidity: weeklyWeather.days[n]?.humidity || parseInt(Math.random() * (99 - 1) + 1),
+              windspeed: weeklyWeather.days[n]?.windspeed || parseInt(Math.random() * (99 - 1) + 1),
+              temp: weeklyWeather.days[n]?.temp || parseInt(Math.random() * (44 - 1) + 1),
               daytype: dayt,
               isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
               venueID: localStorage.getItem("venueID"),
@@ -303,7 +303,7 @@ const AdminReports = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, setWee
       </div>
       {modalViewReport && (
         <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModalViewReport(!modalViewReport) : null)}>
-          <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
+          <div className="fixed right-0 left-[25%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
             <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1" onClick={() => setModalViewReport(!modalViewReport)}>
               ◀ Back
             </button>

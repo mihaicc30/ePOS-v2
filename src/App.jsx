@@ -24,7 +24,8 @@ import Symbol from "./comp/Settings/Symbol";
 import TC from "./comp/Settings/T&C";
 import Payment from "./comp/payment/Payment";
 import Tables from "./comp/tables/Tables";
-import KitchenScreen from "./comp/kitchen/KitchenScreen";
+import KitchenScreen from "./comp/screens/KitchenScreen";
+import BarScreen from "./comp/screens/BarScreen";
 
 import { getVenueById } from "./utils/BasketUtils";
 
@@ -53,7 +54,9 @@ const App = () => {
   const [basketDiscount, setBasketDiscount] = useState(0);
 
   const [weeklyForecast, setWeeklyForecast] = useState({
-    0: null,
+    0: {
+      date: `${String(new Date().toLocaleDateString("en-GB")).split("/")[2]}-${String(new Date().toLocaleDateString("en-GB")).split("/")[1]}-${String(new Date().toLocaleDateString("en-GB")).split("/")[0]}`,
+    },
     1: null,
     2: null,
     3: null,
@@ -65,11 +68,10 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem("venueID", 101010);
     async function getAsyncData() {
-      const w = await fetchWeeklyWeather();
+      setWeeklyWeather(await fetchWeeklyWeather());
       setWeeklyHoliday(await fetchHoliday());
       setMenuitems(await getMenu());
       setVenues(await getVenues());
-      setWeeklyWeather(w);
       setTables(await getTableLayout()); // table layout
       await fetchForecastWeek();
     }
@@ -104,10 +106,10 @@ const App = () => {
 
       setTimeout(async () => {
         let tempz = {
-          cloudy: weeklyWeather.forecast.forecastday[n]?.hour[12].cloud || parseInt(Math.random() * (99 - 1) + 1),
-          humidity: weeklyWeather.forecast.forecastday[n]?.hour[12].humidity || parseInt(Math.random() * (99 - 1) + 1),
-          windspeed: weeklyWeather.forecast.forecastday[n]?.hour[12].wind_mph || parseInt(Math.random() * (99 - 1) + 1),
-          temp: weeklyWeather.forecast.forecastday[n]?.hour[12].temp_c || parseInt(Math.random() * (44 - 1) + 1),
+          cloudy: weeklyWeather.days[n]?.cloudcover || parseInt(Math.random() * (99 - 1) + 1),
+          humidity: weeklyWeather.days[n]?.humidity || parseInt(Math.random() * (99 - 1) + 1),
+          windspeed: weeklyWeather.days[n]?.windspeed || parseInt(Math.random() * (99 - 1) + 1),
+          temp: weeklyWeather.days[n]?.temp || parseInt(Math.random() * (44 - 1) + 1),
           daytype: dayt,
           isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
         };
@@ -127,10 +129,10 @@ const App = () => {
             },
             body: JSON.stringify({
               date: currentDate.toLocaleDateString("en-GB"),
-              cloudy: weeklyWeather.forecast.forecastday[n]?.hour[12].cloud || parseInt(Math.random() * (99 - 1) + 1),
-              humidity: weeklyWeather.forecast.forecastday[n]?.hour[12].humidity || parseInt(Math.random() * (99 - 1) + 1),
-              windspeed: weeklyWeather.forecast.forecastday[n]?.hour[12].wind_mph || parseInt(Math.random() * (99 - 1) + 1),
-              temp: weeklyWeather.forecast.forecastday[n]?.hour[12].temp_c || parseInt(Math.random() * (44 - 1) + 1),
+              cloudy: weeklyWeather.days[n]?.cloudcover || parseInt(Math.random() * (99 - 1) + 1),
+              humidity: weeklyWeather.days[n]?.humidity || parseInt(Math.random() * (99 - 1) + 1),
+              windspeed: weeklyWeather.days[n]?.windspeed || parseInt(Math.random() * (99 - 1) + 1),
+              temp: weeklyWeather.days[n]?.temp || parseInt(Math.random() * (44 - 1) + 1),
               daytype: dayt,
               isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
               venueID: localStorage.getItem("venueID"),
@@ -177,6 +179,7 @@ const App = () => {
         />
 
         <Route path="/kitchen" element={<KitchenScreen venueNtable={venueNtable} />}></Route>
+        <Route path="/bar" element={<BarScreen venueNtable={venueNtable} />}></Route>
 
         <Route path="/tables" element={<Tables setBasketDiscount={setBasketDiscount} basketItems={basketItems} setBasketItems={setBasketItems} tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
 

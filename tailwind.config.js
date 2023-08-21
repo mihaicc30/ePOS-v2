@@ -10,8 +10,23 @@ export default {
         fadeDOWN1: "fadeDOWN .5s forwards",
         shrinkFromLeft: "shrinkFromLeft 4s forwards",
         shake: "shake .5s forwards",
+        colorFlash: "colorFlash 3s forwards",
       },
       keyframes: {
+        colorFlash: {
+          "0%": {border:"2px solid red"},
+          "10%": {border:"2px solid orange"},
+          "20%": {border:"2px solid blue"},
+          "30%": {border:"2px solid yellow"},
+          "40%": {border:"2px solid red"},
+          "50%": {border:"2px solid orange"},
+          "60%": {border:"2px solid blue"},
+          "70%": {border:"2px solid yellow"},
+          "80%": {border:"2px solid red"},
+          "90%": {border:"2px solid orange"},
+          "99%": {border:"2px solid blue"},
+         "100%": {border:"none"},
+        },
         fadeUPnDOWN: {
           "0%": { transform: "translateY(-2rem)", opacity: "0" },
           "20%": { transform: "translateY(0rem)", opacity: "1" },

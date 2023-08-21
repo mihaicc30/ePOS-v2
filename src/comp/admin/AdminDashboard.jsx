@@ -45,10 +45,10 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
 
       setTimeout(async () => {
         let tempz = {
-          cloudy: weeklyWeather.forecast.forecastday[n]?.hour[12].cloud || parseInt(Math.random() * (99 - 1) + 1),
-          humidity: weeklyWeather.forecast.forecastday[n]?.hour[12].humidity || parseInt(Math.random() * (99 - 1) + 1),
-          windspeed: weeklyWeather.forecast.forecastday[n]?.hour[12].wind_mph || parseInt(Math.random() * (99 - 1) + 1),
-          temp: weeklyWeather.forecast.forecastday[n]?.hour[12].temp_c || parseInt(Math.random() * (44 - 1) + 1),
+          cloudy: weeklyWeather.days[n]?.cloudcover || parseInt(Math.random() * (99 - 1) + 1),
+          humidity: weeklyWeather.days[n]?.humidity || parseInt(Math.random() * (99 - 1) + 1),
+          windspeed: weeklyWeather.days[n]?.windspeed || parseInt(Math.random() * (99 - 1) + 1),
+          temp: weeklyWeather.days[n]?.temp || parseInt(Math.random() * (44 - 1) + 1),
           daytype: dayt,
           isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
         };
@@ -68,10 +68,10 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
             },
             body: JSON.stringify({
               date: currentDate.toLocaleDateString("en-GB"),
-              cloudy: weeklyWeather.forecast.forecastday[n]?.hour[12].cloud || parseInt(Math.random() * (99 - 1) + 1),
-              humidity: weeklyWeather.forecast.forecastday[n]?.hour[12].humidity || parseInt(Math.random() * (99 - 1) + 1),
-              windspeed: weeklyWeather.forecast.forecastday[n]?.hour[12].wind_mph || parseInt(Math.random() * (99 - 1) + 1),
-              temp: weeklyWeather.forecast.forecastday[n]?.hour[12].temp_c || parseInt(Math.random() * (44 - 1) + 1),
+              cloudy: weeklyWeather.days[n]?.cloudcover || parseInt(Math.random() * (99 - 1) + 1),
+              humidity: weeklyWeather.days[n]?.humidity || parseInt(Math.random() * (99 - 1) + 1),
+              windspeed: weeklyWeather.days[n]?.windspeed || parseInt(Math.random() * (99 - 1) + 1),
+              temp: weeklyWeather.days[n]?.temp || parseInt(Math.random() * (44 - 1) + 1),
               daytype: dayt,
               isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
               venueID: localStorage.getItem("venueID"),
@@ -852,26 +852,27 @@ const AdminDashboard = ({ weeklyholiday, setWeeklyHoliday, weeklyForecast, setWe
         <div className="widget flex-1 px-2 py-4 my-2 shadow-xl flex justify-center">
           <div className="w-[100%] grid grid-cols-7 gap-2 px-4 justify-center">
             {weeklyWeather &&
-              weeklyWeather.forecast.forecastday.map((day, index) => {
+              weeklyWeather.days.map((day, index) => {
+                if(index < 7)
                 return (
                   <div key={index + "b"} className="grid grid-cols-1 m-2 w-[100%] shadow-xl p-1">
-                    <p className="text-center">{new Date(day.date).toLocaleDateString("en-GB", { weekday: "long" })}</p>
-                    <p className="cols col-span-1 text-center  m-0 h-[24px]">{day.date}</p>
+                    <p className="text-center">{new Date(day.datetime).toLocaleDateString("en-GB", { weekday: "long" })}</p>
+                    <p className="cols col-span-1 text-center  m-0 h-[24px]">{day.datetime}</p>
                     <span className="border-b-2 border-b-orange-400 flex-1"></span>
                     <div className="h-[80px]">
-                      <p className="text-2xl font-bold text-center">{parseFloat(day.hour[timeOfWeather].temp_c).toFixed(1)}&deg;</p>
-                      <p className="line-clamp-2">{day.day.condition.text}</p>
+                      <p className="text-2xl font-bold text-center">{parseFloat(day.hours[timeOfWeather].temp).toFixed(1)}&deg;</p>
+                      <p className="line-clamp-2">{day.hours[timeOfWeather].condition}</p>
                     </div>
                     <div className=" mt-auto">
                       <p className="flex flex-col">
                         <span className="grid grid-cols-[20px_1fr] gap-1">
-                          <TiWeatherCloudy className="text-2xl" /> {day.hour[timeOfWeather].cloud}%
+                          <TiWeatherCloudy className="text-2xl" /> {day.hours[timeOfWeather].cloudcover}%
                         </span>
                         <span className="grid grid-cols-[20px_1fr] gap-1">
-                          <WiHumidity className="text-2xl" /> {day.hour[timeOfWeather].humidity}%
+                          <WiHumidity className="text-2xl" /> {day.hours[timeOfWeather].humidity}%
                         </span>
                         <span className="grid grid-cols-[20px_1fr] gap-1">
-                          <FaWind className="text-xl" /> {day.hour[timeOfWeather].wind_mph}mph
+                          <FaWind className="text-xl" /> {day.hours[timeOfWeather].windspeed}mph
                         </span>
                       </p>
                     </div>

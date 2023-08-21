@@ -101,7 +101,7 @@ const ROTAPerson = ({ person, currentLookedUpDates, index, weekNumber, rota, set
     <div key={index + "asdx"} className="tableData grid grid-cols-8 w-[100%] gap-2 font-[600]">
       {timesModal && (
         <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setTimesModal(!timesModal) : null)}>
-          <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center justify-center">
+          <div className="fixed right-0 left-[25%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center justify-center">
             <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1" onClick={() => setTimesModal(!timesModal)}>
               ◀ Cancel
             </button>
@@ -163,7 +163,7 @@ const ROTAPerson = ({ person, currentLookedUpDates, index, weekNumber, rota, set
 
       {modal && (
         <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModal(!modal) : null)}>
-          <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
+          <div className="fixed right-0 left-[25%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
             <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1" onClick={() => setModal(!modal)}>
               ◀ Cancel
             </button>

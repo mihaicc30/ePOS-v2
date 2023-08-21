@@ -78,29 +78,38 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
     // console.log("🚀", query)
 
     setIsButtonDisabled3(true);
-    // handlePrinting();
+    // handlePrinting("bill");
     setTimeout((async) => {
       setIsButtonDisabled3(false);
     }, 1000);
   };
 
-  const handleBarPrint = async() => {
-    if (isButtonDisabled2) return;
-    setIsButtonDisabled2(true);
-    console.log("🚀", query);
-    // await handlePrinting("bar");
-    setTimeout(() => {
+  const handleBarPrint = async () => {
+    try {
+      if (isButtonDisabled2) return;
+      setIsButtonDisabled2(true);
+      await handlePrinting("bar");
+      setTimeout(() => {
+        setIsButtonDisabled2(false);
+      }, 1000);
+    } catch (error) {
       setIsButtonDisabled2(false);
-    }, 1000);
+      alert(error.message);
+    }
   };
 
   const handleKitchenPrint = async () => {
-    if (isButtonDisabled) return;
-    await handlePrinting("kitchen");
-    setIsButtonDisabled(true);
-    setTimeout(() => {
+    try {
+      if (isButtonDisabled) return;
+      await handlePrinting("kitchen");
+      setIsButtonDisabled(true);
+      setTimeout(() => {
+        setIsButtonDisabled(false);
+      }, 1000);
+    } catch (error) {
       setIsButtonDisabled(false);
-    }, 1000);
+      alert(error.message);
+    }
   };
 
   useEffect(() => {
@@ -177,6 +186,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
   };
 
   const handlePrinting = async (forWhere) => {
+    console.log(basketItems.length, basketItems);
     if (basketItems.length < 1) {
       toast.warn(`There are no items to print.`, {
         position: "top-right",
@@ -190,19 +200,8 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
       });
       return;
     }
+    let tempBasket = basketItems.filter((item) => item.printed === false);
     let areAllPrinted = basketItems.some((item) => item.printed == false);
-    const updatedBasketItems = basketItems.map((item) => {
-      if (!item.printed) {
-        return {
-          ...item,
-          printed: true,
-          datePrinted: new Date().toISOString("en-GB"),
-          printedBy: localStorage.getItem("displayName"),
-        };
-      }
-      return item;
-    });
-    setBasketItems(updatedBasketItems);
 
     if (areAllPrinted) {
       let data = {
@@ -211,7 +210,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
         table: venueNtable.table,
         displayName: localStorage.getItem("displayName"),
         email: localStorage.getItem("email"),
-        items: basketItems,
+        items: tempBasket,
       };
       const query = await addOrder(data);
 
@@ -237,6 +236,19 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
         theme: "light",
       });
     }
+        
+    const updatedBasketItems = basketItems.map((item) => {
+      if (!item.printed) {
+        return {
+          ...item,
+          printed: true,
+          datePrinted: new Date().toISOString("en-GB"),
+          printedBy: localStorage.getItem("displayName"),
+        };
+      }
+      return item;
+    });
+    setBasketItems(updatedBasketItems);
   };
 
   useEffect(() => {
@@ -304,8 +316,11 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
       refID: crypto.randomUUID(),
       dateString: new Date().toLocaleString(),
       date: new Date().toISOString("en-GB"),
+      printed: false,
+      printedBy: false,
       price: 0,
       qty: 1,
+      stock: 100,
     };
     setBasketItems([...basketItems, { ...line }]);
   };
@@ -394,7 +409,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
     <>
       {messageModal && (
         <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? openMessageModal(!messageModal) : null)}>
-          <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
+          <div className="fixed right-0 left-[25%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
             <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1" onClick={() => openMessageModal(!messageModal)}>
               ◀ Cancel
             </button>
@@ -421,7 +436,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme="light" />
       </div>
       <div className={`modalBG ${modal ? "fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" : "hidden"}`} onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModal(!modal) : null)}>
-        <div className={`fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center`}>
+        <div className={`fixed right-0 left-[25%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center`}>
           <button className="block mr-auto p-2 mb-8 text-3xl animate-fadeUP1" onClick={() => setModal(!modal)}>
             ◀ Cancel
           </button>

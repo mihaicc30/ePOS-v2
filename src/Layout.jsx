@@ -12,12 +12,14 @@ const Layout = ({ lefty, setLefty, weeklyForecast, setWeeklyForecast, weeklyholi
   let isNotHomePage;
   let isNotAdminPage;
   let isNotKitchenPage;
+  let isNotBarPage;
 
   useEffect(() => {
     isNotHomePage = window.location.pathname !== "/";
     isNotKitchenPage = window.location.pathname !== "/kitchen";
+    isNotBarPage = window.location.pathname !== "/bar";
     isNotAdminPage = !window.location.pathname.startsWith("/Admin");
-    if (isNotHomePage && isNotAdminPage && isNotKitchenPage) {
+    if (isNotHomePage && isNotAdminPage && isNotKitchenPage && isNotBarPage) {
       setShowNav(true);
     } else {
       setShowNav(false);

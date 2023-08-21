@@ -90,6 +90,13 @@ const Auth = () => {
       navigate("/kitchen");
       return;
     }
+    
+    if (pin.pin === "02") {
+      console.log("bar login");
+      setPin({ pin: "" });
+      navigate("/bar");
+      return;
+    }
     const foundPin = userTable.find((userpin) => userpin.pin === pin.pin);
     if (foundPin && pin.pin.length >= 3) {
       authUser(foundPin);
@@ -217,7 +224,7 @@ const Auth = () => {
       </div>
       {modal && (
         <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModal(!modal) : null)}>
-          <div className="fixed right-0 left-[35%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
+          <div className="fixed right-0 left-[25%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
             <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1 z-[60]" onClick={() => setModal(!modal)}>
               ◀ Back
             </button>

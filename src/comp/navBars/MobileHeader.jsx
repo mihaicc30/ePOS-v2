@@ -45,10 +45,10 @@ const MobileHeader = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, weekly
 
       setTimeout(async () => {
         let tempz = {
-          cloudy: weeklyWeather.forecast.forecastday[`${n}`].hour[12].cloud,
-          humidity: weeklyWeather.forecast.forecastday[`${n}`].hour[12].humidity,
-          windspeed: weeklyWeather.forecast.forecastday[`${n}`].hour[12].wind_mph,
-          temp: weeklyWeather.forecast.forecastday[`${n}`].hour[12].temp_c,
+          cloudy: weeklyWeather.days[`${n}`].hour[12].cloud,
+          humidity: weeklyWeather.days[`${n}`].hour[12].humidity,
+          windspeed: weeklyWeather.days[`${n}`].hour[12].wind_mph,
+          temp: weeklyWeather.days[`${n}`].hour[12].temp_c,
           daytype: dayt,
           isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
         };
@@ -67,10 +67,10 @@ const MobileHeader = ({ weeklyForecast, setWeeklyForecast, weeklyholiday, weekly
             },
             body: JSON.stringify({
               date: currentDate.toLocaleDateString("en-GB"),
-              cloudy: weeklyWeather.forecast.forecastday[n].hour[12].cloud,
-              humidity: weeklyWeather.forecast.forecastday[n].hour[12].humidity,
-              windspeed: weeklyWeather.forecast.forecastday[n].hour[12].wind_mph,
-              temp: weeklyWeather.forecast.forecastday[n].hour[12].temp_c,
+              cloudy: weeklyWeather.days[n].hour[12].cloud,
+              humidity: weeklyWeather.days[n].hour[12].humidity,
+              windspeed: weeklyWeather.days[n].hour[12].wind_mph,
+              temp: weeklyWeather.days[n].hour[12].temp_c,
               daytype: dayt,
               isholiday: weeklyholiday[`${n}`]?.title ? 1 : 0,
               venueID: localStorage.getItem("venueID"),

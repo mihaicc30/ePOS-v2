@@ -517,7 +517,10 @@ export const addNewProduct = async (product) => {
 
 export const fetchWeeklyWeather = async () => {
   try {
-    const response = await fetch("http://api.weatherapi.com/v1/forecast.json?key=0e4f502bab164b37bd285450232907&q=worcester%20uk&days=7&aqi=no&alerts=no");
+    //old - limited to 14days
+    // const response = await fetch("http://api.weatherapi.com/v1/forecast.json?key=0e4f502bab164b37bd285450232907&q=worcester%20uk&days=7&aqi=no&alerts=no");
+    //new
+    const response = await fetch("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/worcester%20uk/next7days?unitGroup=metric&include=days%2Chours&key=Y9HJJWXBU8Z24DW6LF6VN9AVE&contentType=json");
     const data = await response.json();
     return data;
   } catch (error) {
@@ -638,10 +641,10 @@ export const fetchHoliday = async () => {
 
 //     setTimeout(async () => {
 //       let tempz = {
-//         cloudy: weeklyWeather.forecast.forecastday[`${n - 1}`].hour[12].cloud,
-//         humidity: weeklyWeather.forecast.forecastday[`${n - 1}`].hour[12].humidity,
-//         windspeed: weeklyWeather.forecast.forecastday[`${n - 1}`].hour[12].wind_mph,
-//         temp: weeklyWeather.forecast.forecastday[`${n - 1}`].hour[12].temp_c,
+//         cloudy: weeklyWeather.days[`${n - 1}`].hour[12].cloud,
+//         humidity: weeklyWeather.days[`${n - 1}`].hour[12].humidity,
+//         windspeed: weeklyWeather.days[`${n - 1}`].hour[12].wind_mph,
+//         temp: weeklyWeather.days[`${n - 1}`].hour[12].temp_c,
 //         daytype: dayt,
 //         isholiday: weeklyholiday[`${n - 1}`]?.title ? 1 : 0,
 //       };
@@ -654,10 +657,10 @@ export const fetchHoliday = async () => {
 //             "Access-Control-Allow-Credentials": true,
 //           },
 //           body: JSON.stringify({
-//             cloudy: weeklyWeather.forecast.forecastday[n - 1].hour[12].cloud,
-//             humidity: weeklyWeather.forecast.forecastday[n - 1].hour[12].humidity,
-//             windspeed: weeklyWeather.forecast.forecastday[n - 1].hour[12].wind_mph,
-//             temp: weeklyWeather.forecast.forecastday[n - 1].hour[12].temp_c,
+//             cloudy: weeklyWeather.days[n - 1].hour[12].cloud,
+//             humidity: weeklyWeather.days[n - 1].hour[12].humidity,
+//             windspeed: weeklyWeather.days[n - 1].hour[12].wind_mph,
+//             temp: weeklyWeather.days[n - 1].hour[12].temp_c,
 //             daytype: dayt,
 //             isholiday: holiday[1]?.title ? 1 : 0,
 //           }),
