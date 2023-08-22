@@ -496,8 +496,10 @@ export const addNewProduct = async (product) => {
 
 export const fetchWeeklyWeather = async () => {
   try {
+    // https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/worcester%20uk/next7days?unitGroup=metric&key=Y9HJJWXBU8Z24DW6LF6VN9AVE&contentType=json
     const response = await fetch("http://api.weatherapi.com/v1/forecast.json?key=0e4f502bab164b37bd285450232907&q=worcester%20uk&days=7&aqi=no&alerts=no");
     const data = await response.json();
+    console.log("🚀 ~ file: DataTools.jsx:502 ~ fetchWeeklyWeather ~ data:", data)
     return data;
   } catch (error) {
     console.error("Error fetching weather:", error);

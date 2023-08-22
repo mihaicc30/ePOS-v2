@@ -78,30 +78,39 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
     // console.log("🚀", query)
 
     setIsButtonDisabled3(true);
-    // handlePrinting();
+    // handlePrinting("bill");
     setTimeout((async) => {
       setIsButtonDisabled3(false);
     }, 1000);
   };
 
-  const handleBarPrint = async() => {
-    if (isButtonDisabled2) return;
-    setIsButtonDisabled2(true);
-    await handlePrinting("bar");
-    setTimeout(() => {
+  const handleBarPrint = async () => {
+    try {
+      if (isButtonDisabled2) return;
+      setIsButtonDisabled2(true);
+      await handlePrinting("bar");
+      setTimeout(() => {
+        setIsButtonDisabled2(false);
+      }, 1000);
+    } catch (error) {
       setIsButtonDisabled2(false);
-    }, 1000);
+      alert(error.message);
+    }
   };
 
   const handleKitchenPrint = async () => {
-    if (isButtonDisabled) return;
-    await handlePrinting("kitchen");
-    setIsButtonDisabled(true);
-    setTimeout(() => {
+    try {
+      if (isButtonDisabled) return;
+      await handlePrinting("kitchen");
+      setIsButtonDisabled(true);
+      setTimeout(() => {
+        setIsButtonDisabled(false);
+      }, 1000);
+    } catch (error) {
       setIsButtonDisabled(false);
-    }, 1000);
+      alert(error.message);
+    }
   };
-
   useEffect(() => {
     getUser(setUser);
     getVenue(setVenueNtable);
@@ -176,6 +185,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
   };
 
   const handlePrinting = async (forWhere) => {
+    console.log(basketItems.length, basketItems);
     if (basketItems.length < 1) {
       toast.warn(`There are no items to print.`, {
         position: "top-right",
@@ -189,19 +199,8 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
       });
       return;
     }
+    let tempBasket = basketItems.filter((item) => item.printed === false);
     let areAllPrinted = basketItems.some((item) => item.printed == false);
-    const updatedBasketItems = basketItems.map((item) => {
-      if (!item.printed) {
-        return {
-          ...item,
-          printed: true,
-          datePrinted: new Date().toISOString("en-GB"),
-          printedBy: localStorage.getItem("displayName"),
-        };
-      }
-      return item;
-    });
-    setBasketItems(updatedBasketItems);
 
     if (areAllPrinted) {
       let data = {
@@ -210,7 +209,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
         table: venueNtable.table,
         displayName: localStorage.getItem("displayName"),
         email: localStorage.getItem("email"),
-        items: basketItems,
+        items: tempBasket,
       };
       const query = await addOrder(data);
 
@@ -236,7 +235,21 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
         theme: "light",
       });
     }
+        
+    const updatedBasketItems = basketItems.map((item) => {
+      if (!item.printed) {
+        return {
+          ...item,
+          printed: true,
+          datePrinted: new Date().toISOString("en-GB"),
+          printedBy: localStorage.getItem("displayName"),
+        };
+      }
+      return item;
+    });
+    setBasketItems(updatedBasketItems);
   };
+
 
   useEffect(() => {
     const waitingTime = setTimeout(async () => {
@@ -297,14 +310,18 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
     setModalChangeTable(!modalChangeTable);
   };
 
+
   const handleAddLine = () => {
     let line = {
       name: "Line",
       refID: crypto.randomUUID(),
       dateString: new Date().toLocaleString(),
       date: new Date().toISOString("en-GB"),
+      printed: false,
+      printedBy: false,
       price: 0,
       qty: 1,
+      stock: 100,
     };
     setBasketItems([...basketItems, { ...line }]);
   };
