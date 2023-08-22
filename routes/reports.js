@@ -138,7 +138,7 @@ router.post("/grabLabor", async (req, res) => {
       Saturday: 0,
     };
     let wages = [{ "alemihai25@gmail.com": 20 }, { "ioanaculea1992@gmail.com": 15 }, { "PetrisorPredescu2@gmail.com": 13 }, { "CristianConstantinFlorea@gmail.com": 12 }];
-
+    console.log("im here");
     Object.values(laborData[0].roted).forEach((staff) => {
       ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].forEach((typeOfDay) => {
         Object.values(staff[typeOfDay].roted).forEach((day) => {
@@ -157,7 +157,7 @@ router.post("/grabLabor", async (req, res) => {
           // in case ALL users are not logged out but still want to see the present report with the current time as a clock out time
           if (!endHour2) [endHour2, endMinute2] = [new Date().getHours("en-GB"), new Date().getMinutes("en-GB")];
           laborPerDay[typeOfDay] += parseFloat((wages.find((obj) => staff.email in obj)?.[staff.email] * parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2))).toFixed(2)) || 10.4;
-          tempTotalWages += parseFloat((wages.find((obj) => staff.email in obj)?.[staff.email] * parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2))).toFixed(2)) || 10.4;
+          tempTotalWages += parseFloat(((wages.find((obj) => staff.email in obj)?.[staff.email] || 10.4) * parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2))).toFixed(2)) || 10.4;
           calculateActualHours += parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2));
         });
       });
@@ -325,8 +325,7 @@ router.post("/generateEndOfDayReport", async (req, res) => {
 
           // in case ALL users are not logged out but still want to see the present report with the current time as a clock out time
           if (!endHour2) [endHour2, endMinute2] = [new Date().getHours("en-GB"), new Date().getMinutes("en-GB")];
-
-          tempTotalWages += parseFloat((wages.find((obj) => staff.email in obj)?.[staff.email] * parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2))).toFixed(2)) || 10.4;
+          tempTotalWages += parseFloat(((wages.find((obj) => staff.email in obj)?.[staff.email] || 10.4) * parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2))).toFixed(2)) || 10.4;
           calculateActualHours += parseFloat(((endHour2 * 60 + endMinute2 - (startHour2 * 60 + startMinute2)) / 60).toFixed(2));
         });
       }
