@@ -92,6 +92,7 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
     setModal(!modal);
     setModalData(product);
     setTempProduct(product);
+    console.log(product);
   };
 
   const notContains = <BsCheck2Circle className="fill-green-400 text-3xl" />;
@@ -229,15 +230,15 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
       {modal && (
         <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModal(!modal) : null)}>
           <div className="fixed right-0 left-[25%] bg-white top-0 bottom-0 z-40 text-center flex flex-col items-center">
-            <button className="absolute top-0 left-0 p-4 text-xl animate-fadeUP1" onClick={() => setModal(!modal)}>
+            <button className="absolute top-0 left-0 p-2 text-lg animate-fadeUP1" onClick={() => setModal(!modal)}>
               ◀ Cancel
             </button>
             {modalData.name && (
-              <button className="absolute top-[15%] left-0 p-4 text-xl animate-fadeUP1" onClick={() => handleDelete(modalData)}>
+              <button className="absolute top-[15%] left-0 p-2 text-lg animate-fadeUP1" onClick={() => handleDelete(modalData)}>
                 <span className="text-red-400">◀</span> Delete
               </button>
             )}
-            <button className="absolute top-[30%] left-0 p-4 text-xl animate-fadeUP1" onClick={handleSave}>
+            <button className="absolute top-[30%] left-0 p-2 text-lg animate-fadeUP1" onClick={handleSave}>
               <span className="text-green-400">◀</span> Save
             </button>
 
@@ -254,7 +255,7 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                     }))
                   }
                   type="text"
-                  className="p-4 text-2xl border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl"
+                  className="p-2 text-lg border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl"
                   defaultValue={modalData.name}
                   placeholder="Product name.."
                 />
@@ -270,12 +271,12 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                     }))
                   }
                   type="text"
-                  className="p-4 text-2xl border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl"
+                  className="p-2 text-lg border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl"
                   defaultValue={modalData.price.toFixed(2)}
                 />
               </div>
 
-              <div className="flex my-3 relative flex-col col-span-2">
+              <div className="flex my-3 relative flex-col col-span-3">
                 <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Base Cost</span>
                 <input
                   onChange={(e) =>
@@ -285,12 +286,12 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                     }))
                   }
                   type="text"
-                  className="p-4 text-2xl border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl"
+                  className="p-2 text-lg border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl"
                   defaultValue={modalData.portionCost.toFixed(2)}
                 />
               </div>
 
-              <div className="flex my-3 relative flex-col col-span-2">
+              <div className="flex my-3 relative flex-col col-span-3">
                 <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">KCal</span>
                 <input
                   onChange={(e) =>
@@ -300,12 +301,12 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                     }))
                   }
                   type="text"
-                  className="p-4 text-2xl border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl"
+                  className="p-2 text-lg border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl"
                   defaultValue={modalData.calories}
                 />
               </div>
 
-              <div className="flex my-3 relative flex-col col-span-2">
+              <div className="flex my-3 relative flex-col col-span-3">
                 <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Stock</span>
                 <input
                   onChange={(e) =>
@@ -315,12 +316,32 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                     }))
                   }
                   type="text"
-                  className="p-4 text-2xl border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl"
+                  className="p-2 text-lg border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl"
                   defaultValue={modalData.stock}
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4 my-4 col-span-6 ">
+              <div className="flex my-3 relative flex-col col-span-3">
+                <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Print for</span>
+                <select
+                  onChange={(e) =>
+                    setTempProduct((prev) => ({
+                      ...prev,
+                      subcategory_course: parseInt(e.target.value),
+                    }))
+                  }
+                  defaultValue={modalData.subcategory_course}
+                  className="p-2 text-lg border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl"
+                  name="pf"
+                  id="pf">
+                  <option value="0">Bar</option>
+                  <option value="1">Starters</option>
+                  <option value="2">Mains</option>
+                  <option value="3">Deserts</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 my-4 col-span-6 ">
                 <div className="relative ">
                   <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Category</span>
                   <input
@@ -332,7 +353,7 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                     type="text"
                     placeholder="Category name.."
                     defaultValue={modalData.category}
-                    className="p-4 text-xl border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl w-[100%]"
+                    className="p-2 text-lg border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl w-[100%]"
                   />
                   <datalist id="cats">
                     {[...new Set(menuitems.map((item) => item.category))].map((item, index) => {
@@ -357,7 +378,7 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                     type="text"
                     placeholder="Subcategory name.."
                     defaultValue={modalData.subcategory}
-                    className="p-4 text-xl border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl w-[100%]"
+                    className="p-2 text-lg border-y-2 border-y-black/30 font-bold shadow-lg rounded-xl w-[100%]"
                   />
                   <datalist id="subcats">
                     {[...new Set(menuitems.map((item) => item.subcategory))].map((subcat, index) => (
@@ -369,7 +390,7 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 my-4 col-span-6 relative ">
+              <div className="grid grid-cols-2 gap-2 my-4 col-span-6 relative ">
                 <div className="flex flex-wrap justify-center gap-2">
                   <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Ingredients</span>
                   <textarea
@@ -380,7 +401,7 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                       }))
                     }
                     placeholder=""
-                    className="p-4 border-y-2 border-y-black/40 rounded-xl"
+                    className="p-2 border-y-2 border-y-black/40 rounded-xl"
                     name="ingredients"
                     cols="44"
                     rows="4"
@@ -397,7 +418,7 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                       }))
                     }
                     placeholder=""
-                    className="p-4 border-y-2 border-y-black/40 rounded-xl"
+                    className="p-2 border-y-2 border-y-black/40 rounded-xl"
                     name="ingredients"
                     cols="44"
                     rows="4"
@@ -405,9 +426,12 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 justify-items-center mx-auto my-4 col-span-6 gap-20 relative p-4 border-y-2 border-y-black/40 rounded-xl shadow-lg">
+              <div className="grid grid-cols-2 justify-items-center mx-auto my-4 col-span-6 gap-20 relative p-2 border-y-2 border-y-black/40 rounded-xl shadow-lg">
                 <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Allergens</span>
                 <div className="grid grid-cols-1 justify-items-start max-w-[200px] mx-auto whitespace-nowrap ">
+                  <p onClick={(e) => toggleAllergy("Meat")} className="capitalize inline-flex">
+                    {modalData.allergensList.Meat ? notContains : contains}Meat
+                  </p>
                   <p onClick={(e) => toggleAllergy("Nuts")} className="capitalize inline-flex">
                     {modalData.allergensList.Nuts ? notContains : contains}Nuts
                   </p>
@@ -455,13 +479,13 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                 </div>
               </div>
 
-              <div className="p-4 border-y-2 border-y-black/30 shadow-lg rounded-xl relative flex col-span-6 justify-center gap-12">
+              <div className="p-2 border-y-2 border-y-black/30 shadow-lg rounded-xl relative flex col-span-6 justify-center gap-12">
                 <span className="absolute -top-2 left-10 bg-white rounded-lg px-4">Suitability</span>
-                <p className="inline-flex font-bold gap-4 text-xl">Vegetarians {modalData.allergensList.Meat ? <AiOutlineMinusCircle className="fill-red-400 text-3xl" /> : <BsCheck2Circle className="fill-green-400 text-3xl" />}</p>
-                <p className="inline-flex font-bold gap-4 text-xl">Vegans {modalData.allergensList.Meat || modalData.allergensList.Milk || modalData.allergensList.Egg || modalData.allergensList.Fish || modalData.allergensList.Crustaceans ? <AiOutlineMinusCircle className="fill-red-400 text-3xl" /> : <BsCheck2Circle className="fill-green-400 text-3xl" />}</p>
+                <p className="inline-flex font-bold gap-2 text-lg">Vegetarians {modalData.allergensList.Meat ? <AiOutlineMinusCircle className="fill-red-400 text-3xl" /> : <BsCheck2Circle className="fill-green-400 text-3xl" />}</p>
+                <p className="inline-flex font-bold gap-2 text-lg">Vegans {modalData.allergensList.Meat || modalData.allergensList.Moluscs || modalData.allergensList.Milk || modalData.allergensList.Egg || modalData.allergensList.Fish || modalData.allergensList.Crustaceans ? <AiOutlineMinusCircle className="fill-red-400 text-3xl" /> : <BsCheck2Circle className="fill-green-400 text-3xl" />}</p>
               </div>
 
-              <p className="text-xl text-center pb-4 mb-4 pt-4 mt-4 col-span-3">Statistics</p>
+              <p className="text-lg text-center pb-4 mb-4 pt-4 mt-4 col-span-3">Statistics</p>
 
               <div className="pb-4 mb-4 flex justify-evenly col-span-6">
                 <p>Menu Item Profitability = (Number of Items Sold x Menu Price) – (Number of Items Sold x Item Portion Cost)</p>
@@ -471,7 +495,7 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
           </div>
         </div>
       )}
-      <p className="text-xl font-bold p-2 underline">Products</p>
+      <p className="text-lg font-bold p-2 underline">Products</p>
       <div className="relative flex  mr-4 items-center max-[350px]:flex-wrap  max-[350px]:justify-center">
         <button onClick={handleAdd} className={`p-2 bg-green-300 rounded-xl shadow-xl border-b-2 border-b-black transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] active:shadow-[inset_0px_4px_2px_black]`}>
           Add New

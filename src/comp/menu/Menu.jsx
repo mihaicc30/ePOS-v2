@@ -32,6 +32,10 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
   const [messageModalData, setMessageModalData] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
 
+  useEffect(()=>{
+    console.log(menuitems);
+  },[])
+  
   useEffect(() => {
     if (venueNtable.table === "" || !venueNtable.table) return nav("/Tables");
   }, [venueNtable]);

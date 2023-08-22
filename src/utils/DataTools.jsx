@@ -598,6 +598,7 @@ export const getMenu = async () => {
         "Access-Control-Allow-Credentials": true,
       },
       body: JSON.stringify({
+        venueID: localStorage.getItem("venueID"),
         v: import.meta.env.VITE_G,
       }),
     });

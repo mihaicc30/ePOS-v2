@@ -90,7 +90,7 @@ const Auth = () => {
       navigate("/kitchen");
       return;
     }
-    
+
     if (pin.pin === "02") {
       console.log("bar login");
       setPin({ pin: "" });
@@ -292,11 +292,12 @@ const Auth = () => {
           <FaCogs />
         </span>
       </div>
-      <div className="flex w-[100%] h-[100%]">
-        <div className={`transition animate-fadeFromLeft basis-[80%] max-md:basis-[100%] flex flex-col gap-[3vh] h-[98%] my-auto justify-center items-center`}>
-          <div className={`h-[100%] bg-[--c30] ml-auto border-r-4 rounded shadow-xl shadow-[#0a0a0a] flex flex-col w-[80%] p-4 min-h-[80svh] relative justify-start border-2 border-[--c12] max-w-[650px]`}>
+      <div className="flex justify-center items-center w-[100%] h-[100%]">
+        <div className={`transition animate-fadeFromLeft flex flex-col gap-[3vh] h-[96%] my-auto justify-center items-center`}>
+          <div className={`h-[100%] bg-[--c30] border-r-4 rounded shadow-xl shadow-[#0a0a0a] flex flex-col w-[80%] p-4 min-h-[80svh] relative justify-start border-2 border-[--c12] max-w-[650px]`}>
+            <div></div>
             <p className="font-black text-lg tracking-widest text-center">CCW POS</p>
-            <img className="max-w-[10svh] max-h-[10svh] mx-auto" src="./assets/d956248b8cfe7fe8fa39033b50728bcb.jpg" />
+            <img className="absolute max-w-[10svh] max-h-[10svh] mx-auto" src="./assets/d956248b8cfe7fe8fa39033b50728bcb.jpg" />
             <div className="text-center">
               <p className="font-bold text-lg">Welcome!</p>
               <p>Sign in to start to order.</p>
@@ -308,47 +309,47 @@ const Auth = () => {
                   return "*";
                 })}
               </p>
-              <div className="keypad grid grid-cols-4 gap-4 my-4">
-                <button name="1" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+              <div className="keypad grid grid-cols-4 grid-rows-[8svh_8svh_8svh_8svh] gap-4">
+                <button name="1" onClick={handlePinInput} className="bg-[--c1] rounded font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   1
                 </button>
-                <button name="2" onClick={handlePinInput} className=" bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="2" onClick={handlePinInput} className=" bg-[--c1] rounded font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   2
                 </button>
 
-                <button name="3" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="3" onClick={handlePinInput} className="bg-[--c1] rounded font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   3
                 </button>
 
-                <button name="si" onClick={checkPin} className="row-span-2 bg-[--c12] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="si" onClick={checkPin} className="row-span-2 bg-[--c12] rounded font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   SignIn
                 </button>
 
-                <button name="4" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="4" onClick={handlePinInput} className="bg-[--c1] rounded font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   4
                 </button>
-                <button name="5" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="5" onClick={handlePinInput} className="bg-[--c1] rounded font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   5
                 </button>
-                <button name="6" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="6" onClick={handlePinInput} className="bg-[--c1] rounded font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   6
                 </button>
-                <button name="7" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="7" onClick={handlePinInput} className="bg-[--c1] rounded font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   7
                 </button>
-                <button name="8" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="8" onClick={handlePinInput} className="bg-[--c1] rounded font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   8
                 </button>
-                <button name="9" onClick={handlePinInput} className="bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="9" onClick={handlePinInput} className="bg-[--c1] rounded font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   9
                 </button>
-                <button name="cio" onClick={handleClock} className="row-span-2 bg-[--c12] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="cio" onClick={handleClock} className="row-span-2 bg-[--c12] rounded font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   Clock In/Out
                 </button>
-                <button name="c" onClick={handlePinInput} className="bg-[--c12] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="c" onClick={handlePinInput} className="bg-[--c12] rounded font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   C
                 </button>
-                <button name="0" onClick={handlePinInput} className="col-span-2 bg-[--c1] rounded py-4 font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
+                <button name="0" onClick={handlePinInput} className="col-span-2 bg-[--c1] rounded font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   0
                 </button>
               </div>

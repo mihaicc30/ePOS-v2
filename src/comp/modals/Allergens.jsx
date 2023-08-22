@@ -34,6 +34,7 @@ const Allergens = ({ data, modal, setModal }) => {
               <p className="text-xl text-center pb-4 mb-4">Allergens</p>
               <div className="grid grid-cols-2 justify-items-center mx-auto max-w-[400px]">
                 <div className="grid grid-cols-1 justify-items-start max-w-[200px] mx-auto whitespace-nowrap">
+                  <p className="capitalize inline-flex">{data.allergensList.Meat ? notContains : contains}Meat</p>
                   <p className="capitalize inline-flex">{data.allergensList.Nuts ? notContains : contains}Nuts</p>
                   <p className="capitalize inline-flex">{data.allergensList.Gluten ? notContains : contains}Gluten</p>
                   <p className="capitalize inline-flex">{data.allergensList.Milk ? notContains : contains}Milk</p>

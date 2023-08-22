@@ -1,4 +1,6 @@
-
+:root{
+  --fingerWidth: 80px;
+}
 .scan {
   position: relative;
   display: flex;
@@ -8,10 +10,10 @@
 
 .scan .fingerprint {
   position: relataive;
-  width: 80px;
-  height: 80px;
+  width: var(--fingerWidth);
+  height: var(--fingerWidth);
   background: url("/assets/fingerprint.png");
-  background-size: 80px;
+  background-size: var(--fingerWidth);
 }
 
 .scan:active .fingerprint::before {
@@ -23,9 +25,19 @@
   width: 100%;
   height: 100%;
   background: url("/assets/fingerprint2.png");
-  background-size: 80px;
+  background-size: var(--fingerWidth);
   animation: animate 1s ease-in-out infinite;
   -webkit-animation: animate 1s ease-in-out infinite;
+}
+@media screen and (max-width: 700px) {
+  :root{
+    --fingerWidth: 50px;
+  }
+}
+@media screen and (max-height: 700px) {
+  :root{
+    --fingerWidth: 50px;
+  }
 }
 
 @keyframes animate {
