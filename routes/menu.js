@@ -68,12 +68,10 @@ router.post("/fetchOrders", async (req, res) => {
 
 router.post("/addOrder", async (req, res) => {
   if (!req.body.v || req.body.v !== process.env.v) return res.status(400).json({ error: "Missing values." });
-
   try {
     let data = req.body.data;
     data.dateTime = new Date().toLocaleTimeString('en-GB')
     data.dateString = new Date().toLocaleDateString('en-GB')
-    console.log("🚀 ~ file: menu.js:74 ~ router.post ~ data:", data)
     const queue = await Counter.findOne({ counterType: "print" });
     const increment = await Counter.updateOne({ counterType: "print" }, { $inc: { counter: 1 } });
     data["queueNumber"] = queue.counter;
