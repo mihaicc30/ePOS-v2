@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Draggable, { DraggableCore } from "react-draggable";
 import VenueNTable from "../menu/VenueNTable";
 import { getVenueById, getTableTime } from "../../utils/BasketUtils";
+import { getTableLayout } from "../../utils/DataTools";
 import { AiFillCaretRight, AiOutlineArrowDown, AiOutlineArrowLeft, AiOutlineArrowUp, AiOutlineArrowRight } from "react-icons/ai";
 import { BsArrowsMove } from "react-icons/bs";
 import { IoIosResize } from "react-icons/io";
@@ -16,11 +17,11 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTables, draggingIndex, setDraggingIndex, showArea, setshowArea, uniqueAreas, setuniqueAreas, venues, venueNtable, setVenueNtable }) => {
   const nav = useNavigate();
-  const [seeControlls, setseeControlls] = useState(false);
-  const [seeControlls2, setseeControlls2] = useState(false);
-  const [seeControlls3, setseeControlls3] = useState(false);
-  const areaRef = useRef(null);
   const [tableClock, setTableClock] = useState({});
+
+  const [tpCols, setTPCols] = useState(20);
+  const [tpRows, setTPRows] = useState(20);
+  const [tb, setTB] = useState({});
 
   useEffect(() => {
     (async () => {
@@ -28,6 +29,26 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
       setTableClock(tableData);
     })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      let query = await getTableLayout();
+      setTB(query);
+      if (!uniqueAreas.includes(showArea)) return;
+      setTimeout(() => {
+        const listWithBar = query.gridSize.find(([list]) => list === showArea);
+        setTPCols(listWithBar[1]);
+        setTPRows(listWithBar[2]);
+      }, 200);
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!tb.gridSize) return;
+    const listWithBar = tb.gridSize.find(([list]) => list === showArea);
+    setTPCols(listWithBar[1]);
+    setTPRows(listWithBar[2]);
+  }, [showArea]);
 
   const saveLayout = () => {
     toast.success(`Layout has been saved!`, {
@@ -172,14 +193,9 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
       </div>
       <div className={` flex w-[100%] flex-col transition-all z-10 mx-auto text-xl whitespace-nowrap select-none relative`}>
         <p className="text-center">{venueNtable.table ? `Current Selected Table: ${venueNtable.table}` : `Select a Table.`}</p>
-        {localStorage.getItem("isAdmin") === "true" && (
-          <button onClick={saveLayout} className="absolute right-0 top-0 bg-[--c1] active:shadow-[inset_2px_2px_2px_black] p-2 text-center border-b-2 border-b-black rounded-xl mx-1">
-            Save Layout
-          </button>
-        )}
       </div>
 
-      <div className=" relative h-[100%] bg-[#ffffff6b] overflow-hidden">
+      <div className=" relative h-[100%] bg-[#ffffff6b] flex flex-col overflow-auto">
         <div className={`grid grid-cols-${uniqueAreas.length} h-12 text-xl`}>
           {uniqueAreas.map((area, index) => (
             <button key={crypto.randomUUID()} onClick={() => setshowArea(area)} onTouchStart={() => setshowArea(area)} className={`${showArea === area ? "shadow-[inset_0px_4px_2px_black] bg-[--c12]" : "bg-[--c1]"} transition border-b-2 border-b-black rounded-xl mx-1 my-1`}>
@@ -187,59 +203,30 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
             </button>
           ))}
         </div>
-        {localStorage.getItem("isAdmin") === "true" && (
-          <div className={`grid grid-cols-7 h-12 text-xl relative`}>
-            <input ref={areaRef} list="areaslist" type="text" placeholder="Area name.." className="p-2 col-span-2 border-b-2 border-b-black rounded-xl mx-1 my-1" />
-            <datalist id="areaslist">
-              {uniqueAreas.map((area, index) => (
-                <option value={area} key={crypto.randomUUID()}>
-                  {area}
-                </option>
-              ))}
-            </datalist>
-            <div onClick={() => pushNewElement("table")} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
-              Add new table <AiOutlineArrowRight />
-            </div>
-            <div onClick={() => pushNewElement("wall")} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
-              Add new wall <AiOutlineArrowRight />
-            </div>
-            <div onClick={() => setseeControlls(!seeControlls)} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
-              Top Controlls {!seeControlls ? "🔴" : "🟢"}
-            </div>
-            <div onClick={() => setseeControlls2(!seeControlls2)} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
-              Bottom Controlls {!seeControlls2 ? "🔴" : "🟢"}
-            </div>
-            <div onClick={() => setseeControlls3(!seeControlls3)} className="border-b-2 px-4 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-nowrap items-center text-center text-sm justify-between font-semibold bg-[--c1]">
-              Draggable {!seeControlls3 ? "🔴" : "🟢"}
-            </div>
-          </div>
-        )}
-        {tables
-          .filter((table, index) => table.area === showArea)
-          .map((table, index) => {
-            if (table.type === "wall") {
-              return (
-                <Draggable bounds={"#root"} position={draggingIndex === index ? { x: position.x, y: position.y, id: table.id } : { x: table.x, y: table.y, id: table.id }} onDrag={(event, data) => handleDrag(event, data, table.id)} handle=".draggAnchor" key={table.id}>
-                  <div style={{ height: `${table.height + 20}px`, width: `${table.width + 20}px` }} className="fixed bg-blue-900 rounded-lg flex justify-center items-center m-auto"></div>
-                </Draggable>
-              );
-            } else {
-              let seats = Array.from({ length: table.seats }, (_, index) => index + 1);
-              return (
-                <Draggable bounds={"#root"} position={draggingIndex === index ? { x: position.x, y: position.y, id: table.id } : { x: table.x, y: table.y, id: table.id }} onDrag={(event, data) => handleDrag(event, data, table.id)} handle=".draggAnchor" key={table.id}>
-                  <div style={{ height: `${table.height + 20}px`, width: `${table.width + 20}px` }} onClick={() => setTable(table.tn)} onTouchStart={() => setTable(table.tn)} className="fixed bg-transparent rounded-full flex justify-center items-center m-auto">
-                    <div className={`text-white ${tableClock["t" + table.tn] ? "bg-orange-400" : "bg-blue-400"} text-xl draggAnchor relative w-[100%] h-[100%] rounded-[40px] flex flex-col flex-wrap justify-center items-center m-auto`}>
-                      <p className="z-20 flex items-center text-black text-2xl my-2">
-                        T-
-                        {table.tn}
-                      </p>
-                      {tableClock["t" + table.tn] && <p className="z-20 inline-flex items-center text-black text-2xl">{Math.floor((new Date() - new Date().setHours(tableClock["t" + table.tn].split(":")[0], tableClock["t" + table.tn].split(":")[1],0)) / (1000 * 60))}min</p>}
+
+        <div className="relative grow grid border-2 shadow-md" style={{ gridTemplateRows: `repeat(${tpRows},calc(100% / ${tpRows}))`, gridTemplateColumns: `repeat(${tpCols},calc(100% / ${tpCols}))` }}>
+          {Object.values(tb).length > 0 &&
+            tb.layout.map((table, index) => {
+              if (table.area === showArea) {
+                if (table.type === "wall") {
+                  return (
+                    <div key={index + "tL"} className={`relative flex flex-col justify-center mphism ${table.type === "wall" ? "bg-none bg-blue-200 " : ""} items-center  `} style={{ gridColumnStart: `${table.x1}`, gridColumnEnd: `${table.x2}`, gridRowStart: `${table.y1}`, gridRowEnd: `${table.y2}` }}>
+                      <div className="flex flex-col justify-center items-center  rounded-xl h-[100%] w-[100%]"></div>
                     </div>
-                  </div>
-                </Draggable>
-              );
-            }
-          })}
+                  );
+                } else {
+                  return (
+                    <div onClick={() => setTable(table.tn)} key={index + "tL"} className={`relative flex flex-col justify-center mphism ${table.type === "wall" ? "bg-none bg-blue-200 " : ""} items-center  `} style={{ gridColumnStart: `${table.x1}`, gridColumnEnd: `${table.x2}`, gridRowStart: `${table.y1}`, gridRowEnd: `${table.y2}` }}>
+                      <div className="flex flex-col justify-center items-center  rounded-xl h-[100%] w-[100%]">
+                        {table.type !== "wall" && <span className="whitespace-nowrap">T-{table.tn}</span>}
+                        {tableClock["t" + table.tn] && <p className="z-20 inline-flex items-center text-black">{Math.floor((new Date() - new Date().setHours(tableClock["t" + table.tn].split(":")[0], tableClock["t" + table.tn].split(":")[1], 0)) / (1000 * 60))}min</p>}
+                      </div>
+                    </div>
+                  );
+                }
+              }
+            })}
+        </div>
       </div>
     </div>
   );

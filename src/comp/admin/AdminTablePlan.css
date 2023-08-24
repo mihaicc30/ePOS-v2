@@ -1,0 +1,9 @@
+.mphism {
+  border-radius: 20px;
+  background: linear-gradient(145deg, #cacaca83, #f0f0f0);
+  box-shadow: 6px 6px 10px #bebebe, -6px -6px 10px #ffffff80;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+}

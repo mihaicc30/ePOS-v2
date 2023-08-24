@@ -528,7 +528,7 @@ export const fetchWeeklyWeather = async () => {
   }
 };
 
-export const saveTableLayout = async (layout, venueID) => {
+export const saveTableLayout = async (data) => {
   try {
     const query = await fetch(`${import.meta.env.VITE_API}saveTableLayout`, {
       method: "POST",
@@ -538,12 +538,11 @@ export const saveTableLayout = async (layout, venueID) => {
       },
       body: JSON.stringify({
         v: import.meta.env.VITE_G,
-        fromvenueid: venueID,
-        layout: layout,
+        data
       }),
     });
     const response = await query.json();
-    console.log("Received table layout.", new Date().toUTCString());
+    console.log("Saved table layout.", new Date().toUTCString());
     return response;
   } catch (error) {
     console.log(error.message);

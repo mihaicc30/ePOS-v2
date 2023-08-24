@@ -86,7 +86,7 @@ const App = () => {
 
   useEffect(() => {
     if (!tables || tables.length < 1) return;
-    setuniqueAreas([...new Set(tables.map((table) => table.area))]);
+    setuniqueAreas([...new Set(tables.gridSize.map((table) => table[0]))]);
   }, [tables]);
 
   useEffect(() => {
