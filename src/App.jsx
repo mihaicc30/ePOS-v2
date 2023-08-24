@@ -154,20 +154,6 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    // for dev
-
-    const handleKeyPress = (event) => {
-      if (event.key === "F9") {
-        console.log("basketItems", basketItems, basketQty);
-      }
-    };
-    window.addEventListener("keydown", handleKeyPress);
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-    };
-  }, []);
-
   return (
     <Routes>
       <Route path="/" element={<Layout weeklyholiday={weeklyholiday} weeklyForecast={weeklyForecast} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} setWeeklyForecast={setWeeklyForecast} lefty={lefty} setLefty={setLefty} />}>

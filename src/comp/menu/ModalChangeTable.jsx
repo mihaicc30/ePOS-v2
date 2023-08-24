@@ -105,13 +105,13 @@ const ModalChangeTable = ({ setModalChangeTable, setBasketDiscount, basketItems,
               if (table.area === showArea) {
                 if (table.type === "wall") {
                   return (
-                    <div key={index + "tL"} className={`relative flex flex-col justify-center mphism ${table.type === "wall" ? "bg-none bg-blue-200 " : ""} items-center  `} style={{ gridColumnStart: `${table.x1}`, gridColumnEnd: `${table.x2}`, gridRowStart: `${table.y1}`, gridRowEnd: `${table.y2}` }}>
+                    <div key={index + "tL"} className={`relative flex flex-col justify-center mphism bg-none bg-blue-200 items-center  `} style={{ gridColumnStart: `${table.x1}`, gridColumnEnd: `${table.x2}`, gridRowStart: `${table.y1}`, gridRowEnd: `${table.y2}` }}>
                       <div className="flex flex-col justify-center items-center  rounded-xl h-[100%] w-[100%]"></div>
                     </div>
                   );
                 } else {
                   return (
-                    <div onClick={() => setTable(table.tn)} key={index + "tL"} className={`relative flex flex-col justify-center mphism ${table.type === "wall" ? "bg-none bg-blue-200 " : ""} items-center  `} style={{ gridColumnStart: `${table.x1}`, gridColumnEnd: `${table.x2}`, gridRowStart: `${table.y1}`, gridRowEnd: `${table.y2}` }}>
+                    <div  onClick={() => handleTransfer(table.tn)} key={index + "tL"} className={`relative flex flex-col justify-center mphism ${tableClock["t" + table.tn] ? "bg-none bg-orange-200 " : ""} items-center  `} style={{ gridColumnStart: `${table.x1}`, gridColumnEnd: `${table.x2}`, gridRowStart: `${table.y1}`, gridRowEnd: `${table.y2}` }}>
                       <div className="flex flex-col justify-center items-center  rounded-xl h-[100%] w-[100%]">
                         {table.type !== "wall" && <span className="whitespace-nowrap">T-{table.tn}</span>}
                         {tableClock["t" + table.tn] && <p className="z-20 inline-flex items-center text-black">{Math.floor((new Date() - new Date().setHours(tableClock["t" + table.tn].split(":")[0], tableClock["t" + table.tn].split(":")[1], 0)) / (1000 * 60))}min</p>}
@@ -123,39 +123,6 @@ const ModalChangeTable = ({ setModalChangeTable, setBasketDiscount, basketItems,
             })}
         </div>
       </div>
-      {/* <div className=" relative h-[100%] bg-[#ffffff6b] overflow-hidden"> */}
-      {/* <div className={`grid grid-cols-${uniqueAreas.length} h-12 text-xl`}>
-          {uniqueAreas.map((area, index) => (
-            <button key={crypto.randomUUID()} onClick={() => setshowArea(area)} onTouchStart={() => setshowArea(area)} className={`${showArea === area ? "shadow-[inset_0px_4px_2px_black] bg-[--c12]" : "bg-[--c1]"} transition border-b-2 border-b-black rounded-xl mx-1 my-1`}>
-              {area}
-            </button>
-          ))}
-        </div> */}
-      {/* {tables
-          .filter((table, index) => table.area === showArea)
-          .map((table, index) => {
-            if (table.type === "wall") {
-              return (
-                <Draggable bounds={"#root"} position={draggingIndex === index ? { x: position.x, y: position.y, id: table.id } : { x: table.x, y: table.y, id: table.id }} handle=".draggAnchor" key={table.id}>
-                  <div style={{ height: `${table.height + 20}px`, width: `${table.width + 20}px` }} className="fixed bg-gray-200 rounded-lg flex justify-center items-center m-auto">
-                    <div className={`text-white shadow-[0px_2px_6px_2px_gray] bg-blue-950 text-xl draggAnchor z-[15] relative w-[100%] h-[100%] rounded-lg flex flex-col justify-center items-center m-auto`}></div>
-                  </div>
-                </Draggable>
-              );
-            } else {
-              return (
-                <Draggable bounds={"#root"} position={draggingIndex === index ? { x: position.x, y: position.y, id: table.id } : { x: table.x, y: table.y, id: table.id }} handle=".draggAnchor" key={table.id}>
-                  <div style={{ height: `${table.height + 20}px`, width: `${table.width + 20}px` }} onClick={() => handleTransfer(table.tn)} onTouchStart={() => handleTransfer(table.tn)} className="fixed bg-transparent rounded-full flex justify-center items-center m-auto">
-                    <div className={`text-white bg-blue-400 text-xl draggAnchor relative w-[100%] h-[100%] rounded-[40px] flex flex-col flex-wrap justify-center items-center m-auto`}>
-                      <p className="z-20 flex items-center text-black text-2xl my-2">T-{table.tn}</p>
-                      {tableClock["t" + table.tn] && <p className="z-20 inline-flex items-center text-black text-2xl">{Math.floor((new Date() - new Date().setHours(...tableClock["t" + table.tn].split(":"))) / (1000 * 60))}min</p>}
-                    </div>
-                  </div>
-                </Draggable>
-              );
-            }
-          })} */}
-      {/* </div> */}
     </div>
   );
 };

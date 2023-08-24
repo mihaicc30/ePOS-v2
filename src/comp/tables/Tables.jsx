@@ -50,25 +50,6 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
     setTPRows(listWithBar[2]);
   }, [showArea]);
 
-  const saveLayout = () => {
-    toast.success(`Layout has been saved!`, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: false,
-      progress: undefined,
-      theme: "light",
-    });
-    console.log(`dev**DB Query to post tables data to the database in venues`);
-  };
-
-  const handleDrag = (event, data, id) => {
-    if (!seeControlls3) return;
-    setTables((prevTables) => prevTables.map((table) => (table.id === id ? { ...table, x: parseFloat(data.x.toFixed(2)), y: parseFloat(data.y.toFixed(2)) } : table)));
-  };
-
   const setTable = async (tableNumber) => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API}getTable`, {
@@ -118,74 +99,6 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
     }
   };
 
-  const setTableSeats = (id, seats) => {
-    let t = tables.filter((table) => table.id === id);
-    if (!t) return;
-    if (parseInt(t[0].seats) + parseInt(seats) < 1) return;
-    setTables((prevTables) => prevTables.map((table) => (table.id === id ? { ...table, seats: parseInt(t[0].seats) + parseInt(seats) } : table)));
-  };
-
-  const setTableNumber = (id, number) => {
-    let t = tables.filter((table) => table.id === id);
-    if (!t) return;
-    if (parseInt(t[0].tn) + parseInt(number) < 1) return;
-    setTables((prevTables) => prevTables.map((table) => (table.id === id ? { ...table, tn: parseInt(t[0].tn) + parseInt(number) } : table)));
-  };
-
-  const setTableHeight = (id, number) => {
-    let t = tables.filter((table) => table.id === id);
-    if (!t) return;
-    if (parseInt(t[0].height) + parseInt(number) < 1 || parseInt(t[0].height) + parseInt(number) > 300) return;
-    setTables((prevTables) => prevTables.map((table) => (table.id === id ? { ...table, height: parseInt(t[0].height) + parseInt(number) } : table)));
-  };
-
-  const setTableWidth = (id, number) => {
-    let t = tables.filter((table) => table.id === id);
-    if (!t) return;
-    if (parseInt(t[0].width) + parseInt(number) < 1 || parseInt(t[0].width) + parseInt(number) > 300) return;
-    setTables((prevTables) => prevTables.map((table) => (table.id === id ? { ...table, width: parseInt(t[0].width) + parseInt(number) } : table)));
-  };
-
-  const setTableDelete = (id) => {
-    let t = tables.filter((table) => table.id === id);
-    if (!t) return;
-    setTables((prevTables) => prevTables.filter((table) => table.id !== id));
-  };
-
-  const setTableCopy = (id) => {
-    let newID = crypto.randomUUID();
-    let copyElem = tables.filter((table) => table.id === id);
-    if (!copyElem[0]) return;
-    let newElem = {
-      id: crypto.randomUUID(),
-      area: copyElem[0].area,
-      tn: copyElem[0].tn,
-      x: copyElem[0].x + 50,
-      y: copyElem[0].y + 50,
-      type: copyElem[0].type,
-      seats: copyElem[0].seats,
-      height: copyElem[0].height,
-      width: copyElem[0].width,
-    };
-    setTables((prevTables) => [...prevTables, newElem]);
-  };
-
-  const pushNewElement = (elem) => {
-    console.log(areaRef.current.value);
-    let newElem = {
-      id: crypto.randomUUID(),
-      area: areaRef.current.value,
-      tn: 0,
-      x: 100,
-      y: 100,
-      type: elem,
-      seats: 0,
-      height: 110,
-      width: elem === "wall" ? 30 : 110,
-    };
-    setTables((prevTables) => [...prevTables, newElem]);
-  };
-
   return (
     <div className=" bg-[--c60] flex flex-col gap-4 overflow-y-hidden h-[100%] relative">
       <div className="absolute">
@@ -210,13 +123,13 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
               if (table.area === showArea) {
                 if (table.type === "wall") {
                   return (
-                    <div key={index + "tL"} className={`relative flex flex-col justify-center mphism ${table.type === "wall" ? "bg-none bg-blue-200 " : ""} items-center  `} style={{ gridColumnStart: `${table.x1}`, gridColumnEnd: `${table.x2}`, gridRowStart: `${table.y1}`, gridRowEnd: `${table.y2}` }}>
+                    <div key={index + "tL"} className={`relative flex flex-col justify-center mphism bg-none bg-blue-200 items-center  `} style={{ gridColumnStart: `${table.x1}`, gridColumnEnd: `${table.x2}`, gridRowStart: `${table.y1}`, gridRowEnd: `${table.y2}` }}>
                       <div className="flex flex-col justify-center items-center  rounded-xl h-[100%] w-[100%]"></div>
                     </div>
                   );
                 } else {
                   return (
-                    <div onClick={() => setTable(table.tn)} key={index + "tL"} className={`relative flex flex-col justify-center mphism ${table.type === "wall" ? "bg-none bg-blue-200 " : ""} items-center  `} style={{ gridColumnStart: `${table.x1}`, gridColumnEnd: `${table.x2}`, gridRowStart: `${table.y1}`, gridRowEnd: `${table.y2}` }}>
+                    <div onClick={() => setTable(table.tn)} key={index + "tL"} className={`relative flex flex-col justify-center mphism ${tableClock["t" + table.tn] ? "bg-none bg-orange-200 " : ""} items-center  `} style={{ gridColumnStart: `${table.x1}`, gridColumnEnd: `${table.x2}`, gridRowStart: `${table.y1}`, gridRowEnd: `${table.y2}` }}>
                       <div className="flex flex-col justify-center items-center  rounded-xl h-[100%] w-[100%]">
                         {table.type !== "wall" && <span className="whitespace-nowrap">T-{table.tn}</span>}
                         {tableClock["t" + table.tn] && <p className="z-20 inline-flex items-center text-black">{Math.floor((new Date() - new Date().setHours(tableClock["t" + table.tn].split(":")[0], tableClock["t" + table.tn].split(":")[1], 0)) / (1000 * 60))}min</p>}
