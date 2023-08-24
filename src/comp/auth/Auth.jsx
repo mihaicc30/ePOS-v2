@@ -280,7 +280,7 @@ const Auth = () => {
         <div className={`transition animate-fadeFromLeft basis-[80%] max-md:basis-[100%] flex flex-col gap-[3vh] h-[98%] my-auto justify-center items-center`}>
           <div className={`h-[100%] bg-[--c30] ml-auto border-r-4 rounded shadow-xl shadow-[#0a0a0a] flex flex-col w-[80%] p-4 min-h-[80svh] relative justify-start border-2 border-[--c12] max-w-[650px]`}>
             <p className="font-black text-lg tracking-widest text-center">CCW POS</p>
-            <img className="max-w-[10svh] max-h-[10svh] mx-auto" src="./assets/d956248b8cfe7fe8fa39033b50728bcb.jpg" />
+            <img className="max-w-[10svh] max-h-[10svh] mx-auto" src="/assets/d956248b8cfe7fe8fa39033b50728bcb.jpg" />
             <div className="text-center">
               <p className="font-bold text-lg">Welcome!</p>
               <p>Sign in to start to order.</p>

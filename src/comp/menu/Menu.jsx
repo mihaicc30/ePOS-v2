@@ -185,7 +185,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
   };
 
   const handlePrinting = async (forWhere) => {
-    console.log(basketItems.length, basketItems);
+    // console.log(basketItems.length, basketItems);
     if (basketItems.length < 1) {
       toast.warn(`There are no items to print.`, {
         position: "top-right",
@@ -298,7 +298,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
           theme: "light",
         });
       }
-    }, 1000);
+    }, 300);
 
     return () => clearTimeout(waitingTime);
   }, [basketItems, basketDiscount]);

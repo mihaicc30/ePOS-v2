@@ -49,7 +49,9 @@ const App = () => {
   const [basketDiscount, setBasketDiscount] = useState(0);
 
   const [weeklyForecast, setWeeklyForecast] = useState({
-    0: null,
+    0: {
+      date: `${String(new Date().toLocaleDateString("en-GB")).split("/")[2]}-${String(new Date().toLocaleDateString("en-GB")).split("/")[1]}-${String(new Date().toLocaleDateString("en-GB")).split("/")[0]}`,
+    },
     1: null,
     2: null,
     3: null,
@@ -70,7 +72,7 @@ const App = () => {
 
   useEffect(() => {
     if (!tables || tables.length < 1) return;
-    setuniqueAreas([...new Set(tables.map((table) => table.area))]);
+    setuniqueAreas([...new Set(tables.gridSize.map((table) => table[0]))]);
   }, [tables]);
 
   useEffect(() => {
