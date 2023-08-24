@@ -23,7 +23,7 @@ router.post("/grabTableLayout", (req, res) => {
   try {
     TableLayout.findOne({ fromvenueid: req.body.fromvenueid }).then((results) => {
       console.log("Sending table layout.", new Date().toUTCString());
-      res.status(200).json(results.layout);
+      res.status(200).json(results);
     });
   } catch (error) {
     console.log(error.message);
@@ -32,8 +32,11 @@ router.post("/grabTableLayout", (req, res) => {
 });
 
 router.post("/saveTableLayout", (req, res) => {
+  console.log(req.body);
+  console.log("im here now :D");
   try {
-    TableLayout.updateOne({ fromvenueid: req.body.fromvenueid }, {$set:{layout: req.body.layout}}).then((results) => {
+    TableLayout.updateOne({ fromvenueid: req.body.data.venueID }, { $set: { layout: req.body.data.tb.layout, gridSize: req.body.data.tb.gridSize } }).then((results) => {
+      console.log("🚀 ~ file: venues.js:39 ~ TableLayout.updateOne ~ results:", results)
       console.log("Sending table layout.", new Date().toUTCString());
       res.status(200).json(results);
     });

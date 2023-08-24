@@ -6,6 +6,10 @@ const tablelayoutSchema = new Schema({
     type: Number,
     required: true,
   },
+  gridSize: {
+    type: Array,
+    default: [],
+  },
   layout: {
     type: Array,
     default: [],

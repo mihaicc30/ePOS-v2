@@ -3,14 +3,22 @@ const router = require("express").Router();
 const ROTA = require("../models/rota");
 const Posusers = require("../models/posusers");
 
+const options = {
+  timeZone: 'Europe/London',
+  hour12: false, 
+  hour: '2-digit',
+  minute: '2-digit'
+};
+
 router.post("/handleClocked", async (req, res) => {
+  console.log(new Intl.DateTimeFormat('en-GB', options).format(new Date()));
   try {
     let query = await ROTA.findOne({ week: req.body.week, venueID: req.body.venueID });
     if (query) {
       let rotedData = query.roted;
       let tempData = query.roted[`${req.body.email}`][`${req.body.typeOfDay}`][`clocked`];
       if (tempData.length < 1) {
-        rotedData[`${req.body.email}`][`${req.body.typeOfDay}`][`clocked`].push(`${new Date().toLocaleTimeString('en-GB').substring(0, 5)} - ?`);
+        rotedData[`${req.body.email}`][`${req.body.typeOfDay}`][`clocked`].push(`${new Intl.DateTimeFormat('en-GB', options).format(new Date())} - ?`);
         let query2 = await ROTA.updateOne({ week: req.body.week, venueID: req.body.venueID }, { $set: { roted: rotedData } });
         return res.status(200).json({ message: `${rotedData[`${req.body.email}`].displayName} has been clocked in.` });
       } else if (tempData.length >= 1) {
@@ -18,13 +26,13 @@ router.post("/handleClocked", async (req, res) => {
         let startTime = lastEntry.split(" - ")[0];
         let endTime = lastEntry.split(" - ")[1];
         if (endTime === "?") {
-          endTime = new Date().toLocaleTimeString('en-GB').substring(0, 5);
+          endTime = new Intl.DateTimeFormat('en-GB', options).format(new Date());
           tempData[tempData.length - 1] = `${startTime} - ${endTime}`;
           rotedData[`${req.body.email}`][`${req.body.typeOfDay}`][`clocked`] = tempData;
           let query3 = await ROTA.updateOne({ week: req.body.week, venueID: req.body.venueID }, { $set: { roted: rotedData } });
           return res.status(200).json({ message: `${rotedData[`${req.body.email}`].displayName} has been clocked out.` });
         } else if (/^([01]\d|2[0-3]):([0-5]\d)$/.test(endTime)) {
-          rotedData[`${req.body.email}`][`${req.body.typeOfDay}`][`clocked`].push(`${new Date().toLocaleTimeString('en-GB').substring(0, 5)} - ?`);
+          rotedData[`${req.body.email}`][`${req.body.typeOfDay}`][`clocked`].push(`${new Intl.DateTimeFormat('en-GB', options).format(new Date())} - ?`);
           let query4 = await ROTA.updateOne({ week: req.body.week, venueID: req.body.venueID }, { $set: { roted: rotedData } });
           return res.status(200).json({ message: `${rotedData[`${req.body.email}`].displayName} has been clocked in.` });
         } else {
@@ -124,7 +132,6 @@ router.post("/resetRota", async (req, res) => {
 router.post("/updateRota", async (req, res) => {
   try {
     let query = await ROTA.updateOne({ week: req.body.week, venueID: req.body.venueID, weekRange: req.body.weekRange }, { $set: { roted: req.body.data } });
-    console.log(query);
     console.log("ROTA has been updated.", new Date().toLocaleString('en-GB'));
     res.status(200).json({ message: "ok" });
   } catch (error) {

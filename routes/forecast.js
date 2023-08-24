@@ -3,6 +3,12 @@ const router = require("express").Router();
 const tf = require("@tensorflow/tfjs");
 const Targets = require("../models/targets");
 const SF = require("../models/salesforecast");
+const timeOptions = {
+  timeZone: 'Europe/London',
+  hour12: false, 
+  hour: '2-digit',
+  minute: '2-digit'
+};
 
 // cloudy 0 - 100
 // humidity 0 - 100

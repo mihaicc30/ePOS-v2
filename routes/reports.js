@@ -138,7 +138,6 @@ router.post("/grabLabor", async (req, res) => {
       Saturday: 0,
     };
     let wages = [{ "alemihai25@gmail.com": 20 }, { "ioanaculea1992@gmail.com": 15 }, { "PetrisorPredescu2@gmail.com": 13 }, { "CristianConstantinFlorea@gmail.com": 12 }];
-    console.log("im here");
     Object.values(laborData[0].roted).forEach((staff) => {
       ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].forEach((typeOfDay) => {
         Object.values(staff[typeOfDay].roted).forEach((day) => {
