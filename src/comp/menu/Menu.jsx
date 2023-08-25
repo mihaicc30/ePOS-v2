@@ -212,7 +212,7 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
         email: localStorage.getItem("email"),
         items: tempBasket,
       };
-      const query = await addOrder(data);
+      // const query = await addOrder(data);
 
       toast.success(`Ticket has been printed.`, {
         position: "top-right",
@@ -237,18 +237,18 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
       });
     }
 
-    const updatedBasketItems = basketItems.map((item) => {
-      if (!item.printed) {
-        return {
-          ...item,
-          printed: true,
-          datePrinted: new Date().toISOString("en-GB"),
-          printedBy: localStorage.getItem("displayName"),
-        };
-      }
-      return item;
-    });
-    setBasketItems(updatedBasketItems);
+    // const updatedBasketItems = basketItems.map((item) => {
+    //   if (!item.printed) {
+    //     return {
+    //       ...item,
+    //       printed: true,
+    //       datePrinted: new Date().toISOString("en-GB"),
+    //       printedBy: localStorage.getItem("displayName"),
+    //     };
+    //   }
+    //   return item;
+    // });
+    // setBasketItems(updatedBasketItems);
   };
 
   useEffect(() => {

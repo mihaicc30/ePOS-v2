@@ -52,6 +52,22 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
 
   const setTable = async (tableNumber) => {
     try {
+      const utcTimeString = new Date().toISOString();
+      const utcDate = new Date(utcTimeString);
+
+      const options = {
+        timeZone: "Europe/London",
+        hour12: false,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      };
+
+      const britishTime = new Intl.DateTimeFormat("en-GB", options).format(utcDate);
+
       const response = await fetch(`${import.meta.env.VITE_API}getTable`, {
         method: "POST",
         headers: {
@@ -62,6 +78,7 @@ const Tables = ({ setBasketDiscount, basketItems, setBasketItems, tables, setTab
           tableNumber,
           venue: localStorage.getItem("venueID"),
           user: { displayName: localStorage.getItem("displayName"), email: localStorage.getItem("email") },
+          britishTime,
         }),
       });
       const data = await response.json();
