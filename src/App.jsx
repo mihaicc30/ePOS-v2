@@ -65,18 +65,59 @@ const App = () => {
     6: null,
   });
 
+  const [apiData, setApiData] = useState({
+    weather: false,
+    holiday: false,
+    menu: false,
+    venues: false,
+    tableLayout: false,
+    forecast: false,
+  });
+
+  const [fetchFailed, setFetchFailed] = useState(false);
+
+  const getAsyncData = async () => {
+    try {
+      setWeeklyWeather(await fetchWeeklyWeather());
+      setApiData((prevData) => ({ ...prevData, weather: true }));
+
+      setWeeklyHoliday(await fetchHoliday());
+      setApiData((prevData) => ({ ...prevData, holiday: true }));
+
+      setMenuitems(await getMenu());
+      setApiData((prevData) => ({ ...prevData, menu: true }));
+
+      setVenues(await getVenues());
+      setApiData((prevData) => ({ ...prevData, venues: true }));
+
+      setTables(await getTableLayout());
+      setApiData((prevData) => ({ ...prevData, tableLayout: true }));
+
+      await fetchForecastWeek();
+      setApiData((prevData) => ({ ...prevData, forecast: true }));
+
+      setFetchFailed(false);
+    } catch (error) {
+      setFetchFailed(true);
+      setTimeout(getAsyncData, 1000); // Retry after 1 seconds
+    }
+  };
   useEffect(() => {
     localStorage.setItem("venueID", 101010);
-    async function getAsyncData() {
-      setWeeklyWeather(await fetchWeeklyWeather());
-      setWeeklyHoliday(await fetchHoliday());
-      setMenuitems(await getMenu());
-      setVenues(await getVenues());
-      setTables(await getTableLayout()); // table layout
-      await fetchForecastWeek();
-    }
+
     getAsyncData();
   }, []);
+
+  useEffect(() => {
+    // Handle fetch failure
+    if (fetchFailed) {
+      setTimeout(getAsyncData, 1000); // Retry after 1 seconds
+    }
+  }, [fetchFailed]);
+
+  useEffect(() => {
+    console.log(Object.values(apiData).includes(false));
+  }, [apiData]);
 
   useEffect(() => {
     setTimeout(async () => {
@@ -157,7 +198,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout weeklyholiday={weeklyholiday} weeklyForecast={weeklyForecast} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} setWeeklyForecast={setWeeklyForecast} lefty={lefty} setLefty={setLefty} />}>
-        <Route path="/" element={<Auth />} />
+        <Route path="/" element={<Auth apiData={apiData}/>} />
 
         <Route
           path="/admin/*"

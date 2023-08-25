@@ -11,7 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { authUser, setVenue } from "../../utils/authUser";
 import { handleClocked } from "../../utils/DataTools";
 
-const Auth = () => {
+const Auth = ({ apiData }) => {
   const [user, setUser] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -48,6 +48,8 @@ const Auth = () => {
   useEffect(() => {
     if (user) navigate("/Tables");
   }, [user]);
+
+  useEffect(() => {}, [apiData]);
 
   const [pin, setPin] = useState({
     pin: "",
@@ -271,6 +273,7 @@ const Auth = () => {
                   <p className="py-1 px-3 border-2 rounded-lg m-1">Clock In/Out</p>
                   <p className="py-1 px-3 border-2 rounded-lg m-1">Sales Forecast</p>
                   <p className="py-1 px-3 border-2 rounded-lg m-1">Weather Forecast</p>
+                  <p className="py-1 px-3 border-2 rounded-lg m-1">Day Reports</p>
                   <p className="py-1 px-3 border-2 rounded-lg m-1 text-gray-300">Misc Product</p>
                   <p className="py-1 px-3 border-2 rounded-lg m-1">Discounts</p>
                   <p className="py-1 px-3 border-2 rounded-lg m-1 text-gray-300">Bill Splitting</p>
@@ -278,9 +281,10 @@ const Auth = () => {
                   <p className="py-1 px-3 border-2 rounded-lg m-1">Charts</p>
                   <p className="py-1 px-3 border-2 rounded-lg m-1">Visual Table Plan</p>
                   <p className="py-1 px-3 border-2 rounded-lg m-1 text-gray-300">List Table Plan</p>
-                  <p className="py-1 px-3 border-2 rounded-lg m-1 text-gray-300">ROTA Management</p>
+                  <p className="py-1 px-3 border-2 rounded-lg m-1">ROTA Management</p>
                   <p className="py-1 px-3 border-2 rounded-lg m-1 text-gray-300">Payroll</p>
                   <p className="py-1 px-3 border-2 rounded-lg m-1 text-gray-300">Courses</p>
+                  <p className="py-1 px-3 border-2 rounded-lg m-1">Server/Bar/Kitchen Screen</p>
                 </div>
               </div>
             </div>
@@ -295,7 +299,6 @@ const Auth = () => {
       <div className="flex justify-center items-center w-[100%] h-[100%]">
         <div className={`transition animate-fadeFromLeft flex flex-col gap-[3vh] h-[96%] my-auto justify-center items-center`}>
           <div className={`h-[100%] bg-[--c30] border-r-4 rounded shadow-xl shadow-[#0a0a0a] flex flex-col w-[80%] p-4 min-h-[80svh] relative justify-start border-2 border-[--c12] max-w-[650px]`}>
-            <div></div>
             <p className="font-black text-lg tracking-widest text-center">CCW POS</p>
             <img className="absolute max-w-[10svh] max-h-[10svh] mx-auto" src="./assets/d956248b8cfe7fe8fa39033b50728bcb.jpg" />
             <div className="text-center">
@@ -303,6 +306,16 @@ const Auth = () => {
               <p>Sign in to start to order.</p>
             </div>
 
+            {Object.values(apiData).includes(false) && (
+            <div className="absolute inset-0 bg-[#ffd4aceb] z-40 text-center flex flex-col items-center justify-center">
+              <div className="ui-loader loader-blk">
+                <svg viewBox="22 22 44 44" className="multiColor-loader">
+                  <circle cx="44" cy="44" r="20.2" fill="none" strokeWidth="3.6" className="loader-circle loader-circle-animation"></circle>
+                </svg>
+              </div>
+              <p>Loading data...</p>
+            </div>
+            )} 
             <div className={`flex grow flex-col`}>
               <p className="text-center h-[24px]">
                 {pin.pin.split("").map((symbol, index) => {
