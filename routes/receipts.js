@@ -87,7 +87,14 @@ router.post("/addreceipt", async (req, res) => {
       const table = await Tables.findOne({ tableNumber: tableNumber, tableVenue: venue });
       const venueDetails = await Venues.findOne({ id: venue });
       const checkoutTable = await Tables.deleteOne({ tableNumber: tableNumber, tableVenue: venue });
+      const dateString = table.date;
+      const [date, time] = dateString.split(", ");
+      const [day, month, year] = date.split("/");
+      const [hour, minute, second] = time.split(":");
+      
+      const formattedDate = new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`).toISOString();
 
+      
       new Receipts({
         items: table.basket,
         email: user.email,
@@ -104,7 +111,7 @@ router.post("/addreceipt", async (req, res) => {
         }, 0),
         totalAmount: parseFloat(basketTotal),
         discount: basketDiscount,
-        tableOpenAt: table.date,
+        tableOpenAt: formattedDate,
         tableClosedAt: new Date().toISOString("en-GB"),
         paymentMethod: table.paidin,
       })
