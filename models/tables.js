@@ -69,11 +69,11 @@ const tablesSchema = new Schema({
   },
   dateString: {
     type: String,
-    default: new Date().toLocaleDateString('en-GB'),
+    default: new Date().toLocaleDateString("en-GB"),
   },
   date: {
-    type: Date,
-    default: new Date().toISOString('en-GB'),
+    type: String,
+    required: true,
   },
 });
 

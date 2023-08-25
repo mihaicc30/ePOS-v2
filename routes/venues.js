@@ -32,8 +32,6 @@ router.post("/grabTableLayout", (req, res) => {
 });
 
 router.post("/saveTableLayout", (req, res) => {
-  console.log(req.body);
-  console.log("im here now :D");
   try {
     TableLayout.updateOne({ fromvenueid: req.body.data.venueID }, { $set: { layout: req.body.data.tb.layout, gridSize: req.body.data.tb.gridSize } }).then((results) => {
       console.log("🚀 ~ file: venues.js:39 ~ TableLayout.updateOne ~ results:", results)

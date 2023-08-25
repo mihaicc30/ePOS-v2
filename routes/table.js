@@ -55,7 +55,7 @@ router.post("/getTableTime", async (req, res) => {
     const tables = await Tables.find({ tableVenue: venueNumber });
     let tableTimes = {};
     tables.map(async (table, index) => {
-      tableTimes["t" + table.tableNumber] = (new Date(table.date).toLocaleTimeString('en-GB')).substring(0,5);
+      tableTimes["t" + table.tableNumber] = table.date.substring(table.date.lastIndexOf(",") + 2, table.date.lastIndexOf(":"));
     });
 
     res.status(200).json(tableTimes);
@@ -66,7 +66,7 @@ router.post("/getTableTime", async (req, res) => {
 });
 
 router.post("/getTable", async (req, res) => {
-  const { tableNumber, user, venue } = req.body;
+  const { tableNumber, user, venue, britishTime } = req.body;
   try {
     const table = await Tables.findOne({ tableNumber: tableNumber, tableVenue: venue });
     if (table) {
@@ -93,10 +93,10 @@ router.post("/getTable", async (req, res) => {
         closedBy: false,
         closedByEmail: false,
         basket: [],
-        date: new Date().toISOString('en-GB'),
+        date: britishTime,
       });
       await newTable.save();
-      console.log(`Table ${tableNumber} is created. Sending data.`, new Date().toISOString('en-GB'));
+      console.log(`Table ${tableNumber} is created. Sending data.`, britishTime);
       res.status(200).json(newTable);
     }
   } catch (error) {
