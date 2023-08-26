@@ -2,9 +2,6 @@ import React, { PureComponent, useState, useEffect } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Brush } from "recharts";
 
 const ItemProfitability = ({ modalData }) => {
-  useEffect(() => {
-    console.log(modalData);
-  }, []);
   // <p>Menu Item Profitability = (Number of Items Sold x Menu Price) – (Number of Items Sold x Item Portion Cost)</p>
   // <p>item sold along the year chart</p>
   let data = [
