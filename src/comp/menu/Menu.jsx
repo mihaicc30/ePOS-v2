@@ -8,6 +8,7 @@ import { calculateTotal, calculateBasketQTY } from "../../utils/BasketUtils";
 import { deleteEmptyTable, addOrder } from "../../utils/DataTools";
 import VenueNTable from "./VenueNTable";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { TiPrinter } from "react-icons/ti";
 import BillTimeline from "../modals/BillTimeline";
 
 import { AiFillCaretRight, AiOutlineLeft } from "react-icons/ai";
@@ -23,7 +24,6 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
   const nav = useNavigate();
   const [user, setUser] = useState(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [isButtonDisabled2, setIsButtonDisabled2] = useState(false);
   const [isButtonDisabled3, setIsButtonDisabled3] = useState(false);
   const [billTimeline, setBillTimeline] = useState(false);
 
@@ -67,48 +67,6 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
         progress: undefined,
         theme: "light",
       });
-    }
-  };
-
-  const handleBillPrint = async () => {
-    if (isButtonDisabled3) return;
-    // console.log(venueNtable);
-    // "bill"
-    // const query = await addOrder(data)
-    // console.log("🚀", query)
-
-    setIsButtonDisabled3(true);
-    // handlePrinting("bill");
-    setTimeout((async) => {
-      setIsButtonDisabled3(false);
-    }, 1000);
-  };
-
-  const handleBarPrint = async () => {
-    try {
-      if (isButtonDisabled2) return;
-      setIsButtonDisabled2(true);
-      await handlePrinting("bar");
-      setTimeout(() => {
-        setIsButtonDisabled2(false);
-      }, 1000);
-    } catch (error) {
-      setIsButtonDisabled2(false);
-      alert(error.message);
-    }
-  };
-
-  const handleKitchenPrint = async () => {
-    try {
-      if (isButtonDisabled) return;
-      await handlePrinting("kitchen");
-      setIsButtonDisabled(true);
-      setTimeout(() => {
-        setIsButtonDisabled(false);
-      }, 1000);
-    } catch (error) {
-      setIsButtonDisabled(false);
-      alert(error.message);
     }
   };
 
@@ -185,70 +143,115 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
     });
   };
 
-  const handlePrinting = async (forWhere) => {
-    console.log(basketItems.length, basketItems);
-    if (basketItems.length < 1) {
-      toast.warn(`There are no items to print.`, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: false,
-        progress: undefined,
-        theme: "light",
-      });
-      return;
-    }
-    let tempBasket = basketItems.filter((item) => item.printed === false);
-    let areAllPrinted = basketItems.some((item) => item.printed == false);
+  const handleBillPrint = async () => {
+    if (isButtonDisabled3) return;
+    setIsButtonDisabled3(true);
+    setTimeout((async) => {
+      setIsButtonDisabled3(false);
+    }, 1000);
+  };
 
-    if (areAllPrinted) {
-      let data = {
-        orderType: forWhere,
-        venueID: venueNtable.venue,
+  const handleKitchenPrint = async () => {
+    try {
+      if (isButtonDisabled) return;
+      await handlePrinting("kitchen");
+      setIsButtonDisabled(true);
+      setTimeout(() => {
+        setIsButtonDisabled(false);
+      }, 1000);
+    } catch (error) {
+      setIsButtonDisabled(false);
+      alert(error.message);
+    }
+  };
+
+  const handlePrinting = async () => {
+    try {
+      if (isButtonDisabled) return;
+      setIsButtonDisabled(true);
+      // console.log(basketItems.length, basketItems);
+      if (basketItems.length < 1) {
+        toast.warn(`There are no items to print.`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+        return;
+      }
+      let tempBasket = basketItems.filter((item) => item.printed === false);
+      let areAllPrinted = basketItems.some((item) => item.printed == false);
+
+      let barBasket = tempBasket.filter((item) => item.subcategory_course < 1);
+      let kitchenBasket = tempBasket.filter((item) => item.subcategory_course >= 1 || item.subcategory_course == undefined);
+
+      let barData = {
+        orderType: "bar",
+        venueID: localStorage.getItem("venueID"),
         table: venueNtable.table,
         displayName: localStorage.getItem("displayName"),
         email: localStorage.getItem("email"),
-        items: tempBasket,
+        items: barBasket,
       };
-      // const query = await addOrder(data);
+      let kitchenData = {
+        orderType: "kitchen",
+        venueID: localStorage.getItem("venueID"),
+        table: venueNtable.table,
+        displayName: localStorage.getItem("displayName"),
+        email: localStorage.getItem("email"),
+        items: kitchenBasket,
+      };
 
-      toast.success(`Ticket has been printed.`, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: false,
-        progress: undefined,
-        theme: "light",
+      if (barBasket.length > 0) await addOrder(barData);
+      if (kitchenBasket.length > 0) await addOrder(kitchenData);
+
+      if (areAllPrinted) {
+        toast.success(`Ticket has been printed.`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        toast.info(`Ticket has been re-printed.`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+
+      const updatedBasketItems = basketItems.map((item) => {
+        if (!item.printed) {
+          return {
+            ...item,
+            printed: true,
+            datePrinted: new Date().toISOString("en-GB"),
+            printedBy: localStorage.getItem("displayName"),
+          };
+        }
+        return item;
       });
-    } else {
-      toast.info(`Ticket has been re-printed.`, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: false,
-        progress: undefined,
-        theme: "light",
-      });
+      setBasketItems(updatedBasketItems);
+      setTimeout(() => {
+        setIsButtonDisabled(false);
+      }, 1000);
+    } catch (error) {
+      setIsButtonDisabled(false);
+      alert(error.message);
     }
-
-    // const updatedBasketItems = basketItems.map((item) => {
-    //   if (!item.printed) {
-    //     return {
-    //       ...item,
-    //       printed: true,
-    //       datePrinted: new Date().toISOString("en-GB"),
-    //       printedBy: localStorage.getItem("displayName"),
-    //     };
-    //   }
-    //   return item;
-    // });
-    // setBasketItems(updatedBasketItems);
   };
 
   useEffect(() => {
@@ -510,16 +513,16 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
         <div className={`flex ${lefty ? "flex-row-reverse" : ""} justify-end min-h-[60px] col-span-2`}>
           {basketDiscount > 0 && <span className={`basis-[10%] border-b-2 border-b-black mr-auto transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-green-400`}>{basketDiscount}% Discount</span>}
           <button disabled={basketItems.length < 1} onClick={() => setBillTimeline(!billTimeline)} className={`basis-[10%] items-center border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${parseFloat(basketTotal) <= 0 ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>
-            View Bill Timeline
+            Timeline
           </button>
           <button disabled={parseFloat(basketTotal) <= 0} onClick={() => nav("/Payment")} className={`basis-[10%] items-center border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${parseFloat(basketTotal) <= 0 ? "bg-gray-300 text-gray-400" : "bg-[--c1]"} `}>
             Pay Bill
           </button>
           <div className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1]`} onClick={() => console.log("dev**popup w/ custom item&price")}>
-            Misc Item
+            Misc.Item
           </div>
           <div className={`${basketDiscount > 0 ? "bg-[--c12] shadow-[inset_0px_4px_2px_0px_black]" : "bg-[--c1] "} basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold `} onClick={handleDiscount}>
-            {basketDiscount > 0 ? "Remove Discount" : "Apply Discount"}
+            {basketDiscount > 0 ? "Remove Discount" : "Discount"}
           </div>
           <div
             onClick={() => {
@@ -530,23 +533,20 @@ const Menu = ({ draggingIndex, setDraggingIndex, uniqueAreas, setuniqueAreas, sh
             {isButtonDisabled3 && <AiOutlineLoading3Quarters className="animate-spin mx-auto text-5xl" />}
             {!isButtonDisabled3 && "Print Bill"}
           </div>
+
           <div
             onClick={() => {
-              handleBarPrint();
-            }}
-            disabled={isButtonDisabled2}
-            className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold bg-[--c1] ${isButtonDisabled2 ? "bg-gray-200 " : "bg-[--c1]"}`}>
-            {isButtonDisabled2 && <AiOutlineLoading3Quarters className="animate-spin mx-auto text-5xl" />}
-            {!isButtonDisabled2 && "Print Bar"}
-          </div>
-          <div
-            onClick={() => {
-              handleKitchenPrint();
+              handlePrinting();
             }}
             disabled={isButtonDisabled}
             className={`basis-[10%] border-b-2 border-b-black m-1 transition-all cursor-pointer hover:scale-[0.98] active:scale-[0.90] rounded-xl flex flex-col text-center text-sm justify-center font-semibold ${isButtonDisabled ? "bg-gray-200 " : "bg-[--c1]"}`}>
             {isButtonDisabled && <AiOutlineLoading3Quarters className="animate-spin mx-auto text-5xl" />}
-            {!isButtonDisabled && "Print Kitchen"}
+            {!isButtonDisabled && (
+              <span className="flex flex-nowarp items-center justify-center">
+                <TiPrinter className="text-2xl" />
+                Send
+              </span>
+            )}
           </div>
         </div>
       </div>
