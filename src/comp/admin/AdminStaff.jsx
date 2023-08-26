@@ -39,6 +39,13 @@ const AdminStaff = () => {
 
   useEffect(() => {}, [searchStaff]);
 
+  const isNewMember = (staff) => {
+    const now = new Date();
+    const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000); // 30 days in milliseconds
+    const staffDate = new Date(staff.date);
+    return staffDate >= oneMonthAgo && staffDate <= now;
+  };
+
   useEffect(() => {
     // new members widget
     const now = new Date();
@@ -631,10 +638,13 @@ const AdminStaff = () => {
           {staff.map((staffMember, index) => {
             if (staffMember.displayName.split(" ").some((item) => item.toLowerCase().includes(searchStaff.toLowerCase())) || searchStaff === "")
               return (
-                <div className="staffCard shadow-xl flex flex-col p-2" key={crypto.randomUUID()}>
+                <div className="staffCard shadow-xl flex flex-col p-2 relative overflow-hidden" key={crypto.randomUUID()}>
                   {/* <img src={`https://randomuser.me/api/portraits/men/1.jpg`} className="h-[100px] rounded-full aspect-square mx-auto" /> temp disabled */}
-                  <AiOutlineUser className="h-[100px] rounded-full aspect-square mx-auto text-5xl" />
-                  <div className="flex flex-col text-xl text-center grow">
+                  <AiOutlineUser className="h-[100px] rounded-full aspect-square mx-auto text-5xl " />
+                  <div className="flex flex-col text-xl text-center grow ">
+                    {isNewMember(staffMember) && 
+                    <p title="New Starter" className="absolute bg-teal-400 py-4 px-16 top-0 -right-[70px] rotate-45 flex"><span className="-translate-x-4 -rotate-45">✨</span></p>
+                    }
                     <p className="font-bold">{staffMember.displayName}</p>
                     <span className=" border-b-[1px] grow"></span>
                     <p>{staffMember.position}</p>
