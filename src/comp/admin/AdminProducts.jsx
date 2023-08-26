@@ -6,6 +6,7 @@ import { processAllergenList, getStockColour } from "../../utils/BasketUtils";
 import { addNewProduct, updateProduct, deleteProduct } from "../../utils/DataTools";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ItemProfitability from "./AdminComp/ItemProfitability"
 
 const AdminProducts = ({ menuitems, setMenuitems }) => {
   // mimic db fetch - temporary
@@ -92,7 +93,6 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
     setModal(!modal);
     setModalData(product);
     setTempProduct(product);
-    console.log(product);
   };
 
   const notContains = <BsCheck2Circle className="fill-green-400 text-3xl" />;
@@ -485,12 +485,11 @@ const AdminProducts = ({ menuitems, setMenuitems }) => {
                 <p className="inline-flex font-bold gap-2 text-lg">Vegans {modalData.allergensList.Meat || modalData.allergensList.Moluscs || modalData.allergensList.Milk || modalData.allergensList.Egg || modalData.allergensList.Fish || modalData.allergensList.Crustaceans ? <AiOutlineMinusCircle className="fill-red-400 text-3xl" /> : <BsCheck2Circle className="fill-green-400 text-3xl" />}</p>
               </div>
 
-              <p className="text-lg text-center pb-4 mb-4 pt-4 mt-4 col-span-3">Statistics</p>
-
-              <div className="pb-4 mb-4 flex justify-evenly col-span-6">
-                <p>Menu Item Profitability = (Number of Items Sold x Menu Price) – (Number of Items Sold x Item Portion Cost)</p>
-                <p>item sold along the year chart</p>
+              {modalData.name && 
+              <div className="pb-4 mb-4 mt-8 flex justify-evenly col-span-6 flex-col h-[30vh]">
+                <ItemProfitability modalData={modalData}/>
               </div>
+              } 
             </div>
           </div>
         </div>
