@@ -60,15 +60,45 @@ const App = () => {
     6: null,
   });
 
+  
+  const [apiData, setApiData] = useState({
+    menu: false,
+    venues: false,
+    tableLayout: false,
+  });
+
+  const [fetchFailed, setFetchFailed] = useState(false);
+
+  const getAsyncData = async () => {
+    try {
+      setMenuitems(await getMenu());
+      setApiData((prevData) => ({ ...prevData, menu: true }));
+
+      setVenues(await getVenues());
+      setApiData((prevData) => ({ ...prevData, venues: true }));
+
+      setTables(await getTableLayout());
+      setApiData((prevData) => ({ ...prevData, tableLayout: true }));
+
+      setFetchFailed(false);
+    } catch (error) {
+      setFetchFailed(true);
+      setTimeout(getAsyncData, 1000); // Retry after 1 seconds
+    }
+  };
+
   useEffect(() => {
     localStorage.setItem("venueID", 101010);
-    async function getAsyncData() {
-      setMenuitems(await getMenu());
-      setVenues(await getVenues());
-      setTables(await getTableLayout()); // table layout
-    }
+
     getAsyncData();
   }, []);
+  useEffect(() => {
+    // Handle fetch failure
+    if (fetchFailed) {
+      setTimeout(getAsyncData, 1000); // Retry after 1 seconds
+    }
+  }, [fetchFailed]);
+
 
   useEffect(() => {
     if (!tables || tables.length < 1) return;
@@ -87,7 +117,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout weeklyholiday={weeklyholiday} weeklyForecast={weeklyForecast} weeklyWeather={weeklyWeather} setWeeklyWeather={setWeeklyWeather} setWeeklyForecast={setWeeklyForecast} lefty={lefty} setLefty={setLefty} />}>
-        <Route path="/" element={<Auth />} />
+        <Route path="/" element={<Auth apiData={apiData} />} />
 
         <Route path="/tables" element={<Tables setBasketDiscount={setBasketDiscount} basketItems={basketItems} setBasketItems={setBasketItems} tables={tables} setTables={setTables} draggingIndex={draggingIndex} setDraggingIndex={setDraggingIndex} showArea={showArea} setshowArea={setshowArea} uniqueAreas={uniqueAreas} setuniqueAreas={setuniqueAreas} venues={venues} venueNtable={venueNtable} setVenueNtable={setVenueNtable} />} />
 

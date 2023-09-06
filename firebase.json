@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "ccwpos",
+    "site": "ccw-waiter",
     "public": "public",
     "ignore": [
       "firebase.json",

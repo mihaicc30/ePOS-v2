@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { authUser, setVenue } from "../../utils/authUser";
 import { handleClocked } from "../../utils/DataTools";
 
-const Auth = () => {
+const Auth = ({ apiData }) => {
   const [user, setUser] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -51,6 +51,7 @@ const Auth = () => {
     pin: "",
   });
 
+  useEffect(() => {}, [apiData]);
   const handleClear = () => {
     setPin({ pin: "" });
   };
@@ -285,7 +286,16 @@ const Auth = () => {
               <p className="font-bold text-lg">Welcome!</p>
               <p>Sign in to start to order.</p>
             </div>
-
+            {Object.values(apiData).includes(false) && (
+            <div className="absolute inset-0 bg-[#ffd4aceb] z-40 text-center flex flex-col items-center justify-center">
+              <div className="ui-loader loader-blk">
+                <svg viewBox="22 22 44 44" className="multiColor-loader">
+                  <circle cx="44" cy="44" r="20.2" fill="none" strokeWidth="3.6" className="loader-circle loader-circle-animation"></circle>
+                </svg>
+              </div>
+              <p>Loading data...</p>
+            </div>
+            )} 
             <div className={`flex grow flex-col`}>
               <p className="text-center h-[24px]">
                 {pin.pin.split("").map((symbol, index) => {
