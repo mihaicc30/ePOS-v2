@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { auth, db, logout } from "./firebase/config.jsx";
 
 import MobileLeftNav from "./comp/navBars/MobileLeftNav";
 import MobileHeader from "./comp/navBars/MobileHeader";

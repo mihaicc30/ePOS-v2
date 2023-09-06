@@ -3,7 +3,6 @@ import "./AdminSignout.css";
 import { useNavigate } from "react-router-dom";
 import { FiLoader } from "react-icons/fi";
 
-import { auth, logout } from "../../firebase/config.jsx";
 
 
 const Signout = ({ user, setUser, setVenueNtable}) => {

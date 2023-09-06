@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import "./Settings.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AiFillCaretRight } from "react-icons/ai";
-import { auth } from "../../firebase/config.jsx";
 import { getVenueById } from "../../utils/BasketUtils";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

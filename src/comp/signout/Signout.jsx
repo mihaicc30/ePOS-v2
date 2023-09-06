@@ -5,7 +5,6 @@ import { FiLoader } from "react-icons/fi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { deleteEmptyTable } from "../../utils/DataTools";
-import { auth, logout } from "../../firebase/config.jsx";
 
 const Signout = ({ setUser, setVenueNtable }) => {
   const navigate = useNavigate();
