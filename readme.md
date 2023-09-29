@@ -6,6 +6,13 @@
 
 **Year:** 2023
 
+**Main POS:** https://ccwpos.web.app/  ( To access the order management system for the kitchen and bar, utilise this app. )
+
+**Minified POS:** https://ccw-waiter.web.app/
+
+**Customer App:** https://ccw-customer.web.app/
+
+
 ## Welcome to the Restaurant POS System Repository
 
 Thank you for visiting this repository, which contains the code and documentation for my dissertation project. As a student, I've worked diligently on this project to create a comprehensive and efficient restaurant Point of Sale (POS) system.
