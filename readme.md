@@ -22,6 +22,19 @@ The Restaurant POS System is a web-based application developed to streamline res
 
 - **`pos-minified` Branch:** A minified version of the main POS app, with reduced functionality, including no clock-in system, simplified payment processing, and a more streamlined admin UI.
 
+## Test Accounts
+
+
+- **Pin: `111` :** This is one of the regular test accounts. This type of account would belong to waiters, bartenders and other roles involved in order management. For a more thorough testing, there are more accounts like this: `222`, `333`, `444`. 
+
+- **Pin: `112` :** This is admin/management account. This type of account would belong to managers, supervisors, business owners who want to dive into management statistics, rota scheduling, pos users management, sales forcasting and others.
+  
+- **Pin: `01` :** This is login for the kitchen orders interface. This is just a broad example, if the business owner has separate sections in the kitchen this can be further broken down to only see the items for the specific cooking section.
+  
+- **Pin: `02` :** This is login for the bar orders interface. Similar concept to the kitchen login interface, but for drink.
+
+- To test the clock in/out system, users simply put their pin and click on the Clock In/Out button instead of the Sign In.
+
 ## Getting Started
 
 To install and run the project, please follow these steps:
