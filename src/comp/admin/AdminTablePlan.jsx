@@ -137,20 +137,43 @@ const AdminTablePlan = ({ tables, setTables, draggingIndex, setDraggingIndex, sh
     }
   };
 
-  const handleChange = (value, target, who) => {
+  const handleTableChange = (value) => {
     setTB((prevTB) => {
       const updatedLayout = prevTB.layout.map((box) => {
         if (box.id === activeBox.id) {
+          console.log(box);
           const updatedBox = {
             ...box,
-            [who]: parseInt(value),
+            tn: value,
           };
 
-          if (who === "x1" && parseInt(value) >= updatedBox.x2) {
-            updatedBox.x2 = parseInt(value) + 1;
-          } else if (who === "y1" && parseInt(value) >= updatedBox.y2) {
-            updatedBox.y2 = parseInt(value) + 1;
-          }
+          setActiveBox(updatedBox);
+          return updatedBox;
+        }
+        return box;
+      });
+
+      return {
+        ...prevTB,
+        layout: updatedLayout,
+      };
+    });
+  };
+
+  const handleChange = (value, target, who1, who2) => {
+    setTB((prevTB) => {
+      const updatedLayout = prevTB.layout.map((box) => {
+        if (box.id === activeBox.id) {
+          console.log(box);
+          const updatedBox = {
+            ...box,
+            ...(who1 && {
+              [who1]: parseInt(box[who1]) + value > 0 ? parseInt(box[who1]) + value : parseInt(box[who1]),
+            }),
+
+            [who2]: parseInt(box[who2]) + value > 0 ? parseInt(box[who2]) + value : parseInt(box[who2]),
+          };
+
           setActiveBox(updatedBox);
           return updatedBox;
         }
@@ -357,50 +380,74 @@ const AdminTablePlan = ({ tables, setTables, draggingIndex, setDraggingIndex, sh
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 my-2 mphism">
-                  <span className="text-xs text-center">Table Setup</span>
+                <div className="grid grid-cols-1 mt-2 mphism">
+                  <span className="text-xs text-center border-b-2">Table Setup</span>
+                  <div className="grid grid-cols-1 justify-items-center w-[100%]">
+                    <span className="text-xs text-center">Position</span>
+                    <div className="grid grid-cols-3 text-center">
+                      <span className="p-1 m-1"></span>
+                      <button className="p-1 m-1" onClick={(e) => handleChange(-1, "Position", "y1", "y2")}>
+                        <AiOutlineArrowUp className="text-xl" />
+                      </button>
+                      {/* onChange={(e) => handleChange(e.target.value, "Position", "x1")} min={1} max={tpCols} value={parseInt(activeBox.x1)} */}
+                      <span className="p-1 m-1"></span>
+                    </div>
+                    <div className="grid grid-cols-3 text-center">
+                      <button className="p-1 m-1" onClick={(e) => handleChange(-1, "Position", "x1", "x2")}>
+                        <AiOutlineArrowLeft className="text-xl" />
+                      </button>
+                      <span className="m-auto">⚪</span>
+                      <button className="p-1 m-1" onClick={(e) => handleChange(1, "Position", "x1", "x2")}>
+                        <AiOutlineArrowRight className="text-xl" />
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-3 text-center">
+                      <span className="p-1 m-1"></span>
+                      <button className="p-1 m-1" onClick={(e) => handleChange(1, "Position", "y1", "y2")}>
+                        <AiOutlineArrowDown className="text-xl" />
+                      </button>
+                      <span className="p-1 m-1"></span>
+                    </div>
+                  </div>
 
                   <div className="grid grid-cols-1 my-2">
-                    <span className="text-xs text-center">Position</span>
-                    <div className="grid grid-cols-2 gap-4 justify-items-center">
-                      <div className="flex flex-nowrap items-center">
-                        X:
-                        <input type="number" className="bg-transparent w-[50px] text-center border-2 border-dashed border-[#fff]" onChange={(e) => handleChange(e.target.value, "Position", "x1")} min={1} max={tpCols} value={parseInt(activeBox.x1)} />
-                      </div>
-                      <div className="flex flex-nowrap items-center">
-                        Y:
-                        <input type="number" className="bg-transparent w-[50px] text-center border-2 border-dashed border-[#fff]" onChange={(e) => handleChange(e.target.value, "Position", "y1")} min={1} max={tpRows} value={parseInt(activeBox.y1)} />
-                      </div>
+                    <span className="text-xs text-center">Dimensions</span>
+                    <div className="grid grid-cols-3 text-center">
+                      <button className="p-1 m-1" onClick={(e) => handleChange(-1, "Position", "", "x2")}>
+                        <AiOutlineArrowLeft className="text-xl mx-auto" />
+                      </button>
+                      <span className="p-1 m-1 max-md:text-xs">Width</span>
+                      <button className="p-1 m-1" onClick={(e) => handleChange(1, "Position", "", "x2")}>
+                        <AiOutlineArrowRight className="text-xl mx-auto" />
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-3 text-center">
+                      <button className="p-1 m-1 " onClick={(e) => handleChange(-1, "Position", "", "y2")}>
+                        <AiOutlineArrowLeft className="text-xl mx-auto" />
+                      </button>
+                      <span className="p-1 m-1 max-md:text-xs">Height</span>
+                      <button className="p-1 m-1" onClick={(e) => handleChange(1, "Position", "", "y2")}>
+                        <AiOutlineArrowRight className="text-xl mx-auto" />
+                      </button>
                     </div>
 
-                    <span className="text-xs text-center">Dimensions</span>
-                    <div className="grid grid-cols-2 gap-4 justify-items-center">
-                      <div className="flex flex-nowrap items-center">
-                        W:
-                        <input type="number" className="bg-transparent w-[50px] text-center border-2 border-dashed border-[#fff]" onChange={(e) => handleChange(e.target.value, "Dimensions", "x2")} min={parseInt(activeBox.x1) + 1} max={tpCols + 1} value={parseInt(activeBox.x2)} />
-                      </div>
-                      <div className="flex flex-nowrap items-center">
-                        H:
-                        <input type="number" className="bg-transparent w-[50px] text-center border-2 border-dashed border-[#fff]" onChange={(e) => handleChange(e.target.value, "Dimensions", "y2")} min={parseInt(activeBox.y1) + 1} max={tpRows + 1} value={parseInt(activeBox.y2)} />
-                      </div>
-                    </div>
                     {activeBox && activeBox.type !== "wall" && (
                       <>
-                        <span className="text-xs text-center">Number & Seats</span>
-                        <div className="grid grid-cols-2 gap-4 justify-items-center">
+                        <span className="text-xs text-center">Table Number</span>
+                        <div className="grid grid-cols-1 gap-2 justify-items-center">
                           <div className="flex flex-nowrap items-center">
                             <MdTableBar />:
-                            <input type="number" className="appearance-none bg-transparent w-[50px] text-center border-2 border-dashed border-[#fff]" onChange={(e) => handleChange(e.target.value, "Number", "tn")} min={1} value={activeBox.tn} />
+                            <input type="text" className="appearance-none bg-transparent w-[80%] text-center border-2 border-dashed border-[#fff]" onChange={(e) => handleTableChange(e.target.value)} min={1} value={activeBox.tn} />
                           </div>
-                          <div className="flex flex-nowrap items-center cursor-not-allowed">
-                            {/* keeping for future development when Booking system is created */}
-                            <MdOutlineAirlineSeatLegroomExtra className=" cursor-not-allowed text-gray-300" />:
-                            <input type="number" className="bg-gray-300 text-gray-300 w-[50px] text-center border-2 border-dashed border-[#fff] cursor-not-allowed " defaultValue={activeBox.seats} />
-                          </div>
+                          {/* <div className="flex flex-nowrap items-center cursor-not-allowed"> */}
+                          {/* keeping for future development when Booking system is created */}
+                          {/* <MdOutlineAirlineSeatLegroomExtra className=" cursor-not-allowed text-gray-300" />: */}
+                          {/* <input type="number" className="bg-gray-300 text-gray-300 w-[50px] text-center border-2 border-dashed border-[#fff] cursor-not-allowed " defaultValue={activeBox.seats} /> */}
+                          {/* </div> */}
                         </div>
                       </>
                     )}
-                    <div className="grid grid-cols-2 gap-4 justify-items-center my-4">
+                    <div className="grid grid-cols-2 gap-4 justify-items-center mt-4">
                       <button className="p-2 mphism" onClick={handleDelete}>
                         <RiDeleteBin6Line className="text-3xl text-red-400" />
                       </button>

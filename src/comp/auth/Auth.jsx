@@ -159,7 +159,7 @@ const Auth = ({ apiData }) => {
     const startOfYear = new Date(now.getFullYear(), 0, 1);
     const weekNumber = Math.ceil(((now - startOfYear) / 86400000 + startOfYear.getDay()) / 7);
     let typeOfDay = new Date(now).toLocaleDateString("en-GB", { weekday: "long" });
-    
+
     try {
       if (foundPin && pin.pin.length >= 3) {
         const query = await handleClocked(weekNumber, typeOfDay, foundPin.email);
@@ -191,7 +191,7 @@ const Auth = ({ apiData }) => {
         });
       } else if (!foundPin) {
         setClockedLoading(false);
-        toast.error(`User is not found.`, {
+        toast.error(`No user present to match the pin.`, {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -219,10 +219,29 @@ const Auth = ({ apiData }) => {
     setPin({ pin: "" });
   };
 
+  const [accname, setAccname] = useState(true);
+
   return (
-    <div className="flex flex-col bg-[--clsec] w-[100%] h-[100%] relative">
+    <div className="bgRpt flex flex-col bg-[--clsec] w-[100%] h-[100%] relative ">
       <div className="absolute">
         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme="light" />
+      </div>
+      <div className={`absolute h-[100svh] ${accname ? "w-[300px]" : ""} z-50 bg-gray-50/50 flex flex-nowrap`}>
+        <button className={`${accname ? "p-4 m-2 border-2" : "p-2"}`} onClick={() => setAccname(!accname)}>
+          {accname ? "✖" : "▶"}
+        </button>
+        <div className={` ${accname ? "flex flex-col" : "hidden"} overflow-auto`}>
+          <p className="my-3">Greetings from Mihai! Thank you for visiting my project!😄</p>
+          <p className="my-3">For testing purposes you have the following login pins to play with. Enjoy!</p>
+          <p className="mt-3">POS User(waiter/barman/etc): </p>
+          <p>111, 222, 333, 444</p>
+          <p className="mt-3">POS Admin(owner/manager): </p>
+          <p>112</p>
+          <p className="mt-3">Kitchen Order Screen: </p>
+          <p>01</p>
+          <p className="mt-3">Bar Order Screen: </p>
+          <p>02</p>
+        </div>
       </div>
       {modal && (
         <div className="modalBG fixed right-0 left-0 bg-black/50 top-0 bottom-0 z-40 text-center flex flex-col items-center" onClick={(e) => (String(e.target?.className).startsWith("modalBG") ? setModal(!modal) : null)}>
@@ -296,33 +315,38 @@ const Auth = ({ apiData }) => {
           <FaCogs />
         </span>
       </div>
-      <div className="flex justify-center items-center w-[100%] h-[100%]">
-        <div className={`transition animate-fadeFromLeft flex flex-col gap-[3vh] h-[96%] my-auto justify-center items-center`}>
-          <div className={`h-[100%] bg-[--c30] border-r-4 rounded shadow-xl shadow-[#0a0a0a] flex flex-col w-[80%] p-4 min-h-[80svh] relative justify-start border-2 border-[--c12] max-w-[650px]`}>
-            <p className="font-black text-lg tracking-widest text-center">CCW POS</p>
-            <img className="absolute max-w-[10svh] max-h-[10svh] mx-auto" src="./assets/d956248b8cfe7fe8fa39033b50728bcb.jpg" />
-            <div className="text-center">
-              <p className="font-bold text-lg">Welcome!</p>
-              <p>Sign in to start to order.</p>
+
+      <div className="flex justify-center items-center w-[100%] h-[100%] ">
+        <div className={`transition animate-fadeFromLeft flex flex-col gap-[3vh] h-[96%]  my-auto justify-center items-center`}>
+          <div className={`bg-[--c30] border-r-4 rounded shadow-xl shadow-[#0a0a0a] flex flex-col w-[80%] p-4 max-h-[800px] relative justify-start border-2 border-[--c12] max-w-[650px]`}>
+            <div className="flex">
+              <div className="flex basis-[20%] min-w-[100px] max-h-[80px]">
+                <img className="w-[100%] h-[100%] " src="./assets/d956248b8cfe7fe8fa39033b50728bcb.jpg" />
+              </div>
+              <div className="flex flex-col text-center basis-[80%]">
+                <p className="font-black text-lg tracking-widest text-center">CCW POS</p>
+                <p>Please sign in to continue.</p>
+              </div>
             </div>
 
             {Object.values(apiData).includes(false) && (
-            <div className="absolute inset-0 bg-[#ffd4aceb] z-40 text-center flex flex-col items-center justify-center">
-              <div className="ui-loader loader-blk">
-                <svg viewBox="22 22 44 44" className="multiColor-loader">
-                  <circle cx="44" cy="44" r="20.2" fill="none" strokeWidth="3.6" className="loader-circle loader-circle-animation"></circle>
-                </svg>
+              <div className="absolute inset-0 bg-[#ffd4aceb] z-40 text-center flex flex-col items-center justify-center">
+                <div className="ui-loader loader-blk">
+                  <svg viewBox="22 22 44 44" className="multiColor-loader">
+                    <circle cx="44" cy="44" r="20.2" fill="none" strokeWidth="3.6" className="loader-circle loader-circle-animation"></circle>
+                  </svg>
+                </div>
+                <p>Loading data...</p>
               </div>
-              <p>Loading data...</p>
-            </div>
-            )} 
-            <div className={`flex grow flex-col`}>
+            )}
+
+            <div className={`flex grow flex-col max-h-[600px]`}>
               <p className="text-center h-[24px]">
                 {pin.pin.split("").map((symbol, index) => {
                   return "*";
                 })}
               </p>
-              <div className="keypad grid grid-cols-4 grid-rows-[8svh_8svh_8svh_8svh] gap-4">
+              <div className="keypad grid grid-cols-4 grid-rows-[8svh_8svh_8svh_8svh] gap-2">
                 <button name="1" onClick={handlePinInput} className="bg-[--c1] rounded font-bold text-lg text-black border-b-2 border-b-[--c2] relative inline-block shadow-xl active:shadow-black active:shadow-inner disabled:bg-[#cecdcd] disabled:text-[#ffffff] disabled:active:shadow-none">
                   1
                 </button>
@@ -366,19 +390,19 @@ const Auth = ({ apiData }) => {
                   0
                 </button>
               </div>
-              <div
-                className="scan mt-auto relative cursor-pointer mx-auto"
-                ref={fp}
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-                onMouseDown={() => {
-                  setIsScanning(true);
-                  handleScanStart();
-                }}
-                onMouseUp={() => setIsScanning(false)}>
-                <h6 className="absolute opacity-0 -top-1/2">Scanning...</h6>
-                <div className="fingerprint"></div>
-              </div>
+            </div>
+            <div
+              className="scan relative cursor-pointer my-8 mx-auto"
+              ref={fp}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              onMouseDown={() => {
+                setIsScanning(true);
+                handleScanStart();
+              }}
+              onMouseUp={() => setIsScanning(false)}>
+              <h6 className="absolute opacity-0 -top-1/2">Scanning...</h6>
+              <div className="fingerprint"></div>
             </div>
           </div>
         </div>

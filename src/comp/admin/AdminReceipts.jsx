@@ -38,12 +38,16 @@ const AdminReceipts = () => {
 
   const getUniqueYears = () => {
     const years = new Set(receipts.map((receipt) => receipt.year));
-    return Array.from(years).filter((year) => year);
+    return Array.from(years)
+      .filter((year) => year)
+      .sort((a, b) => b - a);
   };
 
   const getUniqueMonths = () => {
     const months = new Set(receipts.map((receipt) => receipt.month));
-    return Array.from(months).filter((month) => month);
+    return Array.from(months)
+      .filter((month) => month)
+      .sort((a, b) => b - a);
   };
 
   return (
@@ -60,18 +64,23 @@ const AdminReceipts = () => {
         </div>
         {getUniqueYears().map((year) => (
           <details className="pl-1" key={year}>
-            <summary className="py-2 border-b-2 bg-[--c12]">{year}</summary>
+          <summary className="max-md:text-sm py-2 border-b-2 bg-[--text-bg-primary-selected]">Year: {year}</summary>
             {getUniqueMonths().map((month) => (
-              <details className="pl-1 bg-[#f5b06f3d]" key={month}>
-                <summary>{month}</summary>
+             <details className="pl-1 bg-[#f5b06f3d]" key={month}>
+             <summary className="max-md:text-sm ">Month: {month}</summary>
                 {receipts
                   .filter((receipt) => String(receipt.receiptNumber).includes(searchReceipts))
+                  .sort((a, b) => new Date(b.tableClosedAt) - new Date(a.tableClosedAt))
                   .map((receipt, index) => {
                     if (receipt.year === year && receipt.month === month) {
                       return (
                         <div key={index} className="receipt border-t-2 border-b-2 my-4 text-sm bg-[--c30] py-2">
                           <details className="pl-5">
-                            <summary>Receipt Number: {receipt.receiptNumber}</summary>
+                          <summary className="flex flex-col">
+                              <span>▶ Receipt Number: {receipt.receiptNumber}</span>
+                              <span>£{parseFloat(receipt.totalAmount).toFixed(2)}</span>
+                              <span>{receipt.dateString}</span>
+                            </summary>
                             <div>
                               <p className="font-bold">Venue: {receipt.pubName}</p>
                               <p>Address: {receipt.address}</p>
